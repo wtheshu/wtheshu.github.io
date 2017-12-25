@@ -1,0 +1,424 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="奇怪先生的博客"><title>Linux磁盘管理 | 奇怪先生的博客</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Linux磁盘管理</h1><a id="logo" href="/.">奇怪先生的博客</a><p class="description">耳目得来终觉浅，觉知此事要躬行。</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">Linux磁盘管理</h1><div class="post-meta"><a href="/2017/08/31/Linux磁盘管理/#comments" class="comment-count"></a><p><span class="date">Aug 31, 2017</span><span><a href="/categories/Linux/" class="category">Linux</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><blockquote>
+<p>这一章学习：如何分区、如何格式化、如何挂载、如何卸载。</p>
+</blockquote>
+<h1 id="查看磁盘或目录的容量"><a href="#查看磁盘或目录的容量" class="headerlink" title="查看磁盘或目录的容量"></a>查看磁盘或目录的容量</h1><p>监控磁盘的使用率在日常的监控工作中是必须要做的。</p>
+<h2 id="df"><a href="#df" class="headerlink" title="df"></a>df</h2><blockquote>
+<p>df （disk filesystem）用于查看已挂载磁盘的总容量、使用容量、剩余容量等。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>常用选项</th>
+<th>选项说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>不加选项</td>
+<td>默认以KB为单位显示</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>查看inodes的使用状况，如已使用100%，即使磁盘空间有富余，也会提示磁盘空间已满</td>
+</tr>
+<tr>
+<td>-h</td>
+<td>以合适的单位显示</td>
+</tr>
+<tr>
+<td>-k</td>
+<td>以KB为单位显示（默认）</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>以MB为单位显示</td>
+</tr>
+<tr>
+<td>-T</td>
+<td>查看每个分区的文件系统类型</td>
+</tr>
+</tbody>
+</table>
+<p>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"># df</div><div class="line">文件系统          1K-块    已用     可用 已用% 挂载点</div><div class="line">/dev/sda3      16561152 3760600 12800552   23% /</div><div class="line">devtmpfs        1006276       0  1006276    0% /dev</div><div class="line">tmpfs           1016076       0  1016076    0% /dev/shm</div><div class="line">tmpfs           1016076    8796  1007280    1% /run</div><div class="line">tmpfs           1016076       0  1016076    0% /sys/fs/cgroup</div><div class="line">/dev/sdb5        991512    2516   921412    1% /newdir</div><div class="line">/dev/sda1        201380   95320   106060   48% /boot</div><div class="line">tmpfs            203216       0   203216    0% /run/user/0</div><div class="line">df -h</div><div class="line">文件系统        容量  已用  可用 已用% 挂载点</div><div class="line">/dev/sda3        16G  3.6G   13G   23% /</div><div class="line">devtmpfs        983M     0  983M    0% /dev</div><div class="line">tmpfs           993M     0  993M    0% /dev/shm</div><div class="line">tmpfs           993M  8.6M  984M    1% /run</div><div class="line">tmpfs           993M     0  993M    0% /sys/fs/cgroup</div><div class="line">/dev/sdb5       969M  2.5M  900M    1% /newdir</div><div class="line">/dev/sda1       197M   94M  104M   48% /boot</div><div class="line">tmpfs           199M     0  199M    0% /run/user/0</div></pre></td></tr></table></figure></p>
+<p>该命令所显示的内容中，每列所代表的意义如下：</p>
+<table>
+<thead>
+<tr>
+<th>列数</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第一列</td>
+<td>分区的名字</td>
+</tr>
+<tr>
+<td>第二列</td>
+<td>该分区的总容量</td>
+</tr>
+<tr>
+<td>第三列</td>
+<td>已使用容量</td>
+</tr>
+<tr>
+<td>第四列</td>
+<td>可用的剩余容量</td>
+</tr>
+<tr>
+<td>第五列</td>
+<td>使用容量的百分比（若该数值达到90%以上，就需要进行管理了）</td>
+</tr>
+<tr>
+<td>第六列</td>
+<td>分区的挂载点</td>
+</tr>
+</tbody>
+</table>
+<p>该命令所显示的内容中，挂载点的说明：</p>
+<ul>
+<li>/dev和//dev/shm 为内存分区，默认大小为内存的1/2，如果我们把文件存在这个分区下，相当于存在了内存中，好处是读写速度非常快，坏处是系统重启时文件会丢失。</li>
+<li>/run、/sys/fs/cgroup等分区都是tmpfs，跟/dev/shm类似，为临时文件系统，最好不要碰它们</li>
+</ul>
+<h2 id="du"><a href="#du" class="headerlink" title="du"></a>du</h2><blockquote>
+<p>du （disk useage）用来查看某个目录或文件所占空间的大小。</p>
+</blockquote>
+<p>格式 <code>du [-abckmsh] [文件或目录名]</code></p>
+<table>
+<thead>
+<tr>
+<th>常用选项</th>
+<th>选项说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>不加参数</td>
+<td>只会列出目录（包含子目录）的大小。默认单位为KB</td>
+</tr>
+<tr>
+<td>-a</td>
+<td>表示全部文件和目录的大小都列出来</td>
+</tr>
+<tr>
+<td>-b</td>
+<td>以B为单位输出</td>
+</tr>
+<tr>
+<td>-k</td>
+<td>以KB为单位输出</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>以MB为单位输出</td>
+</tr>
+<tr>
+<td>-h</td>
+<td>自动以合适的单位输出</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>表示最后加总（不常用）</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>只列出总和（用的最多）</td>
+</tr>
+</tbody>
+</table>
+<p>说明：这个命令用的最多的情况是这种形式： <code>du -sh filename</code></p>
+<h1 id="磁盘的分区"><a href="#磁盘的分区" class="headerlink" title="磁盘的分区"></a>磁盘的分区</h1><h2 id="fdisk"><a href="#fdisk" class="headerlink" title="fdisk"></a>fdisk</h2><blockquote>
+<p>fdisk 是Linux下硬盘的分区工具，是一个非常实用的命令，但是fdisk只能划分小于2TB的分区。大于2T的用parted命令。注意，分区是非常危险的操作，操作失误很可能会把数据弄丢，所以一定要高度警惕！</p>
+</blockquote>
+<p>格式 <code>fdisk [-l] 设备名称</code></p>
+<p>说明：</p>
+<ul>
+<li>fdisk 的选项只有-l这一个。</li>
+<li>选项-l的后面不加设备名称，会直接列出系统中所有的磁盘设备以及分区表。</li>
+<li>选项-l的后面加上设备名称，则会列出该设备的分区表。</li>
+<li><p><code>fdisk -l</code> 显示系统能够识别到的硬盘有哪些，每个硬盘的分区有哪些（类似 /dev/sda，/dev/sdb 等，和/dev/sda1，/dev/sda2等，大于2T用GPT分区表）。示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">fdisk -l</div><div class="line"></div><div class="line">磁盘 /dev/sdb：5368 MB, 5368709120 字节，10485760 个扇区</div><div class="line">Units = 扇区 of 1 * 512 = 512 bytes</div><div class="line">扇区大小(逻辑/物理)：512 字节 / 512 字节</div><div class="line">I/O 大小(最小/最佳)：512 字节 / 512 字节</div><div class="line">磁盘标签类型：dos</div><div class="line">磁盘标识符：0x8de7a46e</div><div class="line"></div><div class="line">   设备 Boot      Start         End      Blocks   Id  System</div><div class="line">/dev/sdb1            2048    10485759     5241856    5  Extended</div><div class="line">/dev/sdb5            4096     2052095     1024000   83  Linux</div><div class="line">/dev/sdb6         2054144     4102143     1024000   83  Linux</div><div class="line"></div><div class="line">磁盘 /dev/sda：21.5 GB, 21474836480 字节，41943040 个扇区</div><div class="line">Units = 扇区 of 1 * 512 = 512 bytes</div><div class="line">扇区大小(逻辑/物理)：512 字节 / 512 字节</div><div class="line">I/O 大小(最小/最佳)：512 字节 / 512 字节</div><div class="line">磁盘标签类型：dos</div><div class="line">磁盘标识符：0x000f3f8d</div><div class="line"></div><div class="line">   设备 Boot      Start         End      Blocks   Id  System</div><div class="line">/dev/sda1   *        2048      411647      204800   83  Linux</div><div class="line">/dev/sda2          411648     8800255     4194304   82  Linux swap / Solaris</div><div class="line">/dev/sda3         8800256    41943039    16571392   83  Linux</div><div class="line"></div><div class="line"># fdisk -l /dev/sda1</div><div class="line"></div><div class="line">磁盘 /dev/sda1：209 MB, 209715200 字节，409600 个扇区</div><div class="line">Units = 扇区 of 1 * 512 = 512 bytes</div><div class="line">扇区大小(逻辑/物理)：512 字节 / 512 字节</div><div class="line">I/O 大小(最小/最佳)：512 字节 / 512 字节</div></pre></td></tr></table></figure>
+</li>
+<li><p>fdisk 如果不加-l选项，则会进入另一个模式，在该模式下，可以对磁盘进行分区操作。示例如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">fdisk /dev/sdb</div><div class="line">欢迎使用 fdisk (util-linux 2.23.2)。</div><div class="line"></div><div class="line">更改将停留在内存中，直到您决定将更改写入磁盘。</div><div class="line">使用写入命令前请三思。</div><div class="line"></div><div class="line"></div><div class="line">命令(输入 m 获取帮助)：m</div><div class="line">命令操作</div><div class="line">   a   toggle a bootable flag</div><div class="line">   b   edit bsd disklabel</div><div class="line">   c   toggle the dos compatibility flag</div><div class="line">   d   delete a partition</div><div class="line">   g   create a new empty GPT partition table</div><div class="line">   G   create an IRIX (SGI) partition table</div><div class="line">   l   list known partition types</div><div class="line">   m   print this menu</div><div class="line">   n   add a new partition</div><div class="line">   o   create a new empty DOS partition table</div><div class="line">   p   print the partition table</div><div class="line">   q   quit without saving changes</div><div class="line">   s   create a new empty Sun disklabel</div><div class="line">   t   change a partition&apos;s system id</div><div class="line">   u   change display/entry units</div><div class="line">   v   verify the partition table</div><div class="line">   w   write table to disk and exit</div><div class="line">   x   extra functionality (experts only)</div><div class="line"></div><div class="line">命令(输入 m 获取帮助)：</div></pre></td></tr></table></figure>
+</li>
+<li><p>进入分区模式后，可以输入m获取命令列表的说明和帮助。其常用的操作命令如下：</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>m</td>
+<td>获取命令列表和帮助</td>
+</tr>
+<tr>
+<td>p</td>
+<td>打印当前磁盘的分区情况</td>
+</tr>
+<tr>
+<td>n</td>
+<td>新建一个新的分区</td>
+</tr>
+<tr>
+<td>w</td>
+<td>保存分区</td>
+</tr>
+<tr>
+<td>q</td>
+<td>表示退出，若未进行保存，则会未保存退出，在此之前的一切分区工作都失效</td>
+</tr>
+<tr>
+<td>d</td>
+<td>删除一个分区</td>
+</tr>
+<tr>
+<td>l</td>
+<td>已知的分区类型列表</td>
+</tr>
+</tbody>
+</table>
+<p>在工作中，常使用的就是给一个盘分一个主分区。</p>
+<h1 id="格式化磁盘分区"><a href="#格式化磁盘分区" class="headerlink" title="格式化磁盘分区"></a>格式化磁盘分区</h1><p>磁盘分区后，还需要对其进行格式化操作才能使用。格式化就是为分区配置相应的文件系统。Win系统用Fat32和NTFS文件系统，而Linux用ext3、ext4或xfs文件系统在 CentOS 7 系统中，是以XFS作为默认的文件系统的，但是我们依旧可以给它指定ext3和ext4格式。</p>
+<p><code>cat /etc/filesystems</code> 查看系统支持哪些文件系统</p>
+<h2 id="mke2fs"><a href="#mke2fs" class="headerlink" title="mke2fs"></a>mke2fs</h2><blockquote>
+<p>mke2fs 用于给磁盘进行格式化。它和这几个工具具有相同的功能：</p>
+<ul>
+<li>mkfs.ext2</li>
+<li>mkfs.ext3</li>
+<li>mkfs.ext4<br>但需要注意的是，mke2fs并不支持把分区格式化为XFS系统，而只能使用mkfs.xfs。</li>
+</ul>
+</blockquote>
+<p>mke2fs 的常用选项如下：</p>
+<table>
+<thead>
+<tr>
+<th>常用选项</th>
+<th>选项说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-b</td>
+<td>分区时设定每个数据区块占用的空间大小。目前，每个数据块支持1024B、2048B和4096B。（设定为别的值可能会不能用）</td>
+</tr>
+<tr>
+<td>-I</td>
+<td>设定inode的大小</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>设定块和inode数量的比例，比如块大小为4096，则后面加上8192，格式化后inode的数量是块数量的两倍</td>
+</tr>
+<tr>
+<td>-N</td>
+<td>设定inode的数量。有时默认的inode数不够用，所以要自定义inode的数量</td>
+</tr>
+<tr>
+<td>-c</td>
+<td>在格式化前先检测一下磁盘是否有问题，加上这个选项后，运行速度会非常慢</td>
+</tr>
+<tr>
+<td>-L</td>
+<td>预设该分区的标签（Label）</td>
+</tr>
+<tr>
+<td>-j</td>
+<td>建立ext3格式的分区。如果使用mkfs.ext3命令，就不用加这个选项了</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>指定文件系统的类型，可以是ext2、ext3和ext4</td>
+</tr>
+<tr>
+<td>-m 1</td>
+<td>（表示百分之一对super user的保留，最小也支持0.1）格式化时，指定预留给管理员的磁盘比例，是一个百分比，只针对 mke2fs 命令</td>
+</tr>
+</tbody>
+</table>
+<p>示例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"># mke2fs -t ext4 /dev/sdb5</div><div class="line">mke2fs 1.42.9 (28-Dec-2013)</div><div class="line">文件系统标签=</div><div class="line">OS type: Linux</div><div class="line">块大小=4096 (log=2)</div><div class="line">分块大小=4096 (log=2)</div><div class="line">Stride=0 blocks, Stripe width=0 blocks</div><div class="line">64000 inodes, 256000 blocks</div><div class="line">12800 blocks (5.00%) reserved for the super user</div><div class="line">第一个数据块=0</div><div class="line">Maximum filesystem blocks=262144000</div><div class="line">8 block groups</div><div class="line">32768 blocks per group, 32768 fragments per group</div><div class="line">8000 inodes per group</div><div class="line">Superblock backups stored on blocks:</div><div class="line">        32768, 98304, 163840, 229376</div><div class="line"></div><div class="line">Allocating group tables: 完成</div><div class="line">正在写入inode表: 完成</div><div class="line">Creating journal (4096 blocks): 完成</div><div class="line">Writing superblocks and filesystem accounting information: 完成</div></pre></td></tr></table></figure></p>
+<p>使用mkfs.xfs把分区格式化为XFS类型，示例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"># mkfs.xfs /dev/sdb7</div><div class="line">meta-data=/dev/sdb7              isize=512    agcount=4, agsize=64000 blks</div><div class="line">         =                       sectsz=512   attr=2, projid32bit=1</div><div class="line">         =                       crc=1        finobt=0, sparse=0</div><div class="line">data     =                       bsize=4096   blocks=256000, imaxpct=25</div><div class="line">         =                       sunit=0      swidth=0 blks</div><div class="line">naming   =version 2              bsize=4096   ascii-ci=0 ftype=1</div><div class="line">log      =internal log           bsize=4096   blocks=855, version=2</div><div class="line">         =                       sectsz=512   sunit=0 blks, lazy-count=1</div><div class="line">realtime =none                   extsz=4096   blocks=0, rtextents=0</div></pre></td></tr></table></figure></p>
+<p>可以使用-L选项来指定标签。标签会在挂载磁盘的时候使用，也可以写入配置文件，这样会很可靠。示例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"># mke2fs -L TEST -t ext4 /dev/sdb5</div><div class="line">mke2fs 1.42.9 (28-Dec-2013)</div><div class="line">文件系统标签=TEST</div><div class="line">OS type: Linux</div><div class="line">块大小=4096 (log=2)</div><div class="line">分块大小=4096 (log=2)</div><div class="line">Stride=0 blocks, Stripe width=0 blocks</div><div class="line">64000 inodes, 256000 blocks</div><div class="line">12800 blocks (5.00%) reserved for the super user</div><div class="line">第一个数据块=0</div><div class="line">Maximum filesystem blocks=262144000</div><div class="line">8 block groups</div><div class="line">32768 blocks per group, 32768 fragments per group</div><div class="line">8000 inodes per group</div><div class="line">Superblock backups stored on blocks:</div><div class="line">        32768, 98304, 163840, 229376</div><div class="line"></div><div class="line">Allocating group tables: 完成</div><div class="line">正在写入inode表: 完成</div><div class="line">Creating journal (4096 blocks): 完成</div><div class="line">Writing superblocks and filesystem accounting information: 完成</div></pre></td></tr></table></figure></p>
+<h2 id="e2label"><a href="#e2label" class="headerlink" title="e2label"></a>e2label</h2><blockquote>
+<p>e2label 用于查看或修改分区的标签，它只支持ext格式的文件系统，而不支持XFS文件系统。</p>
+</blockquote>
+<p>示例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># e2label /dev/sdb5</div><div class="line">TEST</div><div class="line"># e2label /dev/sdb5 TEST1</div><div class="line"># e2label /dev/sdb5</div><div class="line">TEST1</div></pre></td></tr></table></figure></p>
+<h1 id="挂载和卸载磁盘分区"><a href="#挂载和卸载磁盘分区" class="headerlink" title="挂载和卸载磁盘分区"></a>挂载和卸载磁盘分区</h1><p>格式化完成后，如果想要使用这些分区，就需要对它们进行挂载操作。格式化后的磁盘其实是一个块文件，类型为b。</p>
+<p>在挂载某个分区之前，需要先建立一个挂载点，这个挂载点是以目录的形式出现的。一旦把某个分区挂载到这个挂载点（目录）下，要再往这个目录写数据时，就都会写到该分区。所以，在挂载该分区前，挂载点（目录）最好是个空目录。其实目录不为空并不影响所挂载分区的使用，但一旦挂载上了，该目录下以前的东西就看不到了（数据并没有丢失），除非卸载该分区。</p>
+<h2 id="etc-fstab-配置文件"><a href="#etc-fstab-配置文件" class="headerlink" title="/etc/fstab 配置文件"></a>/etc/fstab 配置文件</h2><p>这个文件的内容就是系统启动时需要挂载的各个分区。我们可以在该文件里增加系统启动时需自动挂载的分区。文件内容如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"># cat /etc/fstab</div><div class="line"></div><div class="line">#</div><div class="line"># /etc/fstab</div><div class="line"># Created by anaconda on Tue Aug 15 00:19:30 2017</div><div class="line">#</div><div class="line"># Accessible filesystems, by reference, are maintained under &apos;/dev/disk&apos;</div><div class="line"># See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info</div><div class="line">#</div><div class="line">UUID=1d54c61a-2320-4f2d-92d3-0bfbcebbf797 /                       xfs     defaults        0 0</div><div class="line">UUID=9f03989b-dc6d-4d48-99e1-a85984422d6c /boot                   xfs     defaults        0 0</div><div class="line">UUID=4ad00c9e-66f1-42c4-99b3-d9cd326b586a swap                    swap    defaults        0 0</div><div class="line">LABEL=TEST123                             /newdir                 ext4    defaul</div></pre></td></tr></table></figure></p>
+<p>配置文件中各列的意义如下：</p>
+<table>
+<thead>
+<tr>
+<th>列数</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>分区的标识，可以是分区的Label，分区的UUID，以及分区名（如/dev/sda1）</td>
+</tr>
+<tr>
+<td>2</td>
+<td>挂载点</td>
+</tr>
+<tr>
+<td>3</td>
+<td>分区的文件系统类型</td>
+</tr>
+<tr>
+<td>4</td>
+<td>mount的一些挂载参数。一般情况下，直接写defaults即可</td>
+</tr>
+<tr>
+<td>5</td>
+<td>是否被dump备份。1表示备份，0表示不备份</td>
+</tr>
+<tr>
+<td>6</td>
+<td>开机时是否自检磁盘。1和2都表示检测，0表示不检测。自检是，1比2优先级高，所以先检测1，再检测2。如果有多个分区需要开机检测，就都设置成2，1检测玩后会同时检测2.在CentOS7里，所有分区的该值都设置为0</td>
+</tr>
+</tbody>
+</table>
+<p>下面是配置文件中第4列的常用选项：</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>default</td>
+<td>表示按照大多数永久文件系统的默认值设置挂载定义，它包含了：rw、suid、dev、exec、auto、nouser和async</td>
+</tr>
+<tr>
+<td>async和sync</td>
+<td>async表示磁盘和内存不同步。系统每隔一段时间就会把内存数据写入磁盘中，而sync则会时时同步内存和磁盘中的数据</td>
+</tr>
+<tr>
+<td>auto和noauto</td>
+<td>表示开机自动挂载或是不自动挂载</td>
+</tr>
+<tr>
+<td>ro</td>
+<td>按只读权限挂载</td>
+</tr>
+<tr>
+<td>rw</td>
+<td>按可读可写权限挂载</td>
+</tr>
+<tr>
+<td>exec和noexec</td>
+<td>表示允许或不允许可执行文件执行，但千万不要把根分区挂载为noexec，否则将无法只用系统，甚至连mount命令都无法使用</td>
+</tr>
+<tr>
+<td>user和nouser</td>
+<td>表示允许或不允许root外的其他用户挂载分区。为了安全，请用nouser</td>
+</tr>
+<tr>
+<td>suid和nosuid</td>
+<td>表示允许或不允许分区有suid属性，一般设置为nosuid</td>
+</tr>
+<tr>
+<td>usrquota</td>
+<td>表示启动用户的磁盘配额模式。磁盘配额会针对用户限定他们使用的磁盘额度</td>
+</tr>
+<tr>
+<td>grquota</td>
+<td>表示启动群组的磁盘配额模式</td>
+</tr>
+</tbody>
+</table>
+<h2 id="mount"><a href="#mount" class="headerlink" title="mount"></a>mount</h2><blockquote>
+<p>mount 用于挂载分区。</p>
+</blockquote>
+<p>直接运行 <code>mount</code>，会显示一大推信息，可在其中查看当前系统已挂载的所有分区、分区文件系统的类型、挂载点及一些选项等信息。如果想知道某个已挂载分区的文件系统类型，直接用mount命令查看即可。（查看未挂载的分区，可以使用后面所讲的blkid命令）</p>
+<p>挂载操作，可以用分区名（如/dev/sdb5）、也可以用分区的Label和UUID的方式进行（更可靠）。示例如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># mount /dev/sdb5 /newdir</div><div class="line">或</div><div class="line"># mount LABEL=TEST /newdir</div></pre></td></tr></table></figure></p>
+<p>mount的常用选项如下：</p>
+<table>
+<thead>
+<tr>
+<th>常用选项</th>
+<th>选项说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a</td>
+<td>会把 /etc/fstab 配置文件中出现的所有磁盘分区挂载上</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>用来指定挂载的分区类型，默认不指定，会自动识别</td>
+</tr>
+<tr>
+<td>-o</td>
+<td>用来指定挂载的分区有哪些特性，即上面/etc/fstab配置文件中第4列的哪些（该选项常用）。例如<code>mount -oremount,ro  /dev/sdb5 /db5</code> 重新挂载该分区为只读。<code>mount -o loop \*.iso 挂载点</code> 挂载一个镜像文件</td>
+</tr>
+<tr>
+<td>–bind 源目录 目标目录</td>
+<td>挂载一个目录到另一个目录</td>
+</tr>
+</tbody>
+</table>
+<p>建议：在进行分区的挂载操作时，最好用分区的LABEL或UUID挂载。</p>
+<h2 id="blkid"><a href="#blkid" class="headerlink" title="blkid"></a>blkid</h2><blockquote>
+<p>blkid 用来获取全部磁盘分区的UUID。如果分区在格式化时指定了Label，该命令也会显示LABEL值、文件系统的类型。</p>
+</blockquote>
+<p>示例如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"># blkid</div><div class="line">/dev/sdb5: LABEL=&quot;TEST1&quot; UUID=&quot;d2c3e579-dc31-4121-95b8-789e41fbdd96&quot; TYPE=&quot;ext4&quot;</div><div class="line">/dev/sdb6: UUID=&quot;e9d355cd-d339-4bfe-ab4e-b6ed0a766964&quot; TYPE=&quot;xfs&quot;</div><div class="line">/dev/sdb7: UUID=&quot;ea87ed23-218c-4fed-a600-823c24ac35b2&quot; TYPE=&quot;xfs&quot;</div><div class="line">/dev/sda1: UUID=&quot;9f03989b-dc6d-4d48-99e1-a85984422d6c&quot; TYPE=&quot;xfs&quot;</div><div class="line">/dev/sda2: UUID=&quot;4ad00c9e-66f1-42c4-99b3-d9cd326b586a&quot; TYPE=&quot;swap&quot;</div><div class="line">/dev/sda3: UUID=&quot;1d54c61a-2320-4f2d-92d3-0bfbcebbf797&quot; TYPE=&quot;xfs&quot;</div><div class="line">/dev/sr0: UUID=&quot;2016-12-05-13-52-39-00&quot; LABEL=&quot;CentOS 7 x86_64&quot; TYPE=&quot;iso9660&quot; PTTYPE=&quot;dos&quot;</div></pre></td></tr></table></figure></p>
+<p>这个命令后面也可以指定查询哪个分区：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># blkid /dev/sdb5</div><div class="line">/dev/sdb5: LABEL=&quot;TEST1&quot; UUID=&quot;d2c3e579-dc31-4121-95b8-789e41fbdd96&quot; TYPE=&quot;ext4&quot;</div></pre></td></tr></table></figure></p>
+<p>查询到某个分区的UUID后，如何使用？用法如下：<br><code>mount UUID=&quot;d2c3e579-dc31-4121-95b8-789e41fbdd96&quot; /newdir</code></p>
+<h2 id="umount"><a href="#umount" class="headerlink" title="umount"></a>umount</h2><blockquote>
+<p>umount 用于卸载分区。</p>
+</blockquote>
+<p>格式 <code>umount 挂载点/分区名</code> 。注意，卸载时不能跟LABEL和UUID。</p>
+<p>有时，umount的-l选项很有用。当当前目录在即将要卸载的分区内时，会遇到不能卸载的情况。解决这个问题的方法有两个，一个是从该分区切换到别的分区，另一个就是加上-l这个选项。</p>
+<h2 id="让某个分区在开机后自动挂载"><a href="#让某个分区在开机后自动挂载" class="headerlink" title="让某个分区在开机后自动挂载"></a>让某个分区在开机后自动挂载</h2><p>有两个方法：</p>
+<ol>
+<li>在/etc/fstab文件中配置</li>
+<li>在/etc/rc.d/rc.local文件中，添加一行挂载该分区的命令（注意，命令用绝对路径的写法，且把该文件的权限设置一下： <code>chmod a+x /etc/rc.d/rc.local</code>。因为CentOS7中该文件默认没有执行权限）</li>
+</ol>
+<p>一个小建议，那就是挂载磁盘分区的时候，尽量使用 UUID 或者 LABEL 这两种方法。</p>
+<h1 id="建立一个Swap文件增加虚拟内存"><a href="#建立一个Swap文件增加虚拟内存" class="headerlink" title="建立一个Swap文件增加虚拟内存"></a>建立一个Swap文件增加虚拟内存</h1><p>首先介绍一下dd命令。</p>
+<h2 id="dd"><a href="#dd" class="headerlink" title="dd"></a>dd</h2><blockquote>
+<p>dd命令用于创建指定大小的文件。</p>
+</blockquote>
+<p>格式 <code>dd if=指定源 of=指定目标文件 bs=指定块大小 count=指定块数量</code></p>
+<p>说明：</p>
+<ul>
+<li>用if指定源（一般是用/dev/zero，它是Unix系统特有的一个文件，它可以源源不断地提供”0”）</li>
+<li>用of指定目标文件，这里写上新建文件的名字</li>
+<li>bs乘以count的得数就是即将创建的文件的大小</li>
+</ul>
+<h2 id="增加虚拟内存的实现方法"><a href="#增加虚拟内存的实现方法" class="headerlink" title="增加虚拟内存的实现方法"></a>增加虚拟内存的实现方法</h2><p>增加虚拟磁盘的思路是：建立swapfile–&gt;格式化为swap格式–&gt;启用该虚拟磁盘。</p>
+<p>具体操作如下：</p>
+<ol>
+<li>建立swapfile ： <code>dd if=/dev/zero of=/tmp/newdisk bs=1M count=1024</code></li>
+<li>将其格式化为swap格式： <code>mkswap -f /tmp/newdisk</code></li>
+<li>挂载使用： <code>swapon /tmp/newdisk</code></li>
+<li>关闭临时swap： <code>swapoff /tmp/newdisk</code></li>
+</ol>
+<h1 id="补充的内容"><a href="#补充的内容" class="headerlink" title="补充的内容"></a>补充的内容</h1><h2 id="free"><a href="#free" class="headerlink" title="free"></a>free</h2><blockquote>
+<p>free 用于查看内存和Swap的使用情况。（平时不用）</p>
+</blockquote>
+<h2 id="LVM"><a href="#LVM" class="headerlink" title="LVM"></a>LVM</h2><ol>
+<li>好处是扩展性好</li>
+<li>坏处是数据损坏时可恢复性很小，因此LVM在企业中用的很少，初学时可以不学了</li>
+</ol>
+<h2 id="fsck"><a href="#fsck" class="headerlink" title="fsck"></a>fsck</h2><blockquote>
+<p>fsck 用于修复磁盘，但有时会把磁盘中的数据弄丢，因此不常用。</p>
+</blockquote>
+<p>格式 <code>fsck -y 分区名</code></p>
+<blockquote>
+<p>结束</p>
+</blockquote>
+</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/08/31/Linux压缩打包工具的使用/" class="pre">Linux压缩打包工具的使用</a><a href="/2017/08/31/Linux用户与用户组管理/" class="next">Linux用户与用户组管理</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#查看磁盘或目录的容量"><span class="toc-text">查看磁盘或目录的容量</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#df"><span class="toc-text">df</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#du"><span class="toc-text">du</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#磁盘的分区"><span class="toc-text">磁盘的分区</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#fdisk"><span class="toc-text">fdisk</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#格式化磁盘分区"><span class="toc-text">格式化磁盘分区</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mke2fs"><span class="toc-text">mke2fs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#e2label"><span class="toc-text">e2label</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#挂载和卸载磁盘分区"><span class="toc-text">挂载和卸载磁盘分区</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#etc-fstab-配置文件"><span class="toc-text">/etc/fstab 配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mount"><span class="toc-text">mount</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#blkid"><span class="toc-text">blkid</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#umount"><span class="toc-text">umount</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#让某个分区在开机后自动挂载"><span class="toc-text">让某个分区在开机后自动挂载</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#建立一个Swap文件增加虚拟内存"><span class="toc-text">建立一个Swap文件增加虚拟内存</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#dd"><span class="toc-text">dd</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#增加虚拟内存的实现方法"><span class="toc-text">增加虚拟内存的实现方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#补充的内容"><span class="toc-text">补充的内容</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#free"><span class="toc-text">free</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LVM"><span class="toc-text">LVM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#fsck"><span class="toc-text">fsck</span></a></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/12/19/常用便携软件/">常用便携软件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/01/Linux系统管理技巧（Aming）/">Linux系统管理技巧（Aming）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/FTP服务配置（Aming）/">FTP服务配置（Aming）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/shell脚本中的select循环/">shell脚本中的select循环</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/shell脚本基础语法/">shell脚本基础语法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/20/NFS服务简单配置（Aming）/">NFS服务简单配置（Aming）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/已读书清单-武侠/">已读书清单-武侠</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/已读书清单-科幻/">已读书清单-科幻</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/已读书清单-综合/">已读书清单-综合</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/Linux基础部分的补充/">Linux基础部分的补充</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Reading/">Reading</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Shell/">Shell</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tool/">Tool</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vim/">Vim</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Server/">服务</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/RegularExpression/">正则表达式</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zhuanzai/">转载</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">奇怪先生theshu.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

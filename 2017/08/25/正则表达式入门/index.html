@@ -1,0 +1,159 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="奇怪先生的博客"><title>正则表达式入门 | 奇怪先生的博客</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">正则表达式入门</h1><a id="logo" href="/.">奇怪先生的博客</a><p class="description">耳目得来终觉浅，觉知此事要躬行。</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">正则表达式入门</h1><div class="post-meta"><a href="/2017/08/25/正则表达式入门/#comments" class="comment-count"></a><p><span class="date">Aug 25, 2017</span><span><a href="/categories/RegularExpression/" class="category">正则表达式</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><blockquote>
+<p>正则表达式入门</p>
+</blockquote>
+<h1 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h1><blockquote>
+<p>正则表达式是处理字符串的方法，它是以行为单位来进行字符串的处理行为，通过一些特殊符号的辅助，可以轻易达到查找、删除、替换某特定字符的目的。它是一种规则，只要某工具支持正则表达式，便可以使用这种规则。（支持正则的工具有：vi、grep、awk、sed等）</p>
+<p>注意，使用正则表达式时，需要注意当时环境的语系是什么，否则结果会有所不同。</p>
+<p>注意，正则表达式的特殊字符与一般在命令行输入命令的通配符并不相同。</p>
+</blockquote>
+<h1 id="特殊符号"><a href="#特殊符号" class="headerlink" title="特殊符号"></a>特殊符号</h1><table>
+<thead>
+<tr>
+<th>特殊符号</th>
+<th>代表意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>[:alnum:]</td>
+<td>英文大小写字符及数字，即0-9，A-Z，a-z</td>
+</tr>
+<tr>
+<td>[:alpha:]</td>
+<td>英文大小写字符，即A-Z，a-z</td>
+</tr>
+<tr>
+<td>[:lower:]</td>
+<td>小写字母，即a-z</td>
+</tr>
+<tr>
+<td>[:upper:]</td>
+<td>大写字母，即A-Z</td>
+</tr>
+<tr>
+<td>[:digit:]</td>
+<td>数字，即0-9</td>
+</tr>
+<tr>
+<td>[:blank:]</td>
+<td>空格键与[Tab]按键</td>
+</tr>
+<tr>
+<td>[:cntrl:]</td>
+<td>键盘上面的控制按键，即包括CR，LF，Tab，Del等</td>
+</tr>
+<tr>
+<td>[:graph:]</td>
+<td>除了空格符（空格键与[Tab]按键）外的其它所有按键</td>
+</tr>
+<tr>
+<td>[:print:]</td>
+<td>任何可以被打印出来的字符</td>
+</tr>
+<tr>
+<td>[:punct:]</td>
+<td>标点符号（punctuation symbol），即” ‘ ? ! ; : # $</td>
+</tr>
+<tr>
+<td>[:space:]</td>
+<td>任何会产生空白的字符，包括空格键[Tab]CR等</td>
+</tr>
+<tr>
+<td>[:xdigit:]</td>
+<td>十六进制的数字类型，包括0-9，A-F，a-f的数字与字符</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>上表最常用的是前五个，要熟记！</p>
+</blockquote>
+<h1 id="基础正则表达式"><a href="#基础正则表达式" class="headerlink" title="基础正则表达式"></a>基础正则表达式</h1><table>
+<thead>
+<tr>
+<th>RE字符</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>^word</td>
+<td>待查找的字符串（word）在行首</td>
+</tr>
+<tr>
+<td>word$</td>
+<td>待查找的字符串（word）在行尾</td>
+</tr>
+<tr>
+<td> . 点</td>
+<td>代表一定有一个任意字符的字符</td>
+</tr>
+<tr>
+<td> \</td>
+<td>转义字符，将特殊符号的特殊意义去除</td>
+</tr>
+<tr>
+<td>*星号</td>
+<td>重复零个到无穷多个的前一个字符</td>
+</tr>
+<tr>
+<td>.*</td>
+<td>表示任意个字符（包含空行）</td>
+</tr>
+<tr>
+<td>[list]</td>
+<td>从字符集合的RE字符里找出想要选取的字符</td>
+</tr>
+<tr>
+<td>[n1-n2]</td>
+<td>从字符集合的RE字符里面找出想要选取的字符范围</td>
+</tr>
+<tr>
+<td>[^list]</td>
+<td>从字符集合的RE字符里面找出不要的字符串或范围</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>连续n到m的前一个RE字符，若为{n}则是连续n个前一个RE字符，若为{n,}则是连续n个以上的前一个RE字符</td>
+</tr>
+</tbody>
+</table>
+<h1 id="扩展正则表达式"><a href="#扩展正则表达式" class="headerlink" title="扩展正则表达式"></a>扩展正则表达式</h1><table>
+<thead>
+<tr>
+<th>RE字符</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> +</td>
+<td>重复一个或一个以上的前一个RE字符</td>
+</tr>
+<tr>
+<td> ?</td>
+<td>零个或一个的前一个RE字符</td>
+</tr>
+<tr>
+<td> “竖杠”</td>
+<td>用或（or）的方式找出数个字符串</td>
+</tr>
+<tr>
+<td> ()</td>
+<td>找出 “组”字符串</td>
+</tr>
+<tr>
+<td> ()+</td>
+<td>多个重复组的判别</td>
+</tr>
+</tbody>
+</table>
+<h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><ol>
+<li>{}、+、-、|等在grep中使用时需要加反斜杠脱义，而在egrep直接使用即可。</li>
+<li>egrep 和 grep -E 的效果是一样的。</li>
+<li>sed -r 是使用扩展正则表达式的参数。 </li>
+</ol>
+<blockquote>
+<p>结束</p>
+</blockquote>
+</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/08/25/grep/" class="pre">grep</a><a href="/2017/05/20/《空城纪》许嵩和栈弈/" class="next">《空城纪》许嵩和栈弈</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#定义"><span class="toc-text">定义</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#特殊符号"><span class="toc-text">特殊符号</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#基础正则表达式"><span class="toc-text">基础正则表达式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#扩展正则表达式"><span class="toc-text">扩展正则表达式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#注意"><span class="toc-text">注意</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/12/19/常用便携软件/">常用便携软件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/01/Linux系统管理技巧（Aming）/">Linux系统管理技巧（Aming）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/FTP服务配置（Aming）/">FTP服务配置（Aming）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/shell脚本中的select循环/">shell脚本中的select循环</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/shell脚本基础语法/">shell脚本基础语法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/20/NFS服务简单配置（Aming）/">NFS服务简单配置（Aming）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/已读书清单-武侠/">已读书清单-武侠</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/已读书清单-科幻/">已读书清单-科幻</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/已读书清单-综合/">已读书清单-综合</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/Linux基础部分的补充/">Linux基础部分的补充</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Reading/">Reading</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Shell/">Shell</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tool/">Tool</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vim/">Vim</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Server/">服务</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/RegularExpression/">正则表达式</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zhuanzai/">转载</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">奇怪先生theshu.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="奇怪先生的博客"><title>NFS服务简单配置（Aming） | 奇怪先生的博客</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">NFS服务简单配置（Aming）</h1><a id="logo" href="/.">奇怪先生的博客</a><p class="description">耳目得来终觉浅，觉知此事要躬行。</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">NFS服务简单配置（Aming）</h1><div class="post-meta"><a href="/2017/09/20/NFS服务简单配置（Aming）/#comments" class="comment-count"></a><p><span class="date">Sep 20, 2017</span><span><a href="/categories/Server/" class="category">服务</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><blockquote>
+<p>NFS用于在网络上共享存储。</p>
+</blockquote>
+<h1 id="服务端配置NFS"><a href="#服务端配置NFS" class="headerlink" title="服务端配置NFS"></a>服务端配置NFS</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>在CentOS上使用NFS服务需要安装两个包：nfs-utils和rpcbind。在使用yum工具安装nfs-utils时会一并安装rpcbind。如下所示：<br><code>yum install -y nfs-utils</code></p>
+<p>说明：</p>
+<ul>
+<li>以往的CentOS版本是需要安装protmap包的，从CentOS6开始，就改为安装rpcbind包了。</li>
+</ul>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>配置NFS比较简单，只需要编辑配置文件/etc/exports。如下所示，是一个非常简单的例子，用来创建一个简单的NFS服务器。</p>
+<p>首先，修改配置文件（默认该文件为空），如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># vim /etc/exports       //写入如下内容</div><div class="line"></div><div class="line">/home/nfstestdir 192.168.188.0/24(rw,sync,all_squash,anonuid=1000,anongid=1000)</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>这个配置文件就一行，共分为三个部分<ul>
+<li>第一个部分是本地要共享出去的目录</li>
+<li>第二个部分是允许访问的主机（可以是一个IP，也可以是一个IP段）</li>
+<li>第三个部分是小括号里面的一些权限选项</li>
+</ul>
+</li>
+<li>如上例子所示的这条配置的意义是，要共享的目录为/home/nfstestdir，信任的主机为192.168.188.0/24这个网段，权限为读写，同步模式，下限定所有使用者，并且限定的UID和GID都为1000    </li>
+<li>关于第三部分的权限选项的说明<ul>
+<li>rw：表示读/写</li>
+<li>ro：表示只读</li>
+<li>sync：同步模式，表示内存中的数据实时写入磁盘</li>
+<li>async：非同步模式，表示把内存中的数据定期写入磁盘</li>
+<li>no_root_squash：加上这个选项后，root用户就会对共享目录拥有至高的权限控制，就像是对本机的目录操作一样，但这样安全性降低</li>
+<li>root_squash：与no_root_squash选项相对应，表示root拥护对共享目录的权限不高，只有普通用户的权限，即限制了root</li>
+<li>all_squash：表示不管使用NFS的用户是谁，其身份都会被限定为一个指定的普通用户身份</li>
+<li>anonuid/anongid：要和root_squash以及all_squash选项一同使用，用于指定使用NFS的用户被限定后的UID和GID，但前提是本机的/etc/passwd中存在相应的UID和GID</li>
+</ul>
+</li>
+</ul>
+<p>其次，编辑好配置文件后，创建相关目录并启动NFS服务，如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># mkdir /home/nfstestdir</div><div class="line"># systemctl start rpcbind</div><div class="line"># systemctl start nfs</div><div class="line"># systemctl enable rpcbind</div><div class="line"># systemctl enable nfs</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>在启动NFS服务之前，需要先启动rpcbind服务（CentOS的老版本中为portmap]）</li>
+</ul>
+<h1 id="客户端挂载NFS"><a href="#客户端挂载NFS" class="headerlink" title="客户端挂载NFS"></a>客户端挂载NFS</h1><p>假设两台机器的IP分别为192.168.188.128和192.168.188.129。其中提供NFS服务的是192.168.188.128，客户端是192.168.188.129。</p>
+<p>在客户端挂载NFS之前，需要查看服务端共享了哪些目录。在客户端（188.129）安装nfs-utils包后，可以使用<code>showmount</code>命令查看（这个命令就是前面的包所带的），如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># showmount -e 192.168.188.128</div><div class="line">Export list for 192.168.188.128:</div><div class="line">/home/nfstestdir 192.168.188.0/24</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>使用命令<code>showmount -e IP</code>就可以查看NFS的共享情况，这个IP为NFS服务端IP</li>
+<li>从上例中可以看到192.168.188.128的共享目录为/home/nfstestdir，信任主机为192.168.188.0/24这个网段。</li>
+</ul>
+<p>.<br>然后在客户端上（188.129）挂载NFS，如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># mount -t nfs -o nfsvers=3 192.168.188.128:/home/nfstestdir /mnt</div><div class="line"># df -h</div><div class="line">.......</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>使用命令<code>df -h</code>可以看到增加了一个/mnt分区，它就是NFS的共享目录了。</li>
+<li>-o后面跟挂载选项，如果不加<code>-o nfsvers=3</code>则在挂载目录下的文件属主和属组都是nobody，如果指定 nfsvers=3 则显示UID和GID，所以尽量加上这个选项，避免权限混乱</li>
+<li>假如在该NFS的共享目录里面创建文件的权限不够，则需要在客户端中给共享目录相应的权限（如：chmod 777 /home/nfstestdir）</li>
+<li>在权限配置正确后，客户端在NFS共享目录里面创建文件即可成功。（在上例配置的情况下，客户端在NFS共享目录里面创建的文件所有者和所属组的UID和GID都为1000）</li>
+</ul>
+<h1 id="命令-exportfs"><a href="#命令-exportfs" class="headerlink" title="命令 exportfs"></a>命令 exportfs</h1><p>这个命令用于这种情况，当改变NFS的配置文件/etc/exports后，使用该命令挂载而不需要重启NFS服务。</p>
+<p>exportfs命令的常用选项为-a、-r、-u和-v，各个选项的含义如下：</p>
+<table>
+<thead>
+<tr>
+<th>常用选项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a</td>
+<td>表示全部挂载或者卸载</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>表示重新挂载</td>
+</tr>
+<tr>
+<td>-u</td>
+<td>表示卸载某一个目录</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>表示显示共享的目录</td>
+</tr>
+</tbody>
+</table>
+<h1 id="一个测试实验"><a href="#一个测试实验" class="headerlink" title="一个测试实验"></a>一个测试实验</h1><p>下面是关于以上知识的一个实验（从上面的例子中继续试验）：</p>
+<p>首先修改服务端（188.128）的配置文件，如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># vi /etc/exports		//增加一行：</div><div class="line"></div><div class="line">/tmp/ 192.168.188.0/24(rw.sync,no_root_squash)</div></pre></td></tr></table></figure></p>
+<p>然后在服务端（188.128）上执行如下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># exportfs -arv</div><div class="line">exporting 192.168.188.0/24:/tmp</div><div class="line">exporting 192.168.188.0/24:/home/nfstestdir</div></pre></td></tr></table></figure></p>
+<p>在上一节用到了mount命令。用mount命令来挂载NFS服务是有讲究的，它要用<code>-t nfs</code>来指定挂载的类型为nfs。另外在挂载NFS服务时，常用<code>-o nolock</code>选项（即不加锁）。例如在客户端（188.129）上执行如下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># mkdir /aminglinux</div><div class="line"># mount -t nfs -o nolock 192.168.188.128:/tmp /aminglinux/</div></pre></td></tr></table></figure></p>
+<h1 id="开机自动挂载NFS（基于上面的实验）"><a href="#开机自动挂载NFS（基于上面的实验）" class="headerlink" title="开机自动挂载NFS（基于上面的实验）"></a>开机自动挂载NFS（基于上面的实验）</h1><p>还可以把要挂载的NFS目录写入到客户端上的/etc/fstab文件中，挂载时只需要执行<code>mount -a</code>命令。例如在/etc/fstab文件中增加一行，如下所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">192.168.188.128:/tmp/ /aminglinux  nfs  defualt,nolock		0 0</div></pre></td></tr></table></figure></p>
+<p>由于刚刚已挂载了NFS，需要先卸载，执行如下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># umount /aminglinux</div></pre></td></tr></table></figure></p>
+<p>然后重新挂载，执行如下命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mount -a</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>这样操作的好处是以后开机会自动挂载NFS。</li>
+<li>刚刚挂载的/aminglinux/目录在服务端设置为了no_root_squash，它并不会限制root用户，也就是说使用root用户创建文件时，跟在客户端本机上创建的一样。</li>
+</ul>
+<blockquote>
+<p>结束</p>
+</blockquote>
+</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/09/21/shell脚本基础语法/" class="pre">shell脚本基础语法</a><a href="/2017/09/18/已读书清单-武侠/" class="next">已读书清单-武侠</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#服务端配置NFS"><span class="toc-text">服务端配置NFS</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#配置"><span class="toc-text">配置</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#客户端挂载NFS"><span class="toc-text">客户端挂载NFS</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#命令-exportfs"><span class="toc-text">命令 exportfs</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#一个测试实验"><span class="toc-text">一个测试实验</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#开机自动挂载NFS（基于上面的实验）"><span class="toc-text">开机自动挂载NFS（基于上面的实验）</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/12/19/常用便携软件/">常用便携软件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/01/Linux系统管理技巧（Aming）/">Linux系统管理技巧（Aming）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/FTP服务配置（Aming）/">FTP服务配置（Aming）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/shell脚本中的select循环/">shell脚本中的select循环</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/shell脚本基础语法/">shell脚本基础语法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/20/NFS服务简单配置（Aming）/">NFS服务简单配置（Aming）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/已读书清单-武侠/">已读书清单-武侠</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/已读书清单-科幻/">已读书清单-科幻</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/已读书清单-综合/">已读书清单-综合</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/Linux基础部分的补充/">Linux基础部分的补充</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Reading/">Reading</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Shell/">Shell</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tool/">Tool</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vim/">Vim</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Server/">服务</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/RegularExpression/">正则表达式</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zhuanzai/">转载</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">奇怪先生theshu.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

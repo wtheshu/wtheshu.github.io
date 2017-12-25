@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="奇怪先生的博客"><title>Markdown基础语法 | 奇怪先生的博客</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Markdown基础语法</h1><a id="logo" href="/.">奇怪先生的博客</a><p class="description">耳目得来终觉浅，觉知此事要躬行。</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">Markdown基础语法</h1><div class="post-meta"><a href="/2017/04/23/Markdown基础语法/#comments" class="comment-count"></a><p><span class="date">Apr 23, 2017</span><span><a href="/categories/Tool/" class="category">Tool</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><blockquote>
+<p>本文转自<a href="http://www.jianshu.com/p/q81RER" target="_blank" rel="external">献给写作者的 Markdown 新手指南</a></p>
+</blockquote>
+<h1 id="1-Markdown-的优点："><a href="#1-Markdown-的优点：" class="headerlink" title="1. Markdown 的优点："></a>1. Markdown 的优点：</h1><ul>
+<li>纯文本，所以兼容性极强，可以用所有文本编辑器打开。</li>
+<li>让你专注于文字而不是排版。</li>
+<li>格式转换方便，Markdown 的文本你可以轻松转换为 html、电子书等。</li>
+<li>Markdown 的标记语法有极好的可读性。</li>
+</ul>
+<h1 id="2-Markdown-的基础语法："><a href="#2-Markdown-的基础语法：" class="headerlink" title="2. Markdown 的基础语法："></a>2. Markdown 的基础语法：</h1><h2 id="2-1-标题"><a href="#2-1-标题" class="headerlink" title="2.1 标题"></a>2.1 标题</h2><blockquote>
+<pre><code># 一级标题
+## 二级标题
+### 三级标题
+#### 四级标题
+##### 五级标题
+###### 六级标题
+</code></pre><p><strong>注意：“#”和[标题]之间建议保留一个字符的空格，这是标准的Markdown写法。</strong></p>
+</blockquote>
+<h2 id="2-2-列表"><a href="#2-2-列表" class="headerlink" title="2.2 列表"></a>2.2 列表</h2><blockquote>
+<h3 id="2-2-1-无序列表"><a href="#2-2-1-无序列表" class="headerlink" title="2.2.1 无序列表"></a>2.2.1 无序列表</h3><pre><code>只需要在文字前面加上 - 就可以了。例如：
+- 文本1
+- 文本2
+- 文本3
+</code></pre><h3 id="2-2-2-有序列表"><a href="#2-2-2-有序列表" class="headerlink" title="2.2.2 有序列表"></a>2.2.2 有序列表</h3><pre><code>1. 文本1
+2. 文本2
+3. 文本3
+</code></pre><p><strong>注意：“-”、“&gt;”与文本之间保留一个字符的空格。</strong></p>
+</blockquote>
+<h2 id="2-3-链接和图片"><a href="#2-3-链接和图片" class="headerlink" title="2.3 链接和图片"></a>2.3 链接和图片</h2><blockquote>
+<h3 id="2-3-1-插入链接的语法："><a href="#2-3-1-插入链接的语法：" class="headerlink" title="2.3.1 插入链接的语法："></a>2.3.1 插入链接的语法：</h3><pre><code>[显示文本](链接地址)
+一个例子：[简书](http://www.jianshu.com)
+</code></pre><h3 id="2-3-2-插入图片的语法："><a href="#2-3-2-插入图片的语法：" class="headerlink" title="2.3.2 插入图片的语法："></a>2.3.2 插入图片的语法：</h3><pre><code>![](图片链接地址)
+一个例子：![](http://upload-images.jianshu.io/upload_images/259-0ad0d0bfc1c608b6.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+</code></pre><p><strong>注意：插入图片的语法和链接的语法很像，只是前面多了一个 ！</strong></p>
+</blockquote>
+<h2 id="2-4-引用"><a href="#2-4-引用" class="headerlink" title="2.4 引用"></a>2.4 引用</h2><blockquote>
+<pre><code>在我们写作的时候经常需要引用他人的文字，这个时候引用这个格式就很有必要了
+在 Markdown 中，你只需要在你希望引用的文字前面加上 &gt; 就好了，例如：
+&gt; 一盏灯， 一片昏黄； 一简书， 一杯淡茶。 守着那一份淡定， 品读属于自己的寂寞。 保持淡定， 才能欣赏到最美丽的风景！ 保持淡定， 人生从此不再寂寞。
+</code></pre><p><strong>注：”&gt;” 和文本之间要保留一个字符的空格。</strong></p>
+</blockquote>
+<h2 id="2-5-粗体和斜体"><a href="#2-5-粗体和斜体" class="headerlink" title="2.5 粗体和斜体"></a>2.5 粗体和斜体</h2><blockquote>
+<pre><code>用两个 * 包含一段文本就是粗体的语法，用一个 * 包含一段文本就是斜体的语法。例如：
+*一盏灯*， 一片昏黄；**一简书**， 一杯淡茶。 
+其中「一盏灯」是斜体，「一简书」是粗体。
+</code></pre></blockquote>
+<h2 id="2-6-代码引用"><a href="#2-6-代码引用" class="headerlink" title="2.6 代码引用"></a>2.6 代码引用</h2><blockquote>
+<pre><code>需要引用代码时，如果引用的语句只有一段，不分行，可以用 ` 将语句包起来。
+如果引用的语句为多行，可以将```置于这段代码的首行和末行。
+</code></pre></blockquote>
+<h2 id="2-7-表格"><a href="#2-7-表格" class="headerlink" title="2.7 表格"></a>2.7 表格</h2><blockquote>
+<pre><code>相关代码：
+| Tables        | Are           | Cool  |
+| ------------- |:-------------:| -----:|
+| col 3 is      | right-aligned | $1600 |
+| col 2 is      | centered      |   $12 |
+| zebra stripes | are neat      |    $1 |
+显示效果：
+</code></pre><table>
+<thead>
+<tr>
+<th>Tables</th>
+<th style="text-align:center">Are</th>
+<th style="text-align:right">Cool</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>col 3 is</td>
+<td style="text-align:center">right-aligned</td>
+<td style="text-align:right">$1600</td>
+</tr>
+<tr>
+<td>col 2 is</td>
+<td style="text-align:center">centered</td>
+<td style="text-align:right">$12</td>
+</tr>
+<tr>
+<td>zebra stripes</td>
+<td style="text-align:center">are neat</td>
+<td style="text-align:right">$1</td>
+</tr>
+</tbody>
+</table>
+<pre><code>相关代码：
+dog | bird | cat
+----|------|----
+foo | foo  | foo
+bar | bar  | bar
+baz | baz  | baz
+显示效果：
+</code></pre><table>
+<thead>
+<tr>
+<th>dog</th>
+<th>bird</th>
+<th>cat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>foo</td>
+<td>foo</td>
+<td>foo</td>
+</tr>
+<tr>
+<td>bar</td>
+<td>bar</td>
+<td>bar</td>
+</tr>
+<tr>
+<td>baz</td>
+<td>baz</td>
+<td>baz</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h2 id="2-8-显示链接中带括号的图片"><a href="#2-8-显示链接中带括号的图片" class="headerlink" title="2.8 显示链接中带括号的图片"></a>2.8 显示链接中带括号的图片</h2><blockquote>
+<pre><code>代码如下：
+![][1]
+[1]: http://latex.codecogs.com/gif.latex?\prod%20\(n_{i}\)+1
+</code></pre><p><strong>注意：像括号这种特殊符号需要用“\”转义。</strong></p>
+</blockquote>
+<h1 id="3-结束语"><a href="#3-结束语" class="headerlink" title="3. 结束语"></a>3. 结束语</h1><p>Markdown的基础语法就是这么多了，对于一个写作者来说，这些就完全够用了。</p>
+<blockquote>
+<p>如果想要学习更多Markdown的用法，参考这一篇文章：<a href="http://wowubuntu.com/markdown/" target="_blank" rel="external">『Markdown 语法说明』</a></p>
+</blockquote>
+</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/04/24/Vim的语言性思维/" class="pre">Vim的语言性思维</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Markdown-的优点："><span class="toc-text">1. Markdown 的优点：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Markdown-的基础语法："><span class="toc-text">2. Markdown 的基础语法：</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-标题"><span class="toc-text">2.1 标题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-列表"><span class="toc-text">2.2 列表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-无序列表"><span class="toc-text">2.2.1 无序列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-有序列表"><span class="toc-text">2.2.2 有序列表</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-链接和图片"><span class="toc-text">2.3 链接和图片</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-1-插入链接的语法："><span class="toc-text">2.3.1 插入链接的语法：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-2-插入图片的语法："><span class="toc-text">2.3.2 插入图片的语法：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-引用"><span class="toc-text">2.4 引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-粗体和斜体"><span class="toc-text">2.5 粗体和斜体</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-代码引用"><span class="toc-text">2.6 代码引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-7-表格"><span class="toc-text">2.7 表格</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-8-显示链接中带括号的图片"><span class="toc-text">2.8 显示链接中带括号的图片</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-结束语"><span class="toc-text">3. 结束语</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/12/19/常用便携软件/">常用便携软件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/01/Linux系统管理技巧（Aming）/">Linux系统管理技巧（Aming）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/FTP服务配置（Aming）/">FTP服务配置（Aming）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/shell脚本中的select循环/">shell脚本中的select循环</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/shell脚本基础语法/">shell脚本基础语法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/20/NFS服务简单配置（Aming）/">NFS服务简单配置（Aming）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/已读书清单-武侠/">已读书清单-武侠</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/已读书清单-科幻/">已读书清单-科幻</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/已读书清单-综合/">已读书清单-综合</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/Linux基础部分的补充/">Linux基础部分的补充</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Reading/">Reading</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Shell/">Shell</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tool/">Tool</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vim/">Vim</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Server/">服务</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/RegularExpression/">正则表达式</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zhuanzai/">转载</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">奇怪先生theshu.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

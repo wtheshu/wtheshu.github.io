@@ -1,0 +1,147 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="奇怪先生的博客"><title>远程连接Linux主机 | 奇怪先生的博客</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">远程连接Linux主机</h1><a id="logo" href="/.">奇怪先生的博客</a><p class="description">耳目得来终觉浅，觉知此事要躬行。</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">远程连接Linux主机</h1><div class="post-meta"><a href="/2017/08/26/远程连接Linux主机/#comments" class="comment-count"></a><p><span class="date">Aug 26, 2017</span><span><a href="/categories/Linux/" class="category">Linux</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><blockquote>
+<p>远程连接管理Linux主机</p>
+</blockquote>
+<hr>
+<h1 id="使用Putty连接远程Linux主机"><a href="#使用Putty连接远程Linux主机" class="headerlink" title="使用Putty连接远程Linux主机"></a>使用Putty连接远程Linux主机</h1><p>Putty免费开源，小巧玲珑，在WIndows和Linux上都支持。所以我选择使用这个工具来管理远程Linux主机。使用它的好处是：可以随意的复制粘贴，可以通过鼠标滚轮查看之前显示的历史信息。</p>
+<p>Putty套件的工具有很多，它们的功能如下所示：</p>
+<ul>
+<li>PuTTY（SSH和telnet客户端软件）</li>
+<li>PSCP（SCP客户端，用来远程复制文件）</li>
+<li>PSFTP（SFTP客户端，使用SSH协议传输文件）</li>
+<li>PuTTYtel（一个只有telnet功能的客户端软件）</li>
+<li>Plink（Windows下的命令行接口，使用它可以在cmd下使用PuTTY）</li>
+<li>Pageant（SS和的密钥守护进程，开启后，密钥保存到内存中，连接时不再输入密钥的密码，PuTTY、PSCP、PSFTP和Plink都可以使用）</li>
+<li>PuTTYgen（生成密钥对的工具）</li>
+</ul>
+<p>在本文中，只用到PuTTY和PuTTYgen两个软件。</p>
+<hr>
+<h2 id="使用密码登陆"><a href="#使用密码登陆" class="headerlink" title="使用密码登陆"></a>使用密码登陆</h2><hr>
+<ol>
+<li>填写远程Linux基本信息<ul>
+<li>Host Name（or IP address）这一栏填 服务器的IP。</li>
+<li>Port 这一栏保持22不变。</li>
+<li>Connection type 也保持ssh不变。</li>
+<li>Save Sessions 这里自定义一个名字，主要用来区分主机。</li>
+</ul>
+</li>
+<li>定义字符集<ul>
+<li>为了防止乱码，对于管理安装了中文支持的远程Linux系统来说，要在Putty这里也设置支持中文。</li>
+<li>点一下左侧的 Window –&gt; Translation，看右侧的 Character set translation on received data，选择 UTF-8。</li>
+<li>然后再点一下左侧的 Session，最后点右侧的 save。</li>
+</ul>
+</li>
+<li>远程连接Linux<ul>
+<li>点Open，初次连接是会有一个提示（第一次连接的时候），它的意思是要打开的Linux还未在本机登记，是否要信任它。点击“是”即可连接。</li>
+<li>然后连接成功后即可登陆管理远程的Linux了。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="使用密钥登陆"><a href="#使用密钥登陆" class="headerlink" title="使用密钥登陆"></a>使用密钥登陆</h2><hr>
+<p>SSH服务支持以一种安全认证机制，即密钥认证。所谓的密钥认证，实际上是使用一对加密字符串，一个称为公钥(publickey)， 任何人都可以看到其内容，用于加密；另一个称为私钥(privatekey)，只有拥有者才能看到，用于解密。通过公钥加密过的密文使用私钥可以轻松解密，但根据公钥来猜测私钥却十分困难。SSH 的密钥认证就是使用了这一特性。服务器和客户端都各自拥有自己的公钥和私钥。PuTTY 是可以使用这种机制登录 Linux 的。</p>
+<ol>
+<li>生成密钥对<ul>
+<li>Putty生成密钥对的工具是Puttygen，打开它。右下角的 1024 改成 2048，这表示密钥长度为 2048 位，这样更安全，然后点一下 ―Generate‖按钮, 这样就开始生成密钥了，请来回动一下鼠标，这样才可以快速生成密钥对，大约几秒后就完了。</li>
+<li>“Key comment”这里可以保持不变也可以自定义，它是对该密钥的简单介绍。“Kye passphrase”这里用来给你的密钥设置密码，这样安全一些，当然也可以留空，建议你设置一个密码。“Confirm passphrase”这里再输入一遍刚刚你设置的密码。</li>
+</ul>
+</li>
+<li>保存私钥<ul>
+<li>单击“Save private key”，选择一个存放路径，并定义名字，点“保存”。这个就是所谓的私钥（一个*.ppk文件），请把它保存到一个比较安全的地方，谨防丢掉或被别人看到。</li>
+</ul>
+</li>
+<li>复制公钥到Linux<ul>
+<li>回到刚才生成密钥的窗口，在 “Key”的下方有一段长长的字符串，这串字符串就是公钥的内容，把整个公钥字符串复制下来。然后粘贴到 Linux 的这个文件中： /root/.ssh/authorized_keys。注意这个文件的名字是固定的。下面请做如下操作：<ul>
+<li>创建/root/.ssh 目录，因为这个目录默认是不存在的。# mkdir /root/.ssh</li>
+<li>更改这个目录的权限。# chmod 700 /root/.ssh</li>
+<li>把公钥内容粘贴进/root/.ssh/authorized_keys 文件中。<ul>
+<li>vi /root/.ssh/authorized_keys</li>
+<li>回车后，按一下“i”进入编辑模式，然后直接点击鼠标右键就粘贴了，粘贴后，按一下“Esc”键，然后输入“:wq”回车保存退出该文件。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>关闭SeLinux<ul>
+<li>SeLinux 是 CentOS 的一种安全机制，它的存在的确让 Linux 系统安全了很多，但也产生了不少的麻烦。在这，如果不关闭 seLinux，使用密钥登录会提示 “Server refused our key”, 关闭方法如下：<ul>
+<li>临时关闭：setenforce 0</li>
+<li>永久关闭：vi /etc/selinux/config ，把该配置文件中的SELINUX=enforcing修改为“SELINUX=disabled”，保存退出后然后重启系统。</li>
+<li>说明： /etc/selinux/config配置文件中有三种模式：enforcing（默认开启）、permissive（提醒）和disabled（关闭）。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>关闭防火墙<ul>
+<li>关闭netfilter （即iptables）</li>
+<li>iptables -F     临时将iptables的规则清空（防火墙清空）</li>
+<li>/etc/init.d/iptables save    （或service iptables save）    将清楚后的防火墙规则保存到  /etc/sysconfig/iptables</li>
+</ul>
+</li>
+<li>设置putty通过密钥登陆<ul>
+<li>打开 PuTTY 软件，点一下我们保存好的 session，然后点右侧的“Load”，在左侧靠下面点一下“SSH”前面的+然后选择“Auth”看右侧“Private key file for authentication:”下面的长条框里目前为空，点一下“Browse”, 找到我们刚刚保存好的私钥，点“打开”。此时这个长条框里就有了私钥的地址，当然你也可以自行编辑这个路径。然后再回到左侧，点一下最上面的“Session”，在右侧再点一下“Save”。</li>
+<li>保存好 session 后，点一下右下方的“Open”。出现登录界面，你会发现和原来的登录提示内容有所不同。</li>
+<li>现在不再输入 root 密码，而是需要输入密钥的密码，如果先前在生产密钥的时候你没有设置密码，输入 root 后会直接登录系统。</li>
+</ul>
+</li>
+<li>需要注意几点：<ul>
+<li>/root/.ssh目录的权限为700</li>
+<li>SELinux要关闭</li>
+<li>/root/.ssh/authorized_keys文件名要写对</li>
+<li>公钥的文件内容要粘贴对</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="两台Linux互相登陆"><a href="#两台Linux互相登陆" class="headerlink" title="两台Linux互相登陆"></a>两台Linux互相登陆</h1><p>有时候需要在Linux系统上登陆到另一台Linux主机，这就需要用到以下的技能。用以实现这个目的，CentOS自带的客户端软件是 openssh-clients。</p>
+<hr>
+<h2 id="检查openssh-clients是否安装"><a href="#检查openssh-clients是否安装" class="headerlink" title="检查openssh-clients是否安装"></a>检查openssh-clients是否安装</h2><hr>
+<p>检查是否安装，运行下面的命令：</p>
+<blockquote>
+<p>ssh -V</p>
+</blockquote>
+<p>若没有安装，则运行下面的命令安装：</p>
+<blockquote>
+<p>yum install -y openssh-clients</p>
+</blockquote>
+<hr>
+<h2 id="使用密码登陆-1"><a href="#使用密码登陆-1" class="headerlink" title="使用密码登陆"></a>使用密码登陆</h2><hr>
+<ol>
+<li>登陆命令格式如下：<blockquote>
+<p>ssh Username@IPaddress<br>一个例子： ssh root@192.168.0.105</p>
+</blockquote>
+</li>
+<li>查看当前登陆的用户身份：<blockquote>
+<p>whoami  仅显示用户名<br>who am i   显示用户名、登陆终端、登陆时间、登陆来源IP</p>
+</blockquote>
+</li>
+</ol>
+<hr>
+<h2 id="使用密钥登陆-1"><a href="#使用密钥登陆-1" class="headerlink" title="使用密钥登陆"></a>使用密钥登陆</h2><hr>
+<ol>
+<li>客户端生成密钥对<br>执行如下命令来生成密钥对：<pre><code>ssh-keygen
+</code></pre><ul>
+<li>“Enter file in which to save the key (/root/.ssh/id_rsa): “  首先，可以自定义私钥的存放位置，默认路径为/root/.ssh/id_rsa。可以采用默认值，回车即可。</li>
+<li>“Enter passphrase (empty for no passphrase): “  然后，定义私钥的密码，可以留空，直接回车即可。也可以设置一个密码。</li>
+<li>“Enter same passphrase again: “  接下来，会让我们再一次输入密码，然后回车，变生成了密钥对了。</li>
+<li>可以在相关的目录里面找到私钥（id_rsa）和公钥（id_rsa.pub）</li>
+</ul>
+</li>
+<li>把把公钥复制到目标Linux上面<ul>
+<li>查看公钥内容并复制</li>
+<li>把复制的内容粘贴到 /root/.ssh/suthorized_keys（该文件的创建过程参考Putty的密钥登陆）</li>
+<li>确认该文件的权限，chmod 600 /root/.ssh/authorized_keys</li>
+</ul>
+</li>
+<li>登录Linux<ul>
+<li>ssh 目标Linux的IP地址</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="补充内容"><a href="#补充内容" class="headerlink" title="补充内容"></a>补充内容</h1><p>非root用户的密钥登陆与root用户的配置过程类似。</p>
+<hr>
+<blockquote>
+<p>结束</p>
+</blockquote>
+</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/08/26/CentOS的单用户和救援模式/" class="pre">CentOS的单用户和救援模式</a><a href="/2017/08/26/Linux系统的启动流程/" class="next">Linux系统的启动流程</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#使用Putty连接远程Linux主机"><span class="toc-text">使用Putty连接远程Linux主机</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用密码登陆"><span class="toc-text">使用密码登陆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用密钥登陆"><span class="toc-text">使用密钥登陆</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#两台Linux互相登陆"><span class="toc-text">两台Linux互相登陆</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#检查openssh-clients是否安装"><span class="toc-text">检查openssh-clients是否安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用密码登陆-1"><span class="toc-text">使用密码登陆</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用密钥登陆-1"><span class="toc-text">使用密钥登陆</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#补充内容"><span class="toc-text">补充内容</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/12/19/常用便携软件/">常用便携软件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/01/Linux系统管理技巧（Aming）/">Linux系统管理技巧（Aming）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/FTP服务配置（Aming）/">FTP服务配置（Aming）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/shell脚本中的select循环/">shell脚本中的select循环</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/21/shell脚本基础语法/">shell脚本基础语法</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/20/NFS服务简单配置（Aming）/">NFS服务简单配置（Aming）</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/已读书清单-武侠/">已读书清单-武侠</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/已读书清单-科幻/">已读书清单-科幻</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/18/已读书清单-综合/">已读书清单-综合</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/09/06/Linux基础部分的补充/">Linux基础部分的补充</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Reading/">Reading</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Shell/">Shell</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tool/">Tool</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Vim/">Vim</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Server/">服务</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/RegularExpression/">正则表达式</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zhuanzai/">转载</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">奇怪先生theshu.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>
