@@ -89,7 +89,7 @@
 <li><code>sed &#39;1,2s/ot/to/g&#39; 1.txt</code> 其中的s就是替换的意思，g为全局替换，否则只替换本行中出现的第一个，/分隔符也可以用#、@等符号</li>
 <li>删除所有数字：<code>sed &#39;s/[0-9]//g&#39; 1.txt</code></li>
 <li>删除所有非数字：<code>sed &#39;s/[^0-9]//g&#39; 1.txt</code></li>
-<li>调换两个字符串的位置：<code>head -n2 1.txt | sed &#39;s/\(root\)\(bash\)/\3\2\1/&#39;</code></li>
+<li>调换两个字符串的位置：<code>head -n2 1.txt | sed &#39;s/\(root\)\(.*\)\(bash\)/\3\2\1/&#39;</code> 或 <code>head -n2 1.txt | sed -r &#39;s/(root)(.*)(bash)/\3\2\1/&#39;</code></li>
 <li>直接修改文件内容：<code>sed -i &#39;s/ot/to/g&#39; 1.txt</code></li>
 </ul>
 <h1 id="sed-的练习题和答案"><a href="#sed-的练习题和答案" class="headerlink" title="sed 的练习题和答案"></a>sed 的练习题和答案</h1><ol>

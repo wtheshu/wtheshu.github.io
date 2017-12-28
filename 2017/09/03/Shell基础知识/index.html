@@ -183,6 +183,11 @@
 </tbody>
 </table>
 <p>注意：env命令显示的变量只是环境变量，系统预设的变量其实还有很多，这就需要用到下面的set命令了。</p>
+<p>还有两个变需要了解一下：</p>
+<ul>
+<li>PS1：shell中的提示符</li>
+<li>PS2：当在shell中执行换行后再继续操作时的提示符</li>
+</ul>
 <h2 id="set-和-unset"><a href="#set-和-unset" class="headerlink" title="set 和 unset"></a>set 和 unset</h2><blockquote>
 <p><code>set</code> 用于查看系统里的全部变量，包括环境变量和用户自定义变量。<br><code>unset 变量名</code> 可取消或删除一个变量</p>
 </blockquote>
@@ -241,11 +246,11 @@
 <tbody>
 <tr>
 <td>/etc/profile</td>
-<td>这个文件预设了几个重要的变量，例如PATH、USER、LOGNAME、MAIL、INPUTRC、HOSTNAME、HISTSIZE、umask等</td>
+<td>到交互登陆时才执行。这个文件预设了几个重要的变量，例如PATH、USER、LOGNAME、MAIL、INPUTRC、HOSTNAME、HISTSIZE、umask等</td>
 </tr>
 <tr>
 <td>/etc/bashrc</td>
-<td>这个文件主要预设umask以及PS1</td>
+<td>用户不用登陆，执行shell就生效。这个文件主要预设umask以及PS1</td>
 </tr>
 <tr>
 <td>.bash_profile</td>

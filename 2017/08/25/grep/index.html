@@ -63,13 +63,13 @@
 <li>过滤出所有包含数字的行     <code>grep &#39;[0-9]&#39; 1.txt</code></li>
 <li>过滤出所有不包含数字的行      <code>grep -v &#39;[0-9]&#39; 1.txt</code></li>
 <li>去除所有以‘#’开头的行     <code>grep -v &#39;^#&#39; 1.txt</code></li>
-<li>去除所有空行和以‘#’开头的行     <code>grep -v &#39;^$&#39; 1.txt|grep -v &#39;^#&#39;</code></li>
+<li>去除所有空行和以‘#’开头的行     <code>grep -v &#39;^$&#39; 1.txt | grep -v &#39;^#&#39;</code></li>
 <li>过滤出以英文字母开头的行     <code>grep &#39;^[a-zA-Z]&#39;  1.txt</code></li>
 <li>过滤出以非数字开头的行    <code>grep &#39;^[^0-9]&#39;  1.txt</code></li>
-<li>过滤任意一个或多个字符     <code>grep &#39;r.o&#39; 1.txt</code> ； <code>grep &#39;r\*t&#39; 1.txt</code> ； <code>grep &#39;r.\*p&#39; 1.txt</code><ul>
-<li>. 表示任意一个字符</li>
+<li>过滤任意一个或多个字符     <code>grep &#39;r.o&#39; 1.txt</code> ； <code>grep &#39;r*t&#39; 1.txt</code> ； <code>grep &#39;r.*p&#39; 1.txt</code><ul>
+<li><strong>.</strong> 表示任意一个字符</li>
 <li>* 表示零个或多个*前面的字符</li>
-<li>.* 表示零个或多个任意字符，空行也包含在内</li>
+<li><strong>.</strong>* 表示零个或多个任意字符，空行也包含在内</li>
 </ul>
 </li>
 <li><code>grep -E &#39;ro?t&#39; 1.txt</code>    ？表示匹配零个或一个?前面的字符</li>
@@ -77,7 +77,7 @@
 <li>指定过滤字符次数    <code>grep &#39;o\{2\}&#39;  1.txt</code> </li>
 <li><code>egrep &#39;o+&#39; 1.txt</code>    表示1个或多个前面的字符</li>
 <li><code>egrep &#39;o?&#39; 1.txt</code>    表示0个或1个前面的字符</li>
-<li><code>egrep &#39;roo|body&#39; 1.txt</code>    匹配roo或者匹配body（grep  ‘roo|body’ 1.txt 也可以实现这个功能）</li>
+<li><code>egrep &#39;roo|body&#39; 1.txt</code>    匹配roo或者匹配body（grep  ‘roo\|body’ 1.txt 也可以实现这个功能，即用转义符把|转义）</li>
 <li><code>egrep &#39;r(oo)|(at)o&#39; 1.txt</code>     用括号表示一个整体 </li>
 <li><code>egrep &#39;(oo)+&#39; 1.txt</code>     表示匹配1个或多个‘oo’</li>
 <li><code>egrep &#39;(oo){2}&#39; 1.txt</code>     表示匹配有两次’oo’</li>
