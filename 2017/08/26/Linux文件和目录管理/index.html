@@ -282,7 +282,7 @@
 </tr>
 </tbody>
 </table>
-<p>示例：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"># cat test.txt</div><div class="line"><span class="number">11111111111</span></div><div class="line"><span class="number">22222222222</span></div><div class="line"><span class="number">33333333333</span></div><div class="line"></div><div class="line"><span class="number">55555555555</span></div><div class="line"># cat -n test.txt</div><div class="line"><span class="number">1</span>  <span class="number">11111111111</span></div><div class="line"><span class="number">2</span>  <span class="number">22222222222</span></div><div class="line"><span class="number">3</span>  <span class="number">33333333333</span></div><div class="line"><span class="number">4</span></div><div class="line"><span class="number">5</span>  <span class="number">55555555555</span></div><div class="line"># cat -A test.txt</div><div class="line"><span class="number">11111111111</span>$</div><div class="line"><span class="number">22222222222</span>$</div><div class="line"><span class="number">33333333333</span>$</div><div class="line">$</div><div class="line"><span class="number">55555555555</span>$</div></pre></td></tr></table></figure></p>
+<p>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"># cat test.txt</div><div class="line">11111111111</div><div class="line">22222222222</div><div class="line">33333333333</div><div class="line"></div><div class="line">55555555555</div><div class="line"># cat -n test.txt</div><div class="line">1  11111111111</div><div class="line">2  22222222222</div><div class="line">3  33333333333</div><div class="line">4</div><div class="line">5  55555555555</div><div class="line"># cat -A test.txt</div><div class="line">11111111111$</div><div class="line">22222222222$</div><div class="line">33333333333$</div><div class="line">$</div><div class="line">55555555555$</div></pre></td></tr></table></figure></p>
 <h2 id="tac"><a href="#tac" class="headerlink" title="tac"></a>tac</h2><blockquote>
 <p>tac 是 cat 倒着写的，因此功能是把文件内容倒叙的方式显示在屏幕上。选项与cat相同。</p>
 </blockquote>
@@ -425,7 +425,7 @@
 </tr>
 </tbody>
 </table>
-<h1 id="Linux文件属性"><a href="#Linux文件属性" class="headerlink" title="Linux文件属性"></a>Linux文件属性</h1><h2 id="文件属性的意义"><a href="#文件属性的意义" class="headerlink" title="文件属性的意义"></a>文件属性的意义</h2><p>用命令 <code>ls -l</code> 查看当前目录下的文件时，共显示了9列内容（用空格分列），它们都代表着什么意思呢？如下表所示：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># ls -l test.txt</span></div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 49 </span>8月 <span class="number"> 27 </span>17:45 test.txt</div></pre></td></tr></table></figure></p>
+<h1 id="Linux文件属性"><a href="#Linux文件属性" class="headerlink" title="Linux文件属性"></a>Linux文件属性</h1><h2 id="文件属性的意义"><a href="#文件属性的意义" class="headerlink" title="文件属性的意义"></a>文件属性的意义</h2><p>用命令 <code>ls -l</code> 查看当前目录下的文件时，共显示了9列内容（用空格分列），它们都代表着什么意思呢？如下表所示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># ls -l test.txt</div><div class="line">-rw-r--r-- 1 root root 49 8月  27 17:45 test.txt</div></pre></td></tr></table></figure></p>
 <table>
 <thead>
 <tr>
@@ -651,13 +651,13 @@
 </tr>
 </tbody>
 </table>
-<p>几个例子如下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">chmod u=rwx,go=rw test.txt</div><div class="line">chmod ugo=rw test.txt</div><div class="line">chmod a=rw test.txt</div><div class="line">chmod a+x test.txt</div><div class="line">chmod a-x test.txt</div><div class="line">chmod <span class="number">700</span> test.txt</div><div class="line">chmod <span class="number">655</span> test.txt</div></pre></td></tr></table></figure></p>
+<p>几个例子如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">chmod u=rwx,go=rw test.txt</div><div class="line">chmod ugo=rw test.txt</div><div class="line">chmod a=rw test.txt</div><div class="line">chmod a+x test.txt</div><div class="line">chmod a-x test.txt</div><div class="line">chmod 700 test.txt</div><div class="line">chmod 655 test.txt</div></pre></td></tr></table></figure></p>
 <h2 id="umask"><a href="#umask" class="headerlink" title="umask"></a>umask</h2><p>默认情况下，新建一个目录的权限值为755，新建一个普通文件的权限值为644，那么这个值是由谁来控制的呢？那就是 <strong>umask</strong> 了。</p>
 <blockquote>
 <p>umask 用于改变文件的默认权限</p>
 </blockquote>
 <p>格式为 <code>umask xxx</code> （<code>xxx</code>在这里代表权限的三个数字）</p>
-<p>几个例子如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">umask</span>   <span class="comment"># 查看umask的预设值</span></div><div class="line"><span class="built_in">umask</span> 0022   <span class="comment"># 设置umask的值</span></div></pre></td></tr></table></figure></p>
+<p>几个例子如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">umask   # 查看umask的预设值</div><div class="line">umask 0022   # 设置umask的值</div></pre></td></tr></table></figure></p>
 <h3 id="umask的作用原理"><a href="#umask的作用原理" class="headerlink" title="umask的作用原理"></a>umask的作用原理</h3><p>先了解以下两条规则：</p>
 <ol>
 <li>若用户建立普通文件，则预设没有可执行权限，只有r、w两个权限，最大值为666（-rw-rw-rw-）</li>
@@ -877,7 +877,7 @@
 <li>加上-s就是创建软链接</li>
 <li>不加-s就是创建硬链接</li>
 </ul>
-<p>示例：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ln <span class="built_in">test</span> <span class="built_in">test</span>-hard      //创建<span class="built_in">test</span>的硬链接文件<span class="built_in">test</span>-hard</div><div class="line">ln -s <span class="built_in">test</span> <span class="built_in">test</span>-soft   //创建<span class="built_in">test</span>的软链接文件<span class="built_in">test</span>-soft</div></pre></td></tr></table></figure></p>
+<p>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">ln test test-hard      //创建test的硬链接文件test-hard</div><div class="line">ln -s test test-soft   //创建test的软链接文件test-soft</div></pre></td></tr></table></figure></p>
 <blockquote>
 <p>结束</p>
 </blockquote>
