@@ -1,0 +1,151 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="奇怪先生的博客"><title>《Vim实用技巧》-开始：Vim解决问题的方式 | 奇怪先生的博客</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">《Vim实用技巧》-开始：Vim解决问题的方式</h1><a id="logo" href="/.">奇怪先生的博客</a><p class="description">耳目得来终觉浅，觉知此事要躬行。</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">《Vim实用技巧》-开始：Vim解决问题的方式</h1><div class="post-meta"><a href="/2017/12/29/Tool/007. 《Vim实用技巧》-开始：Vim解决问题的方式/#comments" class="comment-count"></a><p><span class="date">Dec 29, 2017</span><span><a href="/categories/Tool/" class="category">Tool</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><blockquote>
+<p>GO</p>
+</blockquote>
+<hr>
+<h1 id="技巧1-结识-命令"><a href="#技巧1-结识-命令" class="headerlink" title="技巧1 结识 . 命令"></a>技巧1 结识 <code>.</code> 命令</h1><p>理想的编辑模式：用一次按键移动，用另一次按键执行。</p>
+<p><strong><code>.</code></strong> 命令可以重复上次修改。</p>
+<p><strong>上次修改</strong> 可以指很多东西，一次修改的单位可以是字符、整行，甚至是整个文件。</p>
+<p>每次进入插入模式时，也会形成一次修改。从进入插入模式的那一刻起（例如，输入<strong><code>i</code></strong>），直到返回普通模式时为止（输入 <strong><code>Esc</code></strong> ）,Vim 会记录每一个按键操作。做出这样一个修改后再用 <strong><code>.</code></strong> 命令，就会重新执行所有的这些按键操作。</p>
+<p>补充内容</p>
+<ul>
+<li><strong><code>x</code></strong> 命令会删除光标下的字符</li>
+<li><strong><code>dd</code></strong> 命令会删除光标所在的一整行</li>
+<li><strong><code>&gt;G</code></strong> 命令会增加从当前行到文档末尾处的缩进层级</li>
+</ul>
+<hr>
+<h1 id="技巧2-不要自我重复"><a href="#技巧2-不要自我重复" class="headerlink" title="技巧2 不要自我重复"></a>技巧2 不要自我重复</h1><p>对于在行尾添加内容这样的常见操作，如添加分号，Vim 提供了一个专门的命令，可以把两步操作合并为一步。</p>
+<p>减少无关紧要的移动。以下面的一个例子来说明：</p>
+<p><strong><code>a</code></strong> 命令在当前光标后添加内容，而 <strong><code>A</code></strong> 命令则在当前行的结尾添加内容。不管光标当前处于什么位置，输入 <strong><code>A</code></strong> 都会进入插入模式，并把光标移动行尾。换句话说，它把 <strong><code>$a</code></strong> 封装成了一个按键操作。</p>
+<p>很多Vim的单键命令都可以被看成两个或多个其他命令的组合。下表列出了类似的一些例子：</p>
+<table>
+<thead>
+<tr>
+<th>复合命令</th>
+<th>等效的长命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> C</td>
+<td>c$</td>
+</tr>
+<tr>
+<td> s</td>
+<td>cl</td>
+</tr>
+<tr>
+<td> S</td>
+<td>^c</td>
+</tr>
+<tr>
+<td> A</td>
+<td>$a</td>
+</tr>
+<tr>
+<td> o</td>
+<td>A<cr></cr></td>
+</tr>
+<tr>
+<td> O</td>
+<td>ko</td>
+</tr>
+</tbody>
+</table>
+<p>上表所示这些命令的共同点是，它们全都会从普通模式切换到插入模式。</p>
+<p>补充内容</p>
+<ul>
+<li><strong><code>$</code></strong> 命令把光标移到行尾</li>
+<li><strong><code>j</code></strong> 命令使光标下移一行</li>
+</ul>
+<hr>
+<h1 id="技巧3-以退为进"><a href="#技巧3-以退为进" class="headerlink" title="技巧3 以退为进"></a>技巧3 以退为进</h1><p>我们可以用一种常用的 Vim 操作习惯在一个字符前后各添加一个空格。乍一看，这种方法有点古怪，不过其好处是可重复，这将使我们可以事半功倍地完成工作</p>
+<p>先后退一步或多步，然后前进一步或多步，这是个奇怪的小花招，看起来可能不够直接。但这样做最大的好处是：我们可以用 <strong><code>.</code></strong> 命令重复这一修改。</p>
+<p>与其和 Vim 区分模式的编辑模型做斗争，倒不如与它一起协同工作。然后，你就会发现它能把特定任务变得多么的容易。</p>
+<p>补充内容</p>
+<ul>
+<li><strong><code>s</code></strong> 命令把两个操作合并为一个：它先删除光标下的字符，然后进入插入模式</li>
+</ul>
+<hr>
+<h1 id="技巧4-执行、重复、回退"><a href="#技巧4-执行、重复、回退" class="headerlink" title="技巧4 执行、重复、回退"></a>技巧4 执行、重复、回退</h1><p>在面对重复性工作时，我们需要让移动动作和修改都能够重复，这样就可以达到一个最佳编辑模式。Vim对此的支持是：它会记住我们的操作，并使最常用的操作触手可及，所以我们可以很方便地重复执行它们。本节将介绍 Vim 可以重复执行的每个操作，并学习如何回退这些命令。</p>
+<p>当 Vim 让一个操作或移动可以很方便地重复时，它总是会提供某种方式，让我们<br>在不小心做过头时能回退回来。下表总结了Vim中可重复执行的命令，以及相应的回退方式。在多数场景中，撤销（Undo）都是很有用的帮助。</p>
+<table>
+<thead>
+<tr>
+<th>目的</th>
+<th>操作</th>
+<th>重复</th>
+<th>回退</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>做出一个修改</td>
+<td>{edit}</td>
+<td><strong>.</strong></td>
+<td><strong>u</strong></td>
+</tr>
+<tr>
+<td>在行内查找下一指定字符</td>
+<td>f{char}/t{char}</td>
+<td><strong>;</strong></td>
+<td><strong>,</strong></td>
+</tr>
+<tr>
+<td>在行内查找上一指定字符</td>
+<td>F{char}/T{char}</td>
+<td><strong>;</strong></td>
+<td><strong>,</strong></td>
+</tr>
+<tr>
+<td>在文档中查找下一出匹配项</td>
+<td>/pattern<cr></cr></td>
+<td><strong>n</strong></td>
+<td><strong>N</strong></td>
+</tr>
+<tr>
+<td>在文档中查找上一项匹配项</td>
+<td>?pattern<cr></cr></td>
+<td><strong>n</strong></td>
+<td><strong>N</strong></td>
+</tr>
+<tr>
+<td>执行替换</td>
+<td>:s/target/replacement</td>
+<td><strong>&amp;</strong></td>
+<td><strong>u</strong></td>
+</tr>
+<tr>
+<td>执行一系列修改</td>
+<td>qx{changes}q</td>
+<td><strong>@x</strong></td>
+<td><strong>u</strong></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="技巧5-查找并手动替换"><a href="#技巧5-查找并手动替换" class="headerlink" title="技巧5 查找并手动替换"></a>技巧5 查找并手动替换</h1><p>Vim 提供了一个 <code>:substitute</code> 命令专门用于查找替换任务，不过用上面介绍的技术，我们也可以手动修改第一处地方，然后再一个个地查找替换其他匹配项。 <code>.</code> 命令可以把我们从繁重的工作中解放出来，而即将登场的另一个有用的单键命令，则能够让我们方便地在匹配项间跳转。这样才能逐个决定每一个匹配项是否需要操作。</p>
+<p>补充内容</p>
+<ul>
+<li><code>*</code>将文档中光标所在单词全部匹配出来并高亮显示</li>
+<li><strong><code>:set hls</code></strong> 设置高亮显示</li>
+<li><strong><code>cw</code></strong> 命令会删除从光标位置到单词结尾的字符，并进入插入模式</li>
+</ul>
+<hr>
+<h1 id="技巧6-结识-范式"><a href="#技巧6-结识-范式" class="headerlink" title="技巧6 结识 . 范式"></a>技巧6 结识 <strong>.</strong> 范式</h1><p>理想模式：<code>用一键移动，另一键执行</code></p>
+<ul>
+<li>所有这些例子都利用  <code>.</code> 命令重复上次的修改，不过这不是它们唯一的共同点，另外的共同点是它们都只需要按一次键就能把光标移到下一个目标上。</li>
+<li>用一次按键移动，另一次按键执行，没有再比这更好的了，不是吗？这就是我们的理想解决方案。为了方便起见，我们把它叫做<code>“ . 范式”</code>。</li>
+</ul>
+<hr>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>回顾前面3个 <strong><code>.</code></strong> 命令编辑任务</p>
+<ul>
+<li>在技巧 2 中，我们想在一系列行的结尾添加分号。我们先用 <code>A; &lt;Esc&gt;</code> 修改了第一行，做完这步准备后，就可以使用 <code>.</code> 命令对后续行重复此修改。我们使用了 <code>j</code> 命令在行间移动，要完成剩余的修改，只需简单地按足够多次 <code>j.</code> 就可以了。</li>
+<li>在技巧 3 中，我们想为每个 + 号的前后各添加一个空格。我们先用 <code>f+</code> 命令跳到目标字符上，然后用 <code>s</code> 命令把一个字符替换成 3 个，做完这步准备后，我们就可以按若干次 <code>;.</code> 完成此任务。</li>
+<li>在技巧 5 中，我们想把每处出现单词“content”的地方都替换成“copy”。我们使用 <code>*</code> 命令来查找目标单词，然后用 <code>cw</code> 命令修改第一处地方。做完这步准备后，就可以用 <code>n</code> 键跳到下一匹配项，然后用 <code>.</code> 键做相同的修改。要完成这项任务，只需简单地按足够多次 <code>n.</code> 就行了。</li>
+</ul>
+<hr>
+<blockquote>
+<p>OK</p>
+</blockquote>
+</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2018/01/19/Linux/011. Linux计划任务管理技术/" class="pre">Linux计划任务管理技术</a><a href="/2017/12/28/Tool/006. Vim的语言性思维/" class="next">Vim的语言性思维</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#技巧1-结识-命令"><span class="toc-text">技巧1 结识 . 命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#技巧2-不要自我重复"><span class="toc-text">技巧2 不要自我重复</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#技巧3-以退为进"><span class="toc-text">技巧3 以退为进</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#技巧4-执行、重复、回退"><span class="toc-text">技巧4 执行、重复、回退</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#技巧5-查找并手动替换"><span class="toc-text">技巧5 查找并手动替换</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#技巧6-结识-范式"><span class="toc-text">技巧6 结识 . 范式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/012. 正则表达式实用技术/">正则表达式实用技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/011. Linux计划任务管理技术/">Linux计划任务管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/29/Tool/007. 《Vim实用技巧》-开始：Vim解决问题的方式/">《Vim实用技巧》-开始：Vim解决问题的方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/28/Tool/006. Vim的语言性思维/">Vim的语言性思维</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/Tool/005. Vim的配置/">Vim的配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/26/Tool/004. Vim的一些问题总结/">Vim的一些问题总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/转载/003. 入门Linux运维工程师需要学习的内容/">入门Linux运维工程师需要学习的内容</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/转载/002. C和C++高手修炼之路/">C和C++高手修炼之路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/Tool/003. Vim初学笔记/">Vim初学笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/19/Tool/002. 常用便携软件/">常用便携软件</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Reading/">Reading</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Shell/">Shell</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tool/">Tool</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Server/">服务</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zhuanzai/">转载</a><span class="category-list-count">3</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">奇怪先生theshu.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

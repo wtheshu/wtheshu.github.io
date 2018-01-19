@@ -1,0 +1,849 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="奇怪先生的博客"><title>Vim初学笔记 | 奇怪先生的博客</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Vim初学笔记</h1><a id="logo" href="/.">奇怪先生的博客</a><p class="description">耳目得来终觉浅，觉知此事要躬行。</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">Vim初学笔记</h1><div class="post-meta"><a href="/2017/12/25/Tool/003. Vim初学笔记/#comments" class="comment-count"></a><p><span class="date">Dec 25, 2017</span><span><a href="/categories/Tool/" class="category">Tool</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><blockquote>
+<p>GO</p>
+</blockquote>
+<hr>
+<h1 id="0-Vim初相识"><a href="#0-Vim初相识" class="headerlink" title="0. Vim初相识"></a>0. Vim初相识</h1><h2 id="0-1-Vim简介"><a href="#0-1-Vim简介" class="headerlink" title="0.1 Vim简介"></a>0.1 Vim简介</h2><p>Vim是从Vi发展出来，第一个版本由布拉姆米勒在1991年发布，它基于VIM许可证，兼容GPL。官网<a href="http://www.vim.org" target="_blank" rel="external">www.vim.org</a></p>
+<h2 id="0-2-Vim的安装和使用"><a href="#0-2-Vim的安装和使用" class="headerlink" title="0.2 Vim的安装和使用"></a>0.2 Vim的安装和使用</h2><ul>
+<li>安装：<code>yum install -y vim-enhanced</code></li>
+<li>使用：<code>vim filename</code></li>
+</ul>
+<h1 id="1-Vim的模式"><a href="#1-Vim的模式" class="headerlink" title="1. Vim的模式"></a>1. Vim的模式</h1><p>（这节内容摘抄自<a href="https://zh.wikipedia.org/wiki/Vim#.E6.A8.A1.E5.BC.8F" target="_blank" rel="external">Vim-维基百科</a>）</p>
+<p>Vim有6种基本模式和5种派生模式：</p>
+<h2 id="1-1-基本模式"><a href="#1-1-基本模式" class="headerlink" title="1.1 基本模式"></a>1.1 基本模式</h2><ul>
+<li><strong>普通模式</strong></li>
+</ul>
+<p>在普通模式中，用的编辑器命令，比如移动光标，删除文本等等。这也是Vim启动后的默认模式。</p>
+<p>在普通模式中，有很多方法可以进入插入模式。比较普通的方式是按”a”（append／追加）键或者”i”（insert／插入）键。</p>
+<ul>
+<li><strong>插入模式</strong></li>
+</ul>
+<p>在这个模式中，大多数按键都会向文本缓冲中插入文本。大多数新用户希望文本编辑器编辑过程中一直保持这个模式。</p>
+<p>在插入模式中，可以按ESC键回到普通模式。</p>
+<ul>
+<li><strong>可视模式</strong></li>
+</ul>
+<p>这个模式与普通模式比较相似。但是移动命令会扩大高亮的文本区域。高亮区域可以是字符、行或者是一块文本。当执行一个非移动命令时，命令会被执行到这块高亮的区域上。Vim的”文本对象”也能和移动命令一样用在这个模式中。</p>
+<ul>
+<li><strong>选择模式</strong></li>
+</ul>
+<p>这个模式和无模式编辑器的行为比较相似（Windows标准文本控件的方式）。这个模式中，可以用鼠标或者光标键高亮选择文本，不过输入任何字符的话，Vim会用这个字符替换选择的高亮文本块，并且自动进入插入模式。</p>
+<ul>
+<li><strong>命令行模式</strong></li>
+</ul>
+<p>在命令行模式中可以输入会被解释成并执行的文本。例如执行命令（”:”键），搜索（”/“和”?”键）或者过滤命令（”!”键）。在命令执行之后，Vim返回到命令行模式之前的模式，通常是普通模式。</p>
+<ul>
+<li><strong>Ex模式</strong></li>
+</ul>
+<p>这和命令行模式比较相似，在使用”:visual”命令离开Ex模式前，可以一次执行多条命令。</p>
+<h2 id="1-2-派生模式"><a href="#1-2-派生模式" class="headerlink" title="1.2 派生模式"></a>1.2 派生模式</h2><ul>
+<li><strong>操作符等待模式</strong></li>
+</ul>
+<p>这个派生模式指普通模式中，执行一个操作命令后Vim等待一个”动作”来完成这个命令。Vim也支持在操作符等待模式中使用”文本对象”作为动作，包括”aw”一个单词（a word）、”as”一个句子（a sentence）、”ap”一个段落（a paragraph）等等。</p>
+<p>比如，在普通模式下”d2as”删除当前和下一个句子。在可视模式下”apU”把当前段落所有字母大写。</p>
+<ul>
+<li><strong>插入普通模式</strong></li>
+</ul>
+<p>这个模式是在插入模式下按下ctrl-o键的时候进入。这个时候暂时进入普通模式，执行完一个命令之后，Vim返回插入模式</p>
+<ul>
+<li><strong>插入可视模式</strong></li>
+</ul>
+<p>这个模式是在插入模式下按下ctrl-o键并且开始一个可视选择的时候开始。在可视区域选择取消的时候，Vim返回插入模式。</p>
+<ul>
+<li><strong>插入选择模式</strong></li>
+</ul>
+<p>通常这个模式由插入模式下鼠标拖拽或者shift方向键来进入。当选择区域取消的时候，Vim返回插入模式。</p>
+<ul>
+<li><strong>替换模式</strong></li>
+</ul>
+<p>这是一个特殊的插入模式，在这个模式中可以做和插入模式一样的操作，但是每个输入的字符都会覆盖文本缓冲中已经存在的字符。在普通模式下按”R”键进入。</p>
+<h2 id="1-3-其它"><a href="#1-3-其它" class="headerlink" title="1.3 其它"></a>1.3 其它</h2><ul>
+<li><strong>Evim（Easy Vim）</strong></li>
+</ul>
+<p>Evim（Easy Vim）是一个特殊的GUI模式用来尽量的表现的和”无模式”编辑器一样。编辑器自动进入并且停留在插入模式，用户只能通过菜单、鼠标和键盘控制键来对文本进行操作。可以在命令行下输入”evim”或者”vim -y”进入。在Windows下，通常也可以点击桌面上Evim（Easy Vim）的图标。</p>
+<h2 id="1-4-说明"><a href="#1-4-说明" class="headerlink" title="1.4 说明"></a>1.4 说明</h2><p>一般情况下，我们通常只使用三种模式（其它的模式可能会在我们使用过程中不经意就会用上，所以初学时不要在模式上花费太大的精力，只需要搞懂这常用的三种就足够了）：</p>
+<ul>
+<li>普通模式</li>
+<li>插入模式</li>
+<li>命令行模式</li>
+</ul>
+<p>以下的内容也是针对这三种常用模式的学习。</p>
+<hr>
+<h1 id="2-Vim的使用"><a href="#2-Vim的使用" class="headerlink" title="2. Vim的使用"></a>2. Vim的使用</h1><h2 id="2-1-进入Vim"><a href="#2-1-进入Vim" class="headerlink" title="2.1 进入Vim"></a>2.1 进入Vim</h2><ul>
+<li>vim  进入Vim软件环境</li>
+<li>vim filename  用Vim打开或新建一个文件</li>
+</ul>
+<h2 id="2-2-三种常用模式之间的切换"><a href="#2-2-三种常用模式之间的切换" class="headerlink" title="2.2 三种常用模式之间的切换"></a>2.2 三种常用模式之间的切换</h2><h3 id="2-2-1-进入普通模式"><a href="#2-2-1-进入普通模式" class="headerlink" title="2.2.1 进入普通模式"></a>2.2.1 进入普通模式</h3><ul>
+<li>一般用Vim打开文件时的默认模式就是普通模式。</li>
+<li>如果是在别的模式下，<strong>按Esc键</strong> 就会切换到普通模式。</li>
+<li>同上，按 <strong>Ctrl+C</strong> 或者 <strong>Ctrl+[</strong> 效果也同 <strong>按Esc键</strong>。</li>
+</ul>
+<h3 id="2-2-2-进入插入模式"><a href="#2-2-2-进入插入模式" class="headerlink" title="2.2.2 进入插入模式"></a>2.2.2 进入插入模式</h3><p>一般是从默认的普通模式进入到插入模式，常用的方式如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>按键</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>  i</td>
+<td>在当前光标的前面插入</td>
+</tr>
+<tr>
+<td>  I</td>
+<td>在当前光标所在行的行首插入</td>
+</tr>
+<tr>
+<td>  a</td>
+<td>在当前光标的后面插入</td>
+</tr>
+<tr>
+<td>  A</td>
+<td>在当前光标所在行的行尾插入</td>
+</tr>
+<tr>
+<td>  o</td>
+<td>在当前光标所在行的下面新插入一行</td>
+</tr>
+<tr>
+<td>  O</td>
+<td>在当前光标所在行的上面新插入一行</td>
+</tr>
+<tr>
+<td>  cw</td>
+<td>替换从光标所在位置后到一个单词结尾的字符</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-2-3-进入命令行模式"><a href="#2-2-3-进入命令行模式" class="headerlink" title="2.2.3 进入命令行模式"></a>2.2.3 进入命令行模式</h3><p>一般是从默认的普通模式进入到命令行模式，方式如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>按键</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>  ：</td>
+<td>冒号后面加一些命令</td>
+</tr>
+<tr>
+<td>  /</td>
+<td>进行查找替换时前面要用它</td>
+</tr>
+<tr>
+<td>  ？</td>
+<td>进行查找时前面要用它</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-2-4-关于模式之间相互切换的说明"><a href="#2-2-4-关于模式之间相互切换的说明" class="headerlink" title="2.2.4 关于模式之间相互切换的说明"></a>2.2.4 关于模式之间相互切换的说明</h3><ol>
+<li>普通模式和插入模之间可以相互切换。</li>
+<li>普通模式和命令行模式之间可以相互切换。</li>
+<li>插入模式和命令行模式之间不可以直接切换，只能先从一种模式中切换到普通模式，才能再切换到另一个模式。</li>
+</ol>
+<h2 id="2-3-光标移动"><a href="#2-3-光标移动" class="headerlink" title="2.3 光标移动"></a>2.3 光标移动</h2><p>光标移动</p>
+<table>
+<thead>
+<tr>
+<th>按键</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>h/左箭头</td>
+<td>左</td>
+</tr>
+<tr>
+<td>l/右箭头</td>
+<td>右（小写L）</td>
+</tr>
+<tr>
+<td>j/下箭头</td>
+<td>下</td>
+</tr>
+<tr>
+<td>k/上箭头</td>
+<td>上</td>
+</tr>
+</tbody>
+</table>
+<p>行间跳转</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> nG（n Shift+g）</td>
+<td>光标移动到第n行</td>
+</tr>
+<tr>
+<td>    gg</td>
+<td>光标移动到第一行</td>
+</tr>
+<tr>
+<td> G（Shift+g）</td>
+<td>到最后一行</td>
+</tr>
+</tbody>
+</table>
+<p>小技巧：你在完成依次跳转后，可以使用Ctrl+o快速回到上一次(跳转前)光标所在位置,这个技巧很实用，比如当你在写代码时，忽然想起有个bug，需要修改，这时候你跳过去改好了，只需要按下Ctrl+o就可以回到你之前的位置。</p>
+<p>行内跳转</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>   w</td>
+<td>到下一个单词的开头</td>
+</tr>
+<tr>
+<td>   e</td>
+<td>到下一个单词的结尾</td>
+</tr>
+<tr>
+<td>   b</td>
+<td>到前一个单词的开头</td>
+</tr>
+<tr>
+<td>   ge</td>
+<td>到前一个单词的结尾</td>
+</tr>
+<tr>
+<td>   0或^</td>
+<td>到行头</td>
+</tr>
+<tr>
+<td>   $</td>
+<td>到行尾</td>
+</tr>
+<tr>
+<td> f&lt;字母&gt;</td>
+<td>向后搜索&lt;字母&gt;并跳转到第一个匹配的位置（非常实用）</td>
+</tr>
+<tr>
+<td> F&lt;字母&gt;</td>
+<td>向前搜索&lt;字母&gt;并跳转到第一个匹配的位置</td>
+</tr>
+<tr>
+<td> t&lt;字母&gt;</td>
+<td>向后搜索&lt;字母&gt;并跳转到第一个匹配位置之前的一个字母（不常用）</td>
+</tr>
+<tr>
+<td> T&lt;字母&gt;</td>
+<td>向前搜索&lt;字母&gt;并跳转到第一个匹配位置之后的一个字母（不常用）</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-4-操作文本"><a href="#2-4-操作文本" class="headerlink" title="2.4 操作文本"></a>2.4 操作文本</h2><h3 id="2-4-1-删除文本"><a href="#2-4-1-删除文本" class="headerlink" title="2.4.1 删除文本"></a>2.4.1 删除文本</h3><p>普通模式下删除Vim文本信息</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>   x（小写）</td>
+<td>删除光标所在的字符</td>
+</tr>
+<tr>
+<td>   X（大写）</td>
+<td>删除光标所在前一个字符</td>
+</tr>
+<tr>
+<td>   Delete</td>
+<td>同x</td>
+</tr>
+<tr>
+<td>   dd</td>
+<td>删除（实际上是剪切，可用p来粘贴）光标所在行</td>
+</tr>
+<tr>
+<td>   dw</td>
+<td>删除一个单词（不适合中文）</td>
+</tr>
+<tr>
+<td>   d$或D</td>
+<td>删除至行尾</td>
+</tr>
+<tr>
+<td>   d^</td>
+<td>删除至行首</td>
+</tr>
+<tr>
+<td>   dG</td>
+<td>删除至文档结尾处</td>
+</tr>
+<tr>
+<td>   d1G</td>
+<td>删除至文档首部</td>
+</tr>
+</tbody>
+</table>
+<p>除此之外，还可以在命令之前加上数字，表示多次删除1行，即一次删除多行。</p>
+<h3 id="2-4-2-复制粘贴和剪切"><a href="#2-4-2-复制粘贴和剪切" class="headerlink" title="2.4.2 复制粘贴和剪切"></a>2.4.2 复制粘贴和剪切</h3><p>在普通模式下进行复制粘贴和剪切的操作</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>  yy</td>
+<td>复制光标所在行的整行</td>
+</tr>
+<tr>
+<td>  3yy</td>
+<td>复制3行</td>
+</tr>
+<tr>
+<td>  y^</td>
+<td>复制至行首的第一个字符，不包含光标所在处字符</td>
+</tr>
+<tr>
+<td>  y0</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>  yw</td>
+<td>复制一个单词</td>
+</tr>
+<tr>
+<td>  y2w</td>
+<td>复制两个单词</td>
+</tr>
+<tr>
+<td>  yG</td>
+<td>复制至文本末</td>
+</tr>
+<tr>
+<td>  y1G</td>
+<td>复制至文本开头</td>
+</tr>
+<tr>
+<td> p（小写）</td>
+<td>粘贴至光标后（下）</td>
+</tr>
+<tr>
+<td> P（大写）</td>
+<td>粘贴至光标前（上）</td>
+</tr>
+<tr>
+<td>  dd</td>
+<td>剪切光标所在行的整行</td>
+</tr>
+<tr>
+<td>  ddp</td>
+<td>快速交换光标所在行与它下面的行</td>
+</tr>
+<tr>
+<td>剪切的操作</td>
+<td>同复制的操作一致，以此类推</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-4-3-替换和撤销（Undo）"><a href="#2-4-3-替换和撤销（Undo）" class="headerlink" title="2.4.3 替换和撤销（Undo）"></a>2.4.3 替换和撤销（Undo）</h3><p>在普通模式下进行</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>  r+&lt;待替换字母&gt;</td>
+<td>将光标所在字母替换为指定字母</td>
+</tr>
+<tr>
+<td>  R</td>
+<td>连续替换，直到按下Esc</td>
+</tr>
+<tr>
+<td>  cc</td>
+<td>替换整行，即删除光标所在行，并进入插入模式</td>
+</tr>
+<tr>
+<td>  cw</td>
+<td>替换一个单词，即删除一个单词，并进入插入模式</td>
+</tr>
+<tr>
+<td>  C（大写）</td>
+<td>替换光标以后至行末</td>
+</tr>
+<tr>
+<td>  ~</td>
+<td>反转光标所在字母大小写</td>
+</tr>
+<tr>
+<td>  u{n}</td>
+<td>撤销一次或n次操作</td>
+</tr>
+<tr>
+<td>  U（大写）</td>
+<td>撤销当前行的所有修改</td>
+</tr>
+<tr>
+<td>  Ctrl+r</td>
+<td>redo，即撤销undo的操作</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-4-4-查找"><a href="#2-4-4-查找" class="headerlink" title="2.4.4 查找"></a>2.4.4 查找</h3><p>在普通模式下进行</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>  /&lt;字符串&gt;</td>
+<td>向下进行查找</td>
+</tr>
+<tr>
+<td>  ?&lt;字符串&gt;</td>
+<td>向上进行查找</td>
+</tr>
+<tr>
+<td>  n（小写）</td>
+<td>继续相同侧的查找</td>
+</tr>
+<tr>
+<td>  N（大写）</td>
+<td>继续相反侧的查找</td>
+</tr>
+<tr>
+<td>  \*</td>
+<td>向下查找光标所在处的单词</td>
+</tr>
+<tr>
+<td>  \#</td>
+<td>向上查找光标所在处的单词</td>
+</tr>
+<tr>
+<td>  g\*</td>
+<td>同\*，但部分符合该单词即可</td>
+</tr>
+<tr>
+<td>  g\#</td>
+<td>同\#，但部分符合该单词即可</td>
+</tr>
+</tbody>
+</table>
+<p>补充说明：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">加入old中包含“/”这个字符就需要反斜杠|转换或将/换成<span class="comment">#或@</span></div><div class="line"><span class="number">1</span>. <span class="symbol">:%s/</span>\/etc\/old/new/g</div><div class="line"><span class="number">2</span>. <span class="symbol">:%s</span><span class="comment">#/etc/old#new#g</span></div><div class="line"><span class="number">3</span>. <span class="symbol">:%s</span>@/etc/old<span class="variable">@new</span><span class="variable">@g</span></div></pre></td></tr></table></figure></p>
+<h3 id="2-4-5-快速缩进"><a href="#2-4-5-快速缩进" class="headerlink" title="2.4.5 快速缩进"></a>2.4.5 快速缩进</h3><p>使用快速缩进，用于格式化代码超爽，在普通模式下进行</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> &gt;&gt;</td>
+<td>将整行向右缩进</td>
+</tr>
+<tr>
+<td> &lt;&lt;</td>
+<td>将整行向左回退</td>
+</tr>
+<tr>
+<td>:set shiftwidth=n</td>
+<td>设置缩进和回退的字符数（可以简写成sw)</td>
+</tr>
+<tr>
+<td> :ce</td>
+<td>使本行内容居中</td>
+</tr>
+<tr>
+<td> :ri</td>
+<td>使本行内容靠右</td>
+</tr>
+<tr>
+<td> :le</td>
+<td>使本行内容靠左</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-5-Vim重复命令和设置"><a href="#2-5-Vim重复命令和设置" class="headerlink" title="2.5 Vim重复命令和设置"></a>2.5 Vim重复命令和设置</h2><h3 id="2-5-1-Vim重复命令"><a href="#2-5-1-Vim重复命令" class="headerlink" title="2.5.1 Vim重复命令"></a>2.5.1 Vim重复命令</h3><ol>
+<li>重复执行上次命令：在普通模式下，.（小数点）表示重复上一次的命令操作。</li>
+<li>执行指定次数相同的命令：在普通模式输入数字N，N表示重复后面操作的次数。几个例子如下:<ul>
+<li>输入 <code>10x</code> ,删除10个连续字符</li>
+<li>输入 <code>3dd</code> ,将会删除3行文本</li>
+<li>在普通模式下，还可以使用<code>dw</code>或者<code>daw</code>（delete a word）删除一个单词，所以可以联想到<code>dnw</code>（n替换为相应数字）表示删除n个单词。</li>
+</ul>
+</li>
+</ol>
+<h3 id="2-5-2-Vim常用设置"><a href="#2-5-2-Vim常用设置" class="headerlink" title="2.5.2 Vim常用设置"></a>2.5.2 Vim常用设置</h3><ul>
+<li><strong>:set nu</strong> 显示行号</li>
+<li><strong>:set shiftwidth=n</strong> 设置缩进和回退的字符数（可以简写成sw–&gt; :set sw=n ）</li>
+<li><strong>:set nohl</strong> 取消查找关键字后的高亮</li>
+</ul>
+<h2 id="2-6-退出Vim"><a href="#2-6-退出Vim" class="headerlink" title="2.6 退出Vim"></a>2.6 退出Vim</h2><p>命令行模式下退出Vim</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> :q!</td>
+<td>强制退出，不保存</td>
+</tr>
+<tr>
+<td> :q</td>
+<td>退出</td>
+</tr>
+<tr>
+<td> :wq!</td>
+<td>强制保存并退出</td>
+</tr>
+<tr>
+<td> :w &lt;文件路径&gt;</td>
+<td>另存为</td>
+</tr>
+<tr>
+<td> :saveas &lt;文件路径&gt;</td>
+<td>另存为</td>
+</tr>
+<tr>
+<td> :x</td>
+<td>保存并退出</td>
+</tr>
+<tr>
+<td> :wq</td>
+<td>保存并退出</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>普通模式下输入 <strong>ZZ（Shift+zz）</strong> 即可退出（若文件改动，则保存，否则不保存）</li>
+</ul>
+<hr>
+<h1 id="3-Vim初学的补充"><a href="#3-Vim初学的补充" class="headerlink" title="3. Vim初学的补充"></a>3. Vim初学的补充</h1><h2 id="3-1-正常模式下的命令格式"><a href="#3-1-正常模式下的命令格式" class="headerlink" title="3.1. 正常模式下的命令格式"></a>3.1. 正常模式下的命令格式</h2><p>在正常模式下一个命令的格式是∶</p>
+<p><strong>[number] command object</strong> 或者 <strong>command    [number]   object</strong></p>
+<p>其意是∶</p>
+<ul>
+<li>number - 代表的是命令执行的次数</li>
+<li>command - 代表要做的事情，比如 d 代表删除</li>
+<li>object - 代表要操作的对象，比如 w 代表单字/单词，$ 代表到行末等等。</li>
+<li>$ (to the end of line), etc.</li>
+</ul>
+<h2 id="3-2-括号匹配"><a href="#3-2-括号匹配" class="headerlink" title="3.2. 括号匹配"></a>3.2. 括号匹配</h2><p>如果光标当前位置是括号(、)、[、]、{、}，按 % 可以将光标移动到配对的括号上。</p>
+<h2 id="3-3-字符替换"><a href="#3-3-字符替换" class="headerlink" title="3.3. 字符替换"></a>3.3. 字符替换</h2><ul>
+<li>在一行内替换头一个字符串 old 为新的字符串 new，请输入  <code>:s/old/new</code></li>
+<li>在一行内替换所有的字符串 old 为新的字符串 new，请输入  <code>:s/old/new/g</code></li>
+<li>在两行内替换所有的字符串 old 为新的字符串 new，请输入  <code>:#,#s/old/new/g</code></li>
+<li>在文件内替换所有的字符串 old 为新的字符串 new，请输入  <code>:%s/old/new/g</code></li>
+<li>进行全文替换时询问用户确认每个替换需添加 c 选项，请输入 <code>:%s/old/new/gc</code></li>
+</ul>
+<h2 id="3-4-Vim的在线帮助命令"><a href="#3-4-Vim的在线帮助命令" class="headerlink" title="3.4. Vim的在线帮助命令"></a>3.4. Vim的在线帮助命令</h2><p> Vim 拥有一个细致全面的在线帮助系统。要启动该帮助系统，请选择如下三种方法之一∶</p>
+<ul>
+<li>按下 <code>&lt;HELP&gt;</code> 键 (如果键盘上有的话)</li>
+<li>按下 <code>&lt;F1&gt;</code> 键 (如果键盘上有的话)</li>
+<li>输入 <code>:help &lt;回车&gt;</code></li>
+<li>输入 <code>:q &lt;回车&gt;</code> 可以关闭帮助窗口。</li>
+</ul>
+<p>提供一个正确的参数给”:help”命令，您可以找到关于该主题的帮助。请试验以下参数(可别忘了按回车键哦)∶</p>
+<ul>
+<li><code>:help w &lt;回车&gt;</code></li>
+<li><code>:help insert-index &lt;回车&gt;</code></li>
+<li><code>:help user-manual &lt;回车&gt;</code></li>
+<li>vim手册，使用的命令是∶ <code>:help user-manual</code></li>
+</ul>
+<hr>
+<h1 id="4-Vim高级功能"><a href="#4-Vim高级功能" class="headerlink" title="4. Vim高级功能"></a>4. Vim高级功能</h1><h2 id="4-1-多文件编辑"><a href="#4-1-多文件编辑" class="headerlink" title="4.1. 多文件编辑"></a>4.1. 多文件编辑</h2><h3 id="4-1-1-使用Vim编辑多个文件"><a href="#4-1-1-使用Vim编辑多个文件" class="headerlink" title="4.1.1 使用Vim编辑多个文件"></a>4.1.1 使用Vim编辑多个文件</h3><p>编辑多个文件有两种形式，一种是在进入Vim前使用的参数就是多个文件，另一种就是进入Vim后再编辑其他的文件。</p>
+<p>同时创建两个新文件并编辑：</p>
+<ul>
+<li><code>vim 1.txt 2.txt</code> 默认进入1.txt文件的编辑界面</li>
+<li>命令行模式下输入<code>:n</code> 编辑2.txt文件，可以加!即<code>:n!</code>强制切换，之前一个文件的输入内容没有保存，仅仅切换到另一个文件</li>
+<li>命令行模式下输入<code>:N</code> 编辑1.txt文件，可以加!即<code>:N!</code>强制切换，之前文件内的输入没有保存，仅仅是切换到另一个文件。</li>
+</ul>
+<h3 id="4-1-2-进入Vim后打开新文件"><a href="#4-1-2-进入Vim后打开新文件" class="headerlink" title="4.1.2 进入Vim后打开新文件"></a>4.1.2 进入Vim后打开新文件</h3><p>命令行模式下的操作：</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>:e 3.txt</td>
+<td>打开新文件3.txt</td>
+</tr>
+<tr>
+<td>:e#</td>
+<td>回到前一个文件</td>
+</tr>
+<tr>
+<td>:ls</td>
+<td>可以列出以前编辑过的文档</td>
+</tr>
+<tr>
+<td>:b 2.txt（或者编号）</td>
+<td>可以直接进入文件2.txt编辑</td>
+</tr>
+<tr>
+<td>:bd 2.txt（或者编号）</td>
+<td>可以删除以前编辑过的列表中的文件项目</td>
+</tr>
+<tr>
+<td>:e! 4.txt</td>
+<td>新打开文件4.txt，放弃正在编辑的文件</td>
+</tr>
+<tr>
+<td>:f</td>
+<td>显示正在编辑的文件名</td>
+</tr>
+<tr>
+<td>:f new.txt</td>
+<td>改变正在编辑的文件名字为new.txt</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-1-3-恢复文件"><a href="#4-1-3-恢复文件" class="headerlink" title="4.1.3 恢复文件"></a>4.1.3 恢复文件</h3><p>如果因为断电等原因造成文档没有保存，可以采用恢复方式：</p>
+<p><code>vim -r</code> 进入文档后，输入<code>:ewcover 1.txt</code>来恢复。</p>
+<h2 id="4-2-可视模式"><a href="#4-2-可视模式" class="headerlink" title="4.2. 可视模式"></a>4.2. 可视模式</h2><ul>
+<li>在普通模式下输入<code>v（小写）</code>，进入字符选择模式，就可以移动光标，光标走过的地方就会选取。再次按下v会后就会取消选取。</li>
+<li>在普通模式下输入<code>Shift+v（小写）</code>，进入行选择模式，按下V之后就会把整行选取，您可以上下移动光标选更多的行，同样，再按一次Shift+v就可以取消选取。</li>
+<li>在普通模式下输入<code>Ctrl+v（小写）</code>，这是区域选择模式，可以进行矩形区域选择，再按一次Ctrl+v取消选取。</li>
+<li>在普通模式下输入<code>d</code>删除选取区域内容</li>
+<li>在普通模式下输入<code>y</code>复制选取区域内容</li>
+</ul>
+<h2 id="4-3-视窗操作"><a href="#4-3-视窗操作" class="headerlink" title="4.3. 视窗操作"></a>4.3. 视窗操作</h2><p>vim可以在一个界面里打开多个窗口进行编辑，这些编辑窗口称为vim的视窗。打开方法有很多种，例如可以使用在命令行模式下输入<code>:new</code> 打开一个新的vim视窗，并进入视窗编辑一个新文件（普通模式下输入<code>Ctrl+w</code>也可以,但是<code>Ctrl+w</code>在chrome下会与chrome关闭标签页的快捷键冲突，所以使用该快捷键你可以在IE或其它浏览器进行练习），除了<code>:new</code>命令，下述列举的多种方法也可以在命令模式或普通模式下打开新的视窗：</p>
+<ul>
+<li>命令行模式下输入<code>:sp 1.txt</code> 打开新的横向视窗来编辑1.txt</li>
+<li>命令行模式下输入<code>:vsp 2.txt</code> 打开新的纵向视窗来编辑1.txt</li>
+<li>普通模式下<code>Ctrl-w s</code> 将当前窗口分割成两个水平的窗口</li>
+<li>普通模式下<code>Ctrl-w v</code> 将当前窗口分割成两个垂直的窗口</li>
+<li>普通模式下<code>Ctrl-w q</code> 即 <code>:q</code> 结束分割出来的视窗。如果在新视窗中有输入需要使用强制符！即<code>:q!</code></li>
+<li>普通模式下<code>Ctrl-w o</code> 打开一个视窗并且隐藏之前的所有视窗</li>
+<li>普通模式下<code>Ctrl-w j</code> 移至下面视窗</li>
+<li>普通模式下<code>Ctrl-w k</code> 移至上面视窗</li>
+<li>普通模式下<code>Ctrl-w h</code> 移至左边视窗</li>
+<li>普通模式下<code>Ctrl-w l</code> 移至右边视窗</li>
+<li>普通模式下<code>Ctrl-w J</code> 将当前视窗移至下面</li>
+<li>普通模式下<code>Ctrl-w K</code> 将当前视窗移至上面</li>
+<li>普通模式下<code>Ctrl-w H</code> 将当前视窗移至左边</li>
+<li>普通模式下<code>Ctrl-w L</code> 将当前视窗移至右边</li>
+<li>普通模式下<code>Ctrl-w -</code> 减小视窗的高度</li>
+<li>普通模式下<code>Ctrl-w +</code> 增加视窗的高度</li>
+</ul>
+<h2 id="4-4-文档加密"><a href="#4-4-文档加密" class="headerlink" title="4.4. 文档加密"></a>4.4. 文档加密</h2><p><code>vim -x file1</code> 输入您的密码确认密码这样在下一次打开时，vim就会要求你输入密码</p>
+<h2 id="4-5-在Vim执行外部命令"><a href="#4-5-在Vim执行外部命令" class="headerlink" title="4.5. 在Vim执行外部命令"></a>4.5. 在Vim执行外部命令</h2><p>在命令行模式中输入<code>!</code>可以执行外部的shell命令:</p>
+<ul>
+<li><code>:!ls</code> 用于显示当前目录的内容</li>
+<li><code>:!rm FILENAME</code> 用于删除名为 FILENAME 的文件</li>
+<li><code>:w FILENAME</code> 可将当前 VIM 中正在编辑的文件另存为 FILENAME 文件</li>
+</ul>
+<h2 id="4-6-Vim的帮助系统"><a href="#4-6-Vim的帮助系统" class="headerlink" title="4.6. Vim的帮助系统"></a>4.6. Vim的帮助系统</h2><ul>
+<li>普通模式下按<code>&lt;F1&gt;</code>打开vim自己预设的帮助文档</li>
+<li>命令行模式下输入<code>:h shiftwidth</code> 打开名为shiftwidth的帮助文件</li>
+<li>命令行模式下输入<code>:ver</code> 显示版本及参数</li>
+</ul>
+<h2 id="4-7-功能设定"><a href="#4-7-功能设定" class="headerlink" title="4.7. 功能设定"></a>4.7. 功能设定</h2><h3 id="4-7-1-Vim的功能设定"><a href="#4-7-1-Vim的功能设定" class="headerlink" title="4.7.1 Vim的功能设定"></a>4.7.1 Vim的功能设定</h3><p>可以在编辑文件的时候进行功能设定，如命令行模式下输入<code>:set nu</code>（显示行数），设定值退出vim后不会保存。要永久保存配置需要修改vim配置文件。vim的配置文件<code>~/.vimrc</code>，可以打开文件进行修改，不过务必小心不要影响vim正常使用</p>
+<h3 id="4-7-2-获取目前的设定"><a href="#4-7-2-获取目前的设定" class="headerlink" title="4.7.2 获取目前的设定"></a>4.7.2 获取目前的设定</h3><ul>
+<li>命令行模式下输入<code>:set</code>或者<code>:se</code>显示所有修改过的配置</li>
+<li>命令行模式下输入<code>:set all</code> 显示所有的设定值</li>
+<li>命令行模式下输入<code>:set option?</code> 显示option的设定值<br>-命令行模式下输入<code>:set nooption</code> 取消当期设定值</li>
+</ul>
+<h3 id="4-7-3-set功能的说明"><a href="#4-7-3-set功能的说明" class="headerlink" title="4.7.3 set功能的说明"></a>4.7.3 set功能的说明</h3><ul>
+<li>命令行模式下输入<code>:set autoindent(ai)</code> 设置自动缩进</li>
+<li>命令行模式下输入<code>:set autowrite(aw)</code> 设置自动存档，默认未打开</li>
+<li>命令行模式下输入<code>:set background=dark或light</code>，设置背景风格</li>
+<li>命令行模式下输入<code>:set backup(bk)</code> 设置自动备份，默认未打开</li>
+<li>命令行模式下输入<code>:set cindent(cin)</code> 设置C语言风格缩进</li>
+</ul>
+<hr>
+<h1 id="5-Vim使用技巧总结"><a href="#5-Vim使用技巧总结" class="headerlink" title="5. Vim使用技巧总结"></a>5. Vim使用技巧总结</h1><h2 id="5-1-Vim一些常用使用技巧总结"><a href="#5-1-Vim一些常用使用技巧总结" class="headerlink" title="5.1. Vim一些常用使用技巧总结"></a>5.1. Vim一些常用使用技巧总结</h2><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ctrl-C</td>
+<td>回到普通模式</td>
+</tr>
+<tr>
+<td>u / Ctrl+r</td>
+<td>撤销/反撤销</td>
+</tr>
+<tr>
+<td>9G / :9</td>
+<td>定位到第9行</td>
+</tr>
+<tr>
+<td>:9y</td>
+<td>拷贝第9行</td>
+</tr>
+<tr>
+<td>Ctrl-o</td>
+<td>回到此前光标位置</td>
+</tr>
+<tr>
+<td>ZZ / ZQ</td>
+<td>保存并退出/无条件退出</td>
+</tr>
+<tr>
+<td>=</td>
+<td>格式化选定文本</td>
+</tr>
+<tr>
+<td>ggvG</td>
+<td>全选文件内容</td>
+</tr>
+<tr>
+<td>gg=G</td>
+<td>格式化文件</td>
+</tr>
+<tr>
+<td>Shift-v</td>
+<td>选取行</td>
+</tr>
+<tr>
+<td>vip</td>
+<td>选取光标所在段落</td>
+</tr>
+<tr>
+<td>yit / dit / cit</td>
+<td>对标签内的文本进行操作</td>
+</tr>
+<tr>
+<td>mx</td>
+<td>添加书签</td>
+</tr>
+<tr>
+<td>`X</td>
+<td>跳转到书签X</td>
+</tr>
+<tr>
+<td>:marks</td>
+<td>查看所有书签X</td>
+</tr>
+<tr>
+<td>delm X</td>
+<td>删除书签X</td>
+</tr>
+<tr>
+<td>:ls</td>
+<td>查看缓冲区</td>
+</tr>
+<tr>
+<td>:bN</td>
+<td>打开缓冲区N</td>
+</tr>
+<tr>
+<td>:bn / bp /</td>
+<td>缓冲区切换</td>
+</tr>
+<tr>
+<td>:shell / :sh /!cmd</td>
+<td>执行shell命令</td>
+</tr>
+<tr>
+<td>Ctrl-z / fg</td>
+<td>利用了Linux的作业机制，将Vim进程放到后台/前台执行，便于使用shell环境</td>
+</tr>
+<tr>
+<td>vim -o *.py</td>
+<td>打开当前目录下全部.py文件</td>
+</tr>
+<tr>
+<td>:qa</td>
+<td>退出全部窗口</td>
+</tr>
+<tr>
+<td>vnew</td>
+<td>垂直分屏</td>
+</tr>
+<tr>
+<td>Ctrl-w r</td>
+<td>切换缓冲区</td>
+</tr>
+<tr>
+<td>:r filename</td>
+<td>将文件读入到当前光标位置</td>
+</tr>
+<tr>
+<td>Windo diffthis/diffof</td>
+<td>对比当前打开的两个缓冲区</td>
+</tr>
+<tr>
+<td>:e!</td>
+<td>重新打开缓冲区</td>
+</tr>
+<tr>
+<td>:s/foo/bar/gc</td>
+<td>查找foo并将其替换成bar</td>
+</tr>
+<tr>
+<td>:1?xxx / G?xxx</td>
+<td>从文件末尾开始查找</td>
+</tr>
+<tr>
+<td>Shift-k</td>
+<td>查找光标所在命令或函数的man帮助</td>
+</tr>
+<tr>
+<td>J</td>
+<td>合并行</td>
+</tr>
+<tr>
+<td>gi / gk</td>
+<td>对于换行的段落的行移动</td>
+</tr>
+<tr>
+<td>Ctrl-g</td>
+<td>用于显示当前光标所在位置和文件状态信息。</td>
+</tr>
+<tr>
+<td>:!command</td>
+<td>用于执行一个外部命令 command。</td>
+</tr>
+<tr>
+<td>:w FILENAME</td>
+<td>可将当前 VIM 中正在编辑的文件保存到名为 FILENAME 的文件中。</td>
+</tr>
+<tr>
+<td>:#,#w FILENAME</td>
+<td>可将当前编辑文件第 # 行至第 # 行的内容保存到文件FILENAME 中。</td>
+</tr>
+<tr>
+<td>:r FILENAME</td>
+<td>可提取磁盘文件 FILENAME 并将其插入到当前文件的光标位置后面。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-2-Vim键盘图"><a href="#5-2-Vim键盘图" class="headerlink" title="5.2. Vim键盘图"></a>5.2. Vim键盘图</h2><h3 id="图一"><a href="#图一" class="headerlink" title="图一"></a>图一</h3><p><img src="http://ooww3ll01.bkt.clouddn.com/image/png/Vim%E9%94%AE%E7%9B%98%E5%9B%BE%E4%B8%80.png" alt="Vim键盘图一"></p>
+<h3 id="图二"><a href="#图二" class="headerlink" title="图二"></a>图二</h3><p><img src="http://ooww3ll01.bkt.clouddn.com/image/png/Vim%E9%94%AE%E7%9B%98%E5%9B%BE%E4%BA%8C.png" alt="Vim键盘图二"></p>
+<h3 id="图三"><a href="#图三" class="headerlink" title="图三"></a>图三</h3><p><img src="http://ooww3ll01.bkt.clouddn.com/Vim%E9%94%AE%E7%9B%98%E5%9B%BE.jpg" alt="Vim键盘图"></p>
+<hr>
+<blockquote>
+<p>OK</p>
+</blockquote>
+</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/12/25/转载/002. C和C++高手修炼之路/" class="pre">C和C++高手修炼之路</a><a href="/2017/12/19/Tool/002. 常用便携软件/" class="next">常用便携软件</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-Vim初相识"><span class="toc-text">0. Vim初相识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-1-Vim简介"><span class="toc-text">0.1 Vim简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0-2-Vim的安装和使用"><span class="toc-text">0.2 Vim的安装和使用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-Vim的模式"><span class="toc-text">1. Vim的模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-基本模式"><span class="toc-text">1.1 基本模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-派生模式"><span class="toc-text">1.2 派生模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-其它"><span class="toc-text">1.3 其它</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-4-说明"><span class="toc-text">1.4 说明</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Vim的使用"><span class="toc-text">2. Vim的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-进入Vim"><span class="toc-text">2.1 进入Vim</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-三种常用模式之间的切换"><span class="toc-text">2.2 三种常用模式之间的切换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-进入普通模式"><span class="toc-text">2.2.1 进入普通模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-进入插入模式"><span class="toc-text">2.2.2 进入插入模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-3-进入命令行模式"><span class="toc-text">2.2.3 进入命令行模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-4-关于模式之间相互切换的说明"><span class="toc-text">2.2.4 关于模式之间相互切换的说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-光标移动"><span class="toc-text">2.3 光标移动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-操作文本"><span class="toc-text">2.4 操作文本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-1-删除文本"><span class="toc-text">2.4.1 删除文本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-2-复制粘贴和剪切"><span class="toc-text">2.4.2 复制粘贴和剪切</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-3-替换和撤销（Undo）"><span class="toc-text">2.4.3 替换和撤销（Undo）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-4-查找"><span class="toc-text">2.4.4 查找</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-5-快速缩进"><span class="toc-text">2.4.5 快速缩进</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-Vim重复命令和设置"><span class="toc-text">2.5 Vim重复命令和设置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-1-Vim重复命令"><span class="toc-text">2.5.1 Vim重复命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-2-Vim常用设置"><span class="toc-text">2.5.2 Vim常用设置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-退出Vim"><span class="toc-text">2.6 退出Vim</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Vim初学的补充"><span class="toc-text">3. Vim初学的补充</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-正常模式下的命令格式"><span class="toc-text">3.1. 正常模式下的命令格式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-括号匹配"><span class="toc-text">3.2. 括号匹配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-字符替换"><span class="toc-text">3.3. 字符替换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-Vim的在线帮助命令"><span class="toc-text">3.4. Vim的在线帮助命令</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-Vim高级功能"><span class="toc-text">4. Vim高级功能</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-多文件编辑"><span class="toc-text">4.1. 多文件编辑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-1-使用Vim编辑多个文件"><span class="toc-text">4.1.1 使用Vim编辑多个文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-2-进入Vim后打开新文件"><span class="toc-text">4.1.2 进入Vim后打开新文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-3-恢复文件"><span class="toc-text">4.1.3 恢复文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-可视模式"><span class="toc-text">4.2. 可视模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-视窗操作"><span class="toc-text">4.3. 视窗操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-文档加密"><span class="toc-text">4.4. 文档加密</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-5-在Vim执行外部命令"><span class="toc-text">4.5. 在Vim执行外部命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-6-Vim的帮助系统"><span class="toc-text">4.6. Vim的帮助系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-7-功能设定"><span class="toc-text">4.7. 功能设定</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-1-Vim的功能设定"><span class="toc-text">4.7.1 Vim的功能设定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-2-获取目前的设定"><span class="toc-text">4.7.2 获取目前的设定</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-3-set功能的说明"><span class="toc-text">4.7.3 set功能的说明</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-Vim使用技巧总结"><span class="toc-text">5. Vim使用技巧总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-Vim一些常用使用技巧总结"><span class="toc-text">5.1. Vim一些常用使用技巧总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-Vim键盘图"><span class="toc-text">5.2. Vim键盘图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#图一"><span class="toc-text">图一</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#图二"><span class="toc-text">图二</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#图三"><span class="toc-text">图三</span></a></li></ol></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/012. 正则表达式实用技术/">正则表达式实用技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/011. Linux计划任务管理技术/">Linux计划任务管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/29/Tool/007. 《Vim实用技巧》-开始：Vim解决问题的方式/">《Vim实用技巧》-开始：Vim解决问题的方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/28/Tool/006. Vim的语言性思维/">Vim的语言性思维</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/Tool/005. Vim的配置/">Vim的配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/26/Tool/004. Vim的一些问题总结/">Vim的一些问题总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/转载/003. 入门Linux运维工程师需要学习的内容/">入门Linux运维工程师需要学习的内容</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/转载/002. C和C++高手修炼之路/">C和C++高手修炼之路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/Tool/003. Vim初学笔记/">Vim初学笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/19/Tool/002. 常用便携软件/">常用便携软件</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Reading/">Reading</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Shell/">Shell</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tool/">Tool</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Server/">服务</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zhuanzai/">转载</a><span class="category-list-count">3</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">奇怪先生theshu.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

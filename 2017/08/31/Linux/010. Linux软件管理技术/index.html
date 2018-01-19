@@ -1,0 +1,425 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="奇怪先生的博客"><title>Linux软件管理技术 | 奇怪先生的博客</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Linux软件管理技术</h1><a id="logo" href="/.">奇怪先生的博客</a><p class="description">耳目得来终觉浅，觉知此事要躬行。</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">Linux软件管理技术</h1><div class="post-meta"><a href="/2017/08/31/Linux/010. Linux软件管理技术/#comments" class="comment-count"></a><p><span class="date">Aug 31, 2017</span><span><a href="/categories/Linux/" class="category">Linux</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><blockquote>
+<p>GO</p>
+</blockquote>
+<h1 id="0-RPM和DPKG两大阵营"><a href="#0-RPM和DPKG两大阵营" class="headerlink" title="0. RPM和DPKG两大阵营"></a>0. RPM和DPKG两大阵营</h1><p>在 GNU/Linux( 以下简称 Linux) 操作系统中，RPM 和 DPKG 为最常见的两类软件包管理工具，他们分别应用于基于 RPM 软件包的 Linux 发行版本和 DEB 软件包的 Linux 发行版本。软件包管理工具的作用是提供在操作系统中安装，升级，卸载需要的软件的方法，并提供对系统中所有软件状态信息的查询。</p>
+<p>RPM 全称为 Redhat Package Manager，最早由 Red Hat 公司制定实施，随后被 GNU 开源操作系统接受并成为很多 Linux 系统 (RHEL) 的既定软件标准。与 RPM 进行竞争的是基于 Debian 操作系统 (UBUNTU) 的 DEB 软件包管理工具－ DPKG，全称为 Debian Package，功能方面与 RPM 相似。</p>
+<hr>
+<h1 id="1-CentOS软件管理"><a href="#1-CentOS软件管理" class="headerlink" title="1. CentOS软件管理"></a>1. CentOS软件管理</h1><p>学习CentOS的软件管理方式，包括RPM包的安装更新查询卸载等，还有源码包的安装方式。</p>
+<h2 id="1-1-RPM"><a href="#1-1-RPM" class="headerlink" title="1.1. RPM"></a>1.1. RPM</h2><p>一个 RPM 包包含了已压缩的软件文件集以及该软件的内容信息（在头文件中保存），通常表现为以 .rpm 扩展名结尾的文件，例如 package.rpm 。对其操作，需要使用 rpm 命令。下面介绍 rpm 工具的参数和使用方法。</p>
+<h3 id="1-1-1-RPM-介绍"><a href="#1-1-1-RPM-介绍" class="headerlink" title="1.1.1. RPM 介绍"></a>1.1.1. RPM 介绍</h3><p>RPM是Red Hat Package Manager的缩写，由RedHat公司开发。它是以一种数据库记录的方式将我们所需要的套件安装到Linux主机的一套管理程序。也就是说，在Linux系统中存在着一个关于RPM的数据库，它记录了安装的包以及包与包之间的依赖关系。RPM包是预先在Linux机器上编译并打包的文件，安装非常快捷。但是它也有一些缺点，比如安装环境必须与编译时一致或相当，包与包之间存在着相互依赖的情况，卸载包时需要先把依赖的包卸载。如果依赖的包是系统所必须的，就不能卸载这个包，否则系统会崩溃。</p>
+<p>RPM包的文件名都由-和.分成了若干部分，一般都像这样 <code>abattis-cantarell-fonts-0.0.16-3.el7.noarch.rpm</code> 、<code>abrt-2.1.11-45.el7.centos.x86_64.rpm</code>。abrt为包名，2.11为版本信息，45.el7.centos为发布版本号，x86_64为运行平台。常见的运行平台有i386、i486、i586、i686（这三个为32位的CPU）和x86_64（64位的CPU）。另外，有些RPM包并没有写具体的平台而是noarch，这是该包没有平台限制的意思。</p>
+<h3 id="1-1-2-rpm-命令"><a href="#1-1-2-rpm-命令" class="headerlink" title="1.1.2. rpm 命令"></a>1.1.2. rpm 命令</h3><table>
+<thead>
+<tr>
+<th>常用选项</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-i</td>
+<td>表示安装</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>表示可视化</td>
+</tr>
+<tr>
+<td>-h</td>
+<td>表示显示安装进度</td>
+</tr>
+<tr>
+<td>-U</td>
+<td>表示升级</td>
+</tr>
+<tr>
+<td>-e</td>
+<td>表示卸载</td>
+</tr>
+<tr>
+<td>-q</td>
+<td>表示查询</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>表示对RPM包进行查询，通常和其它参数同时使用</td>
+</tr>
+<tr>
+<td>–force</td>
+<td>表示强制安装，即使覆盖属于其他包的文件也要安装</td>
+</tr>
+<tr>
+<td>–nodeps</td>
+<td>表示当要安装（或卸载）的RPM包依赖于其它包时，即使其它包没有安装（或卸载），也要安装（或卸载）这个包</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rpm -ivh package.rpm</td>
+<td>安装RPM包</td>
+</tr>
+<tr>
+<td>rpm -Uvh package.rpm</td>
+<td>升级RPM包</td>
+</tr>
+<tr>
+<td>rpm -ev package</td>
+<td>卸载RPM包（这里的filename是通过RPM的查询功能所查询到的）</td>
+</tr>
+<tr>
+<td>rpm -q package</td>
+<td>查询一个RPM包</td>
+</tr>
+<tr>
+<td>rpm -qa (package)</td>
+<td>查询当前系统所有已安装的RPM包</td>
+</tr>
+<tr>
+<td>rpm -qi package</td>
+<td>得到一个已安装的RPM包的相关信息</td>
+</tr>
+<tr>
+<td>rpm -ql package</td>
+<td>列出一个RPM包的安装文件</td>
+</tr>
+<tr>
+<td>rpm -qf 文件的绝对路径</td>
+<td>列出某个文件属于哪个RPM包</td>
+</tr>
+<tr>
+<td>rpm -qRp package.rpm</td>
+<td>查询RPM包的依赖关系</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1-1-3-RPM-包管理示例"><a href="#1-1-3-RPM-包管理示例" class="headerlink" title="1.1.3. RPM 包管理示例"></a>1.1.3. RPM 包管理示例</h3><p>以下步骤描述了一个普通用户安装 IBM Lotus Notes V85 ( 以下简称 Notes) 的典型操作过程。 Notes 的 RPM 包名为 ibm_lotus_notes-8.5.i586.rpm 。</p>
+<ul>
+<li>首先查询是否该软件是否已经在系统中存在 : <code>rpm -qa | grep ibm_lotus_notes</code>。如果返回信息为空那么说明该软件还未被安装。</li>
+<li><p>查询 Notes 软件包内容：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># rpm -qip ibm_lotus_notes-8.5.i586.rpm </span></div><div class="line">             </div><div class="line"> Name        : ibm_lotus_notes           Relocations: /opt/ibm/lotus/notes </div><div class="line"> Version     : 8.5                               Vendor: IBM </div><div class="line"> Release     : 20081211.1925             Build Date: Sat 13 Dec 2008 09:38:55 AM CST </div><div class="line"> Install Date: (<span class="keyword">not</span> installed)               Build Host: dithers.notesdev.ibm.com </div><div class="line"><span class="built_in"> Group </span>      : Applications/Office           </div><div class="line"> Source RPM: ibm_lotus_notes-8.5-20081211.1925.src.rpm </div><div class="line"> Size        : 603779427                        License: Commercial </div><div class="line"> Signature   : DSA/SHA1, Sat 13 Dec 2008 09:43:02 AM CST, Key ID 314c8c6534f9ae75 </div><div class="line"> Summary     : IBM Lotus Notes </div><div class="line"> Description : </div><div class="line"> IBM Lotus Notes software provides a robust <span class="built_in">..</span>.</div></pre></td></tr></table></figure>
+</li>
+<li><p>安装 Notes：<code>rpm -ivh ibm_lotus_notes-8.5.i586.rpm</code>。返回信息如下：</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Preparing...                ########################################### [<span class="number">100</span>%] </div><div class="line"><span class="number">1</span>:ibm_lotus_notes        ########################################### [<span class="number">100</span>%]</div></pre></td></tr></table></figure>
+</li>
+<li><p>升级 Notes：若今后需要基于该版本升级至更高版本的 Notes( 缝 .0 - ibm_lotus_notes-9.0.i586.rpm)，则使用 -U 参数：<code># rpm -Uvh ibm_lotus_notes-8.5.i586.rpm</code></p>
+</li>
+<li>卸载 Notes：注意卸载软件使用软件名称，而不是包文件名：<code># rpm -ev ibm_lotus_notes</code></li>
+</ul>
+<hr>
+<h2 id="1-2-YUM-工具"><a href="#1-2-YUM-工具" class="headerlink" title="1.2. YUM 工具"></a>1.2. YUM 工具</h2><h3 id="1-2-1-YUM-介绍"><a href="#1-2-1-YUM-介绍" class="headerlink" title="1.2.1. YUM 介绍"></a>1.2.1. YUM 介绍</h3><p>YUM工具是用来集中管理RPM包的，使用它会更加方便的进行安装卸载升级RPM包。YUM工具最大的优势在于可以联网去下载所需要的RPM包，然后自动安装，若是所安装的RPM包有依赖关系，它会依次安装所依赖的包。</p>
+<p>YUM 基于 RPM 包管理工具，能够从指定的源空间（服务器，本地目录等）自动下载目标 RPM 包并且安装，可以自动处理依赖性关系并进行下载、安装，无须繁琐地手动下载、安装每一个需要的依赖包。此外，YUM 的另一个功能是进行系统中所有软件的升级。如上所述，YUM 的 RPM 包来源于源空间，在 RHEL 中由 /etc/yum.repos.d/ 目录中的 .repo 文件配置指定，如 rhel-debuginfo.repo 的内容：</p>
+<p>rhel-debuginfo.repo<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[rhel-debuginfo] </div><div class="line"> <span class="attribute">name</span>=Red Hat Enterprise Linux 5Client - i386 - <span class="builtin-name">Debug</span> </div><div class="line"> <span class="attribute">baseurl</span>=ftp://ftp.redhat.com/pub/redhat/linux/enterprise/5Client/en/os/i386/Debuginfo/ </div><div class="line"> <span class="attribute">enabled</span>=0 </div><div class="line"> <span class="attribute">gpgcheck</span>=1 </div><div class="line"> <span class="attribute">gpgkey</span>=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release</div></pre></td></tr></table></figure></p>
+<p>YUM 的系统配置文件位于 /etc/yum.conf，内容如下：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[main] </div><div class="line"> <span class="attribute">cachedir</span>=/var/cache/yum </div><div class="line"> <span class="attribute">keepcache</span>=1 </div><div class="line"> <span class="attribute">debuglevel</span>=2 </div><div class="line"> <span class="attribute">pkgpolicy</span>=newest </div><div class="line"> <span class="attribute">logfile</span>=/var/log/yum.log </div><div class="line"> <span class="attribute">distroverpkg</span>=redhat-release </div><div class="line"> <span class="attribute">tolerant</span>=1 </div><div class="line"> <span class="attribute">exactarch</span>=1 </div><div class="line"> <span class="attribute">obsoletes</span>=1 </div><div class="line"> <span class="attribute">gpgcheck</span>=1 </div><div class="line"> <span class="attribute">plugins</span>=1 </div><div class="line"> exclude= firefox gftp</div></pre></td></tr></table></figure></p>
+<p>配置文件用来定义用户期望的 yum 行为，比如，gpgcheck 表明安装时不进行 gpg 验证，exclued=firefox gftp 表明进行系统全软件升级时不升级 firefox 和 gftp 。</p>
+<h3 id="1-2-2-YUM-命令"><a href="#1-2-2-YUM-命令" class="headerlink" title="1.2.2. YUM 命令"></a>1.2.2. YUM 命令</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>yum list</td>
+<td>列出所有可用的RPM包资源。（已安装可未安装的都显示出来，yum list会先列出已经安装的包(Installed Packages) 然后再列出可以安装的包(Available Packages)）</td>
+</tr>
+<tr>
+<td>yum search [关键字]</td>
+<td>搜索RPM包（还可以利用 grep 来过滤）</td>
+</tr>
+<tr>
+<td>yum install [-y] RPM包名</td>
+<td>安装RPM包。加上-y选项，表示自动安装，跳过交互的程序</td>
+</tr>
+<tr>
+<td>yum remove [-y] RPM包名</td>
+<td>卸载RPM包（注意，卸载时最好不要加-y选项，以免重要的RPM包被卸载掉）</td>
+</tr>
+<tr>
+<td>yum check-update</td>
+<td>列出系统中可升级的所有软件</td>
+</tr>
+<tr>
+<td>yum update [-y] RPM包名</td>
+<td>升级RPM包</td>
+</tr>
+<tr>
+<td>yum -y update</td>
+<td>升级所有包，改变软件设置和系统设置,系统版本内核都升级</td>
+</tr>
+<tr>
+<td>yum -y upgrade</td>
+<td>升级所有包，不改变软件设置和系统设置，系统版本升级，内核不改变</td>
+</tr>
+<tr>
+<td>yum provides 命令名</td>
+<td>查询该命令是由那个包安装的</td>
+</tr>
+<tr>
+<td>yum grouplist</td>
+<td>列出所有安装过和未安装过的套件</td>
+</tr>
+<tr>
+<td>yum groupinstall 套件名</td>
+<td>安装该组件套件</td>
+</tr>
+<tr>
+<td>yum groupremove 套件名</td>
+<td>卸载该组件套件</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1-2-3-安装YUM扩展源"><a href="#1-2-3-安装YUM扩展源" class="headerlink" title="1.2.3. 安装YUM扩展源"></a>1.2.3. 安装YUM扩展源</h3><ol>
+<li>我们使用 yum 安装 rpm 包时，经常遇到一些包没有，这时候你可以尝试安装 epel 的扩展源，这里有很多系统不自带的 rpm 包。</li>
+</ol>
+<ul>
+<li><code>yum install -y epel-release</code></li>
+<li><code>yum list</code></li>
+<li>你会发现最右侧出现很多 epel 的 rpm 包。</li>
+</ul>
+<ol>
+<li>下载一个扩展源的rpm包，用yum安装。然后用 <code>yum clean all</code> 或 <code>yum makecache</code> 清除缓存，用 <code>yum list</code> 检查是否成功。</li>
+</ol>
+<h3 id="1-2-4-使用本地光盘制作YUN源"><a href="#1-2-4-使用本地光盘制作YUN源" class="headerlink" title="1.2.4. 使用本地光盘制作YUN源"></a>1.2.4. 使用本地光盘制作YUN源</h3><p>有时候，Linux系统不能联网，此时当然就不能很便捷地使用联网的yum源了，这时就需要我们自己在Linux系统下使用光盘制作yum源。具体操作步骤如下：</p>
+<ol>
+<li>挂载光盘<br><code>mount /dev/cdrom /mnt</code></li>
+<li>删除/etc/yum.repos.d目录下所有的repo文件（删除之前，最好先做一下备份）。<br><code>cp -r /etc/yum.repos.d /etc/yum.repos.d_bak</code><br><code>rm -rf /etc/yum.repos.d/*</code></li>
+<li><p>创建新文件dvd.repo，并添加如下内容：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># vim /etc/yum.repos.d/dvd.repo</span></div><div class="line"><span class="section">[dvd]</span></div><div class="line"><span class="attr">name</span>=install dvd</div><div class="line"><span class="attr">baseurl</span>=file:///mnt</div><div class="line"><span class="attr">enabled</span>=<span class="number">1</span></div><div class="line"><span class="attr">gpgcheck</span>=<span class="number">0</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>刷新repos生成缓存，如下所示：<br><code>yum makecache</code></p>
+</li>
+<li>然后就可以用yum了。若需要恢复之前的yum源，则进行如下操作：<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> rm -rf /etc/yum.repos.d</span></div><div class="line"><span class="meta">#</span><span class="bash"> mv /etc/yum.repos.d_bak /etc/yum.repos.d</span></div><div class="line"><span class="meta">#</span><span class="bash"> yum list  //这一步是必须要执行的，这样就可以生成缓存，方便下次使用</span></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="1-2-5-利用YUM工具下载RPM包"><a href="#1-2-5-利用YUM工具下载RPM包" class="headerlink" title="1.2.5. 利用YUM工具下载RPM包"></a>1.2.5. 利用YUM工具下载RPM包</h3><p>有时我们需要下载RPM包但不安装，而仅仅是复制给其它机器使用。我们可以用YUM工具来完成这个任务，做到只下载而不安装。命令如下：</p>
+<ol>
+<li>安装 yum-downloadonly（首先需要安装一个插件来支持只下载不安装）<br><code>yum install -y yum-plugin-downloadonly.noarch</code>（如果你的 CentOS 是 5.x 版本，则需要安装 yum-downloadonly.noarch 这个包。）</li>
+<li>只下载而不安装RPM包 <code>yum install 包名 -y --downloadonly</code> （这样虽然下载了，但是并没有保存到我们想要的目录下，它默认保存到了/var/cache/yum/后面还有好几层子目录，根据你系统的版本决定。）  </li>
+<li>把RPM包下载到指定目录 <code>yum install 包名 -y --downloadonly --downloaddir=绝对路径</code></li>
+<li>下载一个已安装过的RPM包 <code>yum reinstall 包名 -y --downloaonly [--downloddir=绝对路径]</code></li>
+</ol>
+<hr>
+<h1 id="2-Ubuntu软件管理"><a href="#2-Ubuntu软件管理" class="headerlink" title="2. Ubuntu软件管理"></a>2. Ubuntu软件管理</h1><h2 id="2-1-DEB"><a href="#2-1-DEB" class="headerlink" title="2.1. DEB"></a>2.1. DEB</h2><h3 id="2-1-1-DEB-介绍"><a href="#2-1-1-DEB-介绍" class="headerlink" title="2.1.1. DEB 介绍"></a>2.1.1. DEB 介绍</h3><p>一个 DEB 包包含了已压缩的软件文件集以及该软件的内容信息（在头文件中保存），通常表现为以 .deb 扩展名结尾的文件，例如 package.deb 。对其操作，需要使用 dpkg 命令。下面介绍 dpkg 工具的参数和使用方法。</p>
+<h3 id="2-1-2-dpkg-命令"><a href="#2-1-2-dpkg-命令" class="headerlink" title="2.1.2. dpkg 命令"></a>2.1.2. dpkg 命令</h3><p>DPKG 的常规使用方法为 <code>dpkg -? Package(.rpm)</code>, 其中 <code>-?</code> 为安装参数 ( 更多信息，请查阅帮助 $man rpm)。</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-l</td>
+<td>在系统中查询软件内容信息</td>
+</tr>
+<tr>
+<td>–info</td>
+<td>在系统中查询软件或查询指定rpm包的内容信息</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>在系统中安装/升级软件</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>在系统中卸载软件，不删除配置文件</td>
+</tr>
+<tr>
+<td>-P(大)</td>
+<td>在系统中卸载软件以及其配置文件     </td>
+</tr>
+</tbody>
+</table>
+<p>depk命令参数使用方法</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dpkg -i package.deb</td>
+<td>安装或升级DEB包命令</td>
+</tr>
+<tr>
+<td>dpkg -r package.deb</td>
+<td>卸载DEB包，但是不删除其配置文件</td>
+</tr>
+<tr>
+<td>dpkg -P package.deb</td>
+<td>卸载DEB包，并且删除其配置文件</td>
+</tr>
+<tr>
+<td>dpkg-deb -c package.deb</td>
+<td>查询DEB包中包含的文件列表命令</td>
+</tr>
+<tr>
+<td>dpkg –info package.deb</td>
+<td>查询DEB包中包含的内容信息命令</td>
+</tr>
+<tr>
+<td>dpkg -l package</td>
+<td>查询系统中所有已安装DEB</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-1-3-DEB-包管理示例"><a href="#2-1-3-DEB-包管理示例" class="headerlink" title="2.1.3. DEB 包管理示例"></a>2.1.3. DEB 包管理示例</h3><p>以下步骤描述了一个普通用户安装 IBM Lotus Notes V85 ( 以下简称 Notes) 的典型操作过程。 Notes 的 DEB 包名为 ibm_lotus_notes-8.5.i586.deb。</p>
+<ul>
+<li>首先查询是否该软件是否已经在系统中存在：<code>dpkg -l ibm-lotus-*</code><ul>
+<li>如果系统中从未安装过 Lotus 产品，那么返回信息为 : <code>No pakcages found matching ibm-lotus-*</code></li>
+<li>如果系统安装过 Lotus 产品，但已被删除，那么返回信息为 : <code>pn ibm-lotus-notes none (no description available)</code></li>
+</ul>
+</li>
+<li><p>查询 Notes 软件包内容：<code>dpkg --info ibm_lotus_notes-8.5-i586.deb</code>。返回信息如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="string">new</span> <span class="string">debian</span> <span class="string">package,</span> <span class="string">version</span> <span class="number">2.0</span><span class="string">.</span> </div><div class="line"> <span class="string">size</span> <span class="number">335012296</span> <span class="attr">bytes:</span> <span class="string">control</span> <span class="string">archive=</span> <span class="number">231821</span> <span class="string">bytes.</span> </div><div class="line"> <span class="string">...</span> </div><div class="line"><span class="attr"> Package:</span> <span class="string">ibm-lotus-notes</span> </div><div class="line"><span class="attr"> Version:</span> <span class="number">8.5</span><span class="bullet">-20081211.1925</span> </div><div class="line"><span class="attr"> Section:</span> <span class="string">IBM</span> </div><div class="line"><span class="attr"> Priority:</span> <span class="string">extra</span> </div><div class="line"><span class="attr"> Architecture:</span> <span class="string">i386</span> </div><div class="line"><span class="attr"> Installed-Size:</span> <span class="number">619444</span> </div><div class="line"><span class="attr"> Maintainer:</span> <span class="string">IBM</span> <span class="string">Lotus</span> <span class="string">Product</span> </div><div class="line"><span class="attr"> Description:</span> <span class="string">IBM</span> <span class="string">Lotus</span> <span class="string">Notes</span> </div><div class="line">  <span class="string">IBM</span> <span class="string">Lotus</span> <span class="string">Notes</span> <span class="string">software</span> <span class="string">provides</span> <span class="string">a</span> <span class="string">robust</span> <span class="string">...</span> <span class="string">...</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>安装 Notes : <code>dpkg -i ibm_lotus_notes-8.5.i586.deb</code>。返回信息如下：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(Reading database ... <span class="number">151150</span> <span class="built_in">files</span> <span class="keyword">and</span> <span class="built_in">directories</span> currently installed.) </div><div class="line"> Preparing <span class="built_in">to</span> <span class="built_in">replace</span> ibm-lotus-notes <span class="number">8.5</span><span class="number">-20081211.1925</span> </div><div class="line"> (<span class="keyword">using</span> ibm-lotus-notes-higher-<span class="built_in">version</span>.i586.deb) ... </div><div class="line"> Unpacking replacement ibm-lotus-notes ... </div><div class="line"> Setting up ibm-lotus-notes (higher-<span class="built_in">version</span>) ...</div></pre></td></tr></table></figure>
+</li>
+<li><p>升级 Notes：<code>dpkg -i ibm_lotus_notes-8.5.i586.deb</code>。返回信息如下：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">(Reading database ... <span class="number">151150</span> <span class="built_in">files</span> <span class="keyword">and</span> <span class="built_in">directories</span> currently installed.) </div><div class="line"> Preparing <span class="built_in">to</span> <span class="built_in">replace</span> ibm-lotus-notes <span class="number">8.5</span><span class="number">-20081211.1925</span> </div><div class="line"> (<span class="keyword">using</span> ibm-lotus-notes-higher-<span class="built_in">version</span>.i586.deb) ... </div><div class="line"> Unpacking replacement ibm-lotus-notes ... </div><div class="line"> Setting up ibm-lotus-notes (higher-<span class="built_in">version</span>) ...</div></pre></td></tr></table></figure>
+</li>
+<li><p>卸载 Notes : 注意卸载软件使用软件名称，而不是包文件名：<code>dpkg -P ibm-lotus-notes</code></p>
+</li>
+</ul>
+<hr>
+<h2 id="2-2-APT工具"><a href="#2-2-APT工具" class="headerlink" title="2.2. APT工具"></a>2.2. APT工具</h2><h3 id="2-2-1-APT-介绍"><a href="#2-2-1-APT-介绍" class="headerlink" title="2.2.1. APT 介绍"></a>2.2.1. APT 介绍</h3><p>APT 的全称为 Advanced Packaging Tools 。与 YUM 对应，它最早被设计成 DPKG 的前端软件，现在通过 apt-rpm 也支持 rpm 管理。而本节本节将介绍 APT 作为 DPKG 前端的使用。 APT 的主要包管理工具为 APT-GET，通过此工具可满足和上述 YUM 相似的功能要求。</p>
+<p>APT 的软件源定义来自 /etc/apt/sources.list 文件：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># See http://<span class="keyword">help</span>.ubuntu.<span class="keyword">com</span>/community/UpgradeNotes <span class="keyword">for</span> how <span class="keyword">to</span> upgrade <span class="keyword">to</span> </div><div class="line"># newer versions of the distribution.  </div><div class="line"><span class="keyword">deb</span> http://<span class="keyword">cn</span>.archive.ubuntu.<span class="keyword">com</span>/ubuntu/ hardy main restricted </div><div class="line"><span class="keyword">deb</span>-src http://<span class="keyword">cn</span>.archive.ubuntu.<span class="keyword">com</span>/ubuntu/ hardy main restricted</div></pre></td></tr></table></figure></p>
+<p>注意每次手动修改上述文件后，需要使用 <code>sudo apt-get update</code> 来更新系统的源使新的源数据被当前系统识别。</p>
+<p>Ubuntu 中 APT 的配置文件位于 /etc/apt/apt.conf.d，其中的多个配置文件依功能分类。</p>
+<h3 id="2-2-2-APT-命令"><a href="#2-2-2-APT-命令" class="headerlink" title="2.2.2. APT 命令"></a>2.2.2. APT 命令</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>apt-get update</td>
+<td>更新源索引</td>
+</tr>
+<tr>
+<td>apt-get install package-name</td>
+<td>安装指定软件</td>
+</tr>
+<tr>
+<td>apt-get source package-name</td>
+<td>下载指定软件的源文件</td>
+</tr>
+<tr>
+<td>apt-get upgrade</td>
+<td>将系统中所有软件升级到最新版本</td>
+</tr>
+<tr>
+<td>apt-get dist-upgrade</td>
+<td>将操作系统连同所有软件升级到最新版本</td>
+</tr>
+<tr>
+<td>apt-get remove package-name</td>
+<td>卸载指定软件</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="3-RPM与DEB的一些常见问题"><a href="#3-RPM与DEB的一些常见问题" class="headerlink" title="3. RPM与DEB的一些常见问题"></a>3. RPM与DEB的一些常见问题</h1><h2 id="3-1-查询软件包依赖关系"><a href="#3-1-查询软件包依赖关系" class="headerlink" title="3.1. 查询软件包依赖关系"></a>3.1. 查询软件包依赖关系</h2><p>查询 RPM 包的依赖关系，使用 <code>rpm -qRp</code>：<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># rpm -qRp package_a.rpm </span></div><div class="line"> </div><div class="line"> package_b = <span class="keyword">version</span>_info </div><div class="line">或</div><div class="line"> package_b &gt;= <span class="keyword">version</span>_info </div><div class="line">或</div><div class="line"> package_b &lt;= <span class="keyword">version</span>_info</div></pre></td></tr></table></figure></p>
+<p>表明 package_a.rpm 依赖于 version_info 版的 package_b，或者任何高于并包括 version_info 版的 package_b，亦或低于或包括 version_info 版的 package_b 。所以 package_b.rpm 必须在 package_a 之前安装于系统中。</p>
+<p>查询 DEB 包的依赖关系，可解读 dpkg –info 结果中的 Pre-Depends 字段：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$ dpkg --info package_a.<span class="keyword">deb</span> </div><div class="line"> </div><div class="line"> Pre-depend<span class="variable">s:</span> package_b (= version_info) </div><div class="line"> Depend<span class="variable">s:</span> package_b (= version_info) </div><div class="line">或</div><div class="line"> Pre-depend<span class="variable">s:</span> package_b (&gt;= version_info) </div><div class="line"> Depend<span class="variable">s:</span> package_b (&gt;= version_info) </div><div class="line">或</div><div class="line"> Pre-depend<span class="variable">s:</span> package_b (&lt;= version_info) </div><div class="line"> Depend<span class="variable">s:</span> package_b (&lt;= version_info)</div></pre></td></tr></table></figure></p>
+<p>表明 package_a.deb 依赖于 version_info 版的 package_b 或者任何高于并包括 version_info 版的 package_b 亦或低于或包括 version_info 版的 package_b. 所以 package_b.deb 必须在 package_a 之前安装于系统中。</p>
+<p>所以正确的安装方法如下所示：</p>
+<p>对于 package_a，正确的安装方法应该是：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"><span class="comment">#RPM </span></span></div><div class="line"><span class="meta"> #</span><span class="bash"> rpm -ivh package_b.rpm </span></div><div class="line"><span class="meta"> #</span><span class="bash"> rpm -ivh package_a.rpm </span></div><div class="line"> </div><div class="line"><span class="meta">#</span><span class="bash"><span class="comment">#DEB </span></span></div><div class="line"><span class="meta"> $</span><span class="bash"> sudo dpkg -i package_b.deb </span></div><div class="line"><span class="meta"> $</span><span class="bash"> sudo dpkg -i package_a.deb</span></div></pre></td></tr></table></figure></p>
+<p>如上示例为最理想的依赖关系，实际应用中往往最令用户头疼的是 package_a 依赖于 package_b/c/d/e/f 等多个包 , 而 package_b/c/d/e/f 等包又依赖于 package_b1,b2,b3/c1,c2/d1,d2/e1,e2/f1,f2 等等 … … 为保证软件的正常使用，必须找到所有依赖包以及子依赖包并且安装。过多的依赖关系大大降低了 Linux 软件安装的用户友好性。所以针对此类问题，使用了更高级的包管理策略去解决 - yum/apt 。</p>
+<h2 id="3-2-RPM-与-DEB-的兼容-Alien"><a href="#3-2-RPM-与-DEB-的兼容-Alien" class="headerlink" title="3.2. RPM 与 DEB 的兼容 - Alien"></a>3.2. RPM 与 DEB 的兼容 - Alien</h2><p>Alien 工具可以将 RPM 软件包转换成 DEB 软件包，或把 DEB 软件包转换成 RPM 软件包，以此适应兼容性的需要。注意首先请在系统中安装 alien 。</p>
+<p>在 UBUNTU 中使用 alien 将 rpm 转换为 deb 并安装 :<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">$</span><span class="bash"> sudo alien -d package.rpm </span></div><div class="line"><span class="meta">$</span><span class="bash"> sudo dpkg -i package.deb</span></div></pre></td></tr></table></figure></p>
+<p>在 RHEL 中使用 alien 将 deb 转换为 rpm 并安装 :<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> alien -r package.deb </span></div><div class="line"><span class="meta"> #</span><span class="bash"> rpm -ivh package.rpm</span></div></pre></td></tr></table></figure></p>
+<h2 id="3-3-常见的一些问题"><a href="#3-3-常见的一些问题" class="headerlink" title="3.3. 常见的一些问题"></a>3.3. 常见的一些问题</h2><h3 id="3-3-1-可以手动强制不进行-RPM-DEB-的依赖性关系检查吗？"><a href="#3-3-1-可以手动强制不进行-RPM-DEB-的依赖性关系检查吗？" class="headerlink" title="3.3.1. 可以手动强制不进行 RPM/DEB 的依赖性关系检查吗？"></a>3.3.1. 可以手动强制不进行 RPM/DEB 的依赖性关系检查吗？</h3><ul>
+<li>RPM：可以。使用 –nodeps 辅助参数，则安装过程将不理会依赖性关系限制，强制安装目标包，如：<code>rpm -i --nodeps package_a.rpm</code></li>
+<li>DEB：可以。使用— force-depends 辅助参数，如：<code>dpkg -i --force-depends package_a.deb</code></li>
+</ul>
+<h3 id="3-3-2-RPM-中的-–force-是干什么用的？"><a href="#3-3-2-RPM-中的-–force-是干什么用的？" class="headerlink" title="3.3.2. RPM 中的 –force 是干什么用的？"></a>3.3.2. RPM 中的 –force 是干什么用的？</h3><p>RPM 中的默认安装规则是不允许同一个包多次安装的，也不允许降级安装。使用 –force 辅助参数将不考虑以上因素，强制安装 RPM 包。但是，–force 无法强制安装一个不满足系统依赖性关系的包 ( 此时需要用到 –nodeps 参数 ) 。使用方法如：<code>rpm -i --force package_a.rpm</code></p>
+<h3 id="3-3-3-RPM-DPKG-支持远程安装吗？"><a href="#3-3-3-RPM-DPKG-支持远程安装吗？" class="headerlink" title="3.3.3. RPM/DPKG 支持远程安装吗？"></a>3.3.3. RPM/DPKG 支持远程安装吗？</h3><ul>
+<li>RPM：是。 RPM 支持 HTTP 和 FTP 协议，如：<code>rpm -Uvh ftp://user:pass@ftpserver/package.rpm</code></li>
+<li>DEB：最新的基于 DEB 包的系统中，远程安装通常被更先进的 APT 代替。</li>
+</ul>
+<h3 id="3-3-4-可以从-RPM-DPKG-中抽取个别文件吗？"><a href="#3-3-4-可以从-RPM-DPKG-中抽取个别文件吗？" class="headerlink" title="3.3.4. 可以从 RPM/DPKG 中抽取个别文件吗？"></a>3.3.4. 可以从 RPM/DPKG 中抽取个别文件吗？</h3><ul>
+<li>RPM：是。可以使用 rpm2cpio 工具来提取文件</li>
+<li>DEB：是。可以使用 dpkg-deb 工具来提取文件：<code>dpkg-deb --extract ibm_lotus_notes-8.5.i586.deb $dir( 目标目录 )</code></li>
+</ul>
+<h3 id="3-3-5-RPM-DPKG-提供包安装成功的验证机制吗？"><a href="#3-3-5-RPM-DPKG-提供包安装成功的验证机制吗？" class="headerlink" title="3.3.5. RPM/DPKG 提供包安装成功的验证机制吗？"></a>3.3.5. RPM/DPKG 提供包安装成功的验证机制吗？</h3><ul>
+<li>RPM：是。可以使用 -V 参数进行验证。</li>
+<li>DEB：Debian 系统通常使用 debsums 工具参数进行验证。</li>
+</ul>
+<h3 id="3-3-6-RPM-DPKG-提供包安全签名吗？"><a href="#3-3-6-RPM-DPKG-提供包安全签名吗？" class="headerlink" title="3.3.6. RPM/DPKG 提供包安全签名吗？"></a>3.3.6. RPM/DPKG 提供包安全签名吗？</h3><ul>
+<li><p>RPM：是。可以使用 –import 导入与软件同时发布的 GPG KEY, 接着使用 -K 命令来验证包的安全性，如：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># <span class="selector-tag">rpm</span> <span class="selector-tag">--import</span> <span class="selector-tag">pub_ibm_lotus_notes</span><span class="selector-class">.gpg</span> </div><div class="line"># <span class="selector-tag">rpm</span> <span class="selector-tag">-K</span> <span class="selector-tag">ibm_lotus_notes-8</span><span class="selector-class">.5</span><span class="selector-class">.i586</span><span class="selector-class">.rpm</span> </div><div class="line">返回信息 : </div><div class="line"><span class="selector-tag">ibm_lotus_notes-8</span><span class="selector-class">.5</span><span class="selector-class">.i586</span><span class="selector-class">.rpm</span>: (<span class="selector-tag">sha1</span>) <span class="selector-tag">dsa</span> <span class="selector-tag">sha1</span> <span class="selector-tag">md5</span> <span class="selector-tag">gpg</span> <span class="selector-tag">OK</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>DEB：DPKG 不提供原生的 Key 验证机制。可以使用 debsigs 和 debsigs-verify</p>
+</li>
+</ul>
+<h3 id="3-3-7-如果-RPM-的底层数据库损坏，RPM-还能使用吗？"><a href="#3-3-7-如果-RPM-的底层数据库损坏，RPM-还能使用吗？" class="headerlink" title="3.3.7. 如果 RPM 的底层数据库损坏，RPM 还能使用吗？"></a>3.3.7. 如果 RPM 的底层数据库损坏，RPM 还能使用吗？</h3><ul>
+<li>RPM：如果底层数据库损坏，RPM 将无法正常使用。此时最常用的解决方法是重构数据库：<code>rm -f /var/lib/rpm/__* ; rpm -vv --rebuilddb</code></li>
+<li>DEB：DPKG 本身不提供底层数据库恢复机制。它的数据库以文件形式保存在 /var/lib/dpkg 目录中。及时地备份这个目录是最好的预防数据库损坏措施。</li>
+</ul>
+<h3 id="3-3-8-可以查询系统中已经安装的某个文件属于哪个-RPM-包吗？"><a href="#3-3-8-可以查询系统中已经安装的某个文件属于哪个-RPM-包吗？" class="headerlink" title="3.3.8. 可以查询系统中已经安装的某个文件属于哪个 RPM 包吗？"></a>3.3.8. 可以查询系统中已经安装的某个文件属于哪个 RPM 包吗？</h3><ul>
+<li>RPM：可以。使用 -qf 参数 , 如在安装了 Notes8.5 的系统中：<code>rpm -qf /opt/ibm/lotus/notes/notes</code>；返回信息 : <code>Ibm_lotus_notes-8.5-20081211.1920</code></li>
+<li>DEB：可以。使用— search 参数 , 如在安装了 Notes8.5 的系统中：<code>dpkg --search /opt/ibm/lotus/notes/notes</code>；返回信息 : <code>ibm-lotus-notes: /opt/ibm/lotus/notes/notes</code></li>
+</ul>
+<h3 id="3-3-9-可以查询-RPM-包的安装时间吗？"><a href="#3-3-9-可以查询-RPM-包的安装时间吗？" class="headerlink" title="3.3.9. 可以查询 RPM 包的安装时间吗？"></a>3.3.9. 可以查询 RPM 包的安装时间吗？</h3><ul>
+<li>RPM：可以。可使用 –last 查询。如：<code>rpm -qa --last</code>；返回信息 : 系统中所有软件的安装时间。</li>
+<li>DEB：DPKG 不提供直接的查询参数，但是可以用过查询 dpkg 的日志文件实现这个功能。如：<code>cat /var/log/dpkg.log | grep &quot;\ install\ &quot;</code></li>
+</ul>
+<hr>
+<h1 id="4-源码包安装"><a href="#4-源码包安装" class="headerlink" title="4. 源码包安装"></a>4. 源码包安装</h1><p>在Linux下安装源码包是最常用的。安装源码包，需要我们把源代码编译成可执行的二进制文件。如果你能读懂这些源代码，就可以修改这些源代码的自定义功能，然后按你的需求编译。使用源码包除了可以自定义修改源代码外，还可以定制相关的功能，因为源码包在编译时可以附加额外的选项。</p>
+<p>源码包的编译用到了Linux系统里的编译器。常见的源码包一般都是用C语言开发的，因为C语言是Linux上最标准的程序语言。Linux上的C语言编译器称为gcc。利用它可以把C语言编译成可执行的二进制文件。所有，如果Linux上没有安装gcc，就无法编译源码。可以使用命令<code>yum install -y gcc</code>来完成安装。</p>
+<h2 id="4-1-源码包安装的一般步骤"><a href="#4-1-源码包安装的一般步骤" class="headerlink" title="4.1. 源码包安装的一般步骤"></a>4.1. 源码包安装的一般步骤</h2><p>安装源码包通常需要以下三个步骤：</p>
+<ol>
+<li><code>./configure</code>。这一步可以定制功能，加上相应的选项即可，具体有什么选项可以通过命令<code>./configure --help</code>来查看。（一般常用的有–prefix=PREFIX这个选项的意思是定义软件包安装到哪里）这一步会自动检测你的Linux系统与相关的套件是否有编译该源代码包时所需要的库，因为一旦缺少某个库，就不能完成编译，所以若是遇到这种情况，要先安装这些库。只有检测通过后，才会生成Makefile文件。</li>
+<li><code>make</code>。使用这个命令，会根据Makefile文件中预设的参数进行编译，这一步其实就是gcc在工作了。</li>
+<li><code>make install</code>。这一步是安装步骤，用于创建相关软件的存放目录和配置文件。</li>
+</ol>
+<p>注意，对于以上这3个步骤，并不是所有的源代码包软件都一样，也就是说，源码包的安装并没有标准的安装步骤。这就需要你在拿到源码包解压后，进入目录，找到相关的帮助文档（通常，会以INSTALL或README为文件名）。</p>
+<p>通常，源码包都会放置在/usr/local/src目录下，方便对源码包的统一管理。</p>
+<h2 id="4-2-一个源码包安装的实例（安装Apache）"><a href="#4-2-一个源码包安装的实例（安装Apache）" class="headerlink" title="4.2. 一个源码包安装的实例（安装Apache）"></a>4.2. 一个源码包安装的实例（安装Apache）</h2><ol>
+<li>下载源码包</li>
+</ol>
+<ul>
+<li><code>cd /usr/local/src/</code>   #约定目录</li>
+<li><code>wget http://mirrors.cnnic.cn/apache/httpd/httpd-2.2.27.tar.bz2</code></li>
+</ul>
+<ol>
+<li>解压</li>
+</ol>
+<ul>
+<li><code>tar jxvf httpd-2.2.27.tar.bz2</code>    //查看README或者INSTALL说明文件</li>
+</ul>
+<ol>
+<li>指定编译参数</li>
+</ol>
+<ul>
+<li><code>./configure  --help</code></li>
+<li><code>./configure  --prefix 安装路径 ……</code>     </li>
+</ul>
+<ol>
+<li><code>echo $?</code>     验证是否成功</li>
+<li><code>make</code></li>
+<li><code>echo $?</code>     验证是否成功</li>
+<li><code>make install</code></li>
+</ol>
+<hr>
+<blockquote>
+<p>OK</p>
+</blockquote>
+</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/09/03/Shell/001. Shell基础知识/" class="pre">Shell基础知识</a><a href="/2017/08/31/Linux/009. Linux压缩打包技术/" class="next">Linux压缩打包技术</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0-RPM和DPKG两大阵营"><span class="toc-text">0. RPM和DPKG两大阵营</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-CentOS软件管理"><span class="toc-text">1. CentOS软件管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-RPM"><span class="toc-text">1.1. RPM</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-1-RPM-介绍"><span class="toc-text">1.1.1. RPM 介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-2-rpm-命令"><span class="toc-text">1.1.2. rpm 命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-3-RPM-包管理示例"><span class="toc-text">1.1.3. RPM 包管理示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-YUM-工具"><span class="toc-text">1.2. YUM 工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-YUM-介绍"><span class="toc-text">1.2.1. YUM 介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-2-YUM-命令"><span class="toc-text">1.2.2. YUM 命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-3-安装YUM扩展源"><span class="toc-text">1.2.3. 安装YUM扩展源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-4-使用本地光盘制作YUN源"><span class="toc-text">1.2.4. 使用本地光盘制作YUN源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-5-利用YUM工具下载RPM包"><span class="toc-text">1.2.5. 利用YUM工具下载RPM包</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Ubuntu软件管理"><span class="toc-text">2. Ubuntu软件管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-DEB"><span class="toc-text">2.1. DEB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-DEB-介绍"><span class="toc-text">2.1.1. DEB 介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-dpkg-命令"><span class="toc-text">2.1.2. dpkg 命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-DEB-包管理示例"><span class="toc-text">2.1.3. DEB 包管理示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-APT工具"><span class="toc-text">2.2. APT工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-APT-介绍"><span class="toc-text">2.2.1. APT 介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-APT-命令"><span class="toc-text">2.2.2. APT 命令</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-RPM与DEB的一些常见问题"><span class="toc-text">3. RPM与DEB的一些常见问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-查询软件包依赖关系"><span class="toc-text">3.1. 查询软件包依赖关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-RPM-与-DEB-的兼容-Alien"><span class="toc-text">3.2. RPM 与 DEB 的兼容 - Alien</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-常见的一些问题"><span class="toc-text">3.3. 常见的一些问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-1-可以手动强制不进行-RPM-DEB-的依赖性关系检查吗？"><span class="toc-text">3.3.1. 可以手动强制不进行 RPM/DEB 的依赖性关系检查吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-2-RPM-中的-–force-是干什么用的？"><span class="toc-text">3.3.2. RPM 中的 –force 是干什么用的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-3-RPM-DPKG-支持远程安装吗？"><span class="toc-text">3.3.3. RPM/DPKG 支持远程安装吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-4-可以从-RPM-DPKG-中抽取个别文件吗？"><span class="toc-text">3.3.4. 可以从 RPM/DPKG 中抽取个别文件吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-5-RPM-DPKG-提供包安装成功的验证机制吗？"><span class="toc-text">3.3.5. RPM/DPKG 提供包安装成功的验证机制吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-6-RPM-DPKG-提供包安全签名吗？"><span class="toc-text">3.3.6. RPM/DPKG 提供包安全签名吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-7-如果-RPM-的底层数据库损坏，RPM-还能使用吗？"><span class="toc-text">3.3.7. 如果 RPM 的底层数据库损坏，RPM 还能使用吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-8-可以查询系统中已经安装的某个文件属于哪个-RPM-包吗？"><span class="toc-text">3.3.8. 可以查询系统中已经安装的某个文件属于哪个 RPM 包吗？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-9-可以查询-RPM-包的安装时间吗？"><span class="toc-text">3.3.9. 可以查询 RPM 包的安装时间吗？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-源码包安装"><span class="toc-text">4. 源码包安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-源码包安装的一般步骤"><span class="toc-text">4.1. 源码包安装的一般步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-一个源码包安装的实例（安装Apache）"><span class="toc-text">4.2. 一个源码包安装的实例（安装Apache）</span></a></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/012. 正则表达式实用技术/">正则表达式实用技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/011. Linux计划任务管理技术/">Linux计划任务管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/29/Tool/007. 《Vim实用技巧》-开始：Vim解决问题的方式/">《Vim实用技巧》-开始：Vim解决问题的方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/28/Tool/006. Vim的语言性思维/">Vim的语言性思维</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/27/Tool/005. Vim的配置/">Vim的配置</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/26/Tool/004. Vim的一些问题总结/">Vim的一些问题总结</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/转载/003. 入门Linux运维工程师需要学习的内容/">入门Linux运维工程师需要学习的内容</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/转载/002. C和C++高手修炼之路/">C和C++高手修炼之路</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/25/Tool/003. Vim初学笔记/">Vim初学笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/19/Tool/002. 常用便携软件/">常用便携软件</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">13</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Reading/">Reading</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Shell/">Shell</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tool/">Tool</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Server/">服务</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zhuanzai/">转载</a><span class="category-list-count">3</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">奇怪先生theshu.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>

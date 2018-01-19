@@ -1,0 +1,196 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="奇怪先生的博客"><title>Linux系统目录结构 | 奇怪先生的博客</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Linux系统目录结构</h1><a id="logo" href="/.">奇怪先生的博客</a><p class="description">耳目得来终觉浅，觉知此事要躬行。</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">Linux系统目录结构</h1><div class="post-meta"><a href="/2017/08/26/005. Linux系统目录结构/#comments" class="comment-count"></a><p><span class="date">Aug 26, 2017</span><span><a href="/categories/Linux/" class="category">Linux</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><blockquote>
+<p>GO</p>
+</blockquote>
+<h1 id="1-FHS标准"><a href="#1-FHS标准" class="headerlink" title="1. FHS标准"></a>1. FHS标准</h1><hr>
+<p>根据FHS（Filesystem Hierarchy Standard ）官方文件说明，其主要目的是希望让用户可以了解到已安装软件通常放在哪个目录下，所以其希望独立的开发商、操作系统制作者以及想要维护系统的用户，都能够遵循FHS标准。</p>
+<p>FHS将目录定义为四种交互作用的形态：</p>
+<ol>
+<li>可分享的：可以分享给其它系统挂载使用的目录，所以包括可执行文件与用户的邮件等数据。</li>
+<li>不可分享的：自己机器上米娜运行的设备文件或者是与程序有关的socket文件等，由于仅与自身机器有关，所以就不适合分享给其它主机了。</li>
+<li>不可变动的：有些数据是不会经常变动的，跟随着distribution而不变动。例如函数、说明文件、系统管理员所管理的主机服务配置文件等。</li>
+<li>可变动的：经常改变的数据，例如登陆文件、新闻组等。</li>
+</ol>
+<p>事实上，FHS针对目录树架构仅定义出三层目录下面应该放置什么数据而已。分别是下面这三个目录的定义：</p>
+<ol>
+<li>/ （root，根目录）：与开机系统有关。<ul>
+<li>FHS标准建议：根目录所在分区应该越小越好，且应用程序所安装的软件最好不要与根目录放在同一个分区内，保持根目录越小，这样不但性能最好，其根目录所在文件系统也较不容易发生问题。</li>
+<li>根目录下面应该放置这些目录：<ul>
+<li>/bin</li>
+<li>/boot</li>
+<li>/dev</li>
+<li>/etc</li>
+<li>/home</li>
+<li>/lib</li>
+<li>/media</li>
+<li>/mnt</li>
+<li>/opt</li>
+<li>/root</li>
+<li>/sbin</li>
+<li>/srv</li>
+<li>/tmp</li>
+</ul>
+</li>
+<li>特别注意，根目录与开机有关，开机过程中仅有根目录会被挂载，其它分区则是在开机完成之后才会持续进行挂载的行为。正因如此，根目录下与开机过程有关的目录就不能够与根目录放到不同的分区去。这些目录如下：<ul>
+<li>/etc ：配置文件</li>
+<li>/bin ：重要的执行文件</li>
+<li>/dev ：所需要的设备文件</li>
+<li>/lib ：执行文件所需的函数库与内核所需的模块</li>
+<li>/sbin ：重要的系统执行文件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>/usr （Unix Software Resource）：与软件安装和执行有关。<ul>
+<li>这里面放置的数据属于可分享的与不可变动的。</li>
+<li>FHS建议所有软件开发者应该将他们的数据合理地分别放置到这个目录下的子目录，而不是自行新建该软件自己独立的目录。</li>
+<li>该目录下面有如下所示的目录：<ul>
+<li>/usr/X11R6/</li>
+<li>/usr/bin/</li>
+<li>/usr/include/</li>
+<li>/usr/lib/</li>
+<li>/usr/local/</li>
+<li>/usr/sbin/</li>
+<li>/usr/share/</li>
+<li>/usr/src/</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>/var （VARiable）：与系统运作过程有关。<ul>
+<li>该目录只要针对常态性变动的文件，包括缓存（cache）、登陆文件（log file）以及某些软件运行时所产生的文件，包括程序文件（lock file，run file），或者例如MySQL数据库的文件等。</li>
+<li>常见的子目录如下：<ul>
+<li>/var/cache/</li>
+<li>/var/lib/</li>
+<li>/var/lock/</li>
+<li>/var/log/</li>
+<li>/var/mail/</li>
+<li>/var/run/</li>
+<li>/var/spool/ </li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1 id="2-Linux系统目录说明"><a href="#2-Linux系统目录说明" class="headerlink" title="2. Linux系统目录说明"></a>2. Linux系统目录说明</h1><hr>
+<p>常见目录的作用整理如下表：</p>
+<table>
+<thead>
+<tr>
+<th>目录名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/bin</td>
+<td>bin是Binary的缩写，该目录下存放的是最常用的命令</td>
+</tr>
+<tr>
+<td>/boot</td>
+<td>该目录下存放的是启动Linux时使用的一些核心文件，包括一些链接文件以及镜像文件</td>
+</tr>
+<tr>
+<td>/dev</td>
+<td>dev是Device（设备）的缩写。该目录下存放的是Linux的外部设备。在Linux中，访问设备的方式和访问文件的方式是相同的</td>
+</tr>
+<tr>
+<td>/etc</td>
+<td>该目录下存放的是所有系统管理所需要的配置文件和子目录</td>
+</tr>
+<tr>
+<td>/home</td>
+<td>这是用户的家目录。在Linux中， 每个用户都有一个自己的目录，一般该目录名是以用户名来命名的（root用户有自己的家目录/root）</td>
+</tr>
+<tr>
+<td>/lib和/lib64</td>
+<td>这两个目录下存放的是系统最基本的动态链接共享库，其作用类似于Windows里的DLL文件，几乎所有的应用程序都需要用到这些共享库。其中/lib64为64位的软件包的库文件所在目录</td>
+</tr>
+<tr>
+<td>/media</td>
+<td>系统会自动识别一些设备（如U盘、光驱等），当识别后，Linux会把识别的设备挂载到该目录下</td>
+</tr>
+<tr>
+<td>/mnt</td>
+<td>系统提供该目录是为了让用户临时挂载别的文件系统。我们可以将光驱挂载到/mnt/上，然后进入该目录查看光驱里的内容</td>
+</tr>
+<tr>
+<td>/opt</td>
+<td>这是给主机额外安装软件所设置的目录，该目录默认为空。比如，你要安装一个Oracle数据库，可以放到该目录下。</td>
+</tr>
+<tr>
+<td>/proc</td>
+<td>该目录是一个虚拟目录，是系统内存的映射，可以直接访问它来获取系统信息。该目录的内容在内存里，我们可以直接修改里面的某些文件。内存和CPU的详细信息都在该目录下（cpuinfo和meminfo），修改内核参数或调优时会在该目录下进行文件的参数修改，其中的数字目录文件表示进程ID，其中的文件表示状态等信息。比如，可以通过下面的命令来屏蔽主机的ping命令，使他人无法ping通你的机器。在日常工作中，你会经常用到类似的用法： echo 1 &gt; /proc/sys/net/icmp_echo_ignore_all</td>
+</tr>
+<tr>
+<td>/root</td>
+<td>该目录是系统管理员的用户家目录</td>
+</tr>
+<tr>
+<td>/run</td>
+<td>这个目录其实和/var/run是同一个目录，它们属于链接文件的关系，这里面存放的是一些服务的PID。一个服务启动完后，是有一个PID文件的。</td>
+</tr>
+<tr>
+<td>/sbin</td>
+<td>s就是Super User的意思，该目录存放的是系统管理员使用的系统管理程序</td>
+</tr>
+<tr>
+<td>/srv</td>
+<td>该目录存放的是一些服务启动之后需要提取的数据</td>
+</tr>
+<tr>
+<td>/sys</td>
+<td>该目录存放的是与硬件驱动程序相关的信息</td>
+</tr>
+<tr>
+<td>/sys/class</td>
+<td>包含所有注册在kernel里面的设备类型，链接到device</td>
+</tr>
+<tr>
+<td>/sys/dev</td>
+<td>维护一个按照字符设备和块设备的主次号码列表，链接到device</td>
+</tr>
+<tr>
+<td>/sys/device</td>
+<td>是全局设备结构体系，包含所有被发现的注册在各种总线上的各种物理设备，是内核层次表达模型，也是/sys文件系统管理设备的最重要的目录结构</td>
+</tr>
+<tr>
+<td>/sys/fs</td>
+<td>描述系统中所有的文件系统</td>
+</tr>
+<tr>
+<td>/sys/kernel</td>
+<td>存放的是内核中所有可调整的参数</td>
+</tr>
+<tr>
+<td>/tmp</td>
+<td>该目录用来存放一些临时文件</td>
+</tr>
+<tr>
+<td>/usr</td>
+<td>这是一个非常重要的目录，用户的很多应用程序和文件都存放在该目录下</td>
+</tr>
+<tr>
+<td>/usr/bin</td>
+<td>该目录存放的是系统用户使用的应用程序</td>
+</tr>
+<tr>
+<td>/usr/sbin</td>
+<td>该目录存放的是超级用户使用的比较高级的管理程序和系统守护进程</td>
+</tr>
+<tr>
+<td>/usr/src</td>
+<td>该目录是内核源代码默认的放置目录</td>
+</tr>
+<tr>
+<td>/var</td>
+<td>该目录存放的是不断扩充且经常修改的目录，包括各种日志文件或者PID文件，其中刚刚提到的/var/run就是在这个目录下面</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<blockquote>
+<p>OK</p>
+</blockquote>
+</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/08/26/006. 文件与目录管理技术/" class="pre">文件与目录管理技术</a><a href="/2017/08/26/004. CentOS的单用户和救援模式/" class="next">CentOS的单用户和救援模式</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-FHS标准"><span class="toc-text">1. FHS标准</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-Linux系统目录说明"><span class="toc-text">2. Linux系统目录说明</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/31/Linux压缩打包技术/">Linux压缩打包技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/31/007. 用户与用户组管理技术/">用户与用户组管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/26/006. 文件与目录管理技术/">文件与目录管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/26/005. Linux系统目录结构/">Linux系统目录结构</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/26/004. CentOS的单用户和救援模式/">CentOS的单用户和救援模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/26/003. 远程连接Linux主机/">远程连接Linux主机</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/26/002. Linux系统的启动流程/">Linux系统的启动流程</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/26/001. Linux配置静态IP联网/">Linux配置静态IP联网</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/25/000. Linux在线帮助的使用/">Linux在线帮助的使用</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">9</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">奇怪先生theshu.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>
