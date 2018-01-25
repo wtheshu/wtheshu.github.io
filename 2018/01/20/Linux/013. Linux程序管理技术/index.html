@@ -1,0 +1,1022 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="奇怪先生的博客"><title>Linux程序管理技术 | 奇怪先生的博客</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Linux程序管理技术</h1><a id="logo" href="/.">奇怪先生的博客</a><p class="description">耳目得来终觉浅，觉知此事要躬行。</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">Linux程序管理技术</h1><div class="post-meta"><a href="/2018/01/20/Linux/013. Linux程序管理技术/#comments" class="comment-count"></a><p><span class="date">Jan 20, 2018</span><span><a href="/categories/Linux/" class="category">Linux</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><blockquote>
+<p>GO</p>
+</blockquote>
+<hr>
+<h1 id="1-什么是进程（process）"><a href="#1-什么是进程（process）" class="headerlink" title="1. 什么是进程（process）"></a>1. 什么是进程（process）</h1><p>在Linux系统中，触发任何一个事件时，系统都会将它定义为一个进程，并且给予这个进程一个ID，称为PID，同时依据触发这个进程的用户与相关属性关系，给予这个PID一组有效的权限设置。从此以后，这个PID能够在系统上面进行的操作，就与这个PID的权限有关了。</p>
+<h2 id="1-1-进程与程序（process-amp-program）"><a href="#1-1-进程与程序（process-amp-program）" class="headerlink" title="1.1. 进程与程序（process &amp; program）"></a>1.1. 进程与程序（process &amp; program）</h2><ul>
+<li><strong>程序（program）</strong>：通常为二进制程序放置在存储媒介中（如硬盘、光盘等），以物理文件的形式存在。</li>
+<li><strong>进程（process）</strong>：程序被触发后，执行者的权限与属性、程序的程序代码与所需数据等都会被加载到内存中，操作系统并给予这个内存内的单元一个标识符（PID），可以说，进程就是一个正在运行中的程序。</li>
+<li><strong>父进程与子进程</strong>：举例说明，原本运行中的bash就是父进程，被父进程触发的另一个bash就是子进程。</li>
+<li><strong>过程调用的流程</strong>：在Linux的过程调用中通常称为<strong>fork-and-exec</strong>的流程。进程都会通过父进程以复制（fork）的方式产生一个一模一样的子进程，然后被复制出来的子进程再以exec的方式来执行实际要进行的进程，最终就成为一子进程的存在。</li>
+<li><strong>服务</strong>：常驻内存的进程称为服务（daemon）。</li>
+</ul>
+<h2 id="1-2-Linux的多用户、多任务环境"><a href="#1-2-Linux的多用户、多任务环境" class="headerlink" title="1.2. Linux的多用户、多任务环境"></a>1.2. Linux的多用户、多任务环境</h2><ul>
+<li><strong>多用户</strong>：系统中有一个root用户具有所有的权限。其它的用户都有各自的UID。多个用户可同时的登陆到系统上进行工作。</li>
+<li><strong>多任务</strong>：由于Linux的特性，运行多个任务同时进行（属于CPU调度）。</li>
+<li><strong>多重登陆</strong>：用一个用户可重复登陆多个终端，方便管理工作。</li>
+<li><strong>特殊的进程管理行为</strong>：进程管理和工作管理，能够很好的为管理人员提供很方便的管理方式。</li>
+</ul>
+<hr>
+<h1 id="2-工作管理（job-control）"><a href="#2-工作管理（job-control）" class="headerlink" title="2. 工作管理（job control）"></a>2. 工作管理（job control）</h1><p>这个管理工作（job control）是用在bash环境下的，也就是说：当我们登陆系统取得bash shell之后，在单一终端下同时进行多个工作的行为管理。</p>
+<h2 id="2-1-什么是工作管理"><a href="#2-1-什么是工作管理" class="headerlink" title="2.1. 什么是工作管理"></a>2.1. 什么是工作管理</h2><p>在进行工作管理的行为中，其实每个工作都是目前bash的子进程，即彼此之间是有相关性的。我们无法以 job control 的方式由 tty1 的环境去管理 tty2 的bash。</p>
+<p>我们可以在<strong>/etc/security/limits.conf</strong>里面设置用户同时可以登陆的连接数，在这样的情况下，某些用户可能仅能以一个连接来工作！</p>
+<p>由于假设我们只有一个终端，因此在可以出现提示符让你操作的环境就称为<strong>前台（foreground）</strong>，至于其它工作就可以让你放入<strong>后台（background）</strong>去暂停或运行。要注意的是，放入后台的工作想要运行时，它必须不能够与用户互动。而且放入后台的工作是不能使用<strong>Ctrl+C</strong>的方式来终止的。</p>
+<p>总之，要进行 bash 的 job control 必须要注意到的限制是：</p>
+<ul>
+<li>这些工作所触发的进程必须来自于你shell的子进程（只管理自己的bash）。</li>
+<li>前台：你可以控制与执行命令的这个环境称为前台（foreground）的工作。</li>
+<li>后台：可以自行运行的工作，你无法使用<strong>Ctrl+C</strong>来终止它，可使用<strong>bg/fg</strong>调用该工作。</li>
+<li>后台中执行的进程不能等待terminal/shell的输入（input）</li>
+</ul>
+<h2 id="2-2-job-control的管理"><a href="#2-2-job-control的管理" class="headerlink" title="2.2. job control的管理"></a>2.2. job control的管理</h2><p>bash只能够管理自己的工作而不能管理其它bash的工作，此外，又分为前台和后台，而后台里面的工作状态又可以分为<strong>暂停（stop）</strong>、<strong>运行中（running）</strong>。实际进行的job控制的命令如下：</p>
+<h3 id="2-2-1-amp-直接将命令丢到后台中执行"><a href="#2-2-1-amp-直接将命令丢到后台中执行" class="headerlink" title="2.2.1. &amp; 直接将命令丢到后台中执行"></a>2.2.1. <strong>&amp;</strong> 直接将命令丢到后台中执行</h3><p>使用方式：<code>conmmand &amp;</code></p>
+<p>一个例子：将/etc/整个备份成为/tmp/etc.tar.gz且不要等待，可以这样做：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[<span class="meta">root@AmingLinux-105 ~</span>]<span class="meta"># tar -zpcf /tmp/etc.tar.gz /etc &amp;</span></div><div class="line">[<span class="meta">1</span>] <span class="number">1693</span></div><div class="line">[<span class="meta">root@AmingLinux-105 ~</span>]<span class="meta"># tar: Removing leading `/' from member names</span></div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>在括号内的号码为工作号码（job number），该号码与bash的控制有关。但它既然是个命令触发的，所以当然一定是一个进程，因此还会查看到有 job number 也搭配一个PID。</li>
+<li>后续的 1693 则是这个工作在系统中的 PID。至于后续出现的数据是 tar 执行的数据流。</li>
+<li>由于我们没有加上数据流重定向，所以会影响界面，但是却不会影响前台的操作。</li>
+</ul>
+<p>当这个后台运行的程序完成的时候，会出现类似下面的信息：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="number">1</span>]+  完成                  tar -zpcf /tmp/etc<span class="selector-class">.tar</span><span class="selector-class">.gz</span> /etc</div></pre></td></tr></table></figure></p>
+<p>为了防止这个后台运行的程序的数据流会出现在屏幕上，妨碍我们的继续的操作，可以这样做，就是利用重定向将数据流重定向到文件，如下：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@AmingLinux<span class="number">-105</span> ~]# tar -zpcvf /tmp/etc.tar.gz /etc &gt; /tmp/log.txt <span class="number">2</span>&gt;&amp;<span class="number">1</span> &amp;</div><div class="line">[<span class="number">1</span>] <span class="number">1943</span></div></pre></td></tr></table></figure></p>
+<p>如此一来，输出的信息都传送到/tmp/log.txt当中，就不会影响到前台的工作了。</p>
+<h3 id="2-2-2-Ctrl-Z-将目前的工作丢到后台中暂停"><a href="#2-2-2-Ctrl-Z-将目前的工作丢到后台中暂停" class="headerlink" title="2.2.2. Ctrl+Z 将目前的工作丢到后台中暂停"></a>2.2.2. <strong>Ctrl+Z</strong> 将目前的工作丢到后台中暂停</h3><p>使用<code>Ctrl+Z</code>可以把当前工作的进程暂停掉并将它丢到后台，这样我们又取得了前台的操控权。示例如下：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[<span class="meta">root@AmingLinux-105 ~</span>]<span class="meta"># vim ~/.bashrc</span></div><div class="line"><span class="meta"># 在Vim的一般模式下，按下 Ctrl+Z 这两个键</span></div><div class="line">[<span class="meta">1</span>]+  Stopped               vim ~/.bashrc</div><div class="line">[<span class="meta">root@AmingLinux-105 ~</span>]<span class="meta">#  &lt;==顺利取得了前台的控制权</span></div><div class="line">[<span class="meta">root@AmingLinux-105 ~</span>]<span class="meta"># sleep 100</span></div><div class="line">^Z  &lt;==继续按 Ctrl+Z 暂停这个工作</div><div class="line">[<span class="meta">2</span>]+  Stopped               sleep <span class="number">100</span></div><div class="line">[<span class="meta">root@AmingLinux-105 ~</span>]<span class="meta">#</span></div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>当按下 Ctrl+Z 后，屏幕上会出现<code>[1]</code>，表示这是第一个工作。</li>
+<li>那个<code>+</code>代表最近一个被丢进后台的工作，且目前在后台下默认会被取用的那个工作（与fg这个命令有关）。</li>
+<li>Stopped则代表目前这个工作的状态，在默认的情况下，使用Ctrl+Z丢到后台当中的工作都是“暂停”的状态。</li>
+</ul>
+<h3 id="2-2-3-Ctrl-C-将目前的工作终止掉"><a href="#2-2-3-Ctrl-C-将目前的工作终止掉" class="headerlink" title="2.2.3. Ctrl+C 将目前的工作终止掉"></a>2.2.3. <strong>Ctrl+C</strong> 将目前的工作终止掉</h3><p>使用<code>Ctrl+C</code>可以终止正在前台运行的进程，它并不能终止后台暂停或后台运行的进程。</p>
+<h3 id="2-2-4-job-查看目前的后台工作状态"><a href="#2-2-4-job-查看目前的后台工作状态" class="headerlink" title="2.2.4. job 查看目前的后台工作状态"></a>2.2.4. <strong>job</strong> 查看目前的后台工作状态</h3><p>jobs的使用方法：<code>jobs [-lrs]</code></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-l</td>
+<td>除了列出 job number 与命令串之外，同时列出 PID 的号码</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>仅列出正在后台 run 的工作</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>仅列出正在后台当中暂停（stop）的工作</td>
+</tr>
+</tbody>
+</table>
+<p>范例：查看目前的bash当中，所有的工作，与对应的PID：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@AmingLinux<span class="number">-105</span> ~]# jobs -l</div><div class="line">[<span class="number">1</span>]-  <span class="number">1949</span> 停止                  vim ~/.bashrc</div><div class="line">[<span class="number">2</span>]+  <span class="number">1950</span> 停止                  sleep <span class="number">100</span></div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>一般来说，直接执行<code>jobs</code>即可</li>
+<li>若是想要知道该 job number 的PID号码，可以加上<code>-l</code>这个参数</li>
+<li>在输出信息中，那个<code>+</code>代表默认的取用工作，如果我目前有两个工作在后台当中，两个工作都是暂停的，而如果我仅输入<code>fg</code>时，那么哪个[2]所代表的工作会被拿到前台当中来处理</li>
+<li>其实<code>+</code>代表最近被放到后台的工作号码，<code>-</code>代表最近最后第二个被放置到后台中的工作号码。而如果超过最后三个以后的工作，就不会有<code>+/-</code>了</li>
+</ul>
+<h3 id="2-2-5-fg-将后台工作拿到前台来处理"><a href="#2-2-5-fg-将后台工作拿到前台来处理" class="headerlink" title="2.2.5. fg 将后台工作拿到前台来处理"></a>2.2.5. <strong>fg</strong> 将后台工作拿到前台来处理</h3><p>使用方法：<code>fg %jobnumber</code></p>
+<ul>
+<li>%jobnumber : <code>jobnumber</code>为工作号码（数字），注意，那个<code>%</code>是可有可无的。</li>
+</ul>
+<p>范例：先以 jobs 查看工作，再将工作取出：<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[<span class="meta">root@AmingLinux-105 ~</span>]<span class="meta"># jobs</span></div><div class="line">[<span class="meta">1</span>]-  已停止               vim ~/.bashrc</div><div class="line">[<span class="meta">2</span>]+  已停止               sleep <span class="number">100</span></div><div class="line">[<span class="meta">root@AmingLinux-105 ~</span>]<span class="meta"># fg</span></div><div class="line">sleep <span class="number">100</span>  &lt;==再按下Ctrl+Z</div><div class="line">[<span class="meta">root@AmingLinux-105 ~</span>]<span class="meta"># fg %1</span></div><div class="line">vim ~/.bashrc</div><div class="line">		   &lt;==再按下Ctrl+Z</div><div class="line">[<span class="meta">1</span>]+  已停止               vim ~/.bashrc</div><div class="line">[<span class="meta">root@AmingLinux-105 ~</span>]<span class="meta">#</span></div></pre></td></tr></table></figure></p>
+<h3 id="2-2-6-bg-让工作在后台下的状态变成运行中"><a href="#2-2-6-bg-让工作在后台下的状态变成运行中" class="headerlink" title="2.2.6. bg 让工作在后台下的状态变成运行中"></a>2.2.6. <strong>bg</strong> 让工作在后台下的状态变成运行中</h3><p>使用方法：<code>bg %jobnumber</code></p>
+<ul>
+<li>%jobnumber : <code>jobnumber</code>为工作号码（数字），注意，那个<code>%</code>是可有可无的。</li>
+</ul>
+<p>使用这个命令后，再用<code>jobs</code>查看后台进程就会发现后台的进程的状态变为Running了。</p>
+<h3 id="2-2-7-kill-管理后台当中的工作"><a href="#2-2-7-kill-管理后台当中的工作" class="headerlink" title="2.2.7. kill 管理后台当中的工作"></a>2.2.7. <strong>kill</strong> 管理后台当中的工作</h3><p>可以用 kill 工具来管理后台当中的工作。用法：<code>kill -signal %jobnumber</code></p>
+<p>通常我们在管理工作的用法是这样的：<code>kill -9 %jobnumber</code></p>
+<p>说明：</p>
+<ul>
+<li>-9的意思是强制删除一个不正常的工作。</li>
+<li>kill后面接的数字默认是PID，如果想要管理bash的工作控制，就得加上<code>%数字</code>了。</li>
+<li>kill的详细用法参考下面的进程管理章节。</li>
+</ul>
+<h2 id="2-3-脱机管理问题"><a href="#2-3-脱机管理问题" class="headerlink" title="2.3. 脱机管理问题"></a>2.3. 脱机管理问题</h2><p>其实，我们在工作管理当中提到的“后台”指的是在终端机模式下可以避免Ctrl+C中断的一个情境，并不是放到系统的后台去。所以，工作管理的后台依旧与终端机有关。在这样的情况下，如果是以远程连接的方式连接到Linux主机，并且将工作以&amp;的方式放到后台去，这样，在工作尚未结束的情况下脱机了，该工作就会被中断掉。</p>
+<p>那如何解决这个问题？如果我的工作需要进行一大段时间，我又不能防止在后台下面，那该如何处理？</p>
+<p>首先，我们可以利用<strong>at</strong>等工具来处理即可，因为at是将工作放置到系统后台，而与终端机无关。</p>
+<p>另外，可以尝试使用<strong>nohup</strong>这个命令来处理。这个<strong>nohup</strong>可以让你在脱机或注销系统后，还能够让工作继续进行。它的语法如下：</p>
+<ul>
+<li><code>nohup [命令与参数]</code> 在终端机前台中工作</li>
+<li><code>nohup [命令与参数] &amp;</code> 在终端机后台中工作</li>
+</ul>
+<p>上面需要注意的是，nohup并不支持bash内置的命令，因此你的命令必须要是外部命令才行。下面是一个例子：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">1. 先编辑一个会“睡着500秒”的程序：</div><div class="line">[root@theshuhost ~]<span class="comment"># vim sleep500.sh</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">/bin/sleep 500s</div><div class="line">/bin/<span class="built_in">echo</span> <span class="string">"I have slept 500 seconds."</span></div><div class="line">2. 丢到后台去执行，并且立刻注销系统：</div><div class="line">[root@theshuhost ~]<span class="comment"># chmod a+x sleep500.sh</span></div><div class="line">[root@theshuhost ~]<span class="comment"># nohup ./sleep500.sh &amp;</span></div><div class="line">[1] 4701</div><div class="line">[root@theshuhost ~]<span class="comment"># nohup: ignoring input and appending output to ‘nohup.out’</span></div><div class="line">[root@theshuhost ~]<span class="comment"># exit</span></div></pre></td></tr></table></figure></p>
+<p>如果你再次登陆系统的话，再使用ps查看你的进程，会发现sleep500.sh还在执行中，并不会被中断掉。由于我们的进程最后会输出一个信息，但是nuhup与终端机其实无关了，因此这个信息的输出就会被定向“~/nohup.out”，所以你才会看到上述命令中，当你输入nohup后，会出现那个提示信息。</p>
+<p>如果你想要让在后台的工作在你注销后还能够继续执行吗，那么使用nuhup搭配&amp;是不错的运行情境。</p>
+<hr>
+<h1 id="3-进程管理"><a href="#3-进程管理" class="headerlink" title="3. 进程管理"></a>3. 进程管理</h1><p>进程管理非常的重要，这是因为：</p>
+<ul>
+<li>首先，我们在操作系统中的各项工作其实都是经过某个PID来达成的（包括你的bash环境），因此，能不能进行某项工作就与该进程的权限有关了。</li>
+<li>再来，如果你的Linux系统是个很忙碌的系统，那么当整个系统资源快要被使用光时，你是否能够找出最耗系统的那个进程，然后删除该进程，让系统恢复正常呢？</li>
+<li>此外，如果由于某个程序写的不好，导致产生一个有问题的进程在内存当中，你又该如何找出它，然后将它删除？</li>
+<li>如果同时有五六项工作在你的系统当中运行，但其中有一项工作才是最重要的，该如何让那一项重要的工作被最优先执行呢？</li>
+</ul>
+<p>所以说，一个称职的系统管理员，必须要熟悉进程的管理流程才行，否则当系统发生问题时，还真是很难解决问题呢。下面的内容会先介绍如何查看程序与程序的状态，然后再加以过程控制。</p>
+<h2 id="3-1-进程的查看"><a href="#3-1-进程的查看" class="headerlink" title="3.1. 进程的查看"></a>3.1. 进程的查看</h2><h3 id="3-1-1-ps-静态查看系统进程"><a href="#3-1-1-ps-静态查看系统进程" class="headerlink" title="3.1.1. ps 静态查看系统进程"></a>3.1.1. ps 静态查看系统进程</h3><p>作为系统管理员，一定要知道您所管理的系统都有哪些进程在运行，除了上面所介绍的top可以简单查看之外，还有一个专门显示系统进程的命令，就是ps命令。示例如下：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># ps aux</span></div><div class="line">USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND</div><div class="line">root        <span class="number"> 1 </span> 0.0  0.2 <span class="number"> 24324 </span><span class="number"> 5444 </span>?        Ss   09:02   0:07 /sbin/init spla</div><div class="line">root        <span class="number"> 2 </span> 0.0  0.0     <span class="number"> 0 </span>   <span class="number"> 0 </span>?        S    09:02   0:00 [kthreadd]</div><div class="line">root        <span class="number"> 3 </span> 0.0  0.0     <span class="number"> 0 </span>   <span class="number"> 0 </span>?        S    09:02   0:00 [ksoftirqd/0]</div><div class="line">root        <span class="number"> 5 </span> 0.0  0.0     <span class="number"> 0 </span>   <span class="number"> 0 </span>?        S&lt;   09:02   0:00 [kworker/0:0H]</div><div class="line">root        <span class="number"> 7 </span> 0.0  0.0     <span class="number"> 0 </span>   <span class="number"> 0 </span>?        S    09:02   0:11 [rcu_sched]</div><div class="line">root        <span class="number"> 8 </span> 0.0  0.0     <span class="number"> 0 </span>   <span class="number"> 0 </span>?        S    09:02   0:00 [rcu_bh]</div><div class="line">root        <span class="number"> 9 </span> 0.0  0.0     <span class="number"> 0 </span>   <span class="number"> 0 </span>?        S    09:02   0:00 [migration/0]</div><div class="line">root       <span class="number"> 10 </span> 0.0  0.0     <span class="number"> 0 </span>   <span class="number"> 0 </span>?        S    09:02   0:00 [watchdog/0]</div><div class="line">root       <span class="number"> 11 </span> 0.0  0.0     <span class="number"> 0 </span>   <span class="number"> 0 </span>?        S    09:02   0:00 [watchdog/1]</div><div class="line">root       <span class="number"> 12 </span> 0.0  0.0     <span class="number"> 0 </span>   <span class="number"> 0 </span>?        S    09:02   0:00 [migration/1]</div><div class="line">root       <span class="number"> 13 </span> 0.0  0.0     <span class="number"> 0 </span>   <span class="number"> 0 </span>?        S    09:02   0:00 [ksoftirqd/1]</div><div class="line">root       <span class="number"> 15 </span> 0.0  0.0     <span class="number"> 0 </span>   <span class="number"> 0 </span>?        S&lt;   09:02   0:00 [kworker/1:0H]</div><div class="line">root       <span class="number"> 16 </span> 0.0  0.0     <span class="number"> 0 </span>   <span class="number"> 0 </span>?        S    09:02   0:00 [kdevtmpfs]</div><div class="line">root       <span class="number"> 17 </span> 0.0  0.0     <span class="number"> 0 </span>   <span class="number"> 0 </span>?        S&lt;   09:02   0:00 [netns]</div></pre></td></tr></table></figure></p>
+<p><code>ps aux</code>命令内容说明：</p>
+<ul>
+<li>USER、PID、%CPU、%MEM、VSZ虚拟内存使用大小、RSS内存的使用量、TTY、STAT状态、TIME进程运行时间、COMMAAND命令<ul>
+<li>USER：该进程属于哪个用户账号</li>
+<li>PID：该进程的进程标识符</li>
+<li>%CPU：该进程使用掉的CPU资源百分比</li>
+<li>%MEM：该进程所占用的物理内存百分比</li>
+<li>VSZ：该进程使用掉的虚拟内存两（kb）</li>
+<li>RSS：该进程占用的固定的内存量（kb）</li>
+<li>TTY：该进程是在哪个终端机上面运行，若如终端机无关则显示<code>?</code>，另外，tty1~tty6是本机上面的登陆者程序，若为pts/0等的，则表示为由网络连接进主机的进程</li>
+<li>STAT：该进程目前的状态，状态显示与<code>ps -l</code>的S标识相同（R/S/T/Z）</li>
+<li>START：该进程被触发启动的时间</li>
+<li>TIME：该进程实际使用CPU运行的时间</li>
+<li>COMMAND：该进程的实际命令</li>
+</ul>
+</li>
+<li>关于STAT状态的说明<ul>
+<li>S：休眠sleep</li>
+<li>s：父进程（主进程）</li>
+<li>&lt;：高优先级</li>
+<li>N：低优先级</li>
+<li>+：前台</li>
+<li>R：正在运行的</li>
+<li>l（小写的L）：多线程</li>
+<li>L：lock锁</li>
+<li>X：已经死掉的进程</li>
+<li>Z：僵尸进程（即不能杀死的进程，只能通过重启才能去掉）</li>
+<li>T：被暂停的</li>
+<li>D：不能中断的</li>
+<li>W：这个好像是说，从内核2.6xx以后，表示为没有足够的内存页分配</li>
+</ul>
+</li>
+</ul>
+<p>另外一个类似与<code>ps aux</code>的使用方式为<code>ps -elf</code>，两者的功能差不多。其选项说明如下:</p>
+<ul>
+<li>-l：把当前终端下运行的程序列出来</li>
+<li>-e：把后台所有的程序都列出来</li>
+<li>-f：显示Stime</li>
+</ul>
+<p>示例如下：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># ps -elf</span></div><div class="line">F S UID        PID  PPID  C PRI  NI ADDR SZ WCHAN  STIME TTY          TIME CMD</div><div class="line">4 S root        <span class="number"> 1 </span>   <span class="number"> 0 </span><span class="number"> 0 </span><span class="number"> 80 </span> <span class="number"> 0 </span>- <span class="number"> 6327 </span>-      09:41 ?        00:00:07 /sbin</div><div class="line">1 S root        <span class="number"> 2 </span>   <span class="number"> 0 </span><span class="number"> 0 </span><span class="number"> 80 </span> <span class="number"> 0 </span>-    <span class="number"> 0 </span>-      09:41 ?        00:00:00 [kthr</div><div class="line">1 S root        <span class="number"> 3 </span>   <span class="number"> 2 </span><span class="number"> 0 </span><span class="number"> 80 </span> <span class="number"> 0 </span>-    <span class="number"> 0 </span>-      09:41 ?        00:00:00 [ksof</div><div class="line">1 S root        <span class="number"> 5 </span>   <span class="number"> 2 </span><span class="number"> 0 </span><span class="number"> 60 </span>-20 -    <span class="number"> 0 </span>-      09:41 ?        00:00:00 [kwor</div><div class="line">1 S root        <span class="number"> 7 </span>   <span class="number"> 2 </span><span class="number"> 0 </span><span class="number"> 80 </span> <span class="number"> 0 </span>-    <span class="number"> 0 </span>-      09:41 ?        00:00:08 [rcu_</div><div class="line">1 S root        <span class="number"> 8 </span>   <span class="number"> 2 </span><span class="number"> 0 </span><span class="number"> 80 </span> <span class="number"> 0 </span>-    <span class="number"> 0 </span>-      09:41 ?        00:00:00 [rcu_</div><div class="line">1 S root        <span class="number"> 9 </span>   <span class="number"> 2 </span><span class="number"> 0 </span>-40   - -    <span class="number"> 0 </span>-      09:41 ?        00:00:00 [migr</div><div class="line">5 S root       <span class="number"> 10 </span>   <span class="number"> 2 </span><span class="number"> 0 </span>-40   - -    <span class="number"> 0 </span>-      09:41 ?        00:00:00 [watc</div><div class="line">5 S root       <span class="number"> 11 </span>   <span class="number"> 2 </span><span class="number"> 0 </span>-40   - -    <span class="number"> 0 </span>-      09:41 ?        00:00:00 [watc</div><div class="line">1 S root       <span class="number"> 12 </span>   <span class="number"> 2 </span><span class="number"> 0 </span>-40   - -    <span class="number"> 0 </span>-      09:41 ?        00:00:00 [migr</div><div class="line">1 S root       <span class="number"> 13 </span>   <span class="number"> 2 </span><span class="number"> 0 </span><span class="number"> 80 </span> <span class="number"> 0 </span>-    <span class="number"> 0 </span>-      09:41 ?        00:00:00 [ksof</div><div class="line">1 S root       <span class="number"> 15 </span>   <span class="number"> 2 </span><span class="number"> 0 </span><span class="number"> 60 </span>-20 -    <span class="number"> 0 </span>-      09:41 ?        00:00:00 [kwor</div><div class="line">.......</div></pre></td></tr></table></figure></p>
+<p><code>ps -elf</code>命令内容说明：系统整体的进程运行是非常多的，但如果使用<code>ps -l</code>则仅列出与你的操作环境（bash）有关的进程而已，即最上层的父进程会是你自己的bash而没有扩展到init这个进程去，那么<code>ps -elf</code>显示出的数据都是什么意思？如下：</p>
+<ul>
+<li>F：代表这个进程标志（process flags），说明这个进程的权限，常见号码有：<ul>
+<li>若为4表示次进程的权限为root</li>
+<li>若为1则表示此子进程仅可进行复制（fork）而无法实际执行（exec）</li>
+</ul>
+</li>
+<li>S：代表这个进程的状态（STAT），主要的状态有：<ul>
+<li>R（Running）：该进程正在运行中</li>
+<li>S（Sleep）：该进程目前正在睡眠状态（idle），但可以被唤醒（signal）</li>
+<li>D：不可被唤醒的睡眠状态，通常这个进程可能在等待I/O的情况（ex&gt;打印）</li>
+<li>T：停止状态（stop），可能是在工作控制（后台暂停）或除错（traced）状态</li>
+<li>Z（Zombie）：僵尸状态，进程已经终止但却无法被删除至内存外</li>
+</ul>
+</li>
+<li>UID/PID/PPID：代表此进程被该UID所拥有/进程的PID号码/次进程的父进程PID号码</li>
+<li>C：代表CPU的使用率，单位为百分比<br>PRI/NI：Priority/Nice的缩写，代表次进程被CPU所执行的优先级，数值越小代表该进程越快被CPU执行。详细的PRI与NI在下一小节说明</li>
+<li>ADDR/SZ/WCHAN：都与内存有关，ADDR是kernel function，指出该进程在内存的哪个部分，如果是个running的进程，一般就会显示“-”。SZ代表此进程用掉多少内存/WCHAN表示目前进程是否运行中，同样，若为“-”表示正在运行中</li>
+<li>STIME：运行该进程时系统的时间</li>
+<li>TTY：登陆者的终端机位置，若为远程登陆则使用动态终端接口（pts/0）</li>
+<li>TIME：使用掉的CPU时间，注意，是此进程实际花费CPU运行的时间，而不是系统时间</li>
+<li>CMD：就是command的缩写，造成次程序的触发进程的命令是什么</li>
+</ul>
+<p>关于ps命令，以上两个用法就足够了。在工作中，经常把ps命令和管道父结合使用，用来查看某个进程或者它的数量，如下所示：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># <span class="keyword">ps</span> aux | <span class="keyword">grep</span> -<span class="keyword">c</span> mingetty</div><div class="line"><span class="number">1</span></div><div class="line"># <span class="keyword">ps</span> aux | <span class="keyword">grep</span> mingetty</div><div class="line">theshu    <span class="number">4454</span>  <span class="number">0.0</span>  <span class="number">0.0</span>   <span class="number">6864</span>   <span class="number">812</span> <span class="keyword">pts</span>/<span class="number">1</span>    S+   <span class="number">12</span>:<span class="number">16</span>   <span class="number">0</span>:<span class="number">00</span> <span class="keyword">grep</span> --color=auto mingetty</div></pre></td></tr></table></figure></p>
+<h3 id="3-1-2-pstree-程序树查看程序之间的关系"><a href="#3-1-2-pstree-程序树查看程序之间的关系" class="headerlink" title="3.1.2. pstree 程序树查看程序之间的关系"></a>3.1.2. pstree 程序树查看程序之间的关系</h3><p>若是没有这个命令，则用这个命令来安装它：<code>yum install -y psmisc</code></p>
+<p>pstree的用法如下：<br><code>pstree [-A|U] [-up]</code></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-A</td>
+<td>各进程树之间的连接以 ASCII 字符来连接</td>
+</tr>
+<tr>
+<td>-U</td>
+<td>各进程树之间的连接以 utf8 码的字符来连接，在某些终端接口下可能会有错误</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>同时列出每个进程的PID</td>
+</tr>
+<tr>
+<td>-u</td>
+<td>同时列出每个进程的所属账号名称</td>
+</tr>
+</tbody>
+</table>
+<p>示例如下：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line">[theshu@theshuhost ~]$ pstree</div><div class="line">systemd─┬─AliYunDun───<span class="number">14</span>*[&#123;AliYunDun&#125;]</div><div class="line">        ├─AliYunDunUpdate───<span class="number">3</span>*[&#123;AliYunDunUpdate&#125;]</div><div class="line">        ├─agetty</div><div class="line">        ├─aliyun-service───<span class="number">6</span>*[&#123;aliyun-service&#125;]</div><div class="line">        ├─atd</div><div class="line">        ├─auditd───&#123;auditd&#125;</div><div class="line">        ├─crond</div><div class="line">        ├─dbus-daemon</div><div class="line">        ├─dhclient</div><div class="line">        ├─ntpd</div><div class="line">        ├─polkitd───<span class="number">5</span>*[&#123;polkitd&#125;]</div><div class="line">        ├─rsyslogd───<span class="number">2</span>*[&#123;rsyslogd&#125;]</div><div class="line">        ├─sshd───sshd───sshd───bash───pstree</div><div class="line">        ├─systemd-journal</div><div class="line">        ├─systemd-logind</div><div class="line">        ├─systemd-udevd</div><div class="line">        └─tuned───<span class="number">4</span>*[&#123;tuned&#125;]</div><div class="line">[theshu@theshuhost ~]$ pstree -up</div><div class="line">systemd(<span class="number">1</span>)─┬─AliYunDun(<span class="number">1148</span>)─┬─&#123;AliYunDun&#125;(<span class="number">1149</span>)</div><div class="line">           │                 ├─&#123;AliYunDun&#125;(<span class="number">1150</span>)</div><div class="line">           │                 ├─&#123;AliYunDun&#125;(<span class="number">1396</span>)</div><div class="line">           │                 ├─&#123;AliYunDun&#125;(<span class="number">1397</span>)</div><div class="line">           │                 ├─&#123;AliYunDun&#125;(<span class="number">1398</span>)</div><div class="line">           │                 ├─&#123;AliYunDun&#125;(<span class="number">1399</span>)</div><div class="line">           │                 ├─&#123;AliYunDun&#125;(<span class="number">1400</span>)</div><div class="line">           │                 ├─&#123;AliYunDun&#125;(<span class="number">1448</span>)</div><div class="line">           │                 ├─&#123;AliYunDun&#125;(<span class="number">1464</span>)</div><div class="line">           │                 ├─&#123;AliYunDun&#125;(<span class="number">1465</span>)</div><div class="line">           │                 ├─&#123;AliYunDun&#125;(<span class="number">1466</span>)</div><div class="line">           │                 ├─&#123;AliYunDun&#125;(<span class="number">1467</span>)</div><div class="line">           │                 ├─&#123;AliYunDun&#125;(<span class="number">1468</span>)</div><div class="line">           │                 └─&#123;AliYunDun&#125;(<span class="number">31019</span>)</div><div class="line">           ├─AliYunDunUpdate(<span class="number">891</span>)─┬─&#123;AliYunDunUpdate&#125;(<span class="number">894</span>)</div><div class="line">           │                      ├─&#123;AliYunDunUpdate&#125;(<span class="number">895</span>)</div><div class="line">           │                      └─&#123;AliYunDunUpdate&#125;(<span class="number">915</span>)</div><div class="line">           ├─agetty(<span class="number">879</span>)</div><div class="line">           ├─aliyun-service(<span class="number">7725</span>)─┬─&#123;aliyun-service&#125;(<span class="number">7728</span>)</div><div class="line">           │                      ├─&#123;aliyun-service&#125;(<span class="number">7729</span>)</div><div class="line">           │                      ├─&#123;aliyun-service&#125;(<span class="number">7730</span>)</div><div class="line">           │                      ├─&#123;aliyun-service&#125;(<span class="number">7731</span>)</div><div class="line">           │                      ├─&#123;aliyun-service&#125;(<span class="number">7732</span>)</div><div class="line">           │                      └─&#123;aliyun-service&#125;(<span class="number">7733</span>)</div><div class="line">           ├─atd(<span class="number">484</span>)</div><div class="line">           ├─auditd(<span class="number">440</span>)───&#123;auditd&#125;(<span class="number">441</span>)</div><div class="line">           ├─crond(<span class="number">485</span>)</div><div class="line">           ├─dbus-daemon(<span class="number">467</span>,dbus)</div><div class="line">           ├─dhclient(<span class="number">752</span>)</div><div class="line">           ├─ntpd(<span class="number">833</span>,ntp)</div><div class="line">           ├─polkitd(<span class="number">466</span>,polkitd)─┬─&#123;polkitd&#125;(<span class="number">487</span>)</div><div class="line">           │                      ├─&#123;polkitd&#125;(<span class="number">488</span>)</div><div class="line">           │                      ├─&#123;polkitd&#125;(<span class="number">496</span>)</div><div class="line">           │                      ├─&#123;polkitd&#125;(<span class="number">499</span>)</div><div class="line">           │                      └─&#123;polkitd&#125;(<span class="number">501</span>)</div><div class="line">           ├─rsyslogd(<span class="number">477</span>)─┬─&#123;rsyslogd&#125;(<span class="number">494</span>)</div><div class="line">           │               └─&#123;rsyslogd&#125;(<span class="number">497</span>)</div><div class="line">           ├─sshd(<span class="number">1536</span>)───sshd(<span class="number">5322</span>)───sshd(<span class="number">5324</span>,theshu)───bash(<span class="number">5325</span>)───pstree(+</div><div class="line">           ├─systemd-journal(<span class="number">326</span>)</div><div class="line">           ├─systemd-logind(<span class="number">463</span>)</div><div class="line">           ├─systemd-udevd(<span class="number">344</span>)</div><div class="line">           └─tuned(<span class="number">815</span>)─┬─&#123;tuned&#125;(<span class="number">1450</span>)</div><div class="line">                        ├─&#123;tuned&#125;(<span class="number">1451</span>)</div><div class="line">                        ├─&#123;tuned&#125;(<span class="number">1452</span>)</div><div class="line">                        └─&#123;tuned&#125;(<span class="number">1458</span>)</div></pre></td></tr></table></figure></p>
+<h3 id="3-1-3-top-动态查看系统进程"><a href="#3-1-3-top-动态查看系统进程" class="headerlink" title="3.1.3. top 动态查看系统进程"></a>3.1.3. top 动态查看系统进程</h3><p>top的使用方式：<code>top [-d 数字]</code> 或 <code>top [-bnp]</code></p>
+<p>参数：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-d</td>
+<td>后面可以接秒数，就是整个进程界面更新的秒数，默认是5秒</td>
+</tr>
+<tr>
+<td>-b</td>
+<td>以批次的方式执行top，还有更多的参数可以使用。<br> 通常会搭配数据流重定向来将批处理的结果输出成为文件</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>与-b搭配，意义是，需要进行几次 top 的输出结果</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>指定某些个PID来进行查看检测而已</td>
+</tr>
+</tbody>
+</table>
+<p>在top执行过程中可以使用的按键命令：</p>
+<table>
+<thead>
+<tr>
+<th>按键</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>?</td>
+<td>显示在top当中可以输入的按键命令</td>
+</tr>
+<tr>
+<td>P</td>
+<td>以CPU的使用资源排序显示</td>
+</tr>
+<tr>
+<td>M</td>
+<td>以内存的使用资源排序显示</td>
+</tr>
+<tr>
+<td>N</td>
+<td>以PID来排序</td>
+</tr>
+<tr>
+<td>T</td>
+<td>由该进程使用的CPU时间积累（TIME+）排序</td>
+</tr>
+<tr>
+<td>k</td>
+<td>给予某个PID一个信号（signal）</td>
+</tr>
+<tr>
+<td>r</td>
+<td>给予某个PID重新制定一个nice值</td>
+</tr>
+<tr>
+<td>q</td>
+<td>离开top软件的按键</td>
+</tr>
+</tbody>
+</table>
+<p>示例如下：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># top</span></div><div class="line">top - 17:37:05 up  2:25, <span class="number"> 1 </span>user,  load average: 0.00, 0.01, 0.05</div><div class="line">Tasks: <span class="number"> 91 </span>total,  <span class="number"> 1 </span>running, <span class="number"> 90 </span>sleeping,  <span class="number"> 0 </span>stopped,  <span class="number"> 0 </span>zombie</div><div class="line">%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</div><div class="line">KiB Mem : <span class="number"> 1008176 </span>total,  <span class="number"> 507628 </span>free,  <span class="number"> 135092 </span>used,  <span class="number"> 365456 </span>buff/cache</div><div class="line">KiB Swap: <span class="number"> 4194300 </span>total, <span class="number"> 4194300 </span>free,       <span class="number"> 0 </span>used.  <span class="number"> 684136 </span>avail Mem</div><div class="line"></div><div class="line">  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND</div><div class="line">   <span class="number"> 1 </span>root     <span class="number"> 20 </span> <span class="number"> 0 </span><span class="number"> 128164 </span> <span class="number"> 6848 </span> <span class="number"> 4076 </span>S   0.0  0.7   0:01.38 systemd</div><div class="line">   <span class="number"> 2 </span>root     <span class="number"> 20 </span> <span class="number"> 0 </span>     <span class="number"> 0 </span>    <span class="number"> 0 </span>    <span class="number"> 0 </span>S   0.0  0.0   0:00.02 kthreadd</div><div class="line">   <span class="number"> 3 </span>root     <span class="number"> 20 </span> <span class="number"> 0 </span>     <span class="number"> 0 </span>    <span class="number"> 0 </span>    <span class="number"> 0 </span>S   0.0  0.0   0:02.17 ksoftirqd/0</div><div class="line">   <span class="number"> 5 </span>root      <span class="number"> 0 </span>-20      <span class="number"> 0 </span>    <span class="number"> 0 </span>    <span class="number"> 0 </span>S   0.0  0.0   0:00.00 kworker/0:0H</div><div class="line">   <span class="number"> 7 </span>root      rt  <span class="number"> 0 </span>     <span class="number"> 0 </span>    <span class="number"> 0 </span>    <span class="number"> 0 </span>S   0.0  0.0   0:00.10 migration/0</div><div class="line">   <span class="number"> 8 </span>root     <span class="number"> 20 </span> <span class="number"> 0 </span>     <span class="number"> 0 </span>    <span class="number"> 0 </span>    <span class="number"> 0 </span>S   0.0  0.0   0:00.00 rcu_bh</div><div class="line">   <span class="number"> 9 </span>root     <span class="number"> 20 </span> <span class="number"> 0 </span>     <span class="number"> 0 </span>    <span class="number"> 0 </span>    <span class="number"> 0 </span>S   0.0  0.0   0:01.30 rcu_sched</div><div class="line">  <span class="number"> 10 </span>root      rt  <span class="number"> 0 </span>     <span class="number"> 0 </span>    <span class="number"> 0 </span>    <span class="number"> 0 </span>S   0.0  0.0   0:00.15 watchdog/0</div><div class="line">  <span class="number"> 11 </span>root      rt  <span class="number"> 0 </span>     <span class="number"> 0 </span>    <span class="number"> 0 </span>    <span class="number"> 0 </span>S   0.0  0.0   0:00.18 watchdog/1</div><div class="line">  <span class="number"> 12 </span>root      rt  <span class="number"> 0 </span>     <span class="number"> 0 </span>    <span class="number"> 0 </span>    <span class="number"> 0 </span>S   0.0  0.0   0:00.06 migration/1</div><div class="line">  <span class="number"> 13 </span>root     <span class="number"> 20 </span> <span class="number"> 0 </span>     <span class="number"> 0 </span>    <span class="number"> 0 </span>    <span class="number"> 0 </span>S   0.0  0.0   0:00.15 ksoftirqd/1</div><div class="line">  <span class="number"> 15 </span>root      <span class="number"> 0 </span>-20      <span class="number"> 0 </span>    <span class="number"> 0 </span>    <span class="number"> 0 </span>S   0.0  0.0   0:00.00 kworker/1:0H</div><div class="line">  <span class="number"> 17 </span>root     <span class="number"> 20 </span> <span class="number"> 0 </span>     <span class="number"> 0 </span>    <span class="number"> 0 </span>    <span class="number"> 0 </span>S   0.0  0.0   0:00.00 kdevtmpfs</div></pre></td></tr></table></figure></p>
+<p>top命令用于动态监控进程所占的系统资源，每隔5秒变一次。它的特点是把占用系统资源（CPU、内存、磁盘I/O等）最高的进程放到最前面。</p>
+<p>如例所示，top命令打印出很多信息，包括系统负载（load average）、进程数（Tasks）、CPU使用情况、内存使用情况以及交换分区使用情况。这些内容其实可以通过其它命令来查看，用top的重点查看的还是下面的进程使用系统资源的详细状况，其中需要关注的是%CPU、%MEM和COMMAND这几项所代表的意义。RES这一项为进程所占用的内存大小，而%MEM这一项为使用内存的百分比。在top状态下，默认按CPU的使用百分比情况排序，按Shift+M可以按照内存使用大小来排序。按数字1可以列出所有核CPU的使用状态，按q可以推出top。</p>
+<p>top的内容说明：</p>
+<ul>
+<li>第一行（top，综述）：同w命令的第一行（或uptime命令）所示的一样，只不过是动态的（默认3s刷新一次状态）。这一行显示的信息分别为：<ul>
+<li>目前的时间，即是 <code>17:37:05</code> 内容</li>
+<li>开机到目前位置所经过的时间，即是 <code>up  2:25</code> 内容</li>
+<li>已经登陆系统的用户人数，即是<code>1 user</code>内容</li>
+<li>系统在1、5、15分钟的平均工作负载，意思是在1、5、15分钟系统平均要负责运行几个进程（工作）的意思。越小代表系统越闲置，若高于1得要注意你的系统压力是否太过繁复了。</li>
+</ul>
+</li>
+<li>第二行（Tasks，进程）：显示的是目前进程的总量与个别进程在什么状态（running，sleeping，stopped，zombie）。比较需要注意的是最后的zombie那个数值，如果不是0，好好看看到底是哪个process变成僵尸了吧。这一行显示的信息分别为：<ul>
+<li>进程总数 <code>91 total</code></li>
+<li>正在运行进程数 <code>1 running</code></li>
+<li>休眠进程数 <code>90 sleeping</code></li>
+<li>被停止进程数 <code>0 stopped</code></li>
+<li>僵尸进程数 <code>0 zombie</code></li>
+</ul>
+</li>
+<li>第三行（%Cpus）：显示的是CPU的整体负载，每个选项可使用?查阅。需要特别注意的是%wa，那个选项代表的是I/O wait，通常你的系统变慢都是I/O产生的问题比较大。因此这里得要注意这个选项耗用CPU的资源。另外，如果是多内核的设备，可以按下数字键“1”来切换成不同CPU的负载率。这一行的内容分别为：<ul>
+<li>%us 用户态进程，用户空间占用CPU百分比</li>
+<li>%sy 内核态进程，内核空间占用CPU百分比</li>
+<li>%ni 用户进程空间内改变过优先级的进程占用CPU百分比</li>
+<li>%id 空闲CPU百分比</li>
+<li>%wa等待（I/O）等待输入输出的CPU时间百分比</li>
+<li>%hi </li>
+<li>%si </li>
+<li>%st </li>
+</ul>
+</li>
+<li>第四行（内存）：总大小、已使用的、空闲的、缓冲量大小</li>
+<li>第五行（Swap）：总大小、已使用的、空闲的、缓存量大小<ul>
+<li>要注意的是，swap的使用量要尽量少，如果swap被大量使用，表示系统的物理内存实在不足。</li>
+<li>缓冲和缓存的区别：<ul>
+<li>缓冲（buffer）：是为了提高内存和硬盘（或其他I/O设备）之间的数据交换的速度而设计的（内存–硬盘）</li>
+<li>缓存（cache）：是为了提高CPU和内存之间的数据交换速度而设计的（内存–CPU）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>第六行：这个是当在top进程当中输入命令时显示状态的地方。这一行的内容为：<ul>
+<li>PID：进程ID，PPID：父进程ID</li>
+<li>RUSER：Real　user name</li>
+<li>USER：进程使用者的用户名</li>
+<li>PR优先级</li>
+<li>NI优先值（Nice值，从-20到19,数值越低，优先级越高）</li>
+<li>VIRT：虚拟内存大小</li>
+<li>RES：真正内存使用大小</li>
+<li>SHR：共享内存大小</li>
+<li>S：表示状态</li>
+<li>%CPU：上次更新到现在的CPU时间占用百分比</li>
+<li>%MEM：进程使用的物理内存百分比</li>
+<li>TIME+：进程使用的CPU时间总计，单位1/100秒</li>
+<li>COMMAND：命令</li>
+</ul>
+</li>
+</ul>
+<p>在日常工作中常用到命令 <code>top -bn1</code>，它表示非动态打印系统资源的使用情况，和top命令的唯一区别就是，它一次性输出所有信息而非动态显示。这条命令可以用在shell脚本中。示例如下：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">]<span class="comment"># top -bn1 | head</span></div><div class="line">top - 17:42:27 up  2:31, <span class="number"> 1 </span>user,  load average: 0.00, 0.01, 0.05</div><div class="line">Tasks: <span class="number"> 92 </span>total,  <span class="number"> 1 </span>running, <span class="number"> 91 </span>sleeping,  <span class="number"> 0 </span>stopped,  <span class="number"> 0 </span>zombie</div><div class="line">%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</div><div class="line">KiB Mem : <span class="number"> 1008176 </span>total,  <span class="number"> 508100 </span>free,  <span class="number"> 134564 </span>used,  <span class="number"> 365512 </span>buff/cache</div><div class="line">KiB Swap: <span class="number"> 4194300 </span>total, <span class="number"> 4194300 </span>free,       <span class="number"> 0 </span>used.  <span class="number"> 684652 </span>avail Mem</div><div class="line"></div><div class="line">  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND</div><div class="line">   <span class="number"> 1 </span>root     <span class="number"> 20 </span> <span class="number"> 0 </span><span class="number"> 128164 </span> <span class="number"> 6848 </span> <span class="number"> 4076 </span>S   0.0  0.7   0:01.38 systemd</div><div class="line">   <span class="number"> 2 </span>root     <span class="number"> 20 </span> <span class="number"> 0 </span>     <span class="number"> 0 </span>    <span class="number"> 0 </span>    <span class="number"> 0 </span>S   0.0  0.0   0:00.02 kthreadd</div><div class="line">   <span class="number"> 3 </span>root     <span class="number"> 20 </span> <span class="number"> 0 </span>     <span class="number"> 0 </span>    <span class="number"> 0 </span>    <span class="number"> 0 </span>S   0.0  0.0   0:02.17 ksoftirqd/0</div></pre></td></tr></table></figure></p>
+<p><code>top -c</code> 这个命令是使 COMMAND那一列显示的更全一些。</p>
+<p>例子：指定PID查看指定的进程查看。如下：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">我们自己的bash PID可由 $$ 变量取得，请使用 top 持续查看该 PID：</div><div class="line">[root@theshuhost ~]<span class="comment"># echo $$</span></div><div class="line">5683</div><div class="line">[root@theshuhost ~]<span class="comment"># top -d 2 -p 5683</span></div><div class="line">top - 21:00:06 up<span class="number"> 24 </span>days, 23:51, <span class="number"> 2 </span>users,  load average: 0.00, 0.01, 0.05</div><div class="line">Tasks:  <span class="number"> 1 </span>total,  <span class="number"> 0 </span>running,  <span class="number"> 1 </span>sleeping,  <span class="number"> 0 </span>stopped,  <span class="number"> 0 </span>zombie</div><div class="line">%Cpu(s):  0.0 us,  0.5 sy,  0.0 ni, 99.5 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</div><div class="line">KiB Mem : <span class="number"> 1016164 </span>total,  <span class="number"> 299240 </span>free,   <span class="number"> 80928 </span>used,  <span class="number"> 635996 </span>buff/cache</div><div class="line">KiB Swap: <span class="number"> 2097148 </span>total, <span class="number"> 2097148 </span>free,       <span class="number"> 0 </span>used.  <span class="number"> 771796 </span>avail Mem</div><div class="line"><span class="yaml"><span class="meta">---</span></span></div><div class="line"><span class="yaml">  <span class="string">PID</span> <span class="string">USER</span>      <span class="string">PR</span>  <span class="string">NI</span>    <span class="string">VIRT</span>    <span class="string">RES</span>    <span class="string">SHR</span> <span class="string">S</span> <span class="string">%CPU</span> <span class="string">%MEM</span>     <span class="string">TIME+</span> <span class="string">COMMAND</span></span></div><div class="line"><span class="yaml"> <span class="number">5683</span> <span class="string">root</span>      <span class="number">20</span>   <span class="number">0</span>  <span class="number">115392</span>   <span class="number">1984</span>   <span class="number">1600</span> <span class="string">S</span>  <span class="number">0.0</span>  <span class="number">0.2</span>   <span class="number">0</span><span class="string">:00.00</span> <span class="string">bash</span></span></div></pre></td></tr></table></figure></p>
+<p>例子：修改NI数值来达到调控进程的目的。如下：</p>
+<p>承上题，上面的NI值是0，想要改成10该怎么版呢？在上例的top界面中直接按下r之后，会出现如下的图样：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">top - 21:03:57 up<span class="number"> 24 </span>days, 23:55, <span class="number"> 2 </span>users,  load average: 0.00, 0.01, 0.05</div><div class="line">Tasks:  <span class="number"> 1 </span>total,  <span class="number"> 0 </span>running,  <span class="number"> 1 </span>sleeping,  <span class="number"> 0 </span>stopped,  <span class="number"> 0 </span>zombie</div><div class="line">%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</div><div class="line">KiB Mem : <span class="number"> 1016164 </span>total,  <span class="number"> 301492 </span>free,   <span class="number"> 78736 </span>used,  <span class="number"> 635936 </span>buff/cache</div><div class="line">KiB Swap: <span class="number"> 2097148 </span>total, <span class="number"> 2097148 </span>free,       <span class="number"> 0 </span>used.  <span class="number"> 774072 </span>avail Mem</div><div class="line">PID to renice [default pid = 5683]  &lt;&lt;==按下r后在这里输入PID号码</div><div class="line">  PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND</div><div class="line"><span class="number"> 5683 </span>root     <span class="number"> 20 </span> <span class="number"> 0 </span><span class="number"> 115392 </span> <span class="number"> 2028 </span> <span class="number"> 1636 </span>S  0.0  0.2   0:00.00 bash</div></pre></td></tr></table></figure></p>
+<p>完成上面的操作后，在状态栏会出现如下的信息：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Renice PID 5683 <span class="keyword">to</span> value 10  &lt;&lt;==这是nice值</div><div class="line">  PID<span class="built_in"> USER </span>     PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND</div><div class="line"> 5683 root      20   0  115392   2028   1636 S  0.0  0.2   0:00.00 bash</div></pre></td></tr></table></figure></p>
+<p>接下来你就会看到如下的显示界面（注意，NI值已经发生改变）：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">top - 21:06:56 up<span class="number"> 24 </span>days, 23:58, <span class="number"> 2 </span>users,  load average: 0.00, 0.01, 0.05</div><div class="line">Tasks:  <span class="number"> 1 </span>total,  <span class="number"> 0 </span>running,  <span class="number"> 1 </span>sleeping,  <span class="number"> 0 </span>stopped,  <span class="number"> 0 </span>zombie</div><div class="line">%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st</div><div class="line">KiB Mem : <span class="number"> 1016164 </span>total,  <span class="number"> 301364 </span>free,   <span class="number"> 78864 </span>used,  <span class="number"> 635936 </span>buff/cache</div><div class="line">KiB Swap: <span class="number"> 2097148 </span>total, <span class="number"> 2097148 </span>free,       <span class="number"> 0 </span>used.  <span class="number"> 773944 </span>avail Mem</div><div class="line"></div><div class="line">  PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND</div><div class="line"><span class="number"> 5683 </span>root     <span class="number"> 30 </span><span class="number"> 10 </span><span class="number"> 115392 </span> <span class="number"> 2028 </span> <span class="number"> 1636 </span>S  0.0  0.2   0:00.00 bash</div></pre></td></tr></table></figure></p>
+<h2 id="3-2-进程的管理"><a href="#3-2-进程的管理" class="headerlink" title="3.2. 进程的管理"></a>3.2. 进程的管理</h2><h3 id="3-2-1-信号"><a href="#3-2-1-信号" class="headerlink" title="3.2.1. 信号"></a>3.2.1. 信号</h3><p>进程之间是可以相互控制的。那么程序是如何相互管理的呢？其实是通过给予该进程一个信号（signal）去告知该进程你想要让它做什么。因此这个信号就很重要了。</p>
+<p>要给予某个已经存在后台中的工作某些操作时，直接给予一个信号给该工作号码即可。那到底有多少signal呢？可以使用<code>kill -l(小写的L)</code>或<code>man 7 signal</code>都可以查询到。</p>
+<p>主要的信号代号与名称对应及内容如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>代号</th>
+<th>名称</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>SIGHUP　</td>
+<td>启动被终止的进程，可让该PID重新读取自己的配置文件，类似重新启动</td>
+</tr>
+<tr>
+<td>2</td>
+<td>SIGINT</td>
+<td>相当于用键盘输入Ctrl+C来中断一个进程的进行</td>
+</tr>
+<tr>
+<td>9</td>
+<td>SIGKILL</td>
+<td>代表强制中断一个进程的进行，如果该进程进行到一半，那么尚未完成的部分可能会有“半成品”产生，类似vim会有.filename.swp保留下来</td>
+</tr>
+<tr>
+<td>15</td>
+<td>SIGTERM</td>
+<td>以正常的结束来终止该进程。由于是正常的终止，所以后续的操作会将它完成。不过，如果该进程已经发生问题，就是无法使用正常的方法终止时，输入这个signal也是没用的</td>
+</tr>
+<tr>
+<td>17</td>
+<td>SIGSTOP</td>
+<td>相当于用键盘输入Ctrl+Z来暂停一个进程的进行。</td>
+</tr>
+</tbody>
+</table>
+<p>上表中的1、9、15一定要记下来。那么我们如何传送一个信号给某个进程呢？就是通过<code>kill</code>和<code>killall</code>来实现。</p>
+<h3 id="3-2-2-kill"><a href="#3-2-2-kill" class="headerlink" title="3.2.2. kill"></a>3.2.2. kill</h3><p>用法：<code>kill -signal PID</code></p>
+<p>说明：</p>
+<ul>
+<li>kill可以帮我们将这个signal传送给某个工作（%jobnumber）或者是某个PID（直接输入数字）。kill后面接的数字默认会是PID，所以想要管理bash的工作控制，就要加上%数字了。</li>
+<li>强调：kill后面直接加数字与加上%number的情况是不同的。这个很重要。一定要记得那个%是专门用在工作控制的。</li>
+<li>signal除了以数值来表示之外，也可以使用信号名称。</li>
+</ul>
+<p>接下来我们就活用一下kill与刚才上面提到的ps来做个简单的练习吧：</p>
+<ul>
+<li>题目：以ps找出syslog这个进程的PID后，再使用kill传递信号，使得syslog可以重新读取配置文件。<ul>
+<li>由于需要重新读取配置文件，因此signal是1号。至于找出syslog的PID可以这样做：<code>ps aux | grep &#39;syslog&#39; | grep -v &#39;grep&#39; | awk &#39;{print $2}&#39;</code></li>
+<li>接下来则是实际使用kill -1 PID，因此，整串命令会是这样：<code>kill -SIGHUP $(ps aux | grep &#39;syslog&#39; | grep -v &#39;grep&#39; | awk &#39;{print $2}&#39;)</code></li>
+<li>如果要确认有没有重新启动syslog，可以参考日志文件的内容，使用如下命令查阅：<code>tail -5 /var/log/messages</code>。如果有看到类似“www syslogd 1.4.1: restart”之类的字样，就是表示 syslogd已经重启了。</li>
+</ul>
+</li>
+</ul>
+<p>了解了这个用法以后，如果将来你要想将某个莫名其妙的登陆者的连接删除的话，就可以通过使用<code>pstree -p</code>找到相关进程，然后再以<code>kill -9</code>将该进程删除，该连接就会被踢掉了。</p>
+<h3 id="3-2-3-killall"><a href="#3-2-3-killall" class="headerlink" title="3.2.3. killall"></a>3.2.3. killall</h3><p>用法：<code>killall -signal 命令名称</code> 和 <code>killall [-iIe] [command name]</code></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-i</td>
+<td>interactive的意思，交互式的，若需要删除时，会出现提示符给用户</td>
+</tr>
+<tr>
+<td>-e</td>
+<td>exact的意思，表示后面接的 command name 要一致，但整个完整的命令不能超过15个字符</td>
+</tr>
+<tr>
+<td>-I</td>
+<td>命令名称（可能含参数）忽略大小写</td>
+</tr>
+</tbody>
+</table>
+<p>说明：</p>
+<ul>
+<li>由于kill命令后面必须要加上PID（或者是job number），所以，通常kill都会配合ps,pstree等命令，因为我们必须要找到对应的那个进程的ID。</li>
+<li>而killall命令可以利用“执行命令的名称”来给予信号。所以很方便。</li>
+</ul>
+<p>示例如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">示例一：给予syslogd这个命令启动的PID一个 SIGHUP 的信号</div><div class="line"><span class="meta">#</span><span class="bash"> killall -1 syslogd</span></div><div class="line">示例二：强制终止所有以 httpd 启动的进程</div><div class="line"><span class="meta">#</span><span class="bash"> killall -9 httpd</span></div><div class="line">示例三：依次询问每个bash进程是否需要被终止运行</div><div class="line"><span class="meta">#</span><span class="bash"> killall -i -9 bash</span></div></pre></td></tr></table></figure></p>
+<h3 id="3-2-4-进程管理的总结"><a href="#3-2-4-进程管理的总结" class="headerlink" title="3.2.4. 进程管理的总结"></a>3.2.4. 进程管理的总结</h3><ul>
+<li>要删除某个进程，我们可以使用PID或者是启动该进程的命令名称。</li>
+<li>如果要删除某个服务，最简单的方法就是利用killall，因为它可以将系统当中所有以命令名称启动的进程全部删除。</li>
+</ul>
+<h2 id="3-3-关于进程的执行顺序"><a href="#3-3-关于进程的执行顺序" class="headerlink" title="3.3. 关于进程的执行顺序"></a>3.3. 关于进程的执行顺序</h2><p>Linux是多用户、多任务的系统，由top命令的输出结果我们也发现，系统同时间有非常多的进程在运行中，只是绝大部分的进程都在休眠（sleeping）状态而已。试想一下，如果所有的进程同时被唤醒，那么CPU应该要先处理哪个进程呢？也就是说，哪个进程被执行的优选序比较高？这就得考虑到程序的优先执行序（Priority）与CPU调度。</p>
+<p>CPU调度与例行性工作调度（也就是计划任务）不一样，CPU调度指的是每个程序被CPU运行的演算规则，而例行性工作调度则是将某个程序安排在某个时间再交由系统执行。CPU调度与操作系统较具有相关性。</p>
+<h3 id="3-3-1-Priority-与-Nice值"><a href="#3-3-1-Priority-与-Nice值" class="headerlink" title="3.3.1. Priority 与 Nice值"></a>3.3.1. Priority 与 Nice值</h3><p>有时Linux系统下的任务需要分清楚什么进程任务比较重要，什么可以暂缓执行，优先执行什么。为了达到这个目的，Linux给予进程一个所谓的<strong>优先执行序（Priority，PRI）</strong>，这个PRI值越低代表越优先的意思。不过这个PRI值是由内核动态调整的，用户是无法直接调整PRI值的。可以用ps等命令来查看到PRI值。（<code>ps -l</code>）</p>
+<p>因为PRI值我们无法直接调整，那么我们想要调整进程的优先序时，就得要通过Nice值了。Nice值一般都在PRI值的旁边，ps等命令的界面中的NI值。</p>
+<p>一般来说，PRI与NI的相关性如下：<code>PRI (new) = PRI(old) + NICE</code></p>
+<p>说明：</p>
+<ul>
+<li>注意，如果原本的PRI是50，并不是我们给予一个Nice=5，就会让PRI变成55。因为PRI是系统“动态”决定的，所以，虽然Nice值可以影响PRI，不过最终的PRI仍然要经过系统分析后才会决定的。另外，Nice值是有正负的，而既然PRI越小越早被执行，所以，当Nice值为负时，那么该进程就会降低PRI值，即会变得较优先被处理。</li>
+<li>Nice值可以调整的范围是 -20——19</li>
+<li>root可随意调整自己或他人进程的Nice值，且范围是　-20——19</li>
+<li>一般用户仅可调整自己进程的Nice值，且范围仅为 0——19（避免一般用户抢占系统资源）</li>
+<li>一般用户仅可将Nice值越调越高，例如本来Nice为5，则将来仅能调整到大于5</li>
+</ul>
+<p>综上所述，要调整某个进程的优先执行序，就是调整该进程的Nice值。那么如何给予某个进程Nice值呢？有以下两种方式：</p>
+<ol>
+<li>一开始执行程序就立即给予一个特定的Nice值：用<code>nice</code>命令实现。</li>
+<li>调整某个已经存在的PID的Nice值：用<code>renice</code>命令实现。</li>
+</ol>
+<h3 id="3-3-2-nice-新执行的命令即给予新的nice值"><a href="#3-3-2-nice-新执行的命令即给予新的nice值" class="headerlink" title="3.3.2. nice 新执行的命令即给予新的nice值"></a>3.3.2. nice 新执行的命令即给予新的nice值</h3><p>使用方法：<code>nice [-n 数字] command</code></p>
+<p>参数：</p>
+<ul>
+<li>-n：后面接一个数值，数值的范围是-20到19</li>
+</ul>
+<p>例子：用root给一个Nice值为-5，用于执行vi，并查看该进程，最后退出它：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[root@theshuhost ~]<span class="comment"># nice -n -5 vi &amp;</span></div><div class="line">[1] 7142</div><div class="line">[root@theshuhost ~]<span class="comment"># ps -l</span></div><div class="line">F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD</div><div class="line">4 S    <span class="number"> 0 </span><span class="number"> 7123 </span><span class="number"> 7102 </span><span class="number"> 0 </span><span class="number"> 80 </span> <span class="number"> 0 </span>-<span class="number"> 49420 </span>poll_s pts/0    00:00:00 sudo</div><div class="line">4 S    <span class="number"> 0 </span><span class="number"> 7124 </span><span class="number"> 7123 </span><span class="number"> 0 </span><span class="number"> 80 </span> <span class="number"> 0 </span>-<span class="number"> 47402 </span>do_wai pts/0    00:00:00 su</div><div class="line">4 S    <span class="number"> 0 </span><span class="number"> 7125 </span><span class="number"> 7124 </span><span class="number"> 0 </span><span class="number"> 80 </span> <span class="number"> 0 </span>-<span class="number"> 28848 </span>do_wai pts/0    00:00:00 bash</div><div class="line">4 T    <span class="number"> 0 </span><span class="number"> 7142 </span><span class="number"> 7125 </span><span class="number"> 0 </span><span class="number"> 75 </span> -5 -<span class="number"> 31002 </span>do_sig pts/0    00:00:00 vi</div><div class="line">0 R    <span class="number"> 0 </span><span class="number"> 7143 </span><span class="number"> 7125 </span><span class="number"> 0 </span><span class="number"> 80 </span> <span class="number"> 0 </span>-<span class="number"> 37235 </span>-      pts/0    00:00:00 ps</div><div class="line"><span class="comment"># 原本的bash PRI为80，所以vi默认应为80，不过由于给予Nice值为-5，</span></div><div class="line"><span class="comment"># 因此vi的PRI降低了。但有时候做这个实验你会看，并非会降低到75，因为内核还会动态调整。</span></div><div class="line">[root@theshuhost ~]<span class="comment"># kill -9 %1  &lt;==测试完毕将vi关闭</span></div><div class="line">[1]+  Stopped                 nice -n -5 vi</div></pre></td></tr></table></figure></p>
+<p>通常什么时候需要将Nice值调大呢？举例来说，系统的后台工作中，某些比较不重要的进程在运行，例如备份工作，由于备份工作相当消耗系统资源，这个时候就可以将备份的命令的Nice值调大一些，可以使系统的资源分配得更为公平。</p>
+<h3 id="3-3-3-renice-已存在进程的nice重新调整"><a href="#3-3-3-renice-已存在进程的nice重新调整" class="headerlink" title="3.3.3. renice 已存在进程的nice重新调整"></a>3.3.3. renice 已存在进程的nice重新调整</h3><p>使用方法：<code>renice [number] PID</code></p>
+<p>例子：找出自己的bash的PID，并将该PID的Nice调整到10<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[root@theshuhost ~]<span class="comment"># ps -l</span></div><div class="line">F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD</div><div class="line">4 S    <span class="number"> 0 </span><span class="number"> 7123 </span><span class="number"> 7102 </span><span class="number"> 0 </span><span class="number"> 80 </span> <span class="number"> 0 </span>-<span class="number"> 49420 </span>poll_s pts/0    00:00:00 sudo</div><div class="line">4 S    <span class="number"> 0 </span><span class="number"> 7124 </span><span class="number"> 7123 </span><span class="number"> 0 </span><span class="number"> 80 </span> <span class="number"> 0 </span>-<span class="number"> 47402 </span>do_wai pts/0    00:00:00 su</div><div class="line">4 S    <span class="number"> 0 </span><span class="number"> 7125 </span><span class="number"> 7124 </span><span class="number"> 0 </span><span class="number"> 80 </span> <span class="number"> 0 </span>-<span class="number"> 28848 </span>do_wai pts/0    00:00:00 bash</div><div class="line">0 R    <span class="number"> 0 </span><span class="number"> 7154 </span><span class="number"> 7125 </span><span class="number"> 0 </span><span class="number"> 80 </span> <span class="number"> 0 </span>-<span class="number"> 37235 </span>-      pts/0    00:00:00 ps</div><div class="line">[root@theshuhost ~]<span class="comment"># renice 10 7125</span></div><div class="line">7125 (process ID) old priority 0, new priority 10</div><div class="line">[root@theshuhost ~]<span class="comment"># ps -l</span></div><div class="line">F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD</div><div class="line">4 S    <span class="number"> 0 </span><span class="number"> 7123 </span><span class="number"> 7102 </span><span class="number"> 0 </span><span class="number"> 80 </span> <span class="number"> 0 </span>-<span class="number"> 49420 </span>poll_s pts/0    00:00:00 sudo</div><div class="line">4 S    <span class="number"> 0 </span><span class="number"> 7124 </span><span class="number"> 7123 </span><span class="number"> 0 </span><span class="number"> 80 </span> <span class="number"> 0 </span>-<span class="number"> 47402 </span>do_wai pts/0    00:00:00 su</div><div class="line">4 S    <span class="number"> 0 </span><span class="number"> 7125 </span><span class="number"> 7124 </span><span class="number"> 0 </span><span class="number"> 90 </span><span class="number"> 10 </span>-<span class="number"> 28848 </span>do_wai pts/0    00:00:00 bash</div><div class="line">0 R    <span class="number"> 0 </span><span class="number"> 7156 </span><span class="number"> 7125 </span><span class="number"> 0 </span><span class="number"> 90 </span><span class="number"> 10 </span>-<span class="number"> 37235 </span>-      pts/0    00:00:00 ps</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>如果要调整的是已经存在的某个进程的话，那么就得要使用renice这个命令了。使用的方法很简单。renice后面接上数值和PID即可。因为后面接的是PID，所以要使用ps等命令来找出这个进程的PID才行。</li>
+<li>由上面的例子我们也可以看得出来，虽然修改的是bash这个进程，但是该进程所触发的ps命令当中的Nice也会继承而为10。整个Nice值是可以在父进程->子进程之间传递呢。</li>
+<li>另外，除了renice之外，其实哪个top也同样可以调整Nice值的。</li>
+</ul>
+<h2 id="3-4-系统资源的查看"><a href="#3-4-系统资源的查看" class="headerlink" title="3.4. 系统资源的查看"></a>3.4. 系统资源的查看</h2><p>除了系统的进程之外，我们还必须就系统的一些资源进行检查。如以下的这些命令。</p>
+<h3 id="3-4-1-free-查看内存使用情况"><a href="#3-4-1-free-查看内存使用情况" class="headerlink" title="3.4.1. free 查看内存使用情况"></a>3.4.1. free 查看内存使用情况</h3><p>示例如下：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># free</span></div><div class="line">              total        used        free      shared  buff/cache   available</div><div class="line">Mem:       <span class="number"> 2052900 </span>    <span class="number"> 366112 </span>    <span class="number"> 605324 </span>    <span class="number"> 209940 </span>   <span class="number"> 1081464 </span>    1245724</div><div class="line">Swap:      <span class="number"> 2085884 </span>         <span class="number"> 0 </span>    2085884</div></pre></td></tr></table></figure></p>
+<p>只需要敲一个free然后回车就可以知道当前系统的总内存大小以及使用内存的情况。另外我们还可以加-m或者-g选项分别以M或G为单位打印内存使用状况（默认单位是kb）。如下所示：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># free -m</span></div><div class="line">              total        used        free      shared  buff/cache   available</div><div class="line">Mem:          <span class="number"> 2004 </span>       <span class="number"> 351 </span>       <span class="number"> 596 </span>       <span class="number"> 205 </span>      <span class="number"> 1057 </span>       1222</div><div class="line">Swap:         <span class="number"> 2036 </span>         <span class="number"> 0 </span>       2036</div><div class="line"><span class="comment"># free -g</span></div><div class="line">              total        used        free      shared  buff/cache   available</div><div class="line">Mem:             <span class="number"> 1 </span>         <span class="number"> 0 </span>         <span class="number"> 0 </span>         <span class="number"> 0 </span>         <span class="number"> 0 </span>          0</div><div class="line">Swap:            <span class="number"> 1 </span>         <span class="number"> 0 </span>          1</div></pre></td></tr></table></figure></p>
+<h3 id="3-4-2-uname-查看系统与内核相关信息"><a href="#3-4-2-uname-查看系统与内核相关信息" class="headerlink" title="3.4.2. uname 查看系统与内核相关信息"></a>3.4.2. uname 查看系统与内核相关信息</h3><p><code>uname</code>命令可以列出当前系统的内核版本、主要硬件平台以及CPU类型等信息。</p>
+<p>使用方法：<code>uname [-asrmpi]</code></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a</td>
+<td>所有系统相关的信息，包括下面的数据都会被列出来</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>系统内核名称</td>
+</tr>
+<tr>
+<td>-r</td>
+<td>内核的版本</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>本系统的硬件名称，例如i686或x86_64等</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>CPU的类型，与-m类似，只是显示的是CPU的类型</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>硬件的平台（ix86）</td>
+</tr>
+</tbody>
+</table>
+<p>例子：输出系统的基本信息<br><figure class="highlight llvm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="title">@theshuhost</span> ~]$ uname -a</div><div class="line">Linux theshuhost <span class="number">3.10</span>.<span class="number">0</span><span class="number">-693.11</span>.<span class="number">1</span>.el<span class="number">7</span>.<span class="keyword">x</span><span class="number">86</span>_<span class="number">64</span> <span class="symbol">#1</span> SMP Mon Dec <span class="number">4</span> <span class="number">23</span>:<span class="number">52</span>:<span class="number">40</span> UTC <span class="number">2017</span> <span class="keyword">x</span><span class="number">86</span>_<span class="number">64</span> <span class="keyword">x</span><span class="number">86</span>_<span class="number">64</span> <span class="keyword">x</span><span class="number">86</span>_<span class="number">64</span> GNU/Linux</div></pre></td></tr></table></figure></p>
+<p>另外还有两个查看系统的发行版本的命令：</p>
+<ul>
+<li><code>cat /etc/issur</code></li>
+<li><code>cat /etc/redhat-release</code></li>
+</ul>
+<h3 id="3-4-3-w-查看系统负载"><a href="#3-4-3-w-查看系统负载" class="headerlink" title="3.4.3. w 查看系统负载"></a>3.4.3. w 查看系统负载</h3><p>Linux系统管理员最常用的命令就是这个w了。用来查看系统整体上的负载，通过查看这些信息就可以知道当前系统有没有压力。其具体用法如下：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># w</span></div><div class="line"> 15:40:14 up 28 min,  1 user,  load average: 0.00, 0.01, 0.05</div><div class="line">USER     TTY      <span class="keyword">FROM</span>             LOGIN@   IDLE   JCPU   PCPU WHAT</div><div class="line">root     pts/0    192.168.1.105    15:25    6.00s  0.06s  0.01s w</div></pre></td></tr></table></figure></p>
+<p>关于w命令的说明：</p>
+<ul>
+<li>第一行从左到右一次显示的信息是：时间-系统运行时间-登陆用户数-平均负载</li>
+<li>从第二行开始的所有行则是：当前登陆的用户名，其登陆终端（tty表示本地终端，pts\0表示远程终端），IP地址、登陆时间、WHAT所使用的命令。</li>
+<li>在这些信息中，最应该关注的就是第一行中的load average：后面的三个数值了</li>
+</ul>
+<p>关于load average的说明：</p>
+<ul>
+<li>第一个数值表示一分钟内系统的平均负载值，第二个数值表示五分钟内系统的平均负载值，第三个数值表示十五分钟内系统的平均负载值。</li>
+<li>我们着重看第一个值，它表示单位时间内使用CPU的活动进程数（在这里其实就是指一分钟内），该值越大说明服务器压力越大。一般情况下，这个值只要不超过服务器的CPU数量就没有关系。（如果服务器的CPU数量为8，那么值小于8就说明当前服务器没有压力，否则就需要关注一下了）</li>
+</ul>
+<p>查看服务器有几个CPU的方法如下：</p>
+<ul>
+<li><code>cat /proc/cpuinfo</code> 查看/proc/cpuinfo这个文件的内容，该文件记录了CPU的详细信息。</li>
+<li>目前市面上的服务器有很多是2颗多核CPU，在Linux看来，它就是2*n个CPU（这里的n为单颗物理CPU上有几核）。</li>
+<li>假如n是4，则查看这个文件时会显示8段类似的信息，而最后一段信息的processor：后面会显示7。</li>
+<li>所以查看当前系统有几个CPU，可以用这个命令：<code>grep -c &#39;processor&#39; /proc/cpuinfo</code>。</li>
+<li>然而查看有几颗物理CPU时，则需要查看关键字”physical id”：<code>grep -c &#39;physical&#39; /proc/cpuinfo</code>。</li>
+</ul>
+<p>补充内容：</p>
+<ul>
+<li><code>ab -n 10000 -c 100 网址</code> 用来对网站进行压力测试：访问10000次，并发量100.。</li>
+<li><code>uptime</code> 显示w命令的第一行内容</li>
+</ul>
+<h3 id="3-4-4-uptime-查看系统启动时间与工作负载"><a href="#3-4-4-uptime-查看系统启动时间与工作负载" class="headerlink" title="3.4.4. uptime 查看系统启动时间与工作负载"></a>3.4.4. uptime 查看系统启动时间与工作负载</h3><p>示例如下：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="selector-attr">[root@theshuhost ~]</span># <span class="selector-tag">uptime</span></div><div class="line"> 19<span class="selector-pseudo">:40</span><span class="selector-pseudo">:20</span> <span class="selector-tag">up</span> 24 <span class="selector-tag">days</span>, 22<span class="selector-pseudo">:31</span>,  1 <span class="selector-tag">user</span>,  <span class="selector-tag">load</span> <span class="selector-tag">average</span>: 0<span class="selector-class">.00</span>, 0<span class="selector-class">.01</span>, 0<span class="selector-class">.05</span></div></pre></td></tr></table></figure></p>
+<p>上例所示，<code>uptime</code>命令所展示的内容可简单地查看到系统负载。</p>
+<h3 id="3-4-5-netstat-跟踪网络"><a href="#3-4-5-netstat-跟踪网络" class="headerlink" title="3.4.5. netstat 跟踪网络"></a>3.4.5. netstat 跟踪网络</h3><p>命令作用：netstat命令的作用是显示IP、TCP、UDP、ICMP等协议相关的统计信息和当前的TCP/IP网络连接状况。这个命令比较常用在网络的监控方面，不过，在进程管理方面也是需要了解的。这个命令的使用方法如下：</p>
+<p><code>netstat 参数</code></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a或–all</td>
+<td>将目前系统上所有的连接、监听、Socket数据都列出来</td>
+</tr>
+<tr>
+<td>-A [网络类型]</td>
+<td>列出该网络类型连线中的相关地址。网络类型可以选择inet、unix、ipx、ax25、netrom和ddp</td>
+</tr>
+<tr>
+<td>–网络类型</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>-e 或 –extend</td>
+<td>显示网络其他相关信息</td>
+</tr>
+<tr>
+<td>-g 或 –groups</td>
+<td>显示多重广播功能群组组员名单</td>
+</tr>
+<tr>
+<td>-h 或 –help</td>
+<td>在线帮助</td>
+</tr>
+<tr>
+<td>-i 或 –interfaces</td>
+<td>显示指定网络接口的所有信息</td>
+</tr>
+<tr>
+<td>-l 或 –listening</td>
+<td>显示监控中的服务器的Socket</td>
+</tr>
+<tr>
+<td>-n 或 –numeric</td>
+<td>不列出进程的服务名称，以端口号（port number）来显示</td>
+</tr>
+<tr>
+<td>-o 或 –timers</td>
+<td>显示计时器</td>
+</tr>
+<tr>
+<td>-r 或 –route</td>
+<td>显示内核路由表信息</td>
+</tr>
+<tr>
+<td>-s 或 –statistice</td>
+<td>显示个网络协议的统计信息</td>
+</tr>
+<tr>
+<td>-t 或 –tcp</td>
+<td>列出 tcp 网络数据包的数据</td>
+</tr>
+<tr>
+<td>-u 或 –udp</td>
+<td>列出 udp 网络数据包的数据</td>
+</tr>
+<tr>
+<td>-v 或 –verbose</td>
+<td>显示命令执行过程</td>
+</tr>
+<tr>
+<td>-V 或 –version</td>
+<td>显示版本信息</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>列出该网络服务的进程PID</td>
+</tr>
+</tbody>
+</table>
+<p>命令示例如下：</p>
+<ul>
+<li>查看本机的网络连接状况以及各协议的相关统计信息：<code>netstat</code></li>
+<li>查看本机内核路由表信息：<code>netstat -nr</code></li>
+<li>查看本机网络接口的当前配置信息：<code>netstat -i</code></li>
+<li>查看本机TCP传输协议的连接状况：<code>netstat -ta</code></li>
+<li>每隔10秒显示一次活动的TCP连接的连线状况：<code>netstat -o 10 -t</code></li>
+<li>显示以太网网络接口的统计信息和所有协议的统计信息：<code>netstat -es</code></li>
+<li>查看监听中的服务器套接字：<code>netstat -l</code></li>
+<li>查看多播组成员信息：<code>netstat -g</code></li>
+</ul>
+<p>示例如下：列出目前系统已经新建的网络连接与 unix socket状态<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[root@theshuhost ~]# netstat</div><div class="line">Active Internet connections (w/o servers)  《==与网络相关的部分</div><div class="line">Proto Recv-Q Send-Q Local<span class="built_in"> Address </span>          Foreign<span class="built_in"> Address </span>        State</div><div class="line">tcp        0     64 theshuhost:ssh          1.31.240.177:6150       ESTABLISHED</div><div class="line">tcp        0      0 theshuhost:49254        106.11.68.13:http       ESTABLISHED</div><div class="line">Active UNIX domain sockets (w/o servers)   《==与本机的进程自己的相关性（非网络）</div><div class="line">Proto RefCnt Flags      <span class="built_in"> Type </span>      State         I-Node   Path</div><div class="line">unix  2      [ ]         DGRAM                    9655     /run/systemd/shutdownd</div><div class="line">unix  2      [ ]         DGRAM                    6864     /run/systemd/notify</div><div class="line">unix  2      [ ]         DGRAM                    6866     /run/systemd/cgroups-agent</div><div class="line">unix  5      [ ]         DGRAM                    6877     /run/systemd/journal/socket</div><div class="line">unix  10     [ ]         DGRAM                    6879     /dev/log</div><div class="line">……（中间省略）……</div></pre></td></tr></table></figure></p>
+<p>如上，netstat的输出分为两大部分，分别是网络与系统自己的进程相关性部分：</p>
+<ul>
+<li>与网络相关的部分：<ul>
+<li>Proto：网络的数据包协议，主要分为TCP与UDP数据包</li>
+<li>Recv-Q：非由用户进程连接到此socket的复制的总字节数</li>
+<li>Send-Q：非由远程主机传送过来的acknowledge总字节数</li>
+<li>Local Address：本地的IP端口情况</li>
+<li>Foreign Adress：远程主机的IP端口情况</li>
+<li>State：连接状态，主要有建立（ESTABLISED）及监听（LISTEN）</li>
+</ul>
+</li>
+<li>除了网络上的连接之外，其实Linux系统上面的进程可以接收不通进程所发送来的信息，那就是Linux上面的<strong>socket file</strong>。socket file 可以沟通两个进程之间的信息，因此进程可以取得对方传送过来的数据。上面的socket file的输出字段有：<ul>
+<li>Proto：一般就是unix</li>
+<li>RefCnt：；连接到此 socket 的进程数量</li>
+<li>Flags：连接的标识</li>
+<li>Type：socket访问的类型。主要有确认连接的STREAM与不需确认的DGRAM两种</li>
+<li>State：若为CONNECTED表示多个进程之间已经建立连接</li>
+<li>Path：连接到此socket的相关程序的路径，或者是相关数据输出的路径</li>
+</ul>
+</li>
+</ul>
+<p>netstat命令用来打印网络连接状况、系统所开放的端口、路由表等信息。关于这个命令最常用的两种方式就是<code>netstat -lnp</code>（打印当前系统启动哪些端口）和<code>netstat -an</code>（打印网络连接状况），请一定要记住。示例如下：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># netstat -lnp</span></div><div class="line">（并非所有进程都能被检测到，所有非本用户的进程信息将不会显示，如果想看到所有信息，则必须切换到 root 用户）</div><div class="line">激活Internet连接 (仅服务器)</div><div class="line">	Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name</div><div class="line">	tcp       <span class="number"> 0 </span>    <span class="number"> 0 </span>0.0.0.0:3689            0.0.0.0:*               LISTEN      4186/rhythmbox  </div><div class="line">	tcp       <span class="number"> 0 </span>    <span class="number"> 0 </span>127.0.1.1:53            0.0.0.0:*               LISTEN      -               </div><div class="line">	tcp6      <span class="number"> 0 </span>    <span class="number"> 0 </span>:::3689                 :::*                    LISTEN      4186/rhythmbox  </div><div class="line">	udp       <span class="number"> 0 </span>    <span class="number"> 0 </span>127.0.1.1:53            0.0.0.0:*                           -               </div><div class="line">	udp       <span class="number"> 0 </span>    <span class="number"> 0 </span>0.0.0.0:68              0.0.0.0:*                           -               </div><div class="line">	udp       <span class="number"> 0 </span>    <span class="number"> 0 </span>0.0.0.0:37475           0.0.0.0:*                           -               </div><div class="line">	udp       <span class="number"> 0 </span>    <span class="number"> 0 </span>0.0.0.0:631             0.0.0.0:*                           -               </div><div class="line">	udp       <span class="number"> 0 </span>    <span class="number"> 0 </span>192.168.43.247:123      0.0.0.0:*                           -               </div><div class="line">	udp       <span class="number"> 0 </span>    <span class="number"> 0 </span>127.0.0.1:123           0.0.0.0:*                           -               </div><div class="line">	udp       <span class="number"> 0 </span>    <span class="number"> 0 </span>0.0.0.0:123             0.0.0.0:*                           -               </div><div class="line">	udp       <span class="number"> 0 </span>    <span class="number"> 0 </span>0.0.0.0:5353            0.0.0.0:*                           -               </div><div class="line">	udp6      <span class="number"> 0 </span>    <span class="number"> 0 </span>:::50784                :::*                                -               </div><div class="line">	udp6      <span class="number"> 0 </span>    <span class="number"> 0 </span>fe80::3e92:1783:1f3:123 :::*                                -               </div><div class="line">	udp6      <span class="number"> 0 </span>    <span class="number"> 0 </span>::1:123                 :::*                                -               </div><div class="line">	udp6      <span class="number"> 0 </span>    <span class="number"> 0 </span>:::123                  :::*                                -               </div><div class="line">	udp6      <span class="number"> 0 </span>    <span class="number"> 0 </span>:::5353                 :::*                                -               </div><div class="line">	raw6      <span class="number"> 0 </span>    <span class="number"> 0 </span>:::58                   :::*                   <span class="number"> 7 </span>          -               </div><div class="line">	活跃的UNIX域套接字 (仅服务器)</div><div class="line">	Proto RefCnt Flags       Type       State         I-Node   PID/Program name    路径</div><div class="line">	unix <span class="number"> 2 </span>     [ ACC ]     流        LISTENING    <span class="number"> 23756 </span>   1632/systemd        /run/user/1000/systemd/private</div><div class="line">	unix <span class="number"> 2 </span>     [ ACC ]     SEQPACKET  LISTENING    <span class="number"> 1896 </span>    -                   /run/udev/control</div><div class="line">	unix <span class="number"> 2 </span>     [ ACC ]     流        LISTENING    <span class="number"> 22839 </span>   -                   /run/user/1000/keyring/control</div><div class="line">.......</div><div class="line"><span class="comment"># netstat -an</span></div><div class="line">激活Internet连接 (服务器和已建立连接的)</div><div class="line">	Proto Recv-Q Send-Q Local Address           Foreign Address         State      </div><div class="line">	tcp       <span class="number"> 0 </span>    <span class="number"> 0 </span>0.0.0.0:3689            0.0.0.0:*               LISTEN     </div><div class="line">	tcp       <span class="number"> 0 </span>    <span class="number"> 0 </span>127.0.1.1:53            0.0.0.0:*               LISTEN     </div><div class="line">	tcp       <span class="number"> 0 </span>    <span class="number"> 0 </span>192.168.43.247:46792    123.58.182.252:80       ESTABLISHED</div><div class="line">	tcp6      <span class="number"> 0 </span>    <span class="number"> 0 </span>:::3689                 :::*                    LISTEN     </div><div class="line">	udp       <span class="number"> 0 </span>    <span class="number"> 0 </span>127.0.1.1:53            0.0.0.0:*                          </div><div class="line">	udp       <span class="number"> 0 </span>    <span class="number"> 0 </span>0.0.0.0:68              0.0.0.0:*                          </div><div class="line">	udp       <span class="number"> 0 </span>    <span class="number"> 0 </span>0.0.0.0:37475           0.0.0.0:*                          </div><div class="line">	udp       <span class="number"> 0 </span>    <span class="number"> 0 </span>0.0.0.0:631             0.0.0.0:*                          </div><div class="line">	udp       <span class="number"> 0 </span>    <span class="number"> 0 </span>192.168.43.247:123      0.0.0.0:*                          </div><div class="line">	udp       <span class="number"> 0 </span>    <span class="number"> 0 </span>127.0.0.1:123           0.0.0.0:*                          </div><div class="line">	udp       <span class="number"> 0 </span>    <span class="number"> 0 </span>0.0.0.0:123             0.0.0.0:*                          </div><div class="line">	udp       <span class="number"> 0 </span>    <span class="number"> 0 </span>0.0.0.0:5353            0.0.0.0:*                          </div><div class="line">	udp6      <span class="number"> 0 </span>    <span class="number"> 0 </span>:::50784                :::*                               </div><div class="line">	udp6      <span class="number"> 0 </span>    <span class="number"> 0 </span>fe80::3e92:1783:1f3:123 :::*                               </div><div class="line">	udp6      <span class="number"> 0 </span>    <span class="number"> 0 </span>::1:123                 :::*                               </div><div class="line">	udp6      <span class="number"> 0 </span>    <span class="number"> 0 </span>:::123                  :::*                               </div><div class="line">	udp6      <span class="number"> 0 </span>    <span class="number"> 0 </span>:::5353                 :::*                               </div><div class="line">	raw6      <span class="number"> 0 </span>    <span class="number"> 0 </span>:::58                   :::*                   <span class="number"> 7 </span>         </div><div class="line">	活跃的UNIX域套接字 (服务器和已建立连接的)</div><div class="line">	Proto RefCnt Flags       Type       State         I-Node   路径</div><div class="line">	unix <span class="number"> 2 </span>     [ ]         数据报               <span class="number"> 23755 </span>   /run/user/1000/systemd/notify</div><div class="line">	unix <span class="number"> 2 </span>     [ ACC ]     流        LISTENING    <span class="number"> 23756 </span>   /run/user/1000/systemd/private</div><div class="line">	unix <span class="number"> 2 </span>     [ ACC ]     SEQPACKET  LISTENING    <span class="number"> 1896 </span>    /run/udev/control</div><div class="line">	unix <span class="number"> 2 </span>     [ ACC ]     流        LISTENING    <span class="number"> 22839 </span>   /run/user/1000/keyring/control</div><div class="line">	unix <span class="number"> 2 </span>     [ ACC ]     流        LISTENING    <span class="number"> 24162 </span>   /run/user/1000/keyring/ssh</div><div class="line">	......</div></pre></td></tr></table></figure></p>
+<p>关于<code>netstat -an</code>命令内容中连接状态的说明：</p>
+<ul>
+<li>TIME_WAIT 等待</li>
+<li>ESTALISHED 已连接</li>
+<li>LISHEN 监听</li>
+<li><code>netstat -an | wc -l</code> 可简单查看一下机器的并发量</li>
+<li>如果你所管理的服务器是一台提供Web服务（80端口）的服务器，那么就可以使用<code>netstat -an | grep 80</code>来查看当前连接Web服务的有哪些IP了</li>
+</ul>
+<h3 id="3-4-6-dmesg-分析内核产生的信息"><a href="#3-4-6-dmesg-分析内核产生的信息" class="headerlink" title="3.4.6. dmesg 分析内核产生的信息"></a>3.4.6. dmesg 分析内核产生的信息</h3><p>系统在开机的时候，内核会去检测系统的硬件，你的某些硬件到底有没有被识别出来，那就与这个时候的检测有关。但是这些检测的过程要不是没有显示在屏幕上，就是很飞快地在屏幕上一闪而过。能不能把内核检测的信息找出来看看？当然是可以的，就是用<code>dmesg</code>这个命令。</p>
+<p>所有内核检测的信息，不管是开机时候还是系统运行过程中，反正只要是内核产生的信息都会被记录到内存中的某个保护区段。dmesg这个命令就能够将该区段的信息读出来。因为信息实在太多了，所以执行时可以加入管道命令<code>| more</code>或<code>| less</code>来方便阅读。</p>
+<p>示例如下：<br><figure class="highlight less"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">例一：输出所有的内核开机时的信息</div><div class="line"><span class="selector-attr">[root@theshuhost ~]</span># <span class="selector-tag">dmesg</span> | <span class="selector-tag">less</span></div><div class="line"><span class="selector-tag">---</span></div><div class="line">例二：查找开机的时候硬盘的相关信息</div><div class="line"><span class="selector-attr">[root@theshuhost ~]</span># <span class="selector-tag">dmesg</span> | <span class="selector-tag">grep</span> <span class="selector-tag">-i</span> <span class="selector-tag">vd</span></div><div class="line"><span class="selector-attr">[    1.088226]</span> <span class="selector-tag">ata2</span><span class="selector-class">.00</span>: <span class="selector-tag">ATAPI</span>: <span class="selector-tag">QEMU</span> <span class="selector-tag">DVD-ROM</span>, <span class="selector-tag">2</span><span class="selector-class">.1</span><span class="selector-class">.2</span>, <span class="selector-tag">max</span> <span class="selector-tag">UDMA</span>/<span class="selector-tag">100</span></div><div class="line"><span class="selector-attr">[    1.088921]</span> <span class="selector-tag">scsi</span> <span class="selector-tag">1</span><span class="selector-pseudo">:0</span><span class="selector-pseudo">:0</span><span class="selector-pseudo">:0</span>: <span class="selector-tag">CD-ROM</span>            <span class="selector-tag">QEMU</span>     <span class="selector-tag">QEMU</span> <span class="selector-tag">DVD-ROM</span>     <span class="selector-tag">2</span><span class="selector-class">.1</span>. <span class="selector-tag">PQ</span>: <span class="selector-tag">0</span> <span class="selector-tag">ANSI</span>: <span class="selector-tag">5</span></div><div class="line"><span class="selector-attr">[    1.185527]</span>  <span class="selector-tag">vda</span>: <span class="selector-tag">vda1</span></div><div class="line"><span class="selector-attr">[    1.286350]</span> <span class="selector-tag">EXT4-fs</span> (vda1): <span class="selector-tag">mounted</span> <span class="selector-tag">filesystem</span> <span class="selector-tag">with</span> <span class="selector-tag">ordered</span> <span class="selector-tag">data</span> <span class="selector-tag">mode</span>. <span class="selector-tag">Opts</span>: (null)</div><div class="line"><span class="selector-attr">[    2.591818]</span> <span class="selector-tag">EXT4-fs</span> (vda1): <span class="selector-tag">re-mounted</span>. <span class="selector-tag">Opts</span>: (null)</div></pre></td></tr></table></figure></p>
+<p>由例二就可以得知该Linux主机的硬盘的格式是什么了。如果是查找网卡的信息，可以试一试：<code>dmesg | grep -i eth</code></p>
+<h3 id="3-4-7-vmstat-检测系统资源变化"><a href="#3-4-7-vmstat-检测系统资源变化" class="headerlink" title="3.4.7. vmstat 检测系统资源变化"></a>3.4.7. vmstat 检测系统资源变化</h3><p>命令w查看的是系统整体上的负载，通过查看那个数值就可以知道当前系统有没有压力，但它无法判断究竟具体是哪里（CPU、内存、磁盘等）有压力。所以这就用到了vmstat这个命令。</p>
+<p>使用方式：</p>
+<ul>
+<li><code>vmstat [-a] [延迟 【总计检测次数]</code>  CPU/内存等信息</li>
+<li><code>vmstat [-fs]</code>  内存相关</li>
+<li><code>vmstat [-S 单位]</code>  设置显示数据的单位</li>
+<li><code>vmstat [-d]</code>  与磁盘有关</li>
+<li><code>vmstat [-p 分区]</code>  与磁盘有关</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a</td>
+<td>使用 inactive/active（活跃与否）代替 buffer/cache 的内存输出信息</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>开机到目前为止系统复制（fork）的进程数</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>将一些事件（开机至目前为止）导致的内存变化情况列表说明</td>
+</tr>
+<tr>
+<td>-S</td>
+<td>后面可以接单位，让显示的数据有单位，例如：K/M 取代bytes</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>列出磁盘的读写总量统计表</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>后列接分区名，可显示该分区的读写总量统计表</td>
+</tr>
+</tbody>
+</table>
+<p>其常用的用法如下：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># vmstat</div><div class="line">procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----</div><div class="line"> r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st</div><div class="line"> <span class="number">1</span>  <span class="number">0</span>      <span class="number">0</span> <span class="number">522200</span>   <span class="number">2076</span> <span class="number">349976</span>    <span class="number">0</span>    <span class="number">0</span>    <span class="number">30</span>    <span class="number">34</span>   <span class="number">51</span>   <span class="number">47</span>  <span class="number">0</span>  <span class="number">0</span> <span class="number">99</span>  <span class="number">0</span>  <span class="number">0</span></div></pre></td></tr></table></figure></p>
+<p>vmstat命令打印的结果共分为6个部分：procs、memory、swap、io、system、cpu。请重点关注一下r、b、si、so、bi、bo这几列信息。</p>
+<p>说明：</p>
+<ul>
+<li>procs显示进程的相关信息<ul>
+<li>r（run）：表示运行或等待CPU时间片的进程数。不要误认为等待CPU时间片意味着这个进程没有运行，实际上某一时刻1个CPU只能有一个进程占用，其他进程只能排着队等着，此时这些排队等待CPU资源的进程依然是运行状态。该数值如果长期大于服务器CPU的个数，则说明CPU的资源不够用了。</li>
+<li>b（block）：表示等待资源的进程数，这个资源指的是I/O、内存等。举个例子，当磁盘读写非常频繁时，写数据就会非常慢，此时CPU运算很快就结束了，但进程需要把计算的结果写入磁盘，这样进程的任务才算完成，那此时这个进程只能慢慢地等待磁盘了，这样这个进程就是这个状态。该数值如果长时间大于1，则需要关注一下了。</li>
+</ul>
+</li>
+<li>memory显示内存的相关信息<ul>
+<li>swap：表示切换到交换分区中的内存数量，单位kb。</li>
+<li>free：表示当前空闲的内存数量，单位kb。</li>
+<li>buff：表示（即将写入磁盘的）缓冲大小，单位kb。</li>
+<li>cache：表示（从磁盘中读取的）缓存大小，单位kb。</li>
+</ul>
+</li>
+<li>swap显示内存的交换情况<ul>
+<li>si：表示由交换区写入内存的数据量，单位kb。</li>
+<li>so：表示由内存写入交换区的数据量，单位kb。</li>
+</ul>
+</li>
+<li>io显示磁盘的使用情况<ul>
+<li>bi：表示从块设备读取数据的量（读磁盘），单位kb。</li>
+<li>bo：表示从块设备写入数据的量（写磁盘），单位kb。</li>
+</ul>
+</li>
+<li>system显示采集间隔内发生的中断次数<ul>
+<li>in：表示再某一段时间间隔内观测到的每秒设备的中断次数。</li>
+<li>cs：表示每秒产生的上下文切换次数。</li>
+</ul>
+</li>
+<li>cpu显示CPU的使用状态<ul>
+<li>us：显示用户下所花费CPU的时间百分比。</li>
+<li>sy：显示系统花费CPU的时间百分比。</li>
+<li>id：表示CPU处于空闲状态的时间百分比。</li>
+<li>wa：表示I/O等待所占用CPU的时间百分比。</li>
+<li>st：表示被偷走的CPU所占百分比（一般都为0，不用关注）</li>
+</ul>
+</li>
+</ul>
+<p>以上所介绍的各个参数中，再运维工作中经常会关注r、b、wa这三列。io部分的bi和bo也是要经常参考的对象，如果磁盘io压力大，这两列的数值就会比较高。另外，当si和so两列的数值比较高并且不断变化时，说明内存不够了，内存中的数据会频繁交换到交换分区中，这往往对系统性能影响极大。</p>
+<p>我们使用vmstat查看系统状态时，通常都是使用如下形式：</p>
+<ul>
+<li><code>vmstat 1 5</code> 表示每隔1秒输出一次状态，共输出5次。</li>
+<li><code>cmstat 1</code>  表示每隔1秒输出一次状态且一直输出，知道按下Ctrl+C结束。</li>
+</ul>
+<hr>
+<h1 id="4-几个其它的运维工具"><a href="#4-几个其它的运维工具" class="headerlink" title="4. 几个其它的运维工具"></a>4. 几个其它的运维工具</h1><p>在这一节包含了除了上一节所介绍的工具之外的其它几个常用的工具。它们都是在运维工作中经常使用到的，所以要必须掌握。</p>
+<h2 id="4-1-监控系统状态"><a href="#4-1-监控系统状态" class="headerlink" title="4.1. 监控系统状态"></a>4.1. 监控系统状态</h2><h3 id="4-1-1-sar-监控系统状态"><a href="#4-1-1-sar-监控系统状态" class="headerlink" title="4.1.1. sar 监控系统状态"></a>4.1.1. sar 监控系统状态</h3><p>sar命令很强大，它可以监控系统几乎所有资源的状态，比如平均负载、网卡流量、磁盘状态、内存使用等。与其它系统状态监控工具不同，它可以打印历史信息，可以显示当天从零点开始到当前时刻的系统状态信息。如果你的系统没有安装这个命令，请使用<code>yum install -y sysstat</code>安装。</p>
+<p>初次使用sar命令会报错，这是因为sar工具还没有生成相应的数据库文件（无需实时监控，因为不用去查询那个库文件）。它的数据库文件再/var/log/sa/目录下。因为这个命令太复杂，下面仅仅介绍最常用的两个方面的用法。</p>
+<h4 id="用法1-查看网卡流量-sar-n-DEV"><a href="#用法1-查看网卡流量-sar-n-DEV" class="headerlink" title="用法1. 查看网卡流量 sar -n DEV"></a>用法1. 查看网卡流量 <code>sar -n DEV</code></h4><p>具体用法如下：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"># sar -n DEV</div><div class="line">Linux <span class="number">2.6</span><span class="number">.32</span><span class="number">-358.</span>el6.i686 (localhost.localdomain) <span class="number">2013</span>年<span class="number">05</span>月<span class="number">25</span>日 _i686_ (<span class="number">1</span> CPU)</div><div class="line"></div><div class="line"><span class="number">00</span>时<span class="number">00</span>分<span class="number">01</span>秒   IFACE    rxpck/s    txpck/s     rxKB/s    txKB/s    rxcmp/s    txcmp/s    rxmcst/s</div><div class="line"><span class="number">00</span>时<span class="number">10</span>分<span class="number">01</span>秒      lo     <span class="number">0.00</span>       <span class="number">0.00</span>        <span class="number">0.00</span>       <span class="number">0.00</span>    <span class="number">0.00</span>        <span class="number">0.00</span>        <span class="number">0.00</span></div><div class="line"><span class="number">00</span>时<span class="number">10</span>分<span class="number">01</span>秒    eth0    <span class="number">31.94</span>       <span class="number">0.09</span>        <span class="number">3.89</span>       <span class="number">0.02</span>    <span class="number">0.00</span>        <span class="number">0.00</span>        <span class="number">0.00</span>   </div><div class="line"><span class="number">00</span>时<span class="number">20</span>分<span class="number">01</span>秒      lo     <span class="number">0.00</span>       <span class="number">0.00</span>        <span class="number">0.00</span>       <span class="number">0.00</span>    <span class="number">0.00</span>        <span class="number">0.00</span>        <span class="number">0.00</span></div><div class="line"><span class="number">00</span>时<span class="number">20</span>分<span class="number">01</span>秒    eth0    <span class="number">32.40</span>       <span class="number">0.04</span>        <span class="number">3.96</span>       <span class="number">0.01</span>    <span class="number">0.00</span>        <span class="number">0.00</span>        <span class="number">0.00</span></div><div class="line"><span class="number">00</span>时<span class="number">30</span>分<span class="number">01</span>秒      lo     <span class="number">0.00</span>       <span class="number">0.00</span>        <span class="number">0.00</span>       <span class="number">0.00</span>    <span class="number">0.00</span>        <span class="number">0.00</span>        <span class="number">0.00</span></div><div class="line"><span class="number">00</span>时<span class="number">30</span>分<span class="number">01</span>秒    eth0    <span class="number">31.18</span>       <span class="number">0.09</span>        <span class="number">3.76</span>       <span class="number">0.02</span>    <span class="number">0.00</span>        <span class="number">0.00</span>        <span class="number">0.00</span></div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>在上面所示的例子里并没有把全部信息贴出来，因为太多了。</li>
+<li>IFACE这列表示设备名称。</li>
+<li>rxpck/s表示每秒进入收取的包的数量（单位Byte）。</li>
+<li>txbyt/s表示每秒发送的数据量。</li>
+<li>后面几列不需要关注。</li>
+<li>如果有一天您所管理的服务器丢包非常严重,那么您就应该看一看这个网卡流量是否异常了,如果rxpck/s 那一列的数值大于4000,或者rxbyt/s那列大于5,000,000，则很有可能是被攻击了,正常的服务器网卡流量不会高于这么多,除非是您自己在拷贝数据。</li>
+</ul>
+<p>上面的命令是查看网卡流量历史的，如何实时查看网卡流量呢？用下面的命令：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">$ sar -n DEV <span class="number">1</span> <span class="number">5</span></div><div class="line">Linux <span class="number">4.4</span><span class="number">.0</span><span class="number">-53</span>-generic (theshu-Latitude-D530) 	<span class="number">2017</span>年<span class="number">10</span>月<span class="number">06</span>日 	_i686_	(<span class="number">2</span> CPU)</div><div class="line"></div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">05</span>秒     IFACE   rxpck<span class="regexp">/s   txpck/</span>s    rxkB<span class="regexp">/s    txkB/</span>s   rxcmp<span class="regexp">/s   txcmp/</span>s  rxmcst/s   %ifutil</div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">06</span>秒   wlp12s0      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">06</span>秒        lo      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">06</span>秒    enp9s0      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div><div class="line"></div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">06</span>秒     IFACE   rxpck<span class="regexp">/s   txpck/</span>s    rxkB<span class="regexp">/s    txkB/</span>s   rxcmp<span class="regexp">/s   txcmp/</span>s  rxmcst/s   %ifutil</div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">07</span>秒   wlp12s0      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">07</span>秒        lo      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">07</span>秒    enp9s0      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div><div class="line"></div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">07</span>秒     IFACE   rxpck<span class="regexp">/s   txpck/</span>s    rxkB<span class="regexp">/s    txkB/</span>s   rxcmp<span class="regexp">/s   txcmp/</span>s  rxmcst/s   %ifutil</div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">08</span>秒   wlp12s0      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">08</span>秒        lo      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">08</span>秒    enp9s0      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div><div class="line">c</div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">08</span>秒     IFACE   rxpck<span class="regexp">/s   txpck/</span>s    rxkB<span class="regexp">/s    txkB/</span>s   rxcmp<span class="regexp">/s   txcmp/</span>s  rxmcst/s   %ifutil</div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">09</span>秒   wlp12s0      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">09</span>秒        lo      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">09</span>秒    enp9s0      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div><div class="line"></div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">09</span>秒     IFACE   rxpck<span class="regexp">/s   txpck/</span>s    rxkB<span class="regexp">/s    txkB/</span>s   rxcmp<span class="regexp">/s   txcmp/</span>s  rxmcst/s   %ifutil</div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">10</span>秒   wlp12s0      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">10</span>秒        lo      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div><div class="line"><span class="number">11</span>时<span class="number">33</span>分<span class="number">10</span>秒    enp9s0      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div><div class="line"></div><div class="line">平均时间:     IFACE   rxpck<span class="regexp">/s   txpck/</span>s    rxkB<span class="regexp">/s    txkB/</span>s   rxcmp<span class="regexp">/s   txcmp/</span>s  rxmcst/s   %ifutil</div><div class="line">平均时间:   wlp12s0      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div><div class="line">平均时间:        lo      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div><div class="line">平均时间:    enp9s0      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span>      <span class="number">0.00</span></div></pre></td></tr></table></figure></p>
+<p>上面的命令是很常用的，用来查看网卡流量，一秒钟显示1次，共显示5次。着重查看rxpck/s（数据包量）和rxbyt/s（数据量）</p>
+<p>另外也可以查看某一天的网卡流量历史，使用-f选项，后面跟文件名，如果你的系统为CentOS或者是RedHat，那么sar的库文件一定是在/var/log/sa/目录下的：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"># sar -n DEV -f /var/log/sa/sa24</div><div class="line">Linux <span class="number">2.6</span><span class="number">.32</span><span class="number">-358.</span>el6.i686 (localhost.localdomain) <span class="number">2013</span>年<span class="number">05</span>月<span class="number">25</span>日 _i686_ (<span class="number">1</span> CPU)</div><div class="line"></div><div class="line"><span class="number">10</span>时<span class="number">49</span>分<span class="number">36</span>秒	LINUX  RESTART</div><div class="line"></div><div class="line"><span class="number">11</span>时<span class="number">00</span>分<span class="number">01</span>秒   IFACE    rxpck/s    txpck/s     rxKB/s    txKB/s    rxcmp/s    txcmp/s    rxmcst/s</div><div class="line"><span class="number">11</span>时<span class="number">10</span>分<span class="number">01</span>秒      lo     <span class="number">0.00</span>       <span class="number">0.00</span>        <span class="number">0.00</span>       <span class="number">0.00</span>    <span class="number">0.00</span>        <span class="number">0.00</span>        <span class="number">0.00</span></div><div class="line"><span class="number">11</span>时<span class="number">20</span>分<span class="number">01</span>秒    eth0    <span class="number">31.94</span>       <span class="number">0.09</span>        <span class="number">3.89</span>       <span class="number">0.02</span>    <span class="number">0.00</span>        <span class="number">0.00</span>        <span class="number">0.00</span></div><div class="line"><span class="number">11</span>时<span class="number">30</span>分<span class="number">01</span>秒      lo     <span class="number">0.00</span>       <span class="number">0.00</span>        <span class="number">0.00</span>       <span class="number">0.00</span>    <span class="number">0.00</span>        <span class="number">0.00</span>        <span class="number">0.00</span></div><div class="line"><span class="number">11</span>时<span class="number">40</span>分<span class="number">01</span>秒    eth0    <span class="number">32.40</span>       <span class="number">0.04</span>        <span class="number">3.96</span>       <span class="number">0.01</span>    <span class="number">0.00</span>        <span class="number">0.00</span>        <span class="number">0.00</span></div><div class="line"><span class="number">11</span>时<span class="number">50</span>分<span class="number">01</span>秒      lo     <span class="number">0.00</span>       <span class="number">0.00</span>        <span class="number">0.00</span>       <span class="number">0.00</span>    <span class="number">0.00</span>        <span class="number">0.00</span>        <span class="number">0.00</span></div><div class="line"><span class="number">11</span>时<span class="number">60</span>分<span class="number">01</span>秒    eth0    <span class="number">31.18</span>       <span class="number">0.09</span>        <span class="number">3.76</span>       <span class="number">0.02</span>    <span class="number">0.00</span>        <span class="number">0.00</span>        <span class="number">0.00</span></div></pre></td></tr></table></figure></p>
+<p><code>ls /var/log/sa/</code> 你会看到两种不同的文件，一个是以sa开头加日期，一个是sar开头加日期，其中sa加日期的文件是不能直接用cat查看的，只能使用<code>sar -f</code>来查看，另外一种sar加日期的文件是可以直接用cat等工具查看的。他们都是记录系统状态历史信息。</p>
+<h4 id="用法2-查看历史负载"><a href="#用法2-查看历史负载" class="headerlink" title="用法2. 查看历史负载"></a>用法2. 查看历史负载</h4><p>示例如下：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"># sar -q</div><div class="line">Linux <span class="number">2.6</span><span class="number">.32</span><span class="number">-358.</span>el6.i686(localhost.localdomain)	<span class="number">2013</span>年<span class="number">05</span>月<span class="number">25</span>日  _i686_(<span class="number">1</span> CPU)</div><div class="line"></div><div class="line"><span class="number">00</span>时<span class="number">00</span>分<span class="number">01</span>秒   runq-sz    plist-sz    ldavg<span class="number">-1</span>    ldavg<span class="number">-5</span>    ldavg<span class="number">-15</span></div><div class="line"><span class="number">00</span>时<span class="number">10</span>分<span class="number">01</span>秒        <span class="number">0</span>          <span class="number">142</span>       <span class="number">0.00</span>       <span class="number">0.00</span>        <span class="number">0.00</span></div><div class="line"><span class="number">00</span>时<span class="number">20</span>分<span class="number">01</span>秒        <span class="number">0</span>          <span class="number">143</span>       <span class="number">0.00</span>       <span class="number">0.00</span>        <span class="number">0.00</span></div><div class="line"><span class="number">00</span>时<span class="number">30</span>分<span class="number">01</span>秒        <span class="number">0</span>          <span class="number">143</span>       <span class="number">0.00</span>       <span class="number">0.01</span>        <span class="number">0.00</span></div><div class="line"><span class="number">00</span>时<span class="number">40</span>分<span class="number">01</span>秒        <span class="number">0</span>          <span class="number">143</span>       <span class="number">0.05</span>       <span class="number">0.01</span>        <span class="number">0.00</span></div><div class="line"><span class="number">00</span>时<span class="number">50</span>分<span class="number">01</span>秒        <span class="number">0</span>          <span class="number">143</span>       <span class="number">0.00</span>       <span class="number">0.00</span>        <span class="number">0.00</span></div><div class="line"><span class="number">01</span>时<span class="number">00</span>分<span class="number">01</span>秒        <span class="number">0</span>          <span class="number">143</span>       <span class="number">0.00</span>       <span class="number">0.00</span>        <span class="number">0.00</span></div><div class="line"><span class="number">01</span>时<span class="number">10</span>分<span class="number">01</span>秒        <span class="number">0</span>          <span class="number">143</span>       <span class="number">0.08</span>       <span class="number">0.03</span>        <span class="number">0.00</span></div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>要使用这个命令，前提是要开启服务/etc/init.d/sysstat服务。</li>
+<li>可以指定历史文件：<code>sar -q -f /var/log/sa/sa10</code></li>
+<li>这个命令有助于我们查看服务器在过去的某个时间的负载状况。</li>
+<li>补充一个sar的用法：<code>sar -b</code> 用来查看磁盘的读写。</li>
+</ul>
+<p>关于sar初学着掌握以上这两个用法即可。如果以后工作中用到，就man一下吧。</p>
+<h3 id="4-1-2-nload-查看网卡流量"><a href="#4-1-2-nload-查看网卡流量" class="headerlink" title="4.1.2. nload 查看网卡流量"></a>4.1.2. nload 查看网卡流量</h3><p><code>sar</code>命令虽然可以查看网卡流量，但是不够直观，还有一个更好的工具，那就是<code>nload</code>。</p>
+<p>使用方法：直接运行<code>nload</code>命令。然后会出现如下的动态界面。<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">Device eth0 [<span class="number">172.17</span><span class="number">.97</span><span class="number">.250</span>] (<span class="number">1</span>/<span class="number">2</span>):</div><div class="line">================================================================================</div><div class="line"><span class="symbol">Incoming:</span></div><div class="line"><span class="symbol">                                                       Curr:</span> <span class="number">856.00</span> Bit/s</div><div class="line"><span class="symbol">                                                       Avg:</span> <span class="number">1.05</span> kBit/s</div><div class="line"><span class="symbol">                                                       Min:</span> <span class="number">856.00</span> Bit/s</div><div class="line"><span class="symbol">                                                       Max:</span> <span class="number">2.52</span> kBit/s</div><div class="line"><span class="symbol">                                                       Ttl:</span> <span class="number">83.53</span> MByte</div><div class="line"><span class="symbol">Outgoing:</span></div><div class="line"><span class="symbol">                                                       Curr:</span> <span class="number">8.08</span> kBit/s</div><div class="line"><span class="symbol">                                                       Avg:</span> <span class="number">8.02</span> kBit/s</div><div class="line"><span class="symbol">                                                       Min:</span> <span class="number">6.02</span> kBit/s</div><div class="line"><span class="symbol">                                                       Max:</span> <span class="number">9.03</span> kBit/s</div><div class="line"><span class="symbol">                                                       Ttl:</span> <span class="number">46.12</span> MByte</div></pre></td></tr></table></figure></p>
+<p>最上面一行为网卡名字以及IP地址，按向右箭头可以查看其它网卡的网络流量。输出结果分为两个部分，Incoming为进入网卡的流量，Outgoing为网卡出去的流量，我们关注的当然是Curr那行的数据，其单位也是可以动态调整的，非常人性化。按<code>q</code>退出该界面。</p>
+<h2 id="4-2-抓包工具"><a href="#4-2-抓包工具" class="headerlink" title="4.2. 抓包工具"></a>4.2. 抓包工具</h2><h3 id="4-2-1-tcpdump工具"><a href="#4-2-1-tcpdump工具" class="headerlink" title="4.2.1. tcpdump工具"></a>4.2.1. tcpdump工具</h3><p>如果没有这个命令，需要用<code>yum install -y tcpdump</code>命令去安装一下。下面是关于这个命令的两个常用的方式：</p>
+<ol>
+<li><code>tcpdump -nn -i eth0</code><ul>
+<li>-i选项后面跟设备名称，如果想抓eth1网卡的包，后面则要跟eth1。至于-nn选项的作用则是让第三列和第四列显示成”IP+端口号”的形式，如果不加-nn则显示的是”主机名+服务名称”。</li>
+<li>这里需要关注的只是第三列和第四列，显示的信息为哪一个IP+Port在连接哪一个IP+Port。</li>
+</ul>
+</li>
+<li><code>tcpdump -nn -i eth0 host 192.168;.1.100 and port 80 -c 100 -w 1.cap</code><ul>
+<li>可以用host指定ip，用port指定端口，-c指定包数量，-w写入指定文件里。这样1.cap文件里面是包的内容，而如果不加-w则直接在屏幕上显示的不是数据包，而是数据流向。这个1.cap可以下载到Windows系统上，然后使用wireshark查看。</li>
+<li>-s0选项是抓取全部包</li>
+<li>如果在网卡名后面加上tcp，则只会抓取tcp的包</li>
+<li>and表示并且，not表示取反</li>
+</ul>
+</li>
+</ol>
+<h3 id="4-2-2-wireshark工具"><a href="#4-2-2-wireshark工具" class="headerlink" title="4.2.2. wireshark工具"></a>4.2.2. wireshark工具</h3><p>默认CentOS是没有这个命令的，请使用这个命令来安装它<code>yum install -y wireshark</code>。关于这个工具只需要掌握一个用法即可，如下所示：</p>
+<p><code>tshark -n -t a -R http.request -T fields -e &quot;frame.time&quot; -e &quot;ip.src&quot; -e &quot;http.host&quot; -e &quot;http.request.uri&quot;</code></p>
+<p>说明：</p>
+<ul>
+<li>这条命令用于Web服务器，可以显示诸如下面的信息： Mar 21,2014 15:37:08.857507000 199.30.20.38 k168.123.com GET /thread-4861-1-1.html 。</li>
+<li>这类似于Web访问日志，有时候若是服务器没有配置访问日志，可以临时使用该命令查看一下当前服务器上的web请求。</li>
+</ul>
+<hr>
+<h1 id="5-特殊文件与程序"><a href="#5-特殊文件与程序" class="headerlink" title="5. 特殊文件与程序"></a>5. 特殊文件与程序</h1><p>在这一节将介绍 SUID/SGIN/SBIT 这些权限对于程序到底是如何影响的，程序可能会使用到系统资源（举例来说，磁盘就是其中一项资源）。</p>
+<h2 id="5-1-具有SUID-SGID权限的命令执行状态"><a href="#5-1-具有SUID-SGID权限的命令执行状态" class="headerlink" title="5.1. 具有SUID/SGID权限的命令执行状态"></a>5.1. 具有SUID/SGID权限的命令执行状态</h2><p>SUID的权限其实与程序的相关性非常大。这是为什么呢？先来看看SUID的程序是如何被一般用户执行，且具有什么特色呢？</p>
+<ul>
+<li>SUID权限仅对二进制程序（binary program）有效</li>
+<li>执行者对于该程序需要具有x的可执行权限</li>
+<li>本权限仅在执行程序的过程中有效（run-time）</li>
+<li>执行者将具有该程序所有者（owner）的权限</li>
+</ul>
+<p>所以说，整个SUID的权限会生效是由于具有该权限的程序所触发，而我们知道一个程序被触发会变成进程。所以，执行者可以具有程序所有者的权限就是在该程序变成进程的那个时候。比如，passed这个命令，它被触发的时候，就会获取一个新的进程与PID，该PID产生时通过SUID来给予该PID特殊的权限设置。可以通过下面的例子来理解一下：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="string">[theshu@theshuhost ~]</span>$ passwd</div><div class="line">更改用户 theshu 的密码 。</div><div class="line">为 theshu 更改 STRESS 密码。</div><div class="line">（当前）UNIX 密码： &lt;==在这里按下Ctrl+Z，再按下Enter键</div><div class="line"></div><div class="line"><span class="string">[1]</span>+  已停止               passwd</div><div class="line"><span class="string">[theshu@theshuhost ~]</span>$ pstree -u</div><div class="line">systemd─┬─AliYunDun───<span class="number">14</span>*<span class="string">[&#123;AliYunDun&#125;]</span></div><div class="line">        ├─AliYunDunUpdate───<span class="number">3</span>*<span class="string">[&#123;AliYunDunUpdate&#125;]</span></div><div class="line">        ├─agetty</div><div class="line">        ├─aliyun-service───<span class="number">6</span>*<span class="string">[&#123;aliyun-service&#125;]</span></div><div class="line">        ├─atd</div><div class="line">        ├─auditd───&#123;auditd&#125;</div><div class="line">        ├─crond</div><div class="line">        ├─dbus-daemon(dbus)</div><div class="line">        ├─dhclient</div><div class="line">        ├─ntpd(ntp)</div><div class="line">        ├─polkitd(polkitd)───<span class="number">5</span>*<span class="string">[&#123;polkitd&#125;]</span></div><div class="line">        ├─rsyslogd───<span class="number">2</span>*<span class="string">[&#123;rsyslogd&#125;]</span></div><div class="line">        ├─sshd───sshd───sshd(theshu)───bash─┬─passwd(root)</div><div class="line">        │                                   └─pstree</div><div class="line">        ├─systemd-journal</div><div class="line">        ├─systemd-logind</div><div class="line">        ├─systemd-udevd</div><div class="line">        └─tuned───<span class="number">4</span>*<span class="string">[&#123;tuned&#125;]</span></div></pre></td></tr></table></figure></p>
+<p>那么怎样查询整个系统的SUID/SGID的文件呢？使用find命令：<code>find / -perm +6000</code></p>
+<h2 id="5-2-proc-代表的意义"><a href="#5-2-proc-代表的意义" class="headerlink" title="5.2. /proc/* 代表的意义"></a>5.2. /proc/* 代表的意义</h2><p>其实，我们之前提到的所谓进程都是在内存当中，而内存的当中的数据又是写入到/proc/这个目录下的，所以，我们可以直接查看/proc/这个目录当中的文件。查看如下：<br><figure class="highlight tcl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@theshuhost ~]# ll /<span class="keyword">proc</span>/</div><div class="line">total 0</div><div class="line">dr-xr-xr-x  9<span class="title"> root</span> <span class="title">   root</span>                  0<span class="title"> Dec</span> 28 05:08 1</div><div class="line">dr-xr-xr-x  9<span class="title"> root</span> <span class="title">   root</span>                  0<span class="title"> Dec</span> 28 05:08 10</div><div class="line">dr-xr-xr-x  9<span class="title"> root</span> <span class="title">   root</span>                  0<span class="title"> Dec</span> 27 21:08 1148</div><div class="line">dr-xr-xr-x  9<span class="title"> root</span> <span class="title">   root</span>                  0<span class="title"> Dec</span> 28 05:08 12</div><div class="line">....（中间省略）.....</div><div class="line">-r--r--r--  1<span class="title"> root</span> <span class="title">   root</span>                  0<span class="title"> Jan</span> 23 22:10<span class="title"> uptime</span></div><div class="line"><span class="title">-r--r--r--</span>  1<span class="title"> root</span> <span class="title">   root</span>                  0<span class="title"> Jan</span> 23 22:10<span class="title"> version</span></div><div class="line"><span class="title">-r--------</span>  1<span class="title"> root</span> <span class="title">   root</span>                  0<span class="title"> Jan</span> 23 22:10<span class="title"> vmallocinfo</span></div><div class="line"><span class="title">-r--r--r--</span>  1<span class="title"> root</span> <span class="title">   root</span>                  0<span class="title"> Jan</span> 23 22:10<span class="title"> vmstat</span></div><div class="line"><span class="title">-r--r--r--</span>  1<span class="title"> root</span> <span class="title">   root</span>                  0<span class="title"> Jan</span> 23 22:10<span class="title"> zoneinfo</span></div></pre></td></tr></table></figure></p>
+<p>基本上，目前主机上面的各个进程的PID都是以目录的类型存于/proc/目录当中的。举例来说，我们开机所执行的第一个进程systemd(低版本为init)的PID是1，这个PID的所有相关信息都写入在/proc/1/目录下面。我们来直接查看PID为1的数据：<br><figure class="highlight tcl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[root@theshuhost ~]# ll /<span class="keyword">proc</span>/1/</div><div class="line">total 0</div><div class="line">dr-xr-xr-x 2<span class="title"> root</span> root 0<span class="title"> Jan</span> 23 22:16<span class="title"> attr</span></div><div class="line"><span class="title">-rw-r--r--</span> 1<span class="title"> root</span> root 0<span class="title"> Jan</span> 23 22:16<span class="title"> autogroup</span></div><div class="line"><span class="title">-r--------</span> 1<span class="title"> root</span> root 0<span class="title"> Jan</span> 23 22:16<span class="title"> auxv</span></div><div class="line"><span class="title">-r--r--r--</span> 1<span class="title"> root</span> root 0<span class="title"> Dec</span> 28 05:08<span class="title"> cgroup</span></div><div class="line"><span class="title">--w-------</span> 1<span class="title"> root</span> root 0<span class="title"> Jan</span> 23 22:16<span class="title"> clear_refs</span></div><div class="line"><span class="title">-r--r--r--</span> 1<span class="title"> root</span> root 0<span class="title"> Dec</span> 28 05:08<span class="title"> cmdline</span>    &lt;==就是命令串</div><div class="line">-rw-r--r-- 1<span class="title"> root</span> root 0<span class="title"> Dec</span> 28 05:08<span class="title"> comm</span></div><div class="line"><span class="title">-rw-r--r--</span> 1<span class="title"> root</span> root 0<span class="title"> Jan</span> 23 22:16<span class="title"> coredump_filter</span></div><div class="line"><span class="title">-r--r--r--</span> 1<span class="title"> root</span> root 0<span class="title"> Jan</span> 23 22:16<span class="title"> cpuset</span></div><div class="line"><span class="title">lrwxrwxrwx</span> 1<span class="title"> root</span> root 0<span class="title"> Jan</span> 23 22:16<span class="title"> cwd</span> -&gt; /</div><div class="line">-r-------- 1<span class="title"> root</span> root 0<span class="title"> Dec</span> 28 05:08<span class="title"> environ</span>    &lt;==一些环境变量</div><div class="line">lrwxrwxrwx 1<span class="title"> root</span> root 0<span class="title"> Dec</span> 28 05:08<span class="title"> exe</span> -&gt; /usr/lib/systemd/systemd  &lt;==实际执行的命令</div><div class="line">....（一下省略）....</div></pre></td></tr></table></figure></p>
+<p>里面的数据很多，不过，比较有趣的其实是这两个文件，分别是：</p>
+<ul>
+<li>cmdline：这个进程被启动的命令串</li>
+<li>environ：这个进程的环境变量内容</li>
+</ul>
+<p>查阅一下cmdline这个文件，发现它的内容如下：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@theshuhost ~]<span class="comment"># cat /proc/1/cmdline</span></div><div class="line">/usr/<span class="class"><span class="keyword">lib</span>/<span class="title">systemd</span>/<span class="title">systemd</span>--<span class="title">switched</span>-<span class="title">root</span>--<span class="title">system</span>--<span class="title">deserialize21</span></span></div></pre></td></tr></table></figure></p>
+<p>就是这个命令、参数启动systemd的。这还是跟某个特定的PID有关的内容。如果是针对整个Linux系统相关的参数呢？那就是在/proc/目录下面的文件。相关文件与对应的内容如下表：</p>
+<table>
+<thead>
+<tr>
+<th>文件名</th>
+<th>文件内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/proc/cmdline</td>
+<td>加载kernel时所执行的相关参数。查阅此文件，可了解系统是如何启动的</td>
+</tr>
+<tr>
+<td>/proc/cpuinfo</td>
+<td>本机的CPU的相关信息，包含频率、类型与运算功能等</td>
+</tr>
+<tr>
+<td>/proc/devices</td>
+<td>这个文件记录了系统各个主要设备的主要设备代号，与mknod有关</td>
+</tr>
+<tr>
+<td>/proc/filesystems</td>
+<td>目前系统已经加载的文件系统</td>
+</tr>
+<tr>
+<td>/proc/interrupts</td>
+<td>目前系统上面的IRQ分配状态</td>
+</tr>
+<tr>
+<td>/proc/ioports</td>
+<td>目前系统上面各个设备所配置的I/O地址</td>
+</tr>
+<tr>
+<td>/proc/kcore</td>
+<td>这个就是内存的大小。好大对吧？但是不要读它啦</td>
+</tr>
+<tr>
+<td>/proc/loadavg</td>
+<td>top和uptime命令的上头的三个平均负载值就是记录在这里的</td>
+</tr>
+<tr>
+<td>/proc/meminfo</td>
+<td>使用free列出的内存信息，在这里也能够查阅到</td>
+</tr>
+<tr>
+<td>/proc/modules</td>
+<td>目前我们的Linux已经加载的模块列表，也可以想成是驱动程序</td>
+</tr>
+<tr>
+<td>/proc/mounts</td>
+<td>系统已经挂载的数据，就是用mount这个民工调出来的数据</td>
+</tr>
+<tr>
+<td>/proc/swaps</td>
+<td>到底系统加载的内存在哪里？使用的分区记录在此</td>
+</tr>
+<tr>
+<td>/proc/partitions</td>
+<td>使用fdisk -l会出现目前所有的分区吧，在这个文件当中也有记录</td>
+</tr>
+<tr>
+<td>/proc/pci</td>
+<td>在PCI总线上面每个设备的详细情况，可用lspci来查阅</td>
+</tr>
+<tr>
+<td>/proc/uptime</td>
+<td>就是用uptime的时候会出现的信息</td>
+</tr>
+<tr>
+<td>/proc/version</td>
+<td>内核的版本，就是用uname -a显示的内容</td>
+</tr>
+<tr>
+<td>/proc/bus/*</td>
+<td>一些总线的设备，还有USB的设备也记录在此</td>
+</tr>
+</tbody>
+</table>
+<p>其实，上面的这些文件都可以使用cat等命令来查阅，不必深入了解。不过，查看文件内容后，毕竟会比较有感觉。如果将来你想要自行编写某些工具软件，那么这个目录下的相关文件可能会对你有点帮助。</p>
+<h2 id="5-3-查询已打开文件或已执行程序打开的文件"><a href="#5-3-查询已打开文件或已执行程序打开的文件" class="headerlink" title="5.3. 查询已打开文件或已执行程序打开的文件"></a>5.3. 查询已打开文件或已执行程序打开的文件</h2><p>还有一些与程序相关的命令可以值得参考与应用。如下。</p>
+<h3 id="5-3-1-fuser-通过文件（或文件系统）找出正在使用该文件的程序"><a href="#5-3-1-fuser-通过文件（或文件系统）找出正在使用该文件的程序" class="headerlink" title="5.3.1. fuser 通过文件（或文件系统）找出正在使用该文件的程序"></a>5.3.1. fuser 通过文件（或文件系统）找出正在使用该文件的程序</h3><p>有时候我想要知道我的进程到底在这次启动过程中打开了多少文件，可以利用fuser来查看。举例来说，你如果卸除时发现系统通知“device is busy”，那表示这个文件系统正在忙碌中，表示有某个进程有利用该文件系统。那么你就可以利用fuser来跟踪。fuser语法优点像这样：</p>
+<p><code>fuser [-umv] [-k [i] [-signal]] file/dir</code></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-u</td>
+<td>除了进程的PID之外，同时列出该进程的所有者</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>后面接的哪个文件名会主动上提到该文件系统的所顶层，对 umount 不成功很有效</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>可以列出每个文件与程序还有命令的完整相关性</td>
+</tr>
+<tr>
+<td>-k</td>
+<td>找出使用该文件或目录的PID，并试图以SIGKILLz这个信号给予该PID</td>
+</tr>
+<tr>
+<td>-i</td>
+<td>必须与-k配合，在删除PID之前先询问用户意愿</td>
+</tr>
+<tr>
+<td>-signal</td>
+<td>例如 -1 -15 等，若不加的话，默认是 SIGKILL（-9）</td>
+</tr>
+</tbody>
+</table>
+<p>范例一：找出目前所在目录的使用 PID/所属账号/权限<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@theshuhost ~]# fuser -uv .</div><div class="line">                    <span class="built_in"> USER </span>       PID ACCESS COMMAND</div><div class="line">/root:               root      11086 <span class="built_in">..</span>c<span class="built_in">..</span> (root)bash</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>观察输出结果，它说’.’下面有个PID为11086的程序，该程序属于root并且命令为bash。</li>
+<li>比较有趣的是哪个ACCESS的选项，那个选项代表的意义为：<ul>
+<li>c：此进程在当前的目录下（非子目录）</li>
+<li>e：可被触发为执行状态</li>
+<li>f：是一个被打开的文件</li>
+<li>r：代表顶层目录（root directory）</li>
+<li>F：该文件被打开了，不过在等待回应中</li>
+<li>m：可能为分享的动态函数库</li>
+</ul>
+</li>
+</ul>
+<p>那如果你想要查看某个文件系统下面有多少进程正在占用该文件系统时，那个-m的参数就很有帮助了。请看下面的例子。</p>
+<p>范例二：查看一下/proc/的文件系统有多少进程正在利用它<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@theshuhost ~]# fuser -uv /proc</div><div class="line">                    <span class="built_in"> USER </span>       PID ACCESS COMMAND</div><div class="line">/proc:               root     kernel mount (root)/proc</div><div class="line">其实我们需要用到的是/proc下面的文件，所以应该要这样做：</div><div class="line">[root@theshuhost ~]# fuser -muv /proc</div><div class="line">                    <span class="built_in"> USER </span>       PID ACCESS COMMAND</div><div class="line">/proc:               root     kernel mount (root)/proc</div><div class="line">                     root          1 f<span class="built_in">..</span><span class="built_in">..</span> (root)systemd</div><div class="line">                     root        326 f<span class="built_in">..</span><span class="built_in">..</span> (root)systemd-journal</div><div class="line">这样就可以看到有几个进程在进行/proc文件系统的访问。</div></pre></td></tr></table></figure></p>
+<p>既然可以针对整个文件系统，那么能不能仅针对单一文件呢？当然可以，请看下面的例子。</p>
+<p>范例三：找到 /var/ 下面属于 FIFO 类型的文件，并且找出访问该文件的进程<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@www ~]# <span class="builtin-name">find</span> /var -type p</div><div class="line">/var/gdm/.gdmfifo    &lt;==我们针对这个玩意即可！</div><div class="line">/var/run/autofs.fifo-misc</div><div class="line">/var/run/autofs.fifo-net</div><div class="line">[root@www ~]# fuser -uv /var/gdm/.gdmfifo</div><div class="line">				<span class="built_in">	USER	</span>	PID ACCESS COMMAND</div><div class="line">/var/gdm/.gdmfifo:  root	   4892 F<span class="built_in">..</span><span class="built_in">..</span>  (root)gdm-binary</div></pre></td></tr></table></figure></p>
+<p>范例四：同范例三，但试图删除该PID且“不要”删除<br><figure class="highlight excel"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@www ~]# fuser -ki /<span class="built_in">var</span>/gdm/.gdmfifo</div><div class="line">/<span class="built_in">var</span>/gdm/.gdmfi<span class="symbol">fo:</span>	<span class="number">4892</span></div><div class="line">Kill process <span class="number">4892</span> ? (y/<span class="built_in">N</span>) <span class="built_in">n</span></div></pre></td></tr></table></figure></p>
+<p>看吧，通过这个fuser我们可以找出使用该文件、目录的程序，以便查看。它的重点与ps，pstree不同。fuser可以让我们了解到某个文件（或文件系统）目前正在被哪些进程所利用。</p>
+<h3 id="5-3-2-lsof：列出被进程所打开的文件名"><a href="#5-3-2-lsof：列出被进程所打开的文件名" class="headerlink" title="5.3.2. lsof：列出被进程所打开的文件名"></a>5.3.2. lsof：列出被进程所打开的文件名</h3><p>相对于fuser是由文件或者设备去找出使用该文件或设备的进程，反过来说，如何查出某个进程打开或者使用的文件与设备呢？那就是使用lsof。</p>
+<p><code>lsof [-aUu] [+d]</code></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-a</td>
+<td>多项数据需要“同时成立”才显示出结果</td>
+</tr>
+<tr>
+<td>-U</td>
+<td>仅列出Unix like 系统的socket文件类型</td>
+</tr>
+<tr>
+<td>-u</td>
+<td>后面接username，列出该用户相关进程所打开的文件</td>
+</tr>
+<tr>
+<td>+d</td>
+<td>后面接目录，即找出某个目录下面已经被打开的文件</td>
+</tr>
+</tbody>
+</table>
+<p>示例如下：</p>
+<p>范例一：列出目前系统上面所有已经被打开的文件与设备<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root@theshuhost ~]# lsof</div><div class="line">COMMAND     PID   TID    USER   FD      TYPE             DEVICE  SIZE/OFF       NODE NAME</div><div class="line">systemd       <span class="number">1</span>          root  cwd       DIR              <span class="number">253</span>,<span class="number">1</span>      <span class="number">4096</span>          <span class="number">2</span> /</div><div class="line">systemd       <span class="number">1</span>          root  rtd       DIR              <span class="number">253</span>,<span class="number">1</span>      <span class="number">4096</span>          <span class="number">2</span> /</div><div class="line">systemd       <span class="number">1</span>          root  txt       REG              <span class="number">253</span>,<span class="number">1</span>   <span class="number">1523624</span>    <span class="number">1053844</span> /usr/lib/systemd/systemd</div><div class="line">systemd       <span class="number">1</span>          root  mem       REG              <span class="number">253</span>,<span class="number">1</span>     <span class="number">20040</span>    <span class="number">1050451</span> /usr/lib64/libuuid.so<span class="number">.1</span><span class="number">.3</span><span class="number">.0</span></div><div class="line">systemd       <span class="number">1</span>          root  mem       REG              <span class="number">253</span>,<span class="number">1</span>    <span class="number">261336</span>    <span class="number">1051898</span> /usr/lib64/libblkid.so<span class="number">.1</span><span class="number">.1</span><span class="number">.0</span></div><div class="line">systemd       <span class="number">1</span>          root  mem       REG              <span class="number">253</span>,<span class="number">1</span>     <span class="number">90664</span>    <span class="number">1050435</span> /usr/lib64/libz.so<span class="number">.1</span><span class="number">.2</span><span class="number">.7</span></div><div class="line">....下面省略....</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>注意，在默认的情况下，lsof会将目前系统上面已经打开的文件全部列出来。所以，界面多得吓人啊！</li>
+<li>你可以注意到，第一个文件systemd执行的地方就在根目录，而根目录所在的inode也有显示出来。</li>
+</ul>
+<p>范例二：仅列出关于root的所有进程打开的socket文件<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root@theshuhost ~]# lsof -u root -a -U</div><div class="line">COMMAND     PID USER   FD   TYPE             DEVICE SIZE/OFF    NODE NAME</div><div class="line">systemd       <span class="number">1</span> root   <span class="number">12</span>u  unix <span class="number">0xffff880036a09800</span>      <span class="number">0</span>t0    <span class="number">9607</span> /run/systemd/private</div><div class="line">systemd       <span class="number">1</span> root   <span class="number">14</span>u  unix <span class="number">0xffff88003ca1a000</span>      <span class="number">0</span>t0  <span class="number">389584</span> socket</div><div class="line">systemd       <span class="number">1</span> root   <span class="number">23</span>u  unix <span class="number">0xffff8800368fa800</span>      <span class="number">0</span>t0    <span class="number">6864</span> /run/systemd/notify</div><div class="line">systemd       <span class="number">1</span> root   <span class="number">27</span>u  unix <span class="number">0xffff8800368fb000</span>      <span class="number">0</span>t0    <span class="number">6866</span> /run/systemd/cgroups-agent</div><div class="line">systemd       <span class="number">1</span> root   <span class="number">36</span>u  unix <span class="number">0xffff88003617ac00</span>      <span class="number">0</span>t0   <span class="number">11251</span> socket</div><div class="line">systemd       <span class="number">1</span> root   <span class="number">37</span>u  unix <span class="number">0xffff88003db9f000</span>      <span class="number">0</span>t0    <span class="number">6874</span> /run/systemd/journal/stdout</div><div class="line">systemd       <span class="number">1</span> root   <span class="number">38</span>u  unix <span class="number">0xffff8800369b4000</span>      <span class="number">0</span>t0    <span class="number">6877</span> /run/systemd/journal/socket</div><div class="line">systemd       <span class="number">1</span> root   <span class="number">39</span>u  unix <span class="number">0xffff8800369b4400</span>      <span class="number">0</span>t0    <span class="number">6879</span> /dev/log</div><div class="line">....下面省略....</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>注意到那个-a选项了把，如果你分别输入lsof -u root 及 lsof -U，会有什么信息？</li>
+<li>使用 lsof -u root -U 及 lsof -u root -a -U，呵呵，都不同的。</li>
+<li>-a 的用途就是解决同时需要两个选项都成立。</li>
+</ul>
+<p>范例三：请列出目前系统上面所有的被启动的周边设备<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root@theshuhost ~]# lsof +d /dev</div><div class="line">COMMAND     PID    USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME</div><div class="line">systemd       <span class="number">1</span>    root    <span class="number">0</span>u   CHR                <span class="number">1</span>,<span class="number">3</span>      <span class="number">0</span>t0 <span class="number">4856</span> /dev/null</div><div class="line">systemd       <span class="number">1</span>    root    <span class="number">1</span>u   CHR                <span class="number">1</span>,<span class="number">3</span>      <span class="number">0</span>t0 <span class="number">4856</span> /dev/null</div><div class="line">systemd       <span class="number">1</span>    root    <span class="number">2</span>u   CHR                <span class="number">1</span>,<span class="number">3</span>      <span class="number">0</span>t0 <span class="number">4856</span> /dev/null</div><div class="line">systemd       <span class="number">1</span>    root   <span class="number">21</span>r   CHR             <span class="number">10</span>,<span class="number">235</span>      <span class="number">0</span>t0 <span class="number">6516</span> /dev/autofs</div><div class="line">systemd       <span class="number">1</span>    root   <span class="number">39</span>u  unix <span class="number">0xffff8800369b4400</span>      <span class="number">0</span>t0 <span class="number">6879</span> /dev/log</div><div class="line">kdevtmpfs    <span class="number">12</span>    root  cwd    DIR                <span class="number">0</span>,<span class="number">5</span>     <span class="number">3060</span>    <span class="number">3</span> /dev</div><div class="line">....下面省略....</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>因为设备都在/dev/里面，所以查找目录即可。</li>
+</ul>
+<p>范例四：显示出属于root的bash这个进程所打开的文件<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[root@theshuhost ~]# lsof -u root | grep bash</div><div class="line">bash      <span class="number">11086</span> root  cwd       DIR              <span class="number">253</span>,<span class="number">1</span>      <span class="number">4096</span>     <span class="number">131073</span> /root</div><div class="line">bash      <span class="number">11086</span> root  rtd       DIR              <span class="number">253</span>,<span class="number">1</span>      <span class="number">4096</span>          <span class="number">2</span> /</div><div class="line">bash      <span class="number">11086</span> root  txt       REG              <span class="number">253</span>,<span class="number">1</span>    <span class="number">960608</span>    <span class="number">1050319</span> /usr/bin/bash</div><div class="line">bash      <span class="number">11086</span> root  mem       REG              <span class="number">253</span>,<span class="number">1</span> <span class="number">106070960</span>    <span class="number">1058409</span> /usr/lib/locale/locale-archive</div><div class="line">bash      <span class="number">11086</span> root  mem       REG              <span class="number">253</span>,<span class="number">1</span>     <span class="number">62184</span>    <span class="number">1050006</span> /usr/lib64/libnss_files<span class="number">-2.17</span>.so</div><div class="line">bash      <span class="number">11086</span> root  mem       REG              <span class="number">253</span>,<span class="number">1</span>   <span class="number">2127336</span>    <span class="number">1049988</span> /usr/lib64/libc<span class="number">-2.17</span>.so</div><div class="line">bash      <span class="number">11086</span> root  mem       REG              <span class="number">253</span>,<span class="number">1</span>     <span class="number">19776</span>    <span class="number">1049994</span> /usr/lib64/libdl<span class="number">-2.17</span>.so</div><div class="line">bash      <span class="number">11086</span> root  mem       REG              <span class="number">253</span>,<span class="number">1</span>    <span class="number">174576</span>    <span class="number">1050317</span> /usr/lib64/libtinfo.so<span class="number">.5</span><span class="number">.9</span></div><div class="line">bash      <span class="number">11086</span> root  mem       REG              <span class="number">253</span>,<span class="number">1</span>    <span class="number">164112</span>    <span class="number">1049977</span> /usr/lib64/ld<span class="number">-2.17</span>.so</div><div class="line">bash      <span class="number">11086</span> root  mem       REG              <span class="number">253</span>,<span class="number">1</span>     <span class="number">26254</span>    <span class="number">1050290</span> /usr/lib64/gconv/gconv-modules.cache</div><div class="line">bash      <span class="number">11086</span> root    <span class="number">0</span>u      CHR              <span class="number">136</span>,<span class="number">0</span>       <span class="number">0</span>t0          <span class="number">3</span> /dev/pts/<span class="number">0</span></div><div class="line">bash      <span class="number">11086</span> root    <span class="number">1</span>u      CHR              <span class="number">136</span>,<span class="number">0</span>       <span class="number">0</span>t0          <span class="number">3</span> /dev/pts/<span class="number">0</span></div><div class="line">bash      <span class="number">11086</span> root    <span class="number">2</span>u      CHR              <span class="number">136</span>,<span class="number">0</span>       <span class="number">0</span>t0          <span class="number">3</span> /dev/pts/<span class="number">0</span></div><div class="line">bash      <span class="number">11086</span> root  <span class="number">255</span>u      CHR              <span class="number">136</span>,<span class="number">0</span>       <span class="number">0</span>t0          <span class="number">3</span> /dev/pts/<span class="number">0</span></div></pre></td></tr></table></figure></p>
+<p>这个命令可以找出你想要知道的某个进程是否有打开哪些信息，例如上面的范例四的执行结果。</p>
+<hr>
+<blockquote>
+<p>OK</p>
+</blockquote>
+</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2018/01/24/Linux/014. Linux防火墙的简单管理/" class="pre">Linux防火墙的简单管理</a><a href="/2018/01/19/Linux/012. 正则表达式实用技术/" class="next">正则表达式实用技术</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-什么是进程（process）"><span class="toc-text">1. 什么是进程（process）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-进程与程序（process-amp-program）"><span class="toc-text">1.1. 进程与程序（process & program）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-Linux的多用户、多任务环境"><span class="toc-text">1.2. Linux的多用户、多任务环境</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-工作管理（job-control）"><span class="toc-text">2. 工作管理（job control）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-什么是工作管理"><span class="toc-text">2.1. 什么是工作管理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-job-control的管理"><span class="toc-text">2.2. job control的管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-amp-直接将命令丢到后台中执行"><span class="toc-text">2.2.1. & 直接将命令丢到后台中执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-Ctrl-Z-将目前的工作丢到后台中暂停"><span class="toc-text">2.2.2. Ctrl+Z 将目前的工作丢到后台中暂停</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-3-Ctrl-C-将目前的工作终止掉"><span class="toc-text">2.2.3. Ctrl+C 将目前的工作终止掉</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-4-job-查看目前的后台工作状态"><span class="toc-text">2.2.4. job 查看目前的后台工作状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-5-fg-将后台工作拿到前台来处理"><span class="toc-text">2.2.5. fg 将后台工作拿到前台来处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-6-bg-让工作在后台下的状态变成运行中"><span class="toc-text">2.2.6. bg 让工作在后台下的状态变成运行中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-7-kill-管理后台当中的工作"><span class="toc-text">2.2.7. kill 管理后台当中的工作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-脱机管理问题"><span class="toc-text">2.3. 脱机管理问题</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-进程管理"><span class="toc-text">3. 进程管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-进程的查看"><span class="toc-text">3.1. 进程的查看</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-1-ps-静态查看系统进程"><span class="toc-text">3.1.1. ps 静态查看系统进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-2-pstree-程序树查看程序之间的关系"><span class="toc-text">3.1.2. pstree 程序树查看程序之间的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-3-top-动态查看系统进程"><span class="toc-text">3.1.3. top 动态查看系统进程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-进程的管理"><span class="toc-text">3.2. 进程的管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-1-信号"><span class="toc-text">3.2.1. 信号</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-2-kill"><span class="toc-text">3.2.2. kill</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-3-killall"><span class="toc-text">3.2.3. killall</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-4-进程管理的总结"><span class="toc-text">3.2.4. 进程管理的总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-关于进程的执行顺序"><span class="toc-text">3.3. 关于进程的执行顺序</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-1-Priority-与-Nice值"><span class="toc-text">3.3.1. Priority 与 Nice值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-2-nice-新执行的命令即给予新的nice值"><span class="toc-text">3.3.2. nice 新执行的命令即给予新的nice值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-3-renice-已存在进程的nice重新调整"><span class="toc-text">3.3.3. renice 已存在进程的nice重新调整</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-系统资源的查看"><span class="toc-text">3.4. 系统资源的查看</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-1-free-查看内存使用情况"><span class="toc-text">3.4.1. free 查看内存使用情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-2-uname-查看系统与内核相关信息"><span class="toc-text">3.4.2. uname 查看系统与内核相关信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-3-w-查看系统负载"><span class="toc-text">3.4.3. w 查看系统负载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-4-uptime-查看系统启动时间与工作负载"><span class="toc-text">3.4.4. uptime 查看系统启动时间与工作负载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-5-netstat-跟踪网络"><span class="toc-text">3.4.5. netstat 跟踪网络</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-6-dmesg-分析内核产生的信息"><span class="toc-text">3.4.6. dmesg 分析内核产生的信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-7-vmstat-检测系统资源变化"><span class="toc-text">3.4.7. vmstat 检测系统资源变化</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-几个其它的运维工具"><span class="toc-text">4. 几个其它的运维工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-监控系统状态"><span class="toc-text">4.1. 监控系统状态</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-1-sar-监控系统状态"><span class="toc-text">4.1.1. sar 监控系统状态</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#用法1-查看网卡流量-sar-n-DEV"><span class="toc-text">用法1. 查看网卡流量 sar -n DEV</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#用法2-查看历史负载"><span class="toc-text">用法2. 查看历史负载</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-2-nload-查看网卡流量"><span class="toc-text">4.1.2. nload 查看网卡流量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-抓包工具"><span class="toc-text">4.2. 抓包工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-1-tcpdump工具"><span class="toc-text">4.2.1. tcpdump工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-2-wireshark工具"><span class="toc-text">4.2.2. wireshark工具</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-特殊文件与程序"><span class="toc-text">5. 特殊文件与程序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-具有SUID-SGID权限的命令执行状态"><span class="toc-text">5.1. 具有SUID/SGID权限的命令执行状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-proc-代表的意义"><span class="toc-text">5.2. /proc/* 代表的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-查询已打开文件或已执行程序打开的文件"><span class="toc-text">5.3. 查询已打开文件或已执行程序打开的文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-1-fuser-通过文件（或文件系统）找出正在使用该文件的程序"><span class="toc-text">5.3.1. fuser 通过文件（或文件系统）找出正在使用该文件的程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-2-lsof：列出被进程所打开的文件名"><span class="toc-text">5.3.2. lsof：列出被进程所打开的文件名</span></a></li></ol></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/018. Linux中几个辅助运维的工具/">Linux中几个辅助运维的工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/017. Linux系统日志介绍/">Linux系统日志介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/016. Linux数据备份技术/">Linux数据备份技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/015. Linux系统服务管理技术/">Linux系统服务管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/014. Linux防火墙的简单管理/">Linux防火墙的简单管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/20/Linux/013. Linux程序管理技术/">Linux程序管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/012. 正则表达式实用技术/">正则表达式实用技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/011. Linux计划任务管理技术/">Linux计划任务管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/29/Tool/007. 《Vim实用技巧》-开始：Vim解决问题的方式/">《Vim实用技巧》-开始：Vim解决问题的方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/28/Tool/006. Vim的语言性思维/">Vim的语言性思维</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Reading/">Reading</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Shell/">Shell</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tool/">Tool</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Server/">服务</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zhuanzai/">转载</a><span class="category-list-count">3</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">奇怪先生theshu.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script></body></html>
