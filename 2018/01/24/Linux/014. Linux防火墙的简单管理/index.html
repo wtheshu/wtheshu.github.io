@@ -15,44 +15,65 @@
 <li>该命令默认会输出”enforcing”。若是已经永久关闭SELinux了，则会显示”Disabled”。</li>
 <li>当使用<code>setenforce 0</code>临时关闭SELinux之后，再使用<code>getendorce</code>会输出”permissive”。</li>
 </ul>
-<h1 id="2-iptables详解"><a href="#2-iptables详解" class="headerlink" title="2. iptables详解"></a>2. iptables详解</h1><p>真正的防火墙名字叫做netfilter，ipdables只是它的一个实现工具。它的功能非常丰富，但是在日常的管理工作中仅仅会用到一两个应用，这并不代表它不重要。作为一个网络管理员，iptables的各种应用规则是必须要熟练掌握的。但是作为系统管理员，我们也应该会最基本的操作，认识iptables的基本规则。</p>
-<h2 id="2-1-查看、清除和保存规则"><a href="#2-1-查看、清除和保存规则" class="headerlink" title="2.1. 查看、清除和保存规则"></a>2.1. 查看、清除和保存规则</h2><p>CentOS上默认是设有iptables规则的，这个规则虽然很安全，但是对于我们来说没有用，反而会造成某些影响，所以建议你先清除规则，然后把清除后的规则保存一下：</p>
+<hr>
+<h1 id="2-防火墙详解"><a href="#2-防火墙详解" class="headerlink" title="2. 防火墙详解"></a>2. 防火墙详解</h1><p>在之前的CentOS版本（比如5或6）的防火墙为netfilter，CentOS7的防火墙为firewalld。而ipdables（netfilter相对应的）只是它的一个实现工具。它的功能非常丰富，但是在日常的管理工作中仅仅会用到一两个应用，这并不代表它不重要。作为一个网络管理员，iptables的各种应用规则是必须要熟练掌握的。但是作为系统管理员，我们也应该会最基本的操作，认识iptables的基本规则。对于CentOS7上的为firewalld，同样也支持之前版本的命令用法。所以下面分别介绍一下这两种的实现工具是如何使用的。</p>
+<hr>
+<h2 id="2-1-CentOS6的iptables"><a href="#2-1-CentOS6的iptables" class="headerlink" title="2.1. CentOS6的iptables"></a>2.1. CentOS6的iptables</h2><p>如果你现在所用的系统是CentOS6或以前的版本，那么系统默认使用的就是iptables这个工具来管理防火墙的。如果你所使用的是CentOS7版本的系统，那么默认使用的是firewalld来管理防火墙。这时，可以将firewalld关闭，然后开启之前版本的iptables，那么就可以在CentOS7上面使用iptables了。操作如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> systemctl stop firewalld		// 关闭firewalld服务</span></div><div class="line"><span class="meta">#</span><span class="bash"> systemctl <span class="built_in">disable</span> firewalld   // 禁止firewalld服务开机启动</span></div><div class="line"><span class="meta">#</span><span class="bash"> yum install -y iptables-services   // 安装iptables-services，这样就可以使用之前版本的iptables了</span></div><div class="line"><span class="meta">#</span><span class="bash"> systemctl <span class="built_in">enable</span> iptables     // 让它开机启动</span></div><div class="line"><span class="meta">#</span><span class="bash"> systemctl start iptables		// 启动iptables服务</span></div></pre></td></tr></table></figure>
+<h3 id="2-1-1-查看、清除和保存规则"><a href="#2-1-1-查看、清除和保存规则" class="headerlink" title="2.1.1. 查看、清除和保存规则"></a>2.1.1. 查看、清除和保存规则</h3><p>CentOS上默认是设有iptables规则的，这个规则虽然很安全，但是对于我们来说没有用，反而会造成某些影响，所以建议你先清除规则，然后把清除后的规则保存一下：</p>
 <ul>
 <li><code>iptables -nvL</code> 查看规则</li>
 <li><code>iptables -F ; /etc/init.d/iptables save</code> 防火墙规则保存在了/etc/sysconfig/iptables中。</li>
-<li>关于上面两条命令的说明：<code>-nvL</code>选项是查看规则，<code>-F</code>是把当前规则清除，但这个只是临时的，重启系统或者重启iptables服务后还会夹在已经保存的规则，所以需要使用<code>/etc/init.d/iptables save</code>保存一下规则。</li>
+<li>关于上面两条命令的说明：<code>-nvL</code>选项是查看规则，<code>-F</code>是把当前规则清除，但这个只是临时的，重启系统或者重启iptables服务后还会夹在已经保存的规则，所以需要使用<code>/etc/init.d/iptables save</code>保存一下规则。当然，<code>service iptables save</code>的效果是一样的，也是保存防火墙的规则。</li>
+<li><code>iptables -Z</code> 将防火墙中的计数清零</li>
 </ul>
-<h2 id="2-2-iptables的几个表"><a href="#2-2-iptables的几个表" class="headerlink" title="2.2. iptables的几个表"></a>2.2. iptables的几个表</h2><p>filter表</p>
+<h3 id="2-1-2-iptables的5个表和5个链"><a href="#2-1-2-iptables的5个表和5个链" class="headerlink" title="2.1.2. iptables的5个表和5个链"></a>2.1.2. iptables的5个表和5个链</h3><p>五个表如下：</p>
 <ul>
+<li>filter表<ul>
 <li>这个表主要用于过滤包的，是系统预设的表，这个表也是工作中用的最多的。</li>
 <li>内建三个链：INPUT、OUTPUT、FORWARD。</li>
 <li>INPUT作用于进入本机的包，OUTPUT作用于本机送出的包，FORWARD作用于那些跟本机无关的包。</li>
 </ul>
-<p>nat表</p>
-<ul>
+</li>
+<li>nat表<ul>
 <li>主要用处是网络地址转换，比如公网IP和内网IP之间的转换。也有三个链。</li>
-<li>PREROUTING链的作用是在包刚刚到达防火墙时改变它的目的地址，如果需要的话。</li>
-<li>OUTPUT链改变本地产生的包的地址。</li>
-<li>POSTROUTING链在包就要离开防火墙之前改变其源地址。</li>
+<li>PREROUTING链的作用是在包刚刚到达防火墙时改变它的目的地址（如果需要的话）。</li>
+<li>OUTPUT链的作用是改变本地产生的包的目的地址。</li>
+<li>POSTROUTING链的作用是在包就要离开防火墙之前改变其源地址。</li>
 <li>这个表在工作中用的不多，但偶尔会用到。</li>
 </ul>
-<p>mangle表</p>
-<ul>
-<li>这个表主要用于个数据打标记，然后根据标记去操作哪些包。</li>
-<li>这个表几乎不怎么用。</li>
+</li>
+<li>mangle表<ul>
+<li>这个表主要用于给数据包作标记，然后根据标记去操作哪些包。</li>
+<li>这个表几乎不怎么用。除非你想成为高级网络工程师，否则就不需要关注。</li>
 </ul>
-<p>raw表</p>
-<ul>
-<li>对报文设置一个标志，决定数据包是否被状态跟踪机制处理。</li>
+</li>
+<li>raw表<ul>
+<li>这个表可以实现不追踪某些数据包，默认系统的数据包都会被追踪，但追踪势必消耗一定的资源，所以可以用raw表来指定某些端口的包不被追踪。</li>
 <li>只有两个链：OUTPUT、PREROUTING。</li>
-<li>这个表用的不多，几乎不用。</li>
+<li>这个表从来不用。</li>
+</ul>
+</li>
+<li>security表<ul>
+<li>这个表在CentOS6中是没有的，它用于强制访问控制（MAC）的网络规则。</li>
+<li>这个表也不会被用到，所以不需要关注。</li>
+</ul>
+</li>
+</ul>
+<p>五个链如下：</p>
+<ul>
+<li>PREROUTING链：数据包进入路由表之前</li>
+<li>INPUT链：通过路由表后目的地为本机</li>
+<li>FORWARDING链：通过路由表后，目的地不为本机</li>
+<li>OUTPUT链：由本机产生，向外转发</li>
+<li>POSTROUTING链：发送到网卡接口之前</li>
 </ul>
 <p>说明：</p>
 <ul>
 <li>INPUT 进来的-d：local本地（目标）</li>
 <li>OUTPUT 出去的-s：local本地（源）</li>
 </ul>
-<h2 id="2-3-iptables的基本语法"><a href="#2-3-iptables的基本语法" class="headerlink" title="2.3. iptables的基本语法"></a>2.3. iptables的基本语法</h2><p>查看规则以及清除规则</p>
+<h3 id="2-1-3-iptables的基本语法"><a href="#2-1-3-iptables的基本语法" class="headerlink" title="2.1.3. iptables的基本语法"></a>2.1.3. iptables的基本语法</h3><p>查看规则以及清除规则</p>
 <ul>
 <li><code>iptables -t nat -nvL</code><ul>
 <li>-t后面跟表名，-nvL即查看该表的规则，其中-n表示不针对IP反解析主机名，-L表示列出的意思，而-v表示列出的信息更加详细。</li>
@@ -99,7 +120,7 @@
 <li>-j ：后跟动作，其中ACCEPT表示允许包，DROP表示丢掉包，REJECT表示拒绝包</li>
 <li>-i ：指定网卡（不常用，但有时候能够用到）</li>
 </ul>
-<h2 id="2-4-删除一条规则的简便方法"><a href="#2-4-删除一条规则的简便方法" class="headerlink" title="2.4. 删除一条规则的简便方法"></a>2.4. 删除一条规则的简便方法</h2><p>当iptables的规则过多时，想删除某一条规则时，又不容易掌握当时创建时的规则。其实有一种比较简单的方法，如下所示：</p>
+<h3 id="2-1-4-删除一条规则的简便方法"><a href="#2-1-4-删除一条规则的简便方法" class="headerlink" title="2.1.4. 删除一条规则的简便方法"></a>2.1.4. 删除一条规则的简便方法</h3><p>当iptables的规则过多时，想删除某一条规则时，又不容易掌握当时创建时的规则。其实有一种比较简单的方法，如下所示：</p>
 <ul>
 <li><code>iptables -nvL --line-numbers</code> 查看规则的内容和编号</li>
 <li><code>iptables -D INPUT 1</code> 删除编号为1的规则<ul>
@@ -107,7 +128,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="2-5-iptables的-P（大写）选项"><a href="#2-5-iptables的-P（大写）选项" class="headerlink" title="2.5. iptables的-P（大写）选项"></a>2.5. iptables的-P（大写）选项</h2><p>iptables还有一个选项经常用到，就是-P（大写），表示预设策略。用法如下：</p>
+<h3 id="2-1-5-iptables的-P（大写）选项"><a href="#2-1-5-iptables的-P（大写）选项" class="headerlink" title="2.1.5. iptables的-P（大写）选项"></a>2.1.5. iptables的-P（大写）选项</h3><p>iptables还有一个选项经常用到，就是-P（大写），表示预设策略。用法如下：</p>
 <ul>
 <li><code>iptables -P INPUT DROP</code><ul>
 <li>说明：-P后面跟链名，策略内容或者为DROP或者为ACCEPT，默认是ACCEPT。</li>
@@ -126,9 +147,9 @@
 </li>
 <li>如果想开机启动时初始化防火墙规则，则需要在/etc/rc/d/rc.local中添加一行<code>/bin/sh /usr/local/sbin/iptables.sh</code></li>
 </ul>
-<h2 id="2-6-关于icmp的包的一个常见应用"><a href="#2-6-关于icmp的包的一个常见应用" class="headerlink" title="2.6. 关于icmp的包的一个常见应用"></a>2.6. 关于icmp的包的一个常见应用</h2><p><code>iptables -I INPUT -p icmp --icmp-type 8 -j DROP</code></p>
+<h3 id="2-1-6-关于icmp的包的一个常见应用"><a href="#2-1-6-关于icmp的包的一个常见应用" class="headerlink" title="2.1.6. 关于icmp的包的一个常见应用"></a>2.1.6. 关于icmp的包的一个常见应用</h3><p><code>iptables -I INPUT -p icmp --icmp-type 8 -j DROP</code></p>
 <p>说明：<code>--icmp-type</code>这个选项要跟<code>-p icmp</code>一起使用的，后面指定类型编号。这个8指的是能在本机ping通其他机器，而其他机器不能ping通本机。这个有必要记一下。</p>
-<h1 id="3-nat表的应用"><a href="#3-nat表的应用" class="headerlink" title="3. nat表的应用"></a>3. nat表的应用</h1><p>引言：在日常生活中相信你接触过路由器吧，它的功能就是分享上网。本来一根网线过来（其实只有一个公网IP），通过路由器后，路由器分配了一个网段（私网IP），这样连接路由器的多台设备就都能够连接网络了。而远端的设备认为你的IP就是那个连接路由器的公网IP。这个luyouqi的功能其实就是由Linux的netfilter的nat表实现的。</p>
+<h3 id="2-1-7-nat表的应用"><a href="#2-1-7-nat表的应用" class="headerlink" title="2.1.7. nat表的应用"></a>2.1.7. nat表的应用</h3><p>引言：在日常生活中相信你接触过路由器吧，它的功能就是分享上网。本来一根网线过来（其实只有一个公网IP），通过路由器后，路由器分配了一个网段（私网IP），这样连接路由器的多台设备就都能够连接网络了。而远端的设备认为你的IP就是那个连接路由器的公网IP。这个luyouqi的功能其实就是由Linux的netfilter的nat表实现的。</p>
 <p>需求：假设你的机器上有两块网卡eth0和eth1，其中eth0的IP为10.0.2.68，eth1的IP为192.168.1.1。eth0连接了网络，但eth1没有连接，现在有另一台机器（192.168.1.2）和eth1是互通的，那么如何设置也能够让连接eth1的这台机器能够连上网络呢（即能和10.0.2.68互通）？</p>
 <p>解决方法如下：</p>
 <ul>
@@ -141,7 +162,7 @@
 </ul>
 </li>
 </ul>
-<h1 id="4-保存以及备份iptables规则"><a href="#4-保存以及备份iptables规则" class="headerlink" title="4. 保存以及备份iptables规则"></a>4. 保存以及备份iptables规则</h1><ul>
+<h3 id="2-1-8-保存以及备份iptables规则"><a href="#2-1-8-保存以及备份iptables规则" class="headerlink" title="2.1.8. 保存以及备份iptables规则"></a>2.1.8. 保存以及备份iptables规则</h3><ul>
 <li>保存：<ul>
 <li>设定的防火墙规则只是保存在内存中，并没有保存到某一个文件中，也就是说当系统重启后以前设定的规则就没有了，所以设定规则后要先保存一下。、</li>
 <li><code>service iptables save</code></li>
@@ -163,9 +184,307 @@
 </ul>
 </li>
 </ul>
+<h3 id="2-1-9-iptables的扩展内容"><a href="#2-1-9-iptables的扩展内容" class="headerlink" title="2.1.9. iptables的扩展内容"></a>2.1.9. iptables的扩展内容</h3><ul>
+<li>iptables应用在一个网段：</li>
+</ul>
+<p>一个例子：<code>iptables -I INPUT -m iprange --src-range 61.4.176.0-61.4.191.255 -j DROP</code></p>
+<hr>
+<h2 id="2-2-CentOS7的firewalld"><a href="#2-2-CentOS7的firewalld" class="headerlink" title="2.2. CentOS7的firewalld"></a>2.2. CentOS7的firewalld</h2><p>CentOS7版本中集成了多款防火墙管理工具，其中firewalld（Dynamic Firewall Manager of Linux system，Linux系统的动态防火墙管理器）服务是默认的防火墙配置管理工具，它拥有基于CLI（命令行界面）和基于GUI（图形用户界面，工具是firewall=config）的两种管理方式。</p>
+<p>相较于传统的防火墙管理配置工具，firewalld支持动态更新技术并加入了区域（zone）的概念，还有一个service的概念。简单来说，区域就是firewalld预先准备了几套防火墙策略集合（策略模板），用户可以根据生产场景的不同而选择合适的策略集合，从而实现防火墙策略之间的快速切换。</p>
+<h3 id="2-2-1-9个zone介绍"><a href="#2-2-1-9个zone介绍" class="headerlink" title="2.2.1. 9个zone介绍"></a>2.2.1. 9个zone介绍</h3><p>firewalld中常见的区域名称（默认为public）以及相应的策略规则如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>区域</th>
+<th>默认策略规则</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>trusted(信任)</td>
+<td>允许所有的数据包</td>
+</tr>
+<tr>
+<td>home(家庭)</td>
+<td>拒绝流入的流量，除非与流出的流量相关；而如果流量与ssh、mdns、ipp-client、amba-client与dhcpv6-client服务相关，则允许流量</td>
+</tr>
+<tr>
+<td>internal(内部)</td>
+<td>等同于home</td>
+</tr>
+<tr>
+<td>work(工作)</td>
+<td>拒绝流入的流量，除非与流出的流量相关；而如果流量与ssh、ipp-client与dhcpv6-client服务相关，则允许流量</td>
+</tr>
+<tr>
+<td>public(公共)</td>
+<td>拒绝流入的流量，除非与流出的流量相关；而如果流量与ssh、dhcpv6-client服务相关，则允许流量</td>
+</tr>
+<tr>
+<td>external(外部)</td>
+<td>特别是为路由器启用了伪装功能的外部网。你不能信任来自网络的其它计算，不能相信它们不会对你的计算机造成危害，只能接受经过选择的连接</td>
+</tr>
+<tr>
+<td>dmz(非军事区)</td>
+<td>用于你的非军事区内的计算机，此区域内可公开访问，可以有限地进入你的内部网络，仅仅接收经过选择的连接</td>
+</tr>
+<tr>
+<td>block(限制)</td>
+<td>任何接收的网络连接都被IPv4的icmp-host-prohibited信息和IPv6的icmp6-adm-prohibited信息所拒绝</td>
+</tr>
+<tr>
+<td>drop(丢弃)</td>
+<td>任何接收的网络数据包都被丢弃，没有任何回复。仅能有发送出去的网络连接</td>
+</tr>
+</tbody>
+</table>
+<p>对于以上9个zone简单了解即可，因为这些在日常工作中使用它们的机会不会太多。下面是一些关于zone的命令：</p>
+<ul>
+<li><code>firewall-cmd --set-default-zone=work</code> 设定默认的zone为work</li>
+<li><code>firewall-cmd --get-zone-of-interface=ens33</code> 查看指定网卡所在的zone</li>
+<li><code>firewall-cmd --zone=public --add-interface=lo</code> 给指定网卡设置zone</li>
+<li><code>firewall-cmd --zone=dmz --change-interface=lo</code> 针对网卡更改zone</li>
+<li><code>firewall-cmd --zone=dmz --remove-interface=lo</code> 针对网卡删除zone</li>
+<li><code>firewall-cmd --get-active-zones</code> 查看系统所有网卡所在的zone</li>
+<li><code>firewall-cmd --get-zones</code> 查看系统所有的zone</li>
+<li><code>firewall-cmd --get-default-zone</code> 查看系统默认的zone</li>
+</ul>
+<h3 id="2-2-2-service介绍"><a href="#2-2-2-service介绍" class="headerlink" title="2.2.2. service介绍"></a>2.2.2. service介绍</h3><p>其实，之所以有9种zone，是因为每一个zone里面都使用了不同的service，而service就是针对一个服务（端口）做的iptables规则。</p>
+<p>这个命令可以列出系统所有的service：<code>firewall-cmd --get-service</code><br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# firewall-cmd --get-service</div><div class="line">RH-Satellite-6 amanda-client amanda-k5-client bacula bacula-client</div><div class="line">bitcoin bitcoin-rpc bitcoin-testnet bitcoin-testnet-rpc ceph ceph-mon </div><div class="line">cfengine condor-collector ctdb dhcp dhcpv6 dhcpv6-client<span class="built_in"> dns </span>docker-registry </div><div class="line">dropbox-lansync elasticsearch freeipa-ldap freeipa-ldaps freeipa-replication </div><div class="line">freeipa-trust ftp ganglia-client ganglia-master high-availability http https </div><div class="line">imap imaps ipp ipp-client<span class="built_in"> ipsec </span>iscsi-target kadmin kerberos kibana klogin</div><div class="line">kpasswd kshell ldap ldaps libvirt libvirt-tls managesieve mdns mosh mountd</div><div class="line">ms-wbt mssql mysql nfs nrpe<span class="built_in"> ntp </span>openvpn ovirt-imageio ovirt-storageconsole </div><div class="line">ovirt-vmconsole pmcd pmproxy pmwebapi pmwebapis pop3 pop3s postgresql privoxy </div><div class="line">proxy-dhcp ptp pulseaudio puppetmaster quassel<span class="built_in"> radius </span>rpc-bind rsh rsyncd samba</div><div class="line">samba-client sane sip sips smtp smtp-submission smtps<span class="built_in"> snmp </span>snmptrap spideroak-lansync </div><div class="line">squid ssh synergy syslog syslog-tls telnet tftp tftp-client tinc tor-socks </div><div class="line">transmission-client vdsm vnc-server wbem-https xmpp-bosh xmpp-client xmpp-local </div><div class="line">xmpp-server</div></pre></td></tr></table></figure></p>
+<p>这些service都是由一个个配置文件定义的，配置文件的模板在/usr/lib/firewalld/services/目录下，真正生效的配置是在/etc/firewalld/service/目录下面（默认为空）<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># ls /usr/lib/firewalld/services/</span></div><div class="line">amanda-client.<span class="keyword">xml</span>        <span class="title">kadmin</span>.<span class="keyword">xml</span>                <span class="title">quassel</span>.xml</div><div class="line">amanda-k5-client.<span class="keyword">xml</span>     <span class="title">kerberos</span>.<span class="keyword">xml</span>              <span class="title">radius</span>.xml</div><div class="line">bacula-client.<span class="keyword">xml</span>        <span class="title">kibana</span>.<span class="keyword">xml</span>                <span class="title">RH-Satellite-6</span>.xml</div><div class="line">bacula.<span class="keyword">xml</span>               <span class="title">klogin</span>.<span class="keyword">xml</span>                <span class="title">rpc-bind</span>.xml</div><div class="line">bitcoin-rpc.<span class="keyword">xml</span>          <span class="title">kpasswd</span>.<span class="keyword">xml</span>               <span class="title">rsh</span>.xml</div><div class="line">bitcoin-testnet-rpc.<span class="keyword">xml</span>  <span class="title">kshell</span>.<span class="keyword">xml</span>                <span class="title">rsyncd</span>.xml</div><div class="line">bitcoin-testnet.<span class="keyword">xml</span>      <span class="title">ldaps</span>.<span class="keyword">xml</span>                 <span class="title">samba-client</span>.xml</div><div class="line">bitcoin.<span class="keyword">xml</span>              <span class="title">ldap</span>.<span class="keyword">xml</span>                  <span class="title">samba</span>.xml</div><div class="line">ceph-mon.<span class="keyword">xml</span>             <span class="title">libvirt-tls</span>.<span class="keyword">xml</span>           <span class="title">sane</span>.xml</div><div class="line">ceph.<span class="keyword">xml</span>                 <span class="title">libvirt</span>.<span class="keyword">xml</span>               <span class="title">sips</span>.xml</div><div class="line">cfengine.<span class="keyword">xml</span>             <span class="title">managesieve</span>.<span class="keyword">xml</span>           <span class="title">sip</span>.xml</div><div class="line">condor-collector.<span class="keyword">xml</span>     <span class="title">mdns</span>.<span class="keyword">xml</span>                  <span class="title">smtp-submission</span>.xml</div><div class="line">ctdb.<span class="keyword">xml</span>                 <span class="title">mosh</span>.<span class="keyword">xml</span>                  <span class="title">smtps</span>.xml</div><div class="line">dhcpv6-client.<span class="keyword">xml</span>        <span class="title">mountd</span>.<span class="keyword">xml</span>                <span class="title">smtp</span>.xml</div><div class="line">dhcpv6.<span class="keyword">xml</span>               <span class="title">mssql</span>.<span class="keyword">xml</span>                 <span class="title">snmptrap</span>.xml</div><div class="line">dhcp.<span class="keyword">xml</span>                 <span class="title">ms-wbt</span>.<span class="keyword">xml</span>                <span class="title">snmp</span>.xml</div><div class="line">dns.<span class="keyword">xml</span>                  <span class="title">mysql</span>.<span class="keyword">xml</span>                 <span class="title">spideroak-lansync</span>.xml</div><div class="line">docker-registry.<span class="keyword">xml</span>      <span class="title">nfs</span>.<span class="keyword">xml</span>                   <span class="title">squid</span>.xml</div><div class="line">dropbox-lansync.<span class="keyword">xml</span>      <span class="title">nrpe</span>.<span class="keyword">xml</span>                  <span class="title">ssh</span>.xml</div><div class="line">elasticsearch.<span class="keyword">xml</span>        <span class="title">ntp</span>.<span class="keyword">xml</span>                   <span class="title">synergy</span>.xml</div><div class="line">freeipa-ldaps.<span class="keyword">xml</span>        <span class="title">openvpn</span>.<span class="keyword">xml</span>               <span class="title">syslog-tls</span>.xml</div><div class="line">freeipa-ldap.<span class="keyword">xml</span>         <span class="title">ovirt-imageio</span>.<span class="keyword">xml</span>         <span class="title">syslog</span>.xml</div><div class="line">freeipa-replication.<span class="keyword">xml</span>  <span class="title">ovirt-storageconsole</span>.<span class="keyword">xml</span>  <span class="title">telnet</span>.xml</div><div class="line">freeipa-trust.<span class="keyword">xml</span>        <span class="title">ovirt-vmconsole</span>.<span class="keyword">xml</span>       <span class="title">tftp-client</span>.xml</div><div class="line">ftp.<span class="keyword">xml</span>                  <span class="title">pmcd</span>.<span class="keyword">xml</span>                  <span class="title">tftp</span>.xml</div><div class="line">ganglia-client.<span class="keyword">xml</span>       <span class="title">pmproxy</span>.<span class="keyword">xml</span>               <span class="title">tinc</span>.xml</div><div class="line">ganglia-<span class="literal">master</span>.<span class="keyword">xml</span>       <span class="title">pmwebapis</span>.<span class="keyword">xml</span>             <span class="title">tor-socks</span>.xml</div><div class="line">high-availability.<span class="keyword">xml</span>    <span class="title">pmwebapi</span>.<span class="keyword">xml</span>              <span class="title">transmission-client</span>.xml</div><div class="line">https.<span class="keyword">xml</span>                <span class="title">pop3s</span>.<span class="keyword">xml</span>                 <span class="title">vdsm</span>.xml</div><div class="line">http.<span class="keyword">xml</span>                 <span class="title">pop3</span>.<span class="keyword">xml</span>                  <span class="title">vnc-server</span>.xml</div><div class="line">imaps.<span class="keyword">xml</span>                <span class="title">postgresql</span>.<span class="keyword">xml</span>            <span class="title">wbem-https</span>.xml</div><div class="line">imap.<span class="keyword">xml</span>                 <span class="title">privoxy</span>.<span class="keyword">xml</span>               <span class="title">xmpp-bosh</span>.xml</div><div class="line">ipp-client.<span class="keyword">xml</span>           <span class="title">proxy-dhcp</span>.<span class="keyword">xml</span>            <span class="title">xmpp-client</span>.xml</div><div class="line">ipp.<span class="keyword">xml</span>                  <span class="title">ptp</span>.<span class="keyword">xml</span>                   <span class="title">xmpp-local</span>.xml</div><div class="line">ipsec.<span class="keyword">xml</span>                <span class="title">pulseaudio</span>.<span class="keyword">xml</span>            <span class="title">xmpp-server</span>.xml</div><div class="line">iscsi-target.<span class="keyword">xml</span>         <span class="title">puppetmaster</span>.xml</div></pre></td></tr></table></figure></p>
+<p>因为每个zone里面都有不同的service，可以用如下命令来查看一个zone下面有哪些service：</p>
+<ul>
+<li><code>firewall-cmd --list-services</code> 查看当前zone下有哪些service</li>
+<li><code>firewall-cmd --zone=public --list-services</code> 查看指定zone下有哪些service</li>
+</ul>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># firewall-cmd --list-service</span></div><div class="line">ssh dhcpv6-client</div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># firewall-cmd --zone=public --list-services</span></div><div class="line">ssh dhcpv6-client</div></pre></td></tr></table></figure>
+<p>一个zone下面有某个service，意味着这个service是被信任的。比如，当前zone下面有ssh，那么ssh服务（也就是22）端口是方形的。我们可以给一个zone添加一个service，命令如下：</p>
+<ul>
+<li><code>firewall-cmd --zone=public --add-service=http</code> 把http添加到public zone下面<figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# firewall-cmd --zone=public --add-service=http</div><div class="line">success</div><div class="line">[root@theshu ~]# firewall-cmd --list-services</div><div class="line">ssh dhcpv6-client http</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>对于每个zone来说，都有自己的配置文件，你可以查看目录/usr/lib/firewalld/zones/下面对应的文件，这些就是zone的配置文件：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># ls /usr/lib/firewalld/zones/</span></div><div class="line">block.<span class="keyword">xml</span>  <span class="title">drop</span>.<span class="keyword">xml</span>      <span class="title">home</span>.<span class="keyword">xml</span>      <span class="title">public</span>.<span class="keyword">xml</span>   <span class="title">work</span>.xml</div><div class="line">dmz.<span class="keyword">xml</span>    <span class="title">external</span>.<span class="keyword">xml</span>  <span class="title">internal</span>.<span class="keyword">xml</span>  <span class="title">trusted</span>.xml</div></pre></td></tr></table></figure></p>
+<p>上面所说的可以在一个zone里面添加一个service的方法，仅仅是在内存中生效，并没有修改配置文件，如果想修改配置文件，需要加一个选项<code>--permanent</code>，如下：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# firewall-cmd <span class="attribute">--zone</span>=public <span class="attribute">--add-service</span>=http --permanent</div><div class="line">success</div></pre></td></tr></table></figure></p>
+<p>一旦更改了某个zone的配置文件，则会在/etc/firewalld/zones/目录下面生成对应zone的配置文件（.xml后缀的文件），其实这个目录下面的配置文件才是真正的配置文件。而上面所介绍的目录，可以说是所有zone的模板配置文件。</p>
+<h3 id="2-2-3-firewalld的一个示例"><a href="#2-2-3-firewalld的一个示例" class="headerlink" title="2.2.3. firewalld的一个示例"></a>2.2.3. firewalld的一个示例</h3><p>通过这个示例可以更方便的理解zone和service这两个概念。</p>
+<p>需求：假如服务器上配置了一个FTP服务，但端口并非默认的21，而是1121，并且需要在woek zone下面放行FTP。</p>
+<p>具体做法如下：<br><figure class="highlight sqf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># cp /usr/lib/firewalld/services/ftp.xml /etc/firewalld/services/ </span></div><div class="line"><span class="meta"># vi /etc/firewalld/services/ftp.xml     <span class="comment">//把里面的21改为1121</span></span></div><div class="line"><span class="meta"># cp /usr/lib/firewalld/zones/work.xml /etc/firewalld/zones/</span></div><div class="line"><span class="meta"># vi /etc/firewalld/zones/work.xml     <span class="comment">//在里面添加一行FTP相关的配置，内容如下：</span></span></div><div class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span>?&gt;</div><div class="line">&lt;zone&gt;</div><div class="line">	&lt;short&gt;Work&lt;/short&gt;</div><div class="line">	&lt;description&gt;<span class="keyword">For</span> use <span class="built_in">in</span> work areas. You mostly trust the other computers on networks <span class="keyword">to</span> <span class="built_in">not</span> harm your computer. Only selected incoming connections are accepted.&lt;/description&gt;</div><div class="line">	&lt;service <span class="built_in">name</span>=<span class="string">"ssh"</span>/&gt;</div><div class="line">	&lt;service <span class="built_in">name</span>=<span class="string">"ftp"</span>/&gt;</div><div class="line">	&lt;service <span class="built_in">name</span>=<span class="string">"dhcpv6-client"</span>/&gt;</div><div class="line">&lt;/zone&gt;</div><div class="line"><span class="meta"># firewall-cmd --reload    <span class="comment">//重新加载</span></span></div></pre></td></tr></table></figure></p>
+<p>再来验证一下work zone里面的service是否有FTP：<br><figure class="highlight axapta"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># firewall-cmd --zone=work --list-services</span></div><div class="line">ssh ftp dhcpv6-<span class="keyword">client</span></div></pre></td></tr></table></figure></p>
+<h3 id="2-2-4-firewall-cmd命令及其常用参数总结"><a href="#2-2-4-firewall-cmd命令及其常用参数总结" class="headerlink" title="2.2.4. firewall-cmd命令及其常用参数总结"></a>2.2.4. firewall-cmd命令及其常用参数总结</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>–get-zones</td>
+<td>查看系统所有可用的zone</td>
+</tr>
+<tr>
+<td>–get-default-zone</td>
+<td>查看系统默认的zone</td>
+</tr>
+<tr>
+<td>–set-default-zone=work</td>
+<td>设定默认的zone为work</td>
+</tr>
+<tr>
+<td>–get-services</td>
+<td>显示预先定义的服务</td>
+</tr>
+<tr>
+<td>–get-active-zones</td>
+<td>查看系统所有网卡所在的zone</td>
+</tr>
+<tr>
+<td>–add-source=</td>
+<td>将源自此IP或子网的流量导向某个指定区域</td>
+</tr>
+<tr>
+<td>–remove-source=</td>
+<td>不再将源自此IP或子网的流量导向某个指定区域</td>
+</tr>
+<tr>
+<td>–add-interface=网卡名称</td>
+<td>将源自该网卡的所有流量都导向某个指定区域</td>
+</tr>
+<tr>
+<td>–change-interface=网卡名称</td>
+<td>将某个网卡与区域进行关联</td>
+</tr>
+<tr>
+<td>–remove-interface=网卡名称</td>
+<td>将某个网卡与区域取消关联</td>
+</tr>
+<tr>
+<td>–get-zone-of-interface=ens33</td>
+<td>查看指定网卡所在的zone</td>
+</tr>
+<tr>
+<td>–zone=public –add-interface=lo</td>
+<td>给指定网卡设置zone</td>
+</tr>
+<tr>
+<td>–zone=dmz –change-interface=lo</td>
+<td>针对网卡更改zone</td>
+</tr>
+<tr>
+<td>–zone=dmz –remove-interface=lo</td>
+<td>针对网卡删除zone</td>
+</tr>
+<tr>
+<td>–list-all</td>
+<td>显示当前区域的网卡配置参数、资源、端口以及服务等信息</td>
+</tr>
+<tr>
+<td>–list-all-zones</td>
+<td>显示所有区域的网卡配置参数、资源、端口以及服务等信息</td>
+</tr>
+<tr>
+<td>–add-service=服务名</td>
+<td>设置默认区域允许该服务的流量</td>
+</tr>
+<tr>
+<td>–add-port=端口号/协议</td>
+<td>设置默认区域允许该端口的流量</td>
+</tr>
+<tr>
+<td>–remove-service=服务名</td>
+<td>设置默认区域不再允许该服务的流量</td>
+</tr>
+<tr>
+<td>–remove-port=端口好/协议</td>
+<td>设置默认区域不再允许该端口的流量</td>
+</tr>
+<tr>
+<td>–permanent</td>
+<td>让配置的防火墙策略永久生效</td>
+</tr>
+<tr>
+<td>–reload</td>
+<td>让“永久生效”的配置规则立即生效，并覆盖当前的配置规则</td>
+</tr>
+<tr>
+<td>–panic-on</td>
+<td>开启应急状态模式</td>
+</tr>
+<tr>
+<td>–panic-off</td>
+<td>关闭应急状态模式</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-2-5-firewalld的一些实验"><a href="#2-2-5-firewalld的一些实验" class="headerlink" title="2.2.5. firewalld的一些实验"></a>2.2.5. firewalld的一些实验</h3><ul>
+<li>查看firewalld服务当前所使用的区域：<code>firewall-cmd get-default-zone</code> 显示<code>public</code></li>
+<li>查询eno16777728网卡在firewalld服务中的区域：<code>firewall-cmd --get-zone-of-interface=eno16777728</code> 显示<code>public</code></li>
+<li>把firewalld服务中eno16777728网卡的默认区域修改为external，并在系统重启后生效。分别查看当前与永久模式下的区域名称：<ul>
+<li><code>firewall-cmd --permanent --zone=external --change-interface=eno16777728</code> 显示<code>success</code></li>
+<li><code>firewall-cmd --get-zone-of-interface=eno16777728</code> 显示<code>public</code></li>
+<li><code>firewall-cmd --permanent --get-zone-of-interface=eno16777728</code> 显示<code>external</code></li>
+</ul>
+</li>
+<li>把firewalld服务的当前默认区域设置为public：<ul>
+<li><code>firewall-cmd --set-default-zone=public</code> 显示<code>success</code></li>
+<li><code>firewamm-cmd --get-default-zone</code> 显示<code>public</code></li>
+</ul>
+</li>
+<li>启动/关闭firewalld防火墙服务的应急状况模式，阻断一切网络连接（当远程控制服务器时请慎用）：<ul>
+<li><code>firewall-cmd --panic-on</code> 显示<code>success</code></li>
+<li><code>firewall-cmd --panic-off</code> 显示<code>success</code></li>
+</ul>
+</li>
+<li>查询public区域是否允许请求SSH和HTTPS协议的流量：<ul>
+<li><code>firewall-cmd --zone=public --query-service=ssh</code> 显示<code>yes</code></li>
+<li><code>firewall-cmd --zone=public --query-service=https</code> 显示<code>no</code></li>
+</ul>
+</li>
+<li>把firewalld服务中请求HTTPS协议的流量设置为永久允许，并立即生效：<ul>
+<li><code>firewall-cmd --zone=public --add-service=https</code> 显示<code>success</code></li>
+<li><code>firewall-cmd --permanent --zone=public --add-service=https</code> 显示<code>success</code></li>
+<li><code>firewall-cmd --reload</code> 显示<code>success</code></li>
+</ul>
+</li>
+<li>把firewalld服务中请求HTTP协议的流量设置为永久拒绝，并立即生效：<ul>
+<li><code>firewall-cmd --permanent --zone=public --remove-service=http</code> 显示<code>success</code></li>
+<li><code>firewall-cmd --reload</code> 显示<code>success</code></li>
+</ul>
+</li>
+<li>把在firewalld服务中访问8080和8081端口的流量策略设置为允许，但仅限当前生效：<ul>
+<li><code>firewall-cmd --zone=public --add-port=8080-8081/tcp</code> 显示<code>success</code></li>
+<li><code>firewall-cmd --zone=public --list-ports</code> 显示<code>8080-8081/tcp</code></li>
+</ul>
+</li>
+<li>把原本访问本机888端口的流量转发到22端口，且要求当前和长期均有效：<ul>
+<li>注意：流量转发的命令格式为<code>firewall-cmd --permanent --zone=区域 --add-forward-port=port=源端口号:proto=协议:toport=目标端口号:toaddr=目标IP地址</code></li>
+<li><code>firewall-cmd --permanent --zone=public --add-forward-port=port=888:proto=tcp:toport=22:toaddr=192.168.10.10</code> 显示<code>success</code></li>
+<li><code>firewall-cmd --reload</code> 显示<code>success</code></li>
+</ul>
+</li>
+</ul>
+<p>firewalld中锋富规则表示更细致、更详细的防火墙策略配置，它可以针对系统服务、端口号、源地址和目标地址等诸多信息进行更有针对性的策略配置。它的优先级在所有的防火墙策咯中也是最高的。比如，我们可以在firewalld服务中配置一条富规则，使其拒绝192.168.10.0/24网段的所有用户访问本机的ssh服务（22端口），如下所示：<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># firewall-cmd --permanent --zone=public --add-rich-rule="rule family="ipv4" source address="192.168.10.0/24" service name="ssh" reject"</div><div class="line">success</div><div class="line"># firewall-cmd --reload</div><div class="line">success</div></pre></td></tr></table></figure></p>
+<p>在客户端使用ssh命令尝试访问192.168.10.10主机的ssh服务（22端口）：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># ssh 192.168.10.10</span></div><div class="line">Connecting <span class="keyword">to</span> <span class="number">192.168</span><span class="number">.10</span><span class="number">.10</span>:<span class="number">22.</span>..</div><div class="line">Could <span class="literal">not</span> connect <span class="keyword">to</span> <span class="string">'192.168.10.10'</span> (port <span class="number">22</span>): Connection failed.</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="3-服务的访问控制列表"><a href="#3-服务的访问控制列表" class="headerlink" title="3. 服务的访问控制列表"></a>3. 服务的访问控制列表</h1><p>服务的访问控制列表指的是这两个文件：</p>
+<ul>
+<li>/etc/hosts.allow：允许控制列表文件</li>
+<li>/etc/hosts.deny：拒绝控制列表文件</li>
+</ul>
+<p>TCP Wrappers 是 CentOS7系统中默认启用的一款流量监控程序，它能够根据来访主机的地址与本机的目标服务程序做出允许或拒绝的操作。换句话说，Linux系统中其实有两个层面的防火墙，第一种是前面讲到的基于TCP/IP协议的流量过滤工具，而TCP Wrappers服务则是能允许或禁止Linux系统提供服务的防火墙，从而在更高层面保护了Linux系统的安全运行。</p>
+<p>TCP Wrappers服务的防火墙策略由两个控制列表文件所控制，用户可以编辑允许控制列表文件来放行对服务的请求流量，也可以编辑拒绝控制列表文件来阻止对服务的请求流量。控制列表文件修改后会立即生效，系统将会先检查允许控制列表文件（/etc/hosts.allow），如果匹配到相应的允许策略则放行流量；如果没有匹配，则会进一步匹配拒绝控制列表文件（/etc/hosts.deny），若找到匹配项则拒绝该流量。如果这两个文件都没有匹配到，则默认放行流量。</p>
+<h2 id="3-1-常用参数和原则"><a href="#3-1-常用参数和原则" class="headerlink" title="3.1. 常用参数和原则"></a>3.1. 常用参数和原则</h2><p>TCP Wrappers服务的控制列表文件配置起来并不复杂，常用参数如下表所示：</p>
+<table>
+<thead>
+<tr>
+<th>客户端类型</th>
+<th>示例</th>
+<th>满足示例的客户端列表</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>单一主机</td>
+<td>192.168.10.10</td>
+<td>IP地址为192.168.10.10的主机</td>
+</tr>
+<tr>
+<td>指定网段</td>
+<td>192.168.10.</td>
+<td>IP段为192.168.10.0/24的主机</td>
+</tr>
+<tr>
+<td>指定网段</td>
+<td>192.168.10.0/255.255.255.0</td>
+<td>IP段为192.168.10.0/24的主机</td>
+</tr>
+<tr>
+<td>指定DNS后缀</td>
+<td>.theshu.top</td>
+<td>所有DNS后缀为.theshu.top的主机</td>
+</tr>
+<tr>
+<td>指定主机名称</td>
+<td>www.theshu.top</td>
+<td>主机名称为www.theshu.top的主机</td>
+</tr>
+<tr>
+<td>指定所有客户端</td>
+<td>ALL</td>
+<td>所有主机全部包括在内</td>
+</tr>
+</tbody>
+</table>
+<p>在配置TCP Wrappers服务时需要遵循两个原则：</p>
+<ol>
+<li>编写拒绝策略规则时，填写的是服务名称，而非协议名称</li>
+<li>建议先编写拒绝策略规则，再编写允许策略规则，以便直观地看到相应的效果</li>
+</ol>
+<h2 id="3-2-示例"><a href="#3-2-示例" class="headerlink" title="3.2. 示例"></a>3.2. 示例</h2><p>下面编写拒绝策略规则文件，禁止访问本机sshd服务的所有流量（无需/etc/hosts/deny文件中修改原有的注释信息）：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# vim /etc/hosts.deny</div><div class="line"><span class="meta">#</span><span class="bash"></span></div><div class="line"><span class="meta">#</span><span class="bash"> hosts.deny    This file contains access rules <span class="built_in">which</span> are used to</span></div><div class="line"><span class="meta">#</span><span class="bash">               deny connections to network services that either use</span></div><div class="line"><span class="meta">#</span><span class="bash">               the tcp_wrappers library or that have been</span></div><div class="line"><span class="meta">#</span><span class="bash">               started through a tcp_wrappers-enabled xinetd.</span></div><div class="line"><span class="meta">#</span><span class="bash"></span></div><div class="line"><span class="meta">#</span><span class="bash">               The rules <span class="keyword">in</span> this file can also be <span class="built_in">set</span> up <span class="keyword">in</span></span></div><div class="line"><span class="meta">#</span><span class="bash">               /etc/hosts.allow with a <span class="string">'deny'</span> option instead.</span></div><div class="line"><span class="meta">#</span><span class="bash"></span></div><div class="line"><span class="meta">#</span><span class="bash">               See <span class="string">'man 5 hosts_options'</span> and <span class="string">'man 5 hosts_access'</span></span></div><div class="line"><span class="meta">#</span><span class="bash">               <span class="keyword">for</span> information on rule syntax.</span></div><div class="line"><span class="meta">#</span><span class="bash">               See <span class="string">'man tcpd'</span> <span class="keyword">for</span> information on tcp_wrappers</span></div><div class="line"><span class="meta">#</span><span class="bash"></span></div><div class="line"><span class="meta">#</span><span class="bash"><span class="comment">###SSH BlackList START####</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> NEU SSH Black list + sshbl.org + Dragon Research Group (DRG) hosts.deny</span></div><div class="line"><span class="meta">#</span><span class="bash"> Mon Feb  5 12:57:42 CST 2018</span></div><div class="line"><span class="meta">#</span><span class="bash"></span></div><div class="line">sshd:*</div><div class="line">[root@theshu ~]# ssh 192.168.10.10</div><div class="line">ssh_exchange_identification: read: Connection reset by peer</div></pre></td></tr></table></figure></p>
+<p>接下来，在允许策咯规则文件中添加一条规则，使其放行源自192.168.10.0/24网段，访问本机sshd服务的所有流量。可以看到，服务器立刻就放行了访问sshd服务的流量。，效果非常直观：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# vim /etc/hosts.allow</div><div class="line"><span class="meta">#</span><span class="bash"></span></div><div class="line"><span class="meta">#</span><span class="bash"> hosts.allow   This file contains access rules <span class="built_in">which</span> are used to</span></div><div class="line"><span class="meta">#</span><span class="bash">               allow or deny connections to network services that</span></div><div class="line"><span class="meta">#</span><span class="bash">               either use the tcp_wrappers library or that have been</span></div><div class="line"><span class="meta">#</span><span class="bash">               started through a tcp_wrappers-enabled xinetd.</span></div><div class="line"><span class="meta">#</span><span class="bash"></span></div><div class="line"><span class="meta">#</span><span class="bash">               See <span class="string">'man 5 hosts_options'</span> and <span class="string">'man 5 hosts_access'</span></span></div><div class="line"><span class="meta">#</span><span class="bash">               <span class="keyword">for</span> information on rule syntax.</span></div><div class="line"><span class="meta">#</span><span class="bash">               See <span class="string">'man tcpd'</span> <span class="keyword">for</span> information on tcp_wrappers</span></div><div class="line"><span class="meta">#</span><span class="bash"></span></div><div class="line">sshd:192.168.10.</div><div class="line"></div><div class="line">//ssh连接步骤省略，可以连上。</div></pre></td></tr></table></figure></p>
 <hr>
 <blockquote>
 <p>OK</p>
 </blockquote>
-</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2018/01/24/Linux/015. Linux系统服务管理技术/" class="pre">Linux系统服务管理技术</a><a href="/2018/01/20/Linux/013. Linux程序管理技术/" class="next">Linux程序管理技术</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-SELinux介绍"><span class="toc-text">1. SELinux介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-iptables详解"><span class="toc-text">2. iptables详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-查看、清除和保存规则"><span class="toc-text">2.1. 查看、清除和保存规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-iptables的几个表"><span class="toc-text">2.2. iptables的几个表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-iptables的基本语法"><span class="toc-text">2.3. iptables的基本语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-删除一条规则的简便方法"><span class="toc-text">2.4. 删除一条规则的简便方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-iptables的-P（大写）选项"><span class="toc-text">2.5. iptables的-P（大写）选项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-关于icmp的包的一个常见应用"><span class="toc-text">2.6. 关于icmp的包的一个常见应用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-nat表的应用"><span class="toc-text">3. nat表的应用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-保存以及备份iptables规则"><span class="toc-text">4. 保存以及备份iptables规则</span></a></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/018. Linux中几个辅助运维的工具/">Linux中几个辅助运维的工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/017. Linux系统日志介绍/">Linux系统日志介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/016. Linux数据备份技术/">Linux数据备份技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/015. Linux系统服务管理技术/">Linux系统服务管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/014. Linux防火墙的简单管理/">Linux防火墙的简单管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/20/Linux/013. Linux程序管理技术/">Linux程序管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/012. 正则表达式实用技术/">正则表达式实用技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/011. Linux计划任务管理技术/">Linux计划任务管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/29/Tool/007. 《Vim实用技巧》-开始：Vim解决问题的方式/">《Vim实用技巧》-开始：Vim解决问题的方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/28/Tool/006. Vim的语言性思维/">Vim的语言性思维</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Reading/">Reading</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Shell/">Shell</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tool/">Tool</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Server/">服务</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zhuanzai/">转载</a><span class="category-list-count">3</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">奇怪先生theshu.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2018/01/24/Linux/015. Linux系统服务管理技术/" class="pre">Linux系统服务管理技术</a><a href="/2018/01/20/Linux/013. Linux程序管理技术/" class="next">Linux程序管理技术</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-SELinux介绍"><span class="toc-text">1. SELinux介绍</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-防火墙详解"><span class="toc-text">2. 防火墙详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-CentOS6的iptables"><span class="toc-text">2.1. CentOS6的iptables</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-1-查看、清除和保存规则"><span class="toc-text">2.1.1. 查看、清除和保存规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-2-iptables的5个表和5个链"><span class="toc-text">2.1.2. iptables的5个表和5个链</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-3-iptables的基本语法"><span class="toc-text">2.1.3. iptables的基本语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-4-删除一条规则的简便方法"><span class="toc-text">2.1.4. 删除一条规则的简便方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-5-iptables的-P（大写）选项"><span class="toc-text">2.1.5. iptables的-P（大写）选项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-6-关于icmp的包的一个常见应用"><span class="toc-text">2.1.6. 关于icmp的包的一个常见应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-7-nat表的应用"><span class="toc-text">2.1.7. nat表的应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-8-保存以及备份iptables规则"><span class="toc-text">2.1.8. 保存以及备份iptables规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-9-iptables的扩展内容"><span class="toc-text">2.1.9. iptables的扩展内容</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-CentOS7的firewalld"><span class="toc-text">2.2. CentOS7的firewalld</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-1-9个zone介绍"><span class="toc-text">2.2.1. 9个zone介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-2-service介绍"><span class="toc-text">2.2.2. service介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-3-firewalld的一个示例"><span class="toc-text">2.2.3. firewalld的一个示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-4-firewall-cmd命令及其常用参数总结"><span class="toc-text">2.2.4. firewall-cmd命令及其常用参数总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-5-firewalld的一些实验"><span class="toc-text">2.2.5. firewalld的一些实验</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-服务的访问控制列表"><span class="toc-text">3. 服务的访问控制列表</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-常用参数和原则"><span class="toc-text">3.1. 常用参数和原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-示例"><span class="toc-text">3.2. 示例</span></a></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/018. Linux基础部分补充内容/">Linux基础部分补充内容</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/017. Linux系统日志介绍/">Linux系统日志介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/016. Linux数据备份技术/">Linux数据备份技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/015. Linux系统服务管理技术/">Linux系统服务管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/014. Linux防火墙的简单管理/">Linux防火墙的简单管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/20/Linux/013. Linux程序管理技术/">Linux程序管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/012. 正则表达式实用技术/">正则表达式实用技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/011. Linux计划任务管理技术/">Linux计划任务管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/29/Tool/007. 《Vim实用技巧》-开始：Vim解决问题的方式/">《Vim实用技巧》-开始：Vim解决问题的方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/28/Tool/006. Vim的语言性思维/">Vim的语言性思维</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Reading/">Reading</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Shell/">Shell</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tool/">Tool</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Technology/">技术</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zhuanzai/">转载</a><span class="category-list-count">3</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">奇怪先生theshu.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
 </script></body></html>

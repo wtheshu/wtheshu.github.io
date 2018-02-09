@@ -10,23 +10,25 @@
 <li><code>scp -r a/ root@192.168.1.12&quot;/tmp/a/&quot;</code> 从本地拷贝到远程</li>
 <li><code>scp -r 192.168.1.12:/tmp/a/ ./a/</code> 从远程拷贝到本地</li>
 </ul>
-<h1 id="2-rsync工具"><a href="#2-rsync工具" class="headerlink" title="2. rsync工具"></a>2. rsync工具</h1><h2 id="2-1-介绍"><a href="#2-1-介绍" class="headerlink" title="2.1. 介绍"></a>2.1. 介绍</h2><p>在Linux 系统下的数据备份的工具有很多，但其实只用一种就可以满足所有的备份工作，那就是rsync这个工具。从字面上的意思可以理解为<code>remove sync（远程同步）</code>，这样可以理解的更深刻一些。</p>
+<h1 id="2-rsync工具"><a href="#2-rsync工具" class="headerlink" title="2. rsync工具"></a>2. rsync工具</h1><h2 id="2-1-介绍"><a href="#2-1-介绍" class="headerlink" title="2.1. 介绍"></a>2.1. 介绍</h2><p>在Linux 系统下的数据备份的工具有很多，但其实只用一种就可以满足所有的备份工作，那就是rsync这个工具。从字面上的意思可以理解为<code>remote sync（远程同步）</code>，这样可以理解的更深刻一些。</p>
 <p>rsync工具不仅可以远程同步数据（类似于scp)，当然还可以本地同步数据（类似于cp）。但不同于两者的是，rsync工具不会覆盖以前的数据（如果数据已经存在），它会先判断已经存在的数据和新数据有什么不同，只有不同时才会把不同的部分覆盖掉。远程备份和增量备份是它的优势。</p>
 <p>如果Linux系统中没有这个工具，请先安装它：<code>yum install -y rsync</code>。</p>
 <h2 id="2-2-使用"><a href="#2-2-使用" class="headerlink" title="2.2. 使用"></a>2.2. 使用</h2><p>使用格式：</p>
 <ul>
-<li><code>rsync 源 目标</code> //本地</li>
-<li><code>rsync 源 userbname@ip:目标</code> //上传到远程去</li>
-<li><code>rsync username@ip:源文件 目标</code> //下载到本地来</li>
-<li><code>rsync 源 username@ip::模块名</code></li>
-<li><code>rsync username@ip::模块名 目标</code></li>
+<li><code>rsync [选项] 源 目标</code> ——————–//本地同步文件</li>
+<li><code>rsync [选项] 源 userbname@ip:目标</code> ——-//从本地上传到远程去</li>
+<li><code>rsync [选项] username@ip:源文件 目标</code> —-//从远程下载到本地来</li>
+<li><code>rsync [选项] 源 username@ip::模块名</code></li>
+<li><code>rsync [选项] username@ip::模块名 目标</code></li>
 </ul>
+<p>后两种的两种格式中使用了两个冒号，这种方式和前面的方式的不同在于验证方式的不同。后面会再详细介绍。</p>
 <p>常用选项：</p>
 <ul>
-<li>(常用)<code>-a</code> 归档模式，相当于选项 <code>-rlptgoD</code></li>
-<li>(常用)<code>-v</code> 显示信息，显示文件拷贝的状态等信息</li>
+<li>(常用)<code>-a</code> 归档模式，表示以递归方式传输文件，并保持所有属性。相当于选项 <code>-rlptgoD</code>。这个选项后面可以跟一个<code>--no-OPTION</code>这个表示关闭<code>-rlptgoD</code>中的某一个，例如<code>-a --no-l</code> 在a选项中去除l选项</li>
+<li>(常用)<code>-v</code> 显示信息，显示文件拷贝的速率、文件数量等状态信息</li>
+<li>(常用)<code>-z</code> 压缩传输</li>
 <li>(常用)<code>--delete</code> 删除那些DST中SRC没有的文件</li>
-<li>(常用)<code>--exclude=PATTERN</code> 指定排除不需要传输的文件，等号后面跟目录i，支持通配符（如*.txt)</li>
+<li>(常用)<code>--exclude=PATTERN</code> 指定排除不需要传输的文件，等号后面跟文件名，支持通配符（如*.txt)</li>
 <li>(常用)<code>--password-file=filename</code> 指定密码文件</li>
 <li>(常用)<code>rsync --daemon</code> 后台模式启动<ul>
 <li><code>rsync --daemon --help</code> 可查看帮助文件</li>
@@ -35,15 +37,13 @@
 </li>
 <li><code>-r</code> 针对目录，对子目录以递归模式处理</li>
 <li><code>-l</code> 针对软链接文件来使用，保持软链接文件的本身类型</li>
-<li><code>-L</code> 把软链接所指向的源文件拷贝</li>
+<li><code>-L</code> 像对待常规文件一样处理软链接，如果SRC中有软链接文件，则把软链接所指向的源文件拷贝</li>
 <li><code>-u</code> 加上这个选项后将会把DST中比SRC还新的文件排除掉，不会覆盖</li>
 <li><code>-p</code> 保留权限</li>
 <li><code>-t</code> 保留时间属性</li>
 <li><code>-g</code> 保留所属组信息</li>
 <li><code>-o</code> 保留所属主信息</li>
 <li><code>-D</code> 保持设备文件信息（只针对超级用户使用，目前还不理解）</li>
-<li><code>a --no-l</code> 在a选项中去除l选项</li>
-<li><code>-z</code> 压缩传输</li>
 <li><code>-P或--progress</code> 在同步的过程中可以看到同步的过程状态，比如统计要同步的文件数量、同步的文件传输速度等等。</li>
 <li><code>--bwlimit=100</code> 限速，最大传输速度为100kb</li>
 </ul>
@@ -53,7 +53,7 @@
 <li><code>cd rsync</code></li>
 <li><code>mkdir test1</code></li>
 <li><code>cd test1</code></li>
-<li><code>touch 1 2 3</code></li>
+<li><code>touch 1 2 3 /root/123.txt</code></li>
 <li><code>ln -s /root/123.txt ./123.txt</code></li>
 <li><code>ls -l</code></li>
 <li>建立这些文件的目的就是为了做实验做一些准备工作。</li>
@@ -62,7 +62,7 @@
 <li>使用<code>-a</code>选项<ul>
 <li><code>rsync -a test1 test2</code></li>
 <li><code>ls test2</code></li>
-<li><code>ls test2/test/</code></li>
+<li><code>ls test2/test1/</code></li>
 <li>这里有一个问题，就是本想把test1目录直接拷贝成test2目录，可结果rsync却新建了test2目录然后把test1放到了test2当中。为了避免这样的情况发生，可以这样做：</li>
 <li><code>rm -rf test2</code></li>
 <li><code>rsync -a test1/ test2/</code></li>
@@ -127,7 +127,7 @@
 </li>
 <li>最后简单总结一下，在平时使用rsync同步数据的时候，使用-a选项基本上就可以达到我们想要的效果了，只是有时候有个别的需求，会用到-a -no-OPTION、-u、-L、–delete、–exclude以及–progress这些选项，还有些选项虽然没有介绍，但是在以后的工作中遇到特殊需求了，就去查一下rsync的man文档吧。</li>
 </ul>
-<h2 id="2-4-rsync同步之ssh隧道方式（干货）"><a href="#2-4-rsync同步之ssh隧道方式（干货）" class="headerlink" title="2.4. rsync同步之ssh隧道方式（干货）"></a>2.4. rsync同步之ssh隧道方式（干货）</h2><p>在之前介绍的5种方式当中，第二、第三（一个冒号）就属于通过ssh的方式，这种方式其实就是让用户去登陆到远程机器，然后执行rsync的任务。因为用到了ssh，所以必须要俺扎u嗯<code>openssh-clients</code>包才可以，两台机器都安装一下：<code>yum install -y openssh-clients</code>。</p>
+<h2 id="2-4-rsync应用实例：通过ssh隧道的方式（干货）"><a href="#2-4-rsync应用实例：通过ssh隧道的方式（干货）" class="headerlink" title="2.4. rsync应用实例：通过ssh隧道的方式（干货）"></a>2.4. rsync应用实例：通过ssh隧道的方式（干货）</h2><p>在之前介绍的5种方式当中，第二、第三（一个冒号）就属于通过ssh的方式，这种方式其实就是让用户去登陆到远程机器，然后执行rsync的任务。这就需要准备两台Linux机器，因为用到了ssh，所以必须要安装<code>openssh-clients</code>包才可以，两台机器都安装一下：<code>yum install -y openssh-clients</code>。</p>
 <ul>
 <li><code>rsync -avL test1/ www@192.168.0.101:/tmp/test2/</code><ul>
 <li>这种方式就是前面介绍的第二种方式了，是通过ssh拷贝的数据，需要输入192.168.0.101那台机器WWW账户的密码。</li>
@@ -162,15 +162,15 @@
 </ul>
 </li>
 </ul>
-<h2 id="2-5-rsync后台服务方式"><a href="#2-5-rsync后台服务方式" class="headerlink" title="2.5. rsync后台服务方式"></a>2.5. rsync后台服务方式</h2><p>这种方式可以理解成这样，在远程主机上建立一个rsync的服务器，在服务器上配置好rsync的各种应用，然后本机作为rsync的一个客户端去连接远程的rsync服务器。</p>
+<h2 id="2-5-rsync应用实例：通过后台服务的方式（干货）"><a href="#2-5-rsync应用实例：通过后台服务的方式（干货）" class="headerlink" title="2.5. rsync应用实例：通过后台服务的方式（干货）"></a>2.5. rsync应用实例：通过后台服务的方式（干货）</h2><p>这种方式可以理解成这样，在远程主机上建立一个rsync的服务器，在服务器上配置好rsync的各种应用，然后本机作为rsync的一个客户端去连接远程的rsync服务器。</p>
 <p>如何去配置一台rsync服务器呢？如下所示：</p>
 <ul>
 <li><p>建立并配置rsync的配置文件<code>/etc/rsyncd.conf</code></p>
 <ul>
 <li><p><code>vi /etc/rsyncd.conf</code> 加入如下内容：</p>
-  <figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#port=873</span></div><div class="line">log <span class="attribute">file</span>=/var/log/rsync.log</div><div class="line">pid <span class="attribute">file</span>=/var/run/rsyncd.pid</div><div class="line"><span class="comment">#address=192.168.0.10</span></div><div class="line">[test]</div><div class="line"><span class="attribute">path</span>=/root/rsync</div><div class="line">use <span class="attribute">chroot</span>=<span class="literal">true</span></div><div class="line">max <span class="attribute">connections</span>=4</div><div class="line">read <span class="attribute">only</span>=<span class="literal">no</span></div><div class="line"><span class="attribute">list</span>=<span class="literal">true</span></div><div class="line"><span class="attribute">uid</span>=root</div><div class="line"><span class="attribute">gid</span>=root</div><div class="line">auth <span class="attribute">users</span>=test</div><div class="line">secrets <span class="attribute">file</span>=/etc/rsyncd.passwd</div><div class="line">hosts <span class="attribute">allow</span>=192.168.0.101</div></pre></td></tr></table></figure>
+  <figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#port=873</span></div><div class="line">log <span class="attribute">file</span>=/var/log/rsync.log</div><div class="line">pid <span class="attribute">file</span>=/var/run/rsyncd.pid</div><div class="line"><span class="attribute">address</span>=192.168.0.10</div><div class="line">[test]</div><div class="line"><span class="attribute">path</span>=/root/rsync</div><div class="line">use <span class="attribute">chroot</span>=<span class="literal">true</span></div><div class="line">max <span class="attribute">connections</span>=4</div><div class="line">read <span class="attribute">only</span>=<span class="literal">no</span></div><div class="line"><span class="attribute">list</span>=<span class="literal">true</span></div><div class="line"><span class="attribute">uid</span>=root</div><div class="line"><span class="attribute">gid</span>=root</div><div class="line">auth <span class="attribute">users</span>=test</div><div class="line">secrets <span class="attribute">file</span>=/etc/rsyncd.passwd</div><div class="line">hosts <span class="attribute">allow</span>=192.168.0.101</div></pre></td></tr></table></figure>
 </li>
-<li><p>其中的配置文件分为两部分：全局配置部分和模块配置部分。全局部分就是i几个参数而已，就像上例中的port、log file、pid file、address这些都属于全局配置，而[test]以下的部分就是模块配置部分了。</p>
+<li><p>其中的配置文件分为两部分：全局配置部分和模块配置部分。全局部分就是几个参数而已，就像上例中的port、log file、pid file、address这些都属于全局配置，而[test]以下的部分就是模块配置部分了。</p>
 </li>
 <li>一个配置文件中可以有多个模块，模块名自定义，格式就像上例中的这样。其实模块中的一些参数例如use chroot、max connections、uid、gid、auth users、secrets file以及hosts allow都可以配置成全局的参数。当然上例所给出的参数并不是全部的，你可以通过man rsyncd.cong获得更多帮助信息。</li>
 <li>下面简单解释一下这些参数的意义：<ul>
@@ -192,7 +192,7 @@
 </li>
 </ul>
 </li>
-<li>编辑secrets file，保存后修改权限为600，如果权限部队，不能完成同步<ul>
+<li>编辑secrets file，保存后修改权限为600，如果权限不对，不能完成同步<ul>
 <li><code>cat /etc/rsyncd.passwd</code></li>
 <li><code>chmod 600 /etc/rsyncd.passwd</code></li>
 </ul>
@@ -212,10 +212,10 @@
 </ul>
 </li>
 <li>有一个选项叫做”use chroot”默认为<code>true</code>，如果是<code>true</code>，同步的文件中如果有软链接，则会有问题，而把主机Aming-1的rsync配置文件修改一下，把该配置语句的值设置为<code>false</code>，这样就没有任何问题了。</li>
+<li>另外，修改玩rsyncd.conf配置文件后不需要重启rsyncd服务，这是rsync的一个特定机制，配置文件是即时生效的。</li>
 </ul>
 <h2 id="2-6-最后的说明"><a href="#2-6-最后的说明" class="headerlink" title="2.6. 最后的说明"></a>2.6. 最后的说明</h2><p>上面的那个例子中，都有输入密码，这样同样也不能写入到脚本中自动执行，其实这种方式也是可以不用手动输入密码的，它有两种实现方式：</p>
 <ol>
-<li>使用没有设置密码的密钥验证</li>
 <li>指定密码文件<ul>
 <li>在客户端上，也就是主机Aming上，编辑一个密码文件：<code>vim /etc/pass</code>，在其中加入test用户的密码，保存，修改密码文件的权限为600</li>
 <li>在同步的时候，指定一下密码文件，就可以省去输入密码的步骤了<ul>
@@ -224,10 +224,31 @@
 </li>
 </ul>
 </li>
+<li>在rsync服务端不指定用户<ul>
+<li>在服务端上，也就是主机Aming-1上，修改配置文件rsyncd.conf，删除关于认证账户的配置项（auth user和secrets file这两行），如下：<ul>
+<li><code>sed -i &#39;s/auth users/#auth users/;s/secrets file/#secrets file/&#39; /etc/rsyncd.conf</code></li>
+<li>上面这条操作就是在文件/etc/rsyncd中把auth users和secrets file这两行的最前面加一个#号，这表示将这两行作为注释，使其失去意义。<br>然后在到客户端上，也就是Aming上进行测试，如下：</li>
+<li><code>rsync -avL test@192.168.0.10::test/test1/ /tmp/test9/</code></li>
+<li>注意这里不用再加test这个用户了，默认是以root身份复制的。现在登陆时已经不需要输入密码了。</li>
+</ul>
+</li>
+</ul>
+</li>
 </ol>
+<hr>
+<h1 id="3-rsync扩展知识"><a href="#3-rsync扩展知识" class="headerlink" title="3. rsync扩展知识"></a>3. rsync扩展知识</h1><h2 id="3-1-rsync只同步指定类型的文件"><a href="#3-1-rsync只同步指定类型的文件" class="headerlink" title="3.1. rsync只同步指定类型的文件"></a>3.1. rsync只同步指定类型的文件</h2><p>需求：同步某个目录下所有的图片（.jpg），该目录下有很多其它类型的文件，但是只想同步.jpg文件。</p>
+<p>rsync有一个–exclude可以排除指定文件，还有个–include选项的作用正好和–exclude相反。那直接使用–include=”*.jpg”是否可以呢？</p>
+<p><code>rsync -av --include=&quot;\*.jpg&quot; /src/ /des/</code></p>
+<p>实验证明，这样是不对的。而正确答案是：<code>rsync -av --include=&quot;.jpg&quot; --exclude= /src/ /des/</code></p>
+<h2 id="3-2-rsync如何在远程自动创建目录"><a href="#3-2-rsync如何在远程自动创建目录" class="headerlink" title="3.2. rsync如何在远程自动创建目录"></a>3.2. rsync如何在远程自动创建目录</h2><p>默认情况下，使用rsync的时候，不能自动创建级联目录。比如<code>rsync -a /data/1/2/3/1.txt 1.1.1.1.:/date/1/2/3/1.txt</code>这样会报错的。</p>
+<p>所以改一改上面的命令：<code>rsync -a /data/1/2/3/1.txt 1.1.1.1:/data/</code>这样同样也达不到我们想要的效果，这样虽然不再报错，但是这样只是把1.txt放到了1.1.1.1:/data/目录下。</p>
+<p>rsync有个选项那就是-R，这个选项会帮助我们自动创建级联目录。所以，上边的命令应该改成这样：<code>rsync -aR /data/1/2/3/1.txt 1.1.1.1:/data/</code>这样就会在1.1.1.1：/data/目录下创建1/2/3/这样的级联目录，类似<code>mkdir -p</code></p>
+<h2 id="3-3-rsync根据一个文件列表文档来同步"><a href="#3-3-rsync根据一个文件列表文档来同步" class="headerlink" title="3.3. rsync根据一个文件列表文档来同步"></a>3.3. rsync根据一个文件列表文档来同步</h2><p>有时候，有这样的需求，就是根据一个文档中的文件列表来同步文件。举一个例子，1.txt是文件列表，内容如下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">/data/a/<span class="selector-tag">a</span>.txt</div><div class="line">/data/<span class="selector-tag">b</span>.txt</div><div class="line">/data/c/b/c.txt</div></pre></td></tr></table></figure></p>
+<p>那么同步的命令应该是：<code>rsync -av --files-from=1.txt / ip::module/</code></p>
+<p>需要注意的是，1.txt中如果写全局路径，那么source目录需要写成/</p>
 <hr>
 <blockquote>
 <p>OK</p>
 </blockquote>
-</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2018/01/24/Linux/017. Linux系统日志介绍/" class="pre">Linux系统日志介绍</a><a href="/2018/01/24/Linux/015. Linux系统服务管理技术/" class="next">Linux系统服务管理技术</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-scp工具"><span class="toc-text">1. scp工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-rsync工具"><span class="toc-text">2. rsync工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-介绍"><span class="toc-text">2.1. 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-使用"><span class="toc-text">2.2. 使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-一些重要的实验"><span class="toc-text">2.3. 一些重要的实验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-rsync同步之ssh隧道方式（干货）"><span class="toc-text">2.4. rsync同步之ssh隧道方式（干货）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-rsync后台服务方式"><span class="toc-text">2.5. rsync后台服务方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-最后的说明"><span class="toc-text">2.6. 最后的说明</span></a></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/018. Linux中几个辅助运维的工具/">Linux中几个辅助运维的工具</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/017. Linux系统日志介绍/">Linux系统日志介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/016. Linux数据备份技术/">Linux数据备份技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/015. Linux系统服务管理技术/">Linux系统服务管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/014. Linux防火墙的简单管理/">Linux防火墙的简单管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/20/Linux/013. Linux程序管理技术/">Linux程序管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/012. 正则表达式实用技术/">正则表达式实用技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/011. Linux计划任务管理技术/">Linux计划任务管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/29/Tool/007. 《Vim实用技巧》-开始：Vim解决问题的方式/">《Vim实用技巧》-开始：Vim解决问题的方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/28/Tool/006. Vim的语言性思维/">Vim的语言性思维</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Reading/">Reading</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Shell/">Shell</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tool/">Tool</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Server/">服务</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zhuanzai/">转载</a><span class="category-list-count">3</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">奇怪先生theshu.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2018/01/24/Linux/017. Linux系统日志介绍/" class="pre">Linux系统日志介绍</a><a href="/2018/01/24/Linux/015. Linux系统服务管理技术/" class="next">Linux系统服务管理技术</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-scp工具"><span class="toc-text">1. scp工具</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-rsync工具"><span class="toc-text">2. rsync工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-介绍"><span class="toc-text">2.1. 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-使用"><span class="toc-text">2.2. 使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-一些重要的实验"><span class="toc-text">2.3. 一些重要的实验</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-rsync应用实例：通过ssh隧道的方式（干货）"><span class="toc-text">2.4. rsync应用实例：通过ssh隧道的方式（干货）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-5-rsync应用实例：通过后台服务的方式（干货）"><span class="toc-text">2.5. rsync应用实例：通过后台服务的方式（干货）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-6-最后的说明"><span class="toc-text">2.6. 最后的说明</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-rsync扩展知识"><span class="toc-text">3. rsync扩展知识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-rsync只同步指定类型的文件"><span class="toc-text">3.1. rsync只同步指定类型的文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-rsync如何在远程自动创建目录"><span class="toc-text">3.2. rsync如何在远程自动创建目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-rsync根据一个文件列表文档来同步"><span class="toc-text">3.3. rsync根据一个文件列表文档来同步</span></a></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/018. Linux基础部分补充内容/">Linux基础部分补充内容</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/017. Linux系统日志介绍/">Linux系统日志介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/016. Linux数据备份技术/">Linux数据备份技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/015. Linux系统服务管理技术/">Linux系统服务管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/014. Linux防火墙的简单管理/">Linux防火墙的简单管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/20/Linux/013. Linux程序管理技术/">Linux程序管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/012. 正则表达式实用技术/">正则表达式实用技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/011. Linux计划任务管理技术/">Linux计划任务管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/29/Tool/007. 《Vim实用技巧》-开始：Vim解决问题的方式/">《Vim实用技巧》-开始：Vim解决问题的方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/28/Tool/006. Vim的语言性思维/">Vim的语言性思维</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Reading/">Reading</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Shell/">Shell</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tool/">Tool</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Technology/">技术</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zhuanzai/">转载</a><span class="category-list-count">3</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">奇怪先生theshu.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
 </script></body></html>
