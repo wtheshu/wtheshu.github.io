@@ -1,4 +1,372 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="奇怪先生的博客"><title>Shell基础知识 | 奇怪先生的博客</title><link rel="stylesheet" type="text/css" href="//fonts.css.network/css?family=Source+Code+Pro"><link rel="stylesheet" type="text/css" href="/css/style.css?v=2.0.1"><link rel="stylesheet" type="text/css" href="/css/highlight.css?v=2.0.1"><link rel="Shortcut Icon" href="/favicon.ico"><link rel="bookmark" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">Shell基础知识</h1><a id="logo" href="/.">奇怪先生的博客</a><p class="description">耳目得来终觉浅，觉知此事要躬行。</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div><div id="search-form"><div id="result-mask" class="hide"></div><label><input id="search-key" type="text" autocomplete="off" placeholder="Arama"></label><div id="result-wrap" class="hide"><div id="search-result"></div></div><div class="hide"><template id="search-tpl"><div class="item"><a href="/{path}" title="{title}"><div class="title">{title}</div><div class="time">{date}</div><div class="tags">{tags}</div></a></div></template></div></div></div><div id="layout" class="layout-g"><div class="layout-l"><div class="content_container"><div class="post"><h1 class="post-title">Shell基础知识</h1><div class="post-meta"><a href="/2017/09/03/Shell/001. Shell基础知识/#comments" class="comment-count"></a><p><span class="date">Sep 03, 2017</span><span><a href="/categories/Shell/" class="category">Shell</a></span><span><i id="busuanzi_container_page_pv"><i id="busuanzi_value_page_pv"></i><i>点击</i></i></span></p></div><div class="post-content"><blockquote>
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-mac-osx.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Shell," />
+
+
+<meta name="description" content="GO  这些内容是在学习Shell脚本之前必须要掌握的Shell基础知识。 Shell 初相识什么是ShellShell 是系统跟计算机硬件交互时使用的中间介质，它只是系统的一个工具。在Shell和计算机硬件中间还有一层东西，那就是系统内核。用户在使用计算机的时候，直接面对的并不是计算机硬件，而是Shell，用户把指令告诉Shell，然后Shell再传输给系统内核，接着内核再去支配计算机硬件去执">
+<meta name="keywords" content="Shell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell基础知识">
+<meta property="og:url" content="http://www.theshu.top/2017/09/03/Shell/001. Shell基础知识/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="GO  这些内容是在学习Shell脚本之前必须要掌握的Shell基础知识。 Shell 初相识什么是ShellShell 是系统跟计算机硬件交互时使用的中间介质，它只是系统的一个工具。在Shell和计算机硬件中间还有一层东西，那就是系统内核。用户在使用计算机的时候，直接面对的并不是计算机硬件，而是Shell，用户把指令告诉Shell，然后Shell再传输给系统内核，接着内核再去支配计算机硬件去执">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-02-23T12:35:03.767Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shell基础知识">
+<meta name="twitter:description" content="GO  这些内容是在学习Shell脚本之前必须要掌握的Shell基础知识。 Shell 初相识什么是ShellShell 是系统跟计算机硬件交互时使用的中间介质，它只是系统的一个工具。在Shell和计算机硬件中间还有一层东西，那就是系统内核。用户在使用计算机的时候，直接面对的并不是计算机硬件，而是Shell，用户把指令告诉Shell，然后Shell再传输给系统内核，接着内核再去支配计算机硬件去执">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2017/09/03/Shell/001. Shell基础知识/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Shell基础知识 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/09/03/Shell/001. Shell基础知识/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Shell基础知识</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T00:02:20+08:00">2017-09-03</time>
+            
+
+            
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Shell/" itemprop="url" rel="index"><span itemprop="name">Shell</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
 <p>GO</p>
 </blockquote>
 <p>这些内容是在学习Shell脚本之前必须要掌握的Shell基础知识。</p>
@@ -523,5 +891,448 @@
 <blockquote>
 <p>OK</p>
 </blockquote>
-</div><div class="tags"></div><div class="post-share"><div class="bdsharebuttonbox"><span style="float:left;line-height: 28px;height: 28px;font-size:16px;font-weight:blod">分享到：</span><a href="#" data-cmd="more" class="bds_more"></a><a href="#" data-cmd="mshare" title="分享到一键分享" class="bds_mshare"></a><a href="#" data-cmd="fbook" title="分享到Facebook" class="bds_fbook"></a><a href="#" data-cmd="twi" title="分享到Twitter" class="bds_twi"></a><a href="#" data-cmd="linkedin" title="分享到linkedin" class="bds_linkedin"></a><a href="#" data-cmd="youdao" title="分享到有道云笔记" class="bds_youdao"></a><a href="#" data-cmd="evernotecn" title="分享到印象笔记" class="bds_evernotecn"></a><a href="#" data-cmd="weixin" title="分享到微信" class="bds_weixin"></a><a href="#" data-cmd="qzone" title="分享到QQ空间" class="bds_qzone"></a><a href="#" data-cmd="tsina" title="分享到新浪微博" class="bds_tsina"></a></div></div><div class="post-nav"><a href="/2017/09/18/Reading/000. 读书记录清单-综合/" class="pre">读书记录清单-综合</a><a href="/2017/08/31/Linux/010. Linux软件管理技术/" class="next">Linux软件管理技术</a></div><div id="comments"></div></div></div></div><div class="layout-r"><div id="sidebar"><div class="search-pla"></div><div id="toc" class="widget"><div class="widget-title"><i class="fa fa-fei">文章目录</i></div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Shell-初相识"><span class="toc-text">Shell 初相识</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是Shell"><span class="toc-text">什么是Shell</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Shell的特性"><span class="toc-text">Shell的特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#命令记录历史"><span class="toc-text">命令记录历史</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#history"><span class="toc-text">history</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#关于-的几个用法"><span class="toc-text">关于!的几个用法</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#命令和文件名补全"><span class="toc-text">命令和文件名补全</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#别名"><span class="toc-text">别名</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#alias-设置别名"><span class="toc-text">alias  设置别名</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#unalias-取消别名"><span class="toc-text">unalias  取消别名</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通配符"><span class="toc-text">通配符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#输入-输出重定向"><span class="toc-text">输入/输出重定向</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#管道符"><span class="toc-text">管道符</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#作业控制"><span class="toc-text">作业控制</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#变量"><span class="toc-text">变量</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#echo-变量名"><span class="toc-text">echo $变量名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#env"><span class="toc-text">env</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#set-和-unset"><span class="toc-text">set 和 unset</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#export-变量名"><span class="toc-text">export 变量名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#自定义变量"><span class="toc-text">自定义变量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#定义变量的方式"><span class="toc-text">定义变量的方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#自定义变量的规则"><span class="toc-text">自定义变量的规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#让自定义变量一直生效"><span class="toc-text">让自定义变量一直生效</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#变量的配置文件"><span class="toc-text">变量的配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#PS1变量的说明"><span class="toc-text">PS1变量的说明</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Shell-中的特殊符号"><span class="toc-text">Shell 中的特殊符号</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#特殊符号"><span class="toc-text">特殊符号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#几个常用的管道命令"><span class="toc-text">几个常用的管道命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#cut"><span class="toc-text">cut</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sort"><span class="toc-text">sort</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#wc"><span class="toc-text">wc</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#uniq"><span class="toc-text">uniq</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tee"><span class="toc-text">tee</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tr"><span class="toc-text">tr</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#split"><span class="toc-text">split</span></a></li></ol></li></ol></li></ol></div><div class="widget"><div class="widget-title"><i class="fa fa-xie"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/018. Linux基础部分补充内容/">Linux基础部分补充内容</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/017. Linux系统日志介绍/">Linux系统日志介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/016. Linux数据备份技术/">Linux数据备份技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/015. Linux系统服务管理技术/">Linux系统服务管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/24/Linux/014. Linux防火墙的简单管理/">Linux防火墙的简单管理</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/20/Linux/013. Linux程序管理技术/">Linux程序管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/012. 正则表达式实用技术/">正则表达式实用技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/19/Linux/011. Linux计划任务管理技术/">Linux计划任务管理技术</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/29/Tool/007. 《Vim实用技巧》-开始：Vim解决问题的方式/">《Vim实用技巧》-开始：Vim解决问题的方式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/12/28/Tool/006. Vim的语言性思维/">Vim的语言性思维</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-gui"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">19</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Reading/">Reading</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Shell/">Shell</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Tool/">Tool</a><span class="category-list-count">7</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Technology/">技术</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Zhuanzai/">转载</a><span class="category-list-count">3</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-archive"> 归档</i></div><ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">九月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">八月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">五月 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">四月 2017</a></li></ul></div></div></div></div><a id="totop" href="#top"></a><div id="footer"><div class="footer-info"><p><a href="/baidusitemap.xml">Baidu Site Haritası</a> |  <a href="/atom.xml">订阅</a> |  <a href="/about/">关于</a></p><p>本站总访问量：<i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次</p><p><span> Copyright &copy;<a href="/." rel="nofollow">奇怪先生theshu.</a></span><span> Theme by<a rel="nofollow" target="_blank" href="https://github.com/chaooo/hexo-theme-BlueLake"> BlueLake.</a></span><span> Count by<a href="http://busuanzi.ibruce.info/"> busuanzi.</a></span><span> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a></span></p></div></div></div><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><script type="text/javascript" src="/js/search.json.js?v=2.0.1"></script><script type="text/javascript" src="/js/toctotop.js?v=2.0.1" async></script><script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":["mshare","weixin","tsina","qzone","linkedin","fbook","twi","print","renren","sqq","evernotecn","bdysc","tqq","tqf","bdxc","kaixin001","tieba","douban","bdhome","thx","ibaidu","meilishuo","mogujie","diandian","huaban","duitang","hx","fx","youdao","sdo","qingbiji","people","xinhua","mail","isohu","yaolan","wealink","ty","iguba","h163","copy"],"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{},"image":{"viewList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["tsina","qzone","weixin","fbook","twi","linkedin","youdao","evernotecn","mshare"]}};with(document)0[(getElementsByTagName('head')[0]||head).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-</script></body></html>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Shell/" rel="tag"># Shell</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/31/Linux/010. Linux软件管理技术/" rel="next" title="Linux软件管理技术">
+                <i class="fa fa-chevron-left"></i> Linux软件管理技术
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/18/Reading/000. 读书记录清单-综合/" rel="prev" title="读书记录清单-综合">
+                读书记录清单-综合 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">40</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Shell-初相识"><span class="nav-text">Shell 初相识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是Shell"><span class="nav-text">什么是Shell</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shell的特性"><span class="nav-text">Shell的特性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#命令记录历史"><span class="nav-text">命令记录历史</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#history"><span class="nav-text">history</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于-的几个用法"><span class="nav-text">关于!的几个用法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令和文件名补全"><span class="nav-text">命令和文件名补全</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#别名"><span class="nav-text">别名</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#alias-设置别名"><span class="nav-text">alias  设置别名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#unalias-取消别名"><span class="nav-text">unalias  取消别名</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通配符"><span class="nav-text">通配符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#输入-输出重定向"><span class="nav-text">输入/输出重定向</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#管道符"><span class="nav-text">管道符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#作业控制"><span class="nav-text">作业控制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#变量"><span class="nav-text">变量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#echo-变量名"><span class="nav-text">echo $变量名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#env"><span class="nav-text">env</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#set-和-unset"><span class="nav-text">set 和 unset</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#export-变量名"><span class="nav-text">export 变量名</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义变量"><span class="nav-text">自定义变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义变量的方式"><span class="nav-text">定义变量的方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义变量的规则"><span class="nav-text">自定义变量的规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#让自定义变量一直生效"><span class="nav-text">让自定义变量一直生效</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#变量的配置文件"><span class="nav-text">变量的配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PS1变量的说明"><span class="nav-text">PS1变量的说明</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Shell-中的特殊符号"><span class="nav-text">Shell 中的特殊符号</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特殊符号"><span class="nav-text">特殊符号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#几个常用的管道命令"><span class="nav-text">几个常用的管道命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cut"><span class="nav-text">cut</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sort"><span class="nav-text">sort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wc"><span class="nav-text">wc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uniq"><span class="nav-text">uniq</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tee"><span class="nav-text">tee</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tr"><span class="nav-text">tr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#split"><span class="nav-text">split</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Mist</a> v6.0.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
