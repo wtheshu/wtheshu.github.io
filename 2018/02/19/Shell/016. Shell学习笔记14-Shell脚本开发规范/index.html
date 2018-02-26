@@ -105,28 +105,27 @@
 
 
   
-  <meta name="keywords" content="Shell," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
-<meta name="description" content="GO   1. 为什么要学习Shell编程Shell脚本语言是实现Linux/Unix系统管理及自动化运维所必备的重要工具，Linux/Unix系统的底层及基础应用软件的核心大都涉及Shell脚本的内容。每一个合格的Linux系统管理员或运维工程师，都需要能够熟练地编写Shell脚本，并能够阅读系统及各类软件附带的Shell脚本内容。只有这样才能提升运维人员的工作效率，适应日益复杂的工作环境吗，">
-<meta name="keywords" content="Shell">
+<meta name="description" content="GO   1. Shell脚本基本规范2. Shell脚本变量命名及引用变量规范3. Shell函数的命名及函数定义规范4. Shell脚本（模块）高级命名规范5. Shell脚本的代码风格5.1 代码框架5.2. 缩进规范6. Shell脚本的变量及文件检查规范  OK">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Shell学习笔记01-如何才能学号Shell编程">
-<meta property="og:url" content="http://www.theshu.top/2018/02/19/Shell/003. Shell学习笔记01-如何才能学号Shell编程/index.html">
+<meta property="og:title" content="Shell学习笔记14-Shell脚本开发规范">
+<meta property="og:url" content="http://www.theshu.top/2018/02/19/Shell/016. Shell学习笔记14-Shell脚本开发规范/index.html">
 <meta property="og:site_name" content="奇怪先生的博客">
-<meta property="og:description" content="GO   1. 为什么要学习Shell编程Shell脚本语言是实现Linux/Unix系统管理及自动化运维所必备的重要工具，Linux/Unix系统的底层及基础应用软件的核心大都涉及Shell脚本的内容。每一个合格的Linux系统管理员或运维工程师，都需要能够熟练地编写Shell脚本，并能够阅读系统及各类软件附带的Shell脚本内容。只有这样才能提升运维人员的工作效率，适应日益复杂的工作环境吗，">
+<meta property="og:description" content="GO   1. Shell脚本基本规范2. Shell脚本变量命名及引用变量规范3. Shell函数的命名及函数定义规范4. Shell脚本（模块）高级命名规范5. Shell脚本的代码风格5.1 代码框架5.2. 缩进规范6. Shell脚本的变量及文件检查规范  OK">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-23T12:35:15.217Z">
+<meta property="og:updated_time" content="2018-02-19T08:33:22.271Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Shell学习笔记01-如何才能学号Shell编程">
-<meta name="twitter:description" content="GO   1. 为什么要学习Shell编程Shell脚本语言是实现Linux/Unix系统管理及自动化运维所必备的重要工具，Linux/Unix系统的底层及基础应用软件的核心大都涉及Shell脚本的内容。每一个合格的Linux系统管理员或运维工程师，都需要能够熟练地编写Shell脚本，并能够阅读系统及各类软件附带的Shell脚本内容。只有这样才能提升运维人员的工作效率，适应日益复杂的工作环境吗，">
+<meta name="twitter:title" content="Shell学习笔记14-Shell脚本开发规范">
+<meta name="twitter:description" content="GO   1. Shell脚本基本规范2. Shell脚本变量命名及引用变量规范3. Shell函数的命名及函数定义规范4. Shell脚本（模块）高级命名规范5. Shell脚本的代码风格5.1 代码框架5.2. 缩进规范6. Shell脚本的变量及文件检查规范  OK">
 
 
 
 
 
 
-  <link rel="canonical" href="http://www.theshu.top/2018/02/19/Shell/003. Shell学习笔记01-如何才能学号Shell编程/"/>
+  <link rel="canonical" href="http://www.theshu.top/2018/02/19/Shell/016. Shell学习笔记14-Shell脚本开发规范/"/>
 
 
 
@@ -135,7 +134,7 @@
     sidebar: "",
   };
 </script>
-  <title>Shell学习笔记01-如何才能学号Shell编程 | 奇怪先生的博客</title>
+  <title>Shell学习笔记14-Shell脚本开发规范 | 奇怪先生的博客</title>
   
 
 
@@ -313,7 +312,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/003. Shell学习笔记01-如何才能学号Shell编程/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/016. Shell学习笔记14-Shell脚本开发规范/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -330,7 +329,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Shell学习笔记01-如何才能学号Shell编程</h1>
+          <h1 class="post-title" itemprop="name headline">Shell学习笔记14-Shell脚本开发规范</h1>
         
 
         <div class="post-meta">
@@ -342,7 +341,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:07:16+08:00">2018-02-19</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:42:03+08:00">2018-02-19</time>
             
 
             
@@ -363,7 +362,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:35:15+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-19T16:33:22+08:00">2018-02-19</time>
             
           </span>
 
@@ -417,66 +416,7 @@
 <p>GO</p>
 </blockquote>
 <hr>
-<h1 id="1-为什么要学习Shell编程"><a href="#1-为什么要学习Shell编程" class="headerlink" title="1. 为什么要学习Shell编程"></a>1. 为什么要学习Shell编程</h1><p>Shell脚本语言是实现Linux/Unix系统管理及自动化运维所必备的重要工具，Linux/Unix系统的底层及基础应用软件的核心大都涉及Shell脚本的内容。每一个合格的Linux系统管理员或运维工程师，都需要能够熟练地编写Shell脚本，并能够阅读系统及各类软件附带的Shell脚本内容。只有这样才能提升运维人员的工作效率，适应日益复杂的工作环境吗，减少不必要的重复工作，从而为个人的职场发展奠定较好的基础。</p>
-<h1 id="2-学好Shell编程所需的基础知识"><a href="#2-学好Shell编程所需的基础知识" class="headerlink" title="2. 学好Shell编程所需的基础知识"></a>2. 学好Shell编程所需的基础知识</h1><p>学好Shell编程并通过Shell脚本轻松地实现自动化管理企业生产系统的必备基础如下：</p>
-<ul>
-<li>能够熟练使用Vim编辑器，熟悉SSH终端及<strong>.vimrc</strong>等的配置</li>
-<li>要有一定的Linux命令基础，至少需要掌握80个以上Linux常用命令，能够熟练使用它们</li>
-<li>要熟练掌握Linux正则表达式及三剑客命令（grep、sed、awk）</li>
-<li>熟悉常见的Linux网络服务部署、优化、日志分析及排错（需要掌握的基础网络服务包括但不限于：Crond、Rsync、Inotify、Nginx、PHP、MySQL、Keepalived、Memcached、Redis、NFS、Iptables、SVN、Git）</li>
-</ul>
-<h1 id="3-如何才能学号Shell编程之前辈的经验"><a href="#3-如何才能学号Shell编程之前辈的经验" class="headerlink" title="3. 如何才能学号Shell编程之前辈的经验"></a>3. 如何才能学号Shell编程之前辈的经验</h1><p>学好Shell编程的核心：多练–&gt;多思考–&gt;再练–&gt;再思考，坚持如此循环即可！</p>
-<p>以下是一个高手前辈对于如何学好Shell编程所分享的经验：</p>
-<ol>
-<li>掌握Shell脚本基本语法的方法<ul>
-<li>最简单有效的方法就是将语法敲n+1遍。为什么不是n遍呢？因为这里的n指的是你刚开始为掌握语法而练习的那些天（21天法则），而1则是指在确定掌握语法后每天都要写一些、想一想，至少是要看一看，保持一个与Shell脚本接触的热度。</li>
-</ul>
-</li>
-<li>掌握Shell脚本的各种常见语法<ul>
-<li>要掌握各类条件表达式，if多种判断、for循环的不同用法、while多种读文件的循环等，这样做不是为了什么都学会，而是为了能够看懂别人写的代码。掌握常见的各种语法，也就是要经常写，而且要持续写一段时间（让动作定型，在大脑和肌肉里都打上深刻烙印），各种语法都要用。</li>
-</ul>
-</li>
-<li>形成自己的脚本开发风格<ul>
-<li>当掌握了各种常见的语法之后，就要选定一种适合自己的语法，形成自己的开发风格，例如：if语句的语法就只用一种，条件表达式的语法只用一种，函数的写法也只用一种，有些语法需要根据场景去选择。没有必要什么语法都掌握。在解决问题的前提下，掌握一种语法，然后将其用精、用透就是最好的，切记横向痰多，要多纵深学习。</li>
-</ul>
-</li>
-<li>从简单做起，简单判断，简单循环<ul>
-<li>初学者一定要从简单做起，最小化代码学习，简单判断，简单循环，简单案例练习，所有的大程序都是由多个小程序组成的，因此，一开始没必要写多大的程序，免得给自己带来过多的挫败感，形成编程恐惧感。可先通过小的程序培养兴趣及成就感，到碰到大的程序时，即使遇到困难也能坚持下去了。</li>
-</ul>
-</li>
-<li>多模仿，多放下参考资料练习，多思考<ul>
-<li>多找一些脚本例子来仔细分析一下，或者是系统自带的，或者是别人写的，不要只看，看着会并不是真的会。当你闭上眼睛的时候，还能完整地回忆起来，甚至还能完整口述或手写出来才是真的会。</li>
-</ul>
-</li>
-<li>学会分析问题，逐渐形成编程思维<ul>
-<li>在编写程序或脚本时，先将需求理解透，对大的需求进行分解，逐步形成小的程序或模块，然后再开发，或者先分许最终需求的基础实现，最后逐步扩展批量实现。例如在编写批量关闭不需要的自启动服务的脚本时，就采用了这种分析方法，思路如下：<ul>
-<li>掌握关闭一个服务的命令，即 chkconfig 服务名 off</li>
-<li>批量处理时，会有多个服务名，那么就要用到多条以上的命令</li>
-<li>仔细分析以上命令，会发现需要处理的所有命令中，只有“服务名”不同，其它地方都一样，那么自然就会想到用循环语句来处理。</li>
-</ul>
-</li>
-<li>如果能够想到这些了，则表示你已经形成了初级的编程思维了。</li>
-<li>如果你能够通过分析将一个大的需求细分为各个小的单元，然后利用函数、判断、循环、命令等实现每一个小的单元，那么最后把所有程序组合起来就是一个大的脚本程序了。如果达到了这个水平，则表示你已经会编程了。对于领导提出的需求，就能够进行合理的分解，只要在机器上多进行调试，相信一定能写出来。</li>
-</ul>
-</li>
-<li>编程变量名字要规范，采用驼峰语法表示<ul>
-<li>oldboyAgeName用的就是驼峰表示法。记住，在学习的初期，不要去看大的脚本，要从小问题和小的方面着手，当你觉得小的判断、循环等在你的脑子里瞬间就能出来时，再开始去看和写大的脚本，进行深入练习。</li>
-<li>新手初期最好的学习方法就是多敲代码，并针对问题进行分解练习，多敲代码就是让自己养成一个编程习惯，使肌肉、视觉和思维形成记忆，分解问题实际上就是掌握软件的设计和实现思想。</li>
-<li>对于最高的编程境界，个人的理解是：能把大问题进行完整的分析、分解且高效解决。<ul>
-<li>完整性：就是指预先考虑到各种可能性，将问题分解后，合理模块化并实现</li>
-<li>高效率：例如，在求1到100的和时，考虑使用算法(1+100)x100/2，而不是逐个去加。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>不要拿来注意，特别是新手<ul>
-<li>好多网友看书或学习视频时，喜欢要文档、要代码，其实，这是学习的最大误区。</li>
-<li>有了文档和代码，你会变得非常懒惰，心里面会觉得已经学会了，而实际上并没有学会。因此无论是看书还是学习视频，都要自己完成学习笔记及代码的书写，这本身就是最重要的学习过程，在学习上要肯于花时间和精力，而不是投机取巧。如果你至今都没有学号Linux运维，那么可以想一想是不是也犯了这个错误？</li>
-</ul>
-</li>
-</ol>
-<h1 id="4-学习Shell应该达到何种的编程高度"><a href="#4-学习Shell应该达到何种的编程高度" class="headerlink" title="4. 学习Shell应该达到何种的编程高度"></a>4. 学习Shell应该达到何种的编程高度</h1><p>如果掌握了前文提到的Linux基础知识，再熟悉了Shell的编程知识，就能够成为一个合格的运维人员了。要达到的高度就是，至少能够搞定企业场景中的绝大多数Shell编程问题。</p>
-<hr>
+<h1 id="1-Shell脚本基本规范"><a href="#1-Shell脚本基本规范" class="headerlink" title="1. Shell脚本基本规范"></a>1. Shell脚本基本规范</h1><h1 id="2-Shell脚本变量命名及引用变量规范"><a href="#2-Shell脚本变量命名及引用变量规范" class="headerlink" title="2. Shell脚本变量命名及引用变量规范"></a>2. Shell脚本变量命名及引用变量规范</h1><h1 id="3-Shell函数的命名及函数定义规范"><a href="#3-Shell函数的命名及函数定义规范" class="headerlink" title="3. Shell函数的命名及函数定义规范"></a>3. Shell函数的命名及函数定义规范</h1><h1 id="4-Shell脚本（模块）高级命名规范"><a href="#4-Shell脚本（模块）高级命名规范" class="headerlink" title="4. Shell脚本（模块）高级命名规范"></a>4. Shell脚本（模块）高级命名规范</h1><h1 id="5-Shell脚本的代码风格"><a href="#5-Shell脚本的代码风格" class="headerlink" title="5. Shell脚本的代码风格"></a>5. Shell脚本的代码风格</h1><h2 id="5-1-代码框架"><a href="#5-1-代码框架" class="headerlink" title="5.1 代码框架"></a>5.1 代码框架</h2><h2 id="5-2-缩进规范"><a href="#5-2-缩进规范" class="headerlink" title="5.2. 缩进规范"></a>5.2. 缩进规范</h2><h1 id="6-Shell脚本的变量及文件检查规范"><a href="#6-Shell脚本的变量及文件检查规范" class="headerlink" title="6. Shell脚本的变量及文件检查规范"></a>6. Shell脚本的变量及文件检查规范</h1><hr>
 <blockquote>
 <p>OK</p>
 </blockquote>
@@ -498,12 +438,6 @@
 
     <footer class="post-footer">
       
-        <div class="post-tags">
-          
-            <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
-          
-        </div>
-      
 
       
       
@@ -513,8 +447,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/01/24/Linux/018. Linux基础部分补充内容/" rel="next" title="Linux基础部分补充内容">
-                <i class="fa fa-chevron-left"></i> Linux基础部分补充内容
+              <a href="/2018/02/19/Shell/015. Shell学习笔记13-Shell数组的应用实践/" rel="next" title="Shell学习笔记13-Shell数组的应用实践">
+                <i class="fa fa-chevron-left"></i> Shell学习笔记13-Shell数组的应用实践
               </a>
             
           </div>
@@ -523,8 +457,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/02/19/Linux/019. Linux重要命令汇总表/" rel="prev" title="Linux重要命令汇总表">
-                Linux重要命令汇总表 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/02/19/Shell/017. Shell学习笔记15-Shell脚本的调试/" rel="prev" title="Shell学习笔记15-Shell脚本的调试">
+                Shell学习笔记15-Shell脚本的调试 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -605,7 +539,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">40</span>
+                    <span class="site-state-item-count">59</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -708,7 +642,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-为什么要学习Shell编程"><span class="nav-text">1. 为什么要学习Shell编程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-学好Shell编程所需的基础知识"><span class="nav-text">2. 学好Shell编程所需的基础知识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-如何才能学号Shell编程之前辈的经验"><span class="nav-text">3. 如何才能学号Shell编程之前辈的经验</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-学习Shell应该达到何种的编程高度"><span class="nav-text">4. 学习Shell应该达到何种的编程高度</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Shell脚本基本规范"><span class="nav-text">1. Shell脚本基本规范</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Shell脚本变量命名及引用变量规范"><span class="nav-text">2. Shell脚本变量命名及引用变量规范</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Shell函数的命名及函数定义规范"><span class="nav-text">3. Shell函数的命名及函数定义规范</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Shell脚本（模块）高级命名规范"><span class="nav-text">4. Shell脚本（模块）高级命名规范</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Shell脚本的代码风格"><span class="nav-text">5. Shell脚本的代码风格</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-代码框架"><span class="nav-text">5.1 代码框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-缩进规范"><span class="nav-text">5.2. 缩进规范</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Shell脚本的变量及文件检查规范"><span class="nav-text">6. Shell脚本的变量及文件检查规范</span></a></li></ol></div>
             
 
           </div>

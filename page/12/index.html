@@ -312,7 +312,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/26/Linux/002. Linux系统的启动流程/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/26/Linux/005. Linux系统目录结构/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -331,7 +331,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/26/Linux/002. Linux系统的启动流程/" itemprop="url">Linux系统的启动流程</a></h1>
+                <a class="post-title-link" href="/2017/08/26/Linux/005. Linux系统目录结构/" itemprop="url">Linux系统目录结构</a></h1>
         
 
         <div class="post-meta">
@@ -343,7 +343,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-26T13:06:21+08:00">2017-08-26</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-26T17:24:25+08:00">2017-08-26</time>
             
 
             
@@ -364,7 +364,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:31:03+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:31:24+08:00">2018-02-23</time>
             
           </span>
 
@@ -419,14 +419,13 @@
           
 GO
 
-1. Linux系统的启动流程了解系统的启动流程，能够让我们在Linux系统在启动过程中遇到故障时，可以很快速地找到是在哪一步遇到了问题，这样我们就可以针对性地去排查故障。（以CentOS6系统为例说明）
-
-1.1. 第一阶段：硬件引导启动
-首先是BIOS加电自检，BIOS寻找启动介质，是
+1. FHS标准
+根据FHS（Filesystem Hierarchy Standard ）官方文件说明，其主要目的是希望让用户可以了解到已安装软件通常放在哪个目录下，所以其希望独立的开发商、操作系统制作者以及想要维护系统的用户，都能够遵循FHS标准。
+FHS将目录定义为四种交互作用的形态
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/26/Linux/002. Linux系统的启动流程/#more" rel="contents">
+            <a class="btn" href="/2017/08/26/Linux/005. Linux系统目录结构/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -482,7 +481,7 @@ GO
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/26/Linux/001. Linux配置静态IP联网/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/26/Linux/004. CentOS的单用户和救援模式/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -501,7 +500,7 @@ GO
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/26/Linux/001. Linux配置静态IP联网/" itemprop="url">Linux配置静态IP联网</a></h1>
+                <a class="post-title-link" href="/2017/08/26/Linux/004. CentOS的单用户和救援模式/" itemprop="url">CentOS的单用户和救援模式</a></h1>
         
 
         <div class="post-meta">
@@ -513,7 +512,7 @@ GO
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-26T11:36:14+08:00">2017-08-26</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-26T16:00:47+08:00">2017-08-26</time>
             
 
             
@@ -534,7 +533,7 @@ GO
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:30:56+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:31:18+08:00">2018-02-23</time>
             
           </span>
 
@@ -589,14 +588,16 @@ GO
           
 GO
 
-1. CentOS6 的网络配置1.1. 获取IP、网关等信息安装好CentOS后，第一件事情就是配置IP，让机器连接网络，之后便能够通过远程工具（如Putty、Xshell、SecureCRT等）来进行管理了。
+1. CentOS 6
+1.1 CentOS 6 的七个运行级别
+运行级别的配置文件为 /etc/inittab。查看这个文件，其中有七个运行级别的说明。
 
-首先，可以用 ifconfig 查看网卡的IP等信息。
-输入 ifconf
+cat /etc/inittab 查看该文件的的内容如下：
+12345678910# Default runlevel. The r
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/26/Linux/001. Linux配置静态IP联网/#more" rel="contents">
+            <a class="btn" href="/2017/08/26/Linux/004. CentOS的单用户和救援模式/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -652,7 +653,7 @@ GO
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/25/Linux/000. Linux在线帮助的使用/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/26/Linux/003. 远程连接Linux主机/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -671,7 +672,7 @@ GO
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/25/Linux/000. Linux在线帮助的使用/" itemprop="url">Linux在线帮助的使用</a></h1>
+                <a class="post-title-link" href="/2017/08/26/Linux/003. 远程连接Linux主机/" itemprop="url">远程连接Linux主机</a></h1>
         
 
         <div class="post-meta">
@@ -683,7 +684,7 @@ GO
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-25T12:38:43+08:00">2017-08-25</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-26T13:38:51+08:00">2017-08-26</time>
             
 
             
@@ -704,7 +705,7 @@ GO
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T09:41:23+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:31:11+08:00">2018-02-23</time>
             
           </span>
 
@@ -759,12 +760,14 @@ GO
           
 GO
 
-1. 命令执行错误信息当我们执行一条命令的时候，发生了错误，一般会在屏幕上面显示该错误的信息，我们可以通过这个错误信息来寻求解决办法。
-1.1. command not found我们遇到最多的错误大概就是这个command not found了，它的意思是命令找不到。通常出现这个错误的可
+1. 使用Putty连接远程Linux主机Putty免费开源，小巧玲珑，在WIndows和Linux上都支持。所以我选择使用这个工具来管理远程Linux主机。使用它的好处是：可以随意的复制粘贴，可以通过鼠标滚轮查看之前显示的历史信息。
+Putty套件的工具有很多，它们的功能如下所示：
+
+P
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/25/Linux/000. Linux在线帮助的使用/#more" rel="contents">
+            <a class="btn" href="/2017/08/26/Linux/003. 远程连接Linux主机/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -809,7 +812,7 @@ GO
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span><a class="page-number" href="/page/13/">13</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/13/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -858,7 +861,7 @@ GO
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">40</span>
+                    <span class="site-state-item-count">43</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

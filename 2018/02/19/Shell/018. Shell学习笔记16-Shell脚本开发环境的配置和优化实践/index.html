@@ -1,0 +1,1222 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+<meta name="description" content="GO   1. 使用Vim而不是Vi编辑器建议Shell程序或者Python程序开发都使用Vim。Vim是Vi的增强版，可以高亮显示代码、自动缩进等重要的功能。所以，要使用Vim来进行开发，可以将Vim的别名设置为Vi，这样一来，即使是用Vi的命令打开文件，也会调用Vim来进行工作。 因此，首先要做如下调整，以便只使用Vim作为开发脚本的工具：1234# echo &apos;alias vi=vim&apos;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell学习笔记16-Shell脚本开发环境的配置和优化实践">
+<meta property="og:url" content="http://www.theshu.top/2018/02/19/Shell/018. Shell学习笔记16-Shell脚本开发环境的配置和优化实践/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="GO   1. 使用Vim而不是Vi编辑器建议Shell程序或者Python程序开发都使用Vim。Vim是Vi的增强版，可以高亮显示代码、自动缩进等重要的功能。所以，要使用Vim来进行开发，可以将Vim的别名设置为Vi，这样一来，即使是用Vi的命令打开文件，也会调用Vim来进行工作。 因此，首先要做如下调整，以便只使用Vim作为开发脚本的工具：1234# echo &apos;alias vi=vim&apos;">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-02-19T13:16:19.889Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shell学习笔记16-Shell脚本开发环境的配置和优化实践">
+<meta name="twitter:description" content="GO   1. 使用Vim而不是Vi编辑器建议Shell程序或者Python程序开发都使用Vim。Vim是Vi的增强版，可以高亮显示代码、自动缩进等重要的功能。所以，要使用Vim来进行开发，可以将Vim的别名设置为Vi，这样一来，即使是用Vi的命令打开文件，也会调用Vim来进行工作。 因此，首先要做如下调整，以便只使用Vim作为开发脚本的工具：1234# echo &apos;alias vi=vim&apos;">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/02/19/Shell/018. Shell学习笔记16-Shell脚本开发环境的配置和优化实践/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Shell学习笔记16-Shell脚本开发环境的配置和优化实践 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/018. Shell学习笔记16-Shell脚本开发环境的配置和优化实践/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Shell学习笔记16-Shell脚本开发环境的配置和优化实践</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:42:46+08:00">2018-02-19</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-19T21:16:19+08:00">2018-02-19</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Shell/" itemprop="url" rel="index"><span itemprop="name">Shell</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>GO</p>
+</blockquote>
+<hr>
+<h1 id="1-使用Vim而不是Vi编辑器"><a href="#1-使用Vim而不是Vi编辑器" class="headerlink" title="1. 使用Vim而不是Vi编辑器"></a>1. 使用Vim而不是Vi编辑器</h1><p>建议Shell程序或者Python程序开发都使用Vim。Vim是Vi的增强版，可以高亮显示代码、自动缩进等重要的功能。所以，要使用Vim来进行开发，可以将Vim的别名设置为Vi，这样一来，即使是用Vi的命令打开文件，也会调用Vim来进行工作。</p>
+<p>因此，首先要做如下调整，以便只使用Vim作为开发脚本的工具：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> <span class="string">'alias vi=vim'</span> &gt;&gt; /etc/profile</span></div><div class="line"><span class="meta">#</span><span class="bash"> tail -1 /etc/profile</span></div><div class="line">alias vi=vim</div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">source</span> /etc/profile</span></div></pre></td></tr></table></figure></p>
+<p>经过上述调整后，当用vi命令时，会自动被vim替换。</p>
+<h1 id="2-配置文件-vimrc的重要参数介绍"><a href="#2-配置文件-vimrc的重要参数介绍" class="headerlink" title="2. 配置文件.vimrc的重要参数介绍"></a>2. 配置文件<strong>.vimrc</strong>的重要参数介绍</h1><p>在Linux中，每个用户都可以配置自己的Vim的风格，那就是<strong>~/.vimrc</strong>这个文件。我们可以进行适当的设置，从而达到高效开发的目的。</p>
+<p>下面是一个在运维岗位用来开发Shell脚本时的一个设置：<br><figure class="highlight ceylon"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div></pre></td><td class="code"><pre><div class="line"><span class="string">" ~/.vimrc</span></div><div class="line"><span class="string">"</span> vim config file</div><div class="line"><span class="string">" date 2018-02-20</span></div><div class="line"><span class="string">"</span> Created <span class="meta">by</span> theshu</div><div class="line"><span class="string">" </span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">"</span><span class="string">""""""</span><span class="string">"""""</span></div><div class="line"><span class="string">" 全局配置</span></div><div class="line"><span class="string">"""</span><span class="string">""""""</span><span class="string">"""</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 关闭兼容模式</span></div><div class="line"><span class="string">set nocompatible</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 设置历史记录步数</span></div><div class="line"><span class="string">set history=100</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 开启相关插件</span></div><div class="line"><span class="string">filetype on</span></div><div class="line"><span class="string">filetype plugin on</span></div><div class="line"><span class="string">filetype indent on</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 当文件在外部被修改时，自动更新该文件</span></div><div class="line"><span class="string">set autoread</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 激活鼠标的使用</span></div><div class="line"><span class="string">set mouse=a</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">"""</span><span class="string">""""""</span><span class="string">"""</span></div><div class="line"><span class="string">" 字体和颜色</span></div><div class="line"><span class="string">"""</span><span class="string">""""""</span><span class="string">"""</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 开启语法</span></div><div class="line"><span class="string">syntax enable</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 设置字体</span></div><div class="line"><span class="string">"set guifont=dejaVu\ Sans\ MONO\ 10</span></div><div class="line"><span class="string">"</span></div><div class="line"><span class="string">" 设置颜色</span></div><div class="line"><span class="string">"colorscheme desert</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 高亮显示当前行</span></div><div class="line"><span class="string">set cursorline</span></div><div class="line"><span class="string">hi cursorline guibg=#00ff00</span></div><div class="line"><span class="string">hi CursorColumn guibg=#00ff00</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">"""</span><span class="string">""""""</span><span class="string">"""</span></div><div class="line"><span class="string">" 代码折叠</span></div><div class="line"><span class="string">"""</span><span class="string">""""""</span><span class="string">"""</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 激活折叠功能</span></div><div class="line"><span class="string">set foldenable</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 设置按照语法方式折叠（可简写set fdm=XX）</span></div><div class="line"><span class="string">" 共6种折叠方法：</span></div><div class="line"><span class="string">"manual 手工定义折叠</span></div><div class="line"><span class="string">"indent 更多的缩进表示更高级别的折叠</span></div><div class="line"><span class="string">"expr   用表达式来定义折叠</span></div><div class="line"><span class="string">"syntax 用语法高亮来定义折叠</span></div><div class="line"><span class="string">"diff   对没有更改的文本进行折叠</span></div><div class="line"><span class="string">"marker 对文中的标志进行折叠</span></div><div class="line"><span class="string">set foldmethod=manual</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 设置折叠区域的宽度</span></div><div class="line"><span class="string">" 如果不为0，则在屏幕左侧显示一个折叠标识列</span></div><div class="line"><span class="string">" 分别用 "-" 和 "+" 来表示打开和关闭的折叠</span></div><div class="line"><span class="string">set foldcolumn=0</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 设置折叠层数为3</span></div><div class="line"><span class="string">setlocal foldlevel=3</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 设置为自动关闭折叠</span></div><div class="line"><span class="string">set foldclose=all</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 用空格键来代替zo和zc快捷键实现开关折叠</span></div><div class="line"><span class="string">" zo O-pen a fold   (打开折叠)</span></div><div class="line"><span class="string">" zc C-lose a fold  (关闭折叠)</span></div><div class="line"><span class="string">" zf F-old creation (创建折叠)</span></div><div class="line"><span class="string">nnoremap &lt;space&gt; @=((foldclosed(line('.')) &lt; 0) ? 'zc' : 'zo')&lt;CR&gt;</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">"""</span><span class="string">""""""</span><span class="string">"""</span></div><div class="line"><span class="string">" 文字处理</span></div><div class="line"><span class="string">"""</span><span class="string">""""""</span><span class="string">"""</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 使用空格来代替Tab</span></div><div class="line"><span class="string">"set expandtab</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 设置所有的Tab和缩进为4个空格</span></div><div class="line"><span class="string">set tabstop=4</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 设定 &lt;&lt; 和 &gt;&gt; 命令移动时的宽度为4</span></div><div class="line"><span class="string">set shiftwidth=4</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 使得按退格键时可以一次删掉4个空格</span></div><div class="line"><span class="string">set softtabstop=4</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">set smarttab</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 缩进，自动缩进（继承前一行的缩进）</span></div><div class="line"><span class="string">"set autoindent 命令关闭自动缩进，是下面配置的缩写</span></div><div class="line"><span class="string">" 可使用autoindent命令的简写，即 ":set ai" 和 ":set noai"</span></div><div class="line"><span class="string">" 还可以使用 ":set ai sw=4" 在一个命令中打开缩进并设置缩进级别</span></div><div class="line"><span class="string">set ai</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 智能缩进</span></div><div class="line"><span class="string">set si</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 自动换行</span></div><div class="line"><span class="string">set wrap</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 设置软宽度</span></div><div class="line"><span class="string">set sw=4</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">"""</span><span class="string">""""""</span><span class="string">"""</span></div><div class="line"><span class="string">" Vim界面</span></div><div class="line"><span class="string">"""</span><span class="string">""""""</span><span class="string">"""</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" Turn on WiLd menu</span></div><div class="line"><span class="string">set wildmenu</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 显示标尺</span></div><div class="line"><span class="string">set ruler</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 设置命令行的高度</span></div><div class="line"><span class="string">set cmdheight=1</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 显示行数</span></div><div class="line"><span class="string">set nu</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" Do not redraw, when running macros.. lazyredraw</span></div><div class="line"><span class="string">set lz</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 设置退格</span></div><div class="line"><span class="string">set backspace=eol,start,indent</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">"Bbackspace and cursor keys wrap to</span></div><div class="line"><span class="string">set whichwrap+=&lt;,&gt;,h,l</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" Set magic on （设置魔术）</span></div><div class="line"><span class="string">set magic</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 关闭遇到错误时的声音提示</span></div><div class="line"><span class="string">" 关闭错误信息响铃</span></div><div class="line"><span class="string">set noerrorbells</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 关闭使用可视响铃代替呼叫</span></div><div class="line"><span class="string">set novisualbell</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 显示匹配的括号([&#123; 和 &#125;])</span></div><div class="line"><span class="string">set showmatch</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">"How many tenths of a second to blink</span></div><div class="line"><span class="string">set mat=2</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 搜索时高亮显示搜索到的内容</span></div><div class="line"><span class="string">set hlsearch</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 搜索时不区分大小写</span></div><div class="line"><span class="string">" 还可以使用简写（":set ic" 和 ":set noic"）</span></div><div class="line"><span class="string">set ignorecase</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">"""</span><span class="string">""""""</span><span class="string">"""</span></div><div class="line"><span class="string">" 编码设置</span></div><div class="line"><span class="string">"""</span><span class="string">""""""</span><span class="string">"""</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 设置编码</span></div><div class="line"><span class="string">set encoding=utf-8</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 设置文件编码</span></div><div class="line"><span class="string">set fileencodings=utf-8</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 设置终端编码</span></div><div class="line"><span class="string">set termencoding=utf-8</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">"""</span><span class="string">""""""</span><span class="string">"""</span></div><div class="line"><span class="string">" 其它设置</span></div><div class="line"><span class="string">"""</span><span class="string">""""""</span><span class="string">"""</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 开启新行时使用智能自动缩进</span></div><div class="line"><span class="string">set smartindent</span></div><div class="line"><span class="string">set cin</span></div><div class="line"><span class="string">set showmatch</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 隐藏工具栏</span></div><div class="line"><span class="string">set guioptions-=T</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 隐藏菜单栏</span></div><div class="line"><span class="string">set guioptions-=m</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 置空错误铃音的终端代码</span></div><div class="line"><span class="string">set vb t_vb=</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 显示状态栏（默认值为1，表示无法显示状态栏）</span></div><div class="line"><span class="string">set laststatus=2</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 粘贴不换行问题的解决方法</span></div><div class="line"><span class="string">set pastetoggle=&lt;F9&gt;</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 设置背景色</span></div><div class="line"><span class="string">set background=dark</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 设置高亮相关</span></div><div class="line"><span class="string">highlight Search ctermbg=black ctermfg=white guifg=white guibg=black</span></div></pre></td></tr></table></figure></p>
+<p>说明：读者只需简单了解这些参数即可，实际使用时只需要把配置文件放到用户的家目录下，然后退出重新登陆即可使用Vim。</p>
+<p>在Shell脚本的开头自动增加解释器及作者等版权信息<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">autocmd</span> BufNewFile *.<span class="keyword">py</span>,*.<span class="keyword">cc</span>,*.<span class="keyword">sh</span>,*.java exec <span class="string">":call SetTitle()"</span></div><div class="line">func SetTitle()</div><div class="line">	<span class="keyword">if</span> <span class="built_in">expand</span>(<span class="string">"%:e"</span>) == <span class="string">'sh'</span></div><div class="line">		<span class="keyword">call</span> <span class="built_in">setline</span>(<span class="number">1</span>, <span class="string">"#!/bin/bash"</span>)</div><div class="line">		<span class="keyword">call</span> <span class="built_in">setline</span>(<span class="number">2</span>, <span class="string">"#Author:oldboy"</span>)</div><div class="line">		<span class="keyword">call</span> <span class="built_in">setline</span>(<span class="number">3</span>, <span class="string">"#Blog:http://www.theshu.top"</span>)</div><div class="line">		<span class="keyword">call</span> <span class="built_in">setline</span>(<span class="number">4</span>, <span class="string">"#Time:"</span>.<span class="built_in">strftime</span>(<span class="string">"%F %T"</span>))</div><div class="line">		<span class="keyword">call</span> <span class="built_in">setline</span>(<span class="number">5</span>, <span class="string">"#Name:"</span>.<span class="built_in">expand</span>(<span class="string">"%"</span>))</div><div class="line">		<span class="keyword">call</span> <span class="built_in">setline</span>(<span class="number">6</span>, <span class="string">"#Version:V1.0"</span>)</div><div class="line">		<span class="keyword">call</span> <span class="built_in">setline</span>(<span class="number">7</span>, <span class="string">"#Description:This is a test script."</span>)</div><div class="line">	<span class="keyword">endif</span></div><div class="line">endfunc</div></pre></td></tr></table></figure></p>
+<p>Vim路径等配置知识的整理如下表：</p>
+<table>
+<thead>
+<tr>
+<th>相关配置文件</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>~/.viminfo</td>
+<td>用户使用vim的操作历史</td>
+</tr>
+<tr>
+<td>~/.vimrc</td>
+<td>当前用户Vim的配置文件</td>
+</tr>
+<tr>
+<td>/etc/vimrc</td>
+<td>系统全局Vim的配置文件</td>
+</tr>
+<tr>
+<td>/usr/share/vim/vim74/colors/</td>
+<td>配置模板文件存放路径</td>
+</tr>
+</tbody>
+</table>
+<h1 id="3-让配置文件-vimrc生效"><a href="#3-让配置文件-vimrc生效" class="headerlink" title="3. 让配置文件.vimrc生效"></a>3. 让配置文件<strong>.vimrc</strong>生效</h1><p>将vim的配置文件.vimrc上传到Linux系统的家目录下，然后退出后重新登陆，即可应用.vimrc里对应的设置。</p>
+<p>提示：同样适用于普通用户。</p>
+<h1 id="4-使用Vim编辑器进行编码测试"><a href="#4-使用Vim编辑器进行编码测试" class="headerlink" title="4. 使用Vim编辑器进行编码测试"></a>4. 使用Vim编辑器进行编码测试</h1><h2 id="4-1-代码自动缩进功能"><a href="#4-1-代码自动缩进功能" class="headerlink" title="4.1. 代码自动缩进功能"></a>4.1. 代码自动缩进功能</h2><p>这个自动缩进的功能非常好用，当输入循环及条件结构语句等代码时，系统会自动将输入语句的关键字及命令代码缩进到合理的位置。而且缩进的宽度是可以在配置文件里面设置的。</p>
+<h2 id="4-2-代码颜色高亮显示功能说明"><a href="#4-2-代码颜色高亮显示功能说明" class="headerlink" title="4.2. 代码颜色高亮显示功能说明"></a>4.2. 代码颜色高亮显示功能说明</h2><p>代码颜色高亮显示也是一个非常好的功能，可以通过它区分字符、变量、循环等很多不通的Shell脚本元素。例如当编写的代码出现错误时，对应的代码高亮颜色就会和正确时的不同，开发者可以根据代码的高亮颜色对Shell脚本进行调试，提升编码的效率，减少编码的错误。</p>
+<h1 id="5-Vim配置文件的自动增加版权功能"><a href="#5-Vim配置文件的自动增加版权功能" class="headerlink" title="5. Vim配置文件的自动增加版权功能"></a>5. Vim配置文件的自动增加版权功能</h1><p>配置文件的最后一段的意思就是自动为Shell脚本文件自动增加版权信息的，也可以对照着配置其它编程语言的相关信息。</p>
+<h1 id="6-Vim配置文件的代码折叠功能"><a href="#6-Vim配置文件的代码折叠功能" class="headerlink" title="6. Vim配置文件的代码折叠功能"></a>6. Vim配置文件的代码折叠功能</h1><p>Vim非常强大，只不过对有些功能需要进行额外配置，比如在代码量较大时比较有用的高级功能——代码折叠（依赖.vimrc配置，当然也可以以命令模式执行）。</p>
+<p>在命令模式下，可以把光标定位到当前的第2行，然后执行<code>zf3j</code>命令，便可将第2行及其下面的3行缩进，其他缩进也是如此。</p>
+<p>在配置文件中，我们配置了这样的功能：把光标放到对应折叠后的行上，按空格键即可展开上述折叠的行。</p>
+<hr>
+<blockquote>
+<p>OK</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/19/Shell/017. Shell学习笔记15-Shell脚本的调试/" rel="next" title="Shell学习笔记15-Shell脚本的调试">
+                <i class="fa fa-chevron-left"></i> Shell学习笔记15-Shell脚本的调试
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/19/Shell/019. Shell学习笔记17-Linux信号及trap命令的企业应用实践/" rel="prev" title="Shell学习笔记17-Linux信号及trap命令的企业应用实践">
+                Shell学习笔记17-Linux信号及trap命令的企业应用实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">59</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-使用Vim而不是Vi编辑器"><span class="nav-text">1. 使用Vim而不是Vi编辑器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-配置文件-vimrc的重要参数介绍"><span class="nav-text">2. 配置文件.vimrc的重要参数介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-让配置文件-vimrc生效"><span class="nav-text">3. 让配置文件.vimrc生效</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-使用Vim编辑器进行编码测试"><span class="nav-text">4. 使用Vim编辑器进行编码测试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-代码自动缩进功能"><span class="nav-text">4.1. 代码自动缩进功能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-代码颜色高亮显示功能说明"><span class="nav-text">4.2. 代码颜色高亮显示功能说明</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Vim配置文件的自动增加版权功能"><span class="nav-text">5. Vim配置文件的自动增加版权功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Vim配置文件的代码折叠功能"><span class="nav-text">6. Vim配置文件的代码折叠功能</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

@@ -312,7 +312,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/26/Linux/005. Linux系统目录结构/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/31/Linux/008. Linux磁盘管理技术/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -331,7 +331,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/26/Linux/005. Linux系统目录结构/" itemprop="url">Linux系统目录结构</a></h1>
+                <a class="post-title-link" href="/2017/08/31/Linux/008. Linux磁盘管理技术/" itemprop="url">Linux磁盘管理技术</a></h1>
         
 
         <div class="post-meta">
@@ -343,7 +343,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-26T17:24:25+08:00">2017-08-26</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-31T14:23:34+08:00">2017-08-31</time>
             
 
             
@@ -364,7 +364,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:31:24+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:32:04+08:00">2018-02-23</time>
             
           </span>
 
@@ -419,13 +419,12 @@
           
 GO
 
-1. FHS标准
-根据FHS（Filesystem Hierarchy Standard ）官方文件说明，其主要目的是希望让用户可以了解到已安装软件通常放在哪个目录下，所以其希望独立的开发商、操作系统制作者以及想要维护系统的用户，都能够遵循FHS标准。
-FHS将目录定义为四种交互作用的形态
+这一章学习：如何分区、如何格式化、如何挂载、如何卸载。
+0. MBR和GPT0.1. MBRMBR全称Master Boot Record，中文叫做“主引导记录”，又叫做“主引导扇区”，是计算机开机后访问硬盘时所必须要读取的首个扇区，它在硬盘上的地址为0柱面0磁道1扇区。MBR 的主要作用
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/26/Linux/005. Linux系统目录结构/#more" rel="contents">
+            <a class="btn" href="/2017/08/31/Linux/008. Linux磁盘管理技术/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -481,7 +480,7 @@ FHS将目录定义为四种交互作用的形态
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/26/Linux/004. CentOS的单用户和救援模式/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/31/Linux/007. Linux用户与用户组管理技术/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -500,7 +499,7 @@ FHS将目录定义为四种交互作用的形态
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/26/Linux/004. CentOS的单用户和救援模式/" itemprop="url">CentOS的单用户和救援模式</a></h1>
+                <a class="post-title-link" href="/2017/08/31/Linux/007. Linux用户与用户组管理技术/" itemprop="url">Linux用户与用户组管理技术</a></h1>
         
 
         <div class="post-meta">
@@ -512,7 +511,7 @@ FHS将目录定义为四种交互作用的形态
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-26T16:00:47+08:00">2017-08-26</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-31T08:38:19+08:00">2017-08-31</time>
             
 
             
@@ -533,7 +532,7 @@ FHS将目录定义为四种交互作用的形态
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:31:18+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:31:57+08:00">2018-02-23</time>
             
           </span>
 
@@ -588,16 +587,12 @@ FHS将目录定义为四种交互作用的形态
           
 GO
 
-1. CentOS 6
-1.1 CentOS 6 的七个运行级别
-运行级别的配置文件为 /etc/inittab。查看这个文件，其中有七个运行级别的说明。
-
-cat /etc/inittab 查看该文件的的内容如下：
-12345678910# Default runlevel. The r
+这部分知识在日常工作中用的并不多，但是这些都是属于基础知识，也必须要掌握。
+1. 认识 /etc/passwd 和 /etc/shadow这两个文件是Linux系统中最重要的文件之一。注意，Linux系统关于像这两个与用户和组有关的文件，都会在相应的目录下面自动备份成相应的名字后面加-，如
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/26/Linux/004. CentOS的单用户和救援模式/#more" rel="contents">
+            <a class="btn" href="/2017/08/31/Linux/007. Linux用户与用户组管理技术/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -653,7 +648,7 @@ cat /etc/inittab 查看该文件的的内容如下：
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/26/Linux/003. 远程连接Linux主机/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/26/Linux/006. Linux文件与目录管理技术/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -672,7 +667,7 @@ cat /etc/inittab 查看该文件的的内容如下：
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/26/Linux/003. 远程连接Linux主机/" itemprop="url">远程连接Linux主机</a></h1>
+                <a class="post-title-link" href="/2017/08/26/Linux/006. Linux文件与目录管理技术/" itemprop="url">Linux文件与目录管理技术</a></h1>
         
 
         <div class="post-meta">
@@ -684,7 +679,7 @@ cat /etc/inittab 查看该文件的的内容如下：
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-26T13:38:51+08:00">2017-08-26</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-26T22:49:24+08:00">2017-08-26</time>
             
 
             
@@ -705,7 +700,7 @@ cat /etc/inittab 查看该文件的的内容如下：
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:31:11+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:31:32+08:00">2018-02-23</time>
             
           </span>
 
@@ -760,14 +755,22 @@ cat /etc/inittab 查看该文件的的内容如下：
           
 GO
 
-1. 使用Putty连接远程Linux主机Putty免费开源，小巧玲珑，在WIndows和Linux上都支持。所以我选择使用这个工具来管理远程Linux主机。使用它的好处是：可以随意的复制粘贴，可以通过鼠标滚轮查看之前显示的历史信息。
-Putty套件的工具有很多，它们的功能如下所示：
+0. 几个基本概念- 绝对路径和相对路径
+绝对路径：由根目录写起的路径。如：/usr/local/mysql。
+相对路径：不是由根目录。写起的路径。如：../ 表示上一层路径，./ 表示本层路径。
 
-P
+
+1. 文件管理命令- ls
+ls （list）用于查看某个目录下有何文件。
+
+
+
+
+常用
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/26/Linux/003. 远程连接Linux主机/#more" rel="contents">
+            <a class="btn" href="/2017/08/26/Linux/006. Linux文件与目录管理技术/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -812,7 +815,7 @@ P
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -861,7 +864,7 @@ P
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">40</span>
+                    <span class="site-state-item-count">43</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
