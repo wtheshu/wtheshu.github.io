@@ -105,20 +105,21 @@
 
 
   
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Shell," />
 
 
-<meta name="description" content="GO   1. Shell脚本的条件测试1.1. 条件测试方法综述1.2. test条件测试的简单语法及示例1.3. []（中括号）条件测试语法及示例1.4. [[]] 条件测试语法及示例2. 文件测试表达式2.1. 文件测试表达式的用法2.2. 文件测试表达式举例2.3. 特殊条件测试表达式案例3. 字符串测试表达式3.1. 字符串测试操作符3.2. 字符串测试生产案例4. 整数二元比较操作符">
+<meta name="description" content="GO   1. Shell脚本的条件测试1.1. 条件测试方法综述通常，在bash的各种条件结构和流程控制结构中都要进行各种测试，然后根据测试结果执行不同的操作，有时也会与if等条件语句相结合，来完成测试判断，以减少程序运行的错误。 执行条件测试表达式后通常会返回真或假，就像执行命令后的返回值为0表示真，非0表示假一样。 在bash编程里，条件测试常用的语法形式见下表：    条件测试语法 说明">
+<meta name="keywords" content="Shell">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Shell学习笔记06-Shell脚本的条件测试与比较">
 <meta property="og:url" content="http://www.theshu.top/2018/02/19/Shell/008. Shell学习笔记06-Shell脚本的条件测试与比较/index.html">
 <meta property="og:site_name" content="奇怪先生的博客">
-<meta property="og:description" content="GO   1. Shell脚本的条件测试1.1. 条件测试方法综述1.2. test条件测试的简单语法及示例1.3. []（中括号）条件测试语法及示例1.4. [[]] 条件测试语法及示例2. 文件测试表达式2.1. 文件测试表达式的用法2.2. 文件测试表达式举例2.3. 特殊条件测试表达式案例3. 字符串测试表达式3.1. 字符串测试操作符3.2. 字符串测试生产案例4. 整数二元比较操作符">
+<meta property="og:description" content="GO   1. Shell脚本的条件测试1.1. 条件测试方法综述通常，在bash的各种条件结构和流程控制结构中都要进行各种测试，然后根据测试结果执行不同的操作，有时也会与if等条件语句相结合，来完成测试判断，以减少程序运行的错误。 执行条件测试表达式后通常会返回真或假，就像执行命令后的返回值为0表示真，非0表示假一样。 在bash编程里，条件测试常用的语法形式见下表：    条件测试语法 说明">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-19T08:12:43.393Z">
+<meta property="og:updated_time" content="2018-02-27T10:18:29.546Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shell学习笔记06-Shell脚本的条件测试与比较">
-<meta name="twitter:description" content="GO   1. Shell脚本的条件测试1.1. 条件测试方法综述1.2. test条件测试的简单语法及示例1.3. []（中括号）条件测试语法及示例1.4. [[]] 条件测试语法及示例2. 文件测试表达式2.1. 文件测试表达式的用法2.2. 文件测试表达式举例2.3. 特殊条件测试表达式案例3. 字符串测试表达式3.1. 字符串测试操作符3.2. 字符串测试生产案例4. 整数二元比较操作符">
+<meta name="twitter:description" content="GO   1. Shell脚本的条件测试1.1. 条件测试方法综述通常，在bash的各种条件结构和流程控制结构中都要进行各种测试，然后根据测试结果执行不同的操作，有时也会与if等条件语句相结合，来完成测试判断，以减少程序运行的错误。 执行条件测试表达式后通常会返回真或假，就像执行命令后的返回值为0表示真，非0表示假一样。 在bash编程里，条件测试常用的语法形式见下表：    条件测试语法 说明">
 
 
 
@@ -362,7 +363,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-19T16:12:43+08:00">2018-02-19</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-27T18:18:29+08:00">2018-02-27</time>
             
           </span>
 
@@ -416,7 +417,439 @@
 <p>GO</p>
 </blockquote>
 <hr>
-<h1 id="1-Shell脚本的条件测试"><a href="#1-Shell脚本的条件测试" class="headerlink" title="1. Shell脚本的条件测试"></a>1. Shell脚本的条件测试</h1><h2 id="1-1-条件测试方法综述"><a href="#1-1-条件测试方法综述" class="headerlink" title="1.1. 条件测试方法综述"></a>1.1. 条件测试方法综述</h2><h2 id="1-2-test条件测试的简单语法及示例"><a href="#1-2-test条件测试的简单语法及示例" class="headerlink" title="1.2. test条件测试的简单语法及示例"></a>1.2. test条件测试的简单语法及示例</h2><h2 id="1-3-（中括号）条件测试语法及示例"><a href="#1-3-（中括号）条件测试语法及示例" class="headerlink" title="1.3. []（中括号）条件测试语法及示例"></a>1.3. []（中括号）条件测试语法及示例</h2><h2 id="1-4-条件测试语法及示例"><a href="#1-4-条件测试语法及示例" class="headerlink" title="1.4. [[]] 条件测试语法及示例"></a>1.4. [[]] 条件测试语法及示例</h2><h1 id="2-文件测试表达式"><a href="#2-文件测试表达式" class="headerlink" title="2. 文件测试表达式"></a>2. 文件测试表达式</h1><h2 id="2-1-文件测试表达式的用法"><a href="#2-1-文件测试表达式的用法" class="headerlink" title="2.1. 文件测试表达式的用法"></a>2.1. 文件测试表达式的用法</h2><h2 id="2-2-文件测试表达式举例"><a href="#2-2-文件测试表达式举例" class="headerlink" title="2.2. 文件测试表达式举例"></a>2.2. 文件测试表达式举例</h2><h2 id="2-3-特殊条件测试表达式案例"><a href="#2-3-特殊条件测试表达式案例" class="headerlink" title="2.3. 特殊条件测试表达式案例"></a>2.3. 特殊条件测试表达式案例</h2><h1 id="3-字符串测试表达式"><a href="#3-字符串测试表达式" class="headerlink" title="3. 字符串测试表达式"></a>3. 字符串测试表达式</h1><h2 id="3-1-字符串测试操作符"><a href="#3-1-字符串测试操作符" class="headerlink" title="3.1. 字符串测试操作符"></a>3.1. 字符串测试操作符</h2><h2 id="3-2-字符串测试生产案例"><a href="#3-2-字符串测试生产案例" class="headerlink" title="3.2. 字符串测试生产案例"></a>3.2. 字符串测试生产案例</h2><h1 id="4-整数二元比较操作符"><a href="#4-整数二元比较操作符" class="headerlink" title="4. 整数二元比较操作符"></a>4. 整数二元比较操作符</h1><h2 id="4-1-整数二元比较操作符介绍"><a href="#4-1-整数二元比较操作符介绍" class="headerlink" title="4.1. 整数二元比较操作符介绍"></a>4.1. 整数二元比较操作符介绍</h2><h2 id="4-2-整数变量测试实践示例"><a href="#4-2-整数变量测试实践示例" class="headerlink" title="4.2. 整数变量测试实践示例"></a>4.2. 整数变量测试实践示例</h2><h1 id="5-逻辑操作符"><a href="#5-逻辑操作符" class="headerlink" title="5. 逻辑操作符"></a>5. 逻辑操作符</h1><h2 id="5-1-逻辑操作符介绍"><a href="#5-1-逻辑操作符介绍" class="headerlink" title="5.1. 逻辑操作符介绍"></a>5.1. 逻辑操作符介绍</h2><h2 id="5-2-逻辑操作符实践示例"><a href="#5-2-逻辑操作符实践示例" class="headerlink" title="5.2. 逻辑操作符实践示例"></a>5.2. 逻辑操作符实践示例</h2><h2 id="5-3-逻辑操作符企业案例"><a href="#5-3-逻辑操作符企业案例" class="headerlink" title="5.3. 逻辑操作符企业案例"></a>5.3. 逻辑操作符企业案例</h2><h1 id="6-测试表达式test、-、-、-的区别总结"><a href="#6-测试表达式test、-、-、-的区别总结" class="headerlink" title="6. 测试表达式test、[]、[[]]、(()) 的区别总结"></a>6. 测试表达式test、[]、[[]]、(()) 的区别总结</h1><hr>
+<h1 id="1-Shell脚本的条件测试"><a href="#1-Shell脚本的条件测试" class="headerlink" title="1. Shell脚本的条件测试"></a>1. Shell脚本的条件测试</h1><h2 id="1-1-条件测试方法综述"><a href="#1-1-条件测试方法综述" class="headerlink" title="1.1. 条件测试方法综述"></a>1.1. 条件测试方法综述</h2><p>通常，在bash的各种条件结构和流程控制结构中都要进行各种测试，然后根据测试结果执行不同的操作，有时也会与if等条件语句相结合，来完成测试判断，以减少程序运行的错误。</p>
+<p>执行条件测试表达式后通常会返回<code>真</code>或<code>假</code>，就像执行命令后的返回值为<code>0表示真，非0表示假</code>一样。</p>
+<p>在bash编程里，条件测试常用的语法形式见下表：</p>
+<table>
+<thead>
+<tr>
+<th>条件测试语法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>语法1：<code>test &lt;测试表达式&gt;</code></td>
+<td>这是利用<code>test</code>命令进行条件测试表达式的方法。<code>test</code>命令和<code>&lt;测试表达式&gt;</code>之间至少有一个空格</td>
+</tr>
+<tr>
+<td>语法2：<code>[&lt;测试表达式&gt;]</code></td>
+<td>这是通过<code>[]</code>（单中括号）进行条件测试表达式的方法，和<code>test</code>命令的用法相同，这是推荐使用的方法。<code>[]</code>的边界和内容之间至少有一个空格</td>
+</tr>
+<tr>
+<td>语法3：<code>[[&lt;测试表达式&gt;]]</code></td>
+<td>这是通过<code>[[]]</code>（双中括号）进行条件测试表达式的方法，是比<code>test</code>和<code>[]</code>更新的语法格式。<code>[[]]</code>的边界和内容之间至少有一个空格</td>
+</tr>
+<tr>
+<td>语法4：<code>((&lt;测试表达式&gt;))</code></td>
+<td>这是通过<code>(())</code>（双小括号）进行条件测试表达式的方法，一般用于if语句里。<code>(())</code>（双小括号）两端不需要有空格。</td>
+</tr>
+</tbody>
+</table>
+<p>上表中有几个注意事项需要说明一下：</p>
+<ul>
+<li>语法1中的<code>test</code>命令和语法2中的<code>[]</code>是等价的。语法3中的<code>[[]]</code>为扩展的<code>test</code>命令，语法4中的<code>(())</code>常用于计算。建议以后使用相对友好的语法2，即中括号<code>[]</code>的语法格式。</li>
+<li>在<code>[[]]</code>（双中括号）中可以使用通配符等进行模式匹配，这是其区别于其他几种语法格式的地方。</li>
+<li><code>&amp;&amp;</code>、<code>||</code>、<code>&gt;</code>、<code>&lt;</code>等操作符可以应用于<code>[[]]</code>中，但不能应用于<code>[]</code>中，在<code>[]</code>中一般用<code>-a</code>、<code>-o</code>、<code>-gt</code>（用于整数）、<code>-lt</code>（用于整数）代替上述操作符。</li>
+<li>对于整数的关系运算，也可以使用Shell的算术运算符<code>(())</code>。</li>
+</ul>
+<h2 id="1-2-test条件测试的简单语法及示例"><a href="#1-2-test条件测试的简单语法及示例" class="headerlink" title="1.2. test条件测试的简单语法及示例"></a>1.2. test条件测试的简单语法及示例</h2><p>test条件测试的语法格式：<code>test &lt;测试表达式&gt;</code></p>
+<p>对于如下语句：<code>test -f file &amp;&amp; echo true || echo false</code>。该语句表示如果file文件存在，则输出true，否则（||）输出false。这里的&amp;&amp;是并且的意思。test的-f参数用于测试文件是否为普通文件，test命令若执行成功（为真），则执行&amp;&amp;后面的，命令，而||后面的命令是test命令执行失败之后（为假）所执行的命令。</p>
+<p>test命令测试表达式的逻辑也可以用上述表达式的一般逻辑（即仅有一个&amp;&amp;或||）来测试，示例如下：<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">test </span>-f filename &amp;&amp; echo 1  #&lt;==若表达式成功，则输出1</div><div class="line"><span class="keyword">test </span>-f filename || echo 0  #&lt;==若表达式不成功，则输出0</div></pre></td></tr></table></figure></p>
+<p>另外，逻辑操作符<code>&amp;&amp;</code>和<code>||</code>的两端既可以有空格，也可以无空格，这就要看个人的编程习惯了。</p>
+<p>范例：在test命令中使用-f选项（文件存在且为普通文件则表达式成立）测试文件：<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="string">[root@theshu</span> <span class="string">~]#</span> <span class="string">test</span> <span class="bullet">-f</span> <span class="string">file</span> <span class="string">&amp;&amp;</span> <span class="string">echo</span> <span class="literal">true</span> <span class="string">||</span> <span class="string">echo</span> <span class="literal">false</span></div><div class="line"><span class="literal">false</span></div><div class="line"><span class="string">[root@theshu</span> <span class="string">~]#</span> <span class="string">touch</span> <span class="string">file</span></div><div class="line"><span class="string">[root@theshu</span> <span class="string">~]#</span> <span class="string">test</span> <span class="bullet">-f</span> <span class="string">file</span> <span class="string">&amp;&amp;</span> <span class="string">echo</span> <span class="literal">true</span> <span class="string">||</span> <span class="string">echo</span> <span class="literal">false</span></div><div class="line"><span class="literal">true</span></div></pre></td></tr></table></figure></p>
+<p>范例：在test命令中使用-z选项（如果测试字符串的长度为0，则表达式成立）测试字符串：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># test -z <span class="string">"theshu"</span> &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">0</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># char=<span class="string">"theshu"</span></span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># test -z <span class="string">"$char"</span> &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">0</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># char=<span class="string">""</span></span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># test -z <span class="string">"$char"</span> &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">1</span></div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>提示：关于test测试表达式的更多知识可执行<code>man test</code>查看帮助，但大部分场景都会使用<code>[]</code>的语法替代<code>test</code>命令的语法。</p>
+</blockquote>
+<p>结论：test命令测试的功能很强大，但是和<code>[]</code>、<code>[[]]</code>的功能有所重合，因此，在实际工作中选择一种适合自己的语法就好了。对于其它的语法，能读懂别人写的脚本就可以了。</p>
+<h2 id="1-3-（中括号）条件测试语法及示例"><a href="#1-3-（中括号）条件测试语法及示例" class="headerlink" title="1.3. []（中括号）条件测试语法及示例"></a>1.3. []（中括号）条件测试语法及示例</h2><p><code>[]</code>条件测试的语法格式为：<code>[ &lt;测试表达式&gt; ]</code></p>
+<blockquote>
+<p>注意：中括号内部的两端要有空格，<code>[]</code>和<code>test</code>等价，即<code>test</code>的所有判断选择都可以直接在<code>[]</code>里使用。</p>
+</blockquote>
+<p>对于如下语句：<code>[ -f /tmp/theshu.txt ] &amp;&amp; echo 1 || echo 0</code>。如果<code>/tmp/theshu.txt</code>文件存在，则输出1，否则（<code>||</code>）输出0.这里的<code>&amp;&amp;</code>表示并且。<code>[]</code>的应用同<code>test</code>命令，若中括号里的命令执行成功（返回真），则执行<code>&amp;&amp;</code>后面的命令，否则执行<code>||</code>后面的命令。</p>
+<p><code>[]</code>测试表达式的逻辑也可以用如下的语法来判断逻辑的表达式写法（test命令的用法也适合于此），即：<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[ -f <span class="string">/tmp/theshu.txt</span> ] &amp;&amp; <span class="keyword">echo</span> 1	<span class="comment">#&lt;==若表达式成功，则输出1</span></div><div class="line">[ -f <span class="string">/tmp/theshu.txt</span> ] || <span class="keyword">echo</span> 0	<span class="comment">#&lt;==若表达式不成功，则输出0</span></div></pre></td></tr></table></figure></p>
+<p>另外，逻辑操作符<code>&amp;&amp;</code>和<code>||</code>的两端可以有空格也可以无空格。</p>
+<p>示例：利用<code>[]</code>加-f选项（文件存在且为普通文件则表达式成立）测试文件：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# [ -f /tmp/theshu.txt ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span></div><div class="line">[root@theshu ~]# <span class="section">touch</span> /tmp/theshu.txt</div><div class="line">[root@theshu ~]# [ -f /tmp/theshu.txt ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span></div><div class="line">[root@theshu ~]# [ -f /tmp/theshu.txt ] &amp;&amp; echo <span class="number">1</span></div><div class="line"><span class="number">1</span></div><div class="line">[root@theshu ~]# [ -f /tmp/theshu1.txt ] || echo <span class="number">0</span></div><div class="line"><span class="number">0</span></div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>提示：<code>[]</code>命令的选项和<code>test</code>命令的选项是通用的，因此，使用<code>[]</code>时的参数选项可以通过<code>man test</code>命令获取帮助。</p>
+</blockquote>
+<h2 id="1-4-条件测试语法及示例"><a href="#1-4-条件测试语法及示例" class="headerlink" title="1.4. [[]] 条件测试语法及示例"></a>1.4. [[]] 条件测试语法及示例</h2><p><code>[[]]</code>条件测试的语法格式为：<code>[[ &lt;测试表达式&gt; ]]</code>。注意：双括号里的两端也要有空格。</p>
+<p>对于如下语句：<code>[[ -f /tmp/theshu.txt ]] &amp;&amp; echo 1 || echo 0</code>。如果<code>/tmp/theshu.txt</code>文件存在就输出1，否则（||）就输出0.这里的<code>&amp;&amp;</code>表示并且。<code>[[]]</code>的应用属于<code>[]</code>和<code>test</code>命令的扩展命令，功能更丰富也更复杂。如果双括号里的表达式成立（为真），则执行<code>&amp;&amp;</code>后面的名利个，否则执行<code>||</code>后面的命令。</p>
+<p><code>[[]]</code>测试表达式的逻辑也可以使用如下的部分逻辑形式，即：<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="string">[[ -f /tmp/theshu.txt ]]</span> &amp;&amp; echo <span class="number">0</span>	#&lt;==若表达式成功则输出<span class="number">1</span></div><div class="line"><span class="string">[[ -f /tmp/theshu.txt ]]</span> || echo <span class="number">1</span>	#&lt;==若表达式不成功则输出<span class="number">0</span></div></pre></td></tr></table></figure></p>
+<p>另外，逻辑操作符<code>&amp;&amp;</code>和<code>||</code>的两端可以有空格也可以无空格。</p>
+<p>双中括号内部的两端要有空格，<code>[[]]</code>里的测试判断选项，也可以通过<code>man test</code>来获得，<code>[[]]</code>表达式与<code>[]</code>和<code>test</code>用法的选项部分是相同的，其与<code>[]</code>和<code>test</code>测试表达式的区别在于，在<code>[[]]</code>中可以使用通配符等进行模式匹配；并且<code>&amp;&amp;</code>、<code>||</code>、<code>&gt;</code>、<code>&lt;</code>等操作符可以用用<code>[[]]</code>中，但不能应用于<code>[]</code>中，在<code>[]</code>中一般使用<code>-a</code>、<code>-o</code>、<code>-gt</code>（用于整数）、<code>-lt</code>（用于整数）等操作符代替上文提到的用于<code>[[]]``中的符号。除了使用通配符功能之外，建议放弃这个双括号的写法，虽然它是较新的</code>test`命令的语法格式。</p>
+<p>范例：<code>[[]]</code>的使用示例：<br><figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# <span class="string">[[ -f /tmp/theshu.txt ]]</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span></div><div class="line">[root@theshu ~]# touch /tmp/theshu.txt</div><div class="line">[root@theshu ~]# <span class="string">[[ -f /tmp/theshu.txt ]]</span> || echo <span class="number">0</span></div></pre></td></tr></table></figure></p>
+<p>有关<code>test</code>、<code>[]</code>、<code>[[]]</code>这些操作符的用法，通过<code>help test</code>或<code>man test</code>查询即可得到帮助，完整的<code>[]</code>、<code>[[]]</code>用法可通过<code>man bash</code>来获取。</p>
+<h1 id="2-文件测试表达式"><a href="#2-文件测试表达式" class="headerlink" title="2. 文件测试表达式"></a>2. 文件测试表达式</h1><h2 id="2-1-文件测试表达式的用法"><a href="#2-1-文件测试表达式的用法" class="headerlink" title="2.1. 文件测试表达式的用法"></a>2.1. 文件测试表达式的用法</h2><p>在书写文件测试表达式时，通常可以使用下表中的文件测试操作符：</p>
+<table>
+<thead>
+<tr>
+<th>常用文件测试操作符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-d 文件</code>，d为directory</td>
+<td>文件存在且为目录则为真，即测试表达式成立</td>
+</tr>
+<tr>
+<td><code>-f 文件</code>，f为file</td>
+<td>文件存在且为普通文件则为真，即测试表达式成立</td>
+</tr>
+<tr>
+<td><code>-e 文件</code>，e为exist</td>
+<td>文件存在则为真，即测试表达式成立。注意区别与<code>-f</code>，<code>-e</code>不辨别是目录还是文件</td>
+</tr>
+<tr>
+<td><code>-r 文件</code>，r为read</td>
+<td>文件存在且可读则为真，即测试表达式成立</td>
+</tr>
+<tr>
+<td><code>-s 文件</code>，s为size</td>
+<td>文件存在且文件大小不为0则为真，即测试表达式成立</td>
+</tr>
+<tr>
+<td><code>-w 文件</code>，w为write</td>
+<td>文件存在且可写则为真，即测试表达式成立</td>
+</tr>
+<tr>
+<td><code>-x 文件</code>，x为executable</td>
+<td>文件存在且可执行则为真，即测试表达式成立</td>
+</tr>
+<tr>
+<td><code>-L 文件</code>，L为link</td>
+<td>文件存在且为链接文件则为真，即测试表达式成立</td>
+</tr>
+<tr>
+<td><code>f1 -nt f2</code>，nt为newer than</td>
+<td>文件<code>f1</code>比文件<code>f2</code>新则为真，即测试表达式成立。根据文件的修改时间来计算</td>
+</tr>
+<tr>
+<td><code>f1 -ot f2</code>，or为older than</td>
+<td>文件<code>f1</code>比文件<code>f2</code>旧则为真，即测试表达式成立。根据文件的修改时间来计算</td>
+</tr>
+</tbody>
+</table>
+<p>上表列出的是企业里比较常用的操作符，这些操作符对于<code>[[]]</code>、<code>[]</code>、<code>test</code>的测试表达式几乎是通用的，更多的操作符可通过<code>man test</code>获得帮助。</p>
+<h2 id="2-2-文件测试表达式举例"><a href="#2-2-文件测试表达式举例" class="headerlink" title="2.2. 文件测试表达式举例"></a>2.2. 文件测试表达式举例</h2><h3 id="2-2-1-普通文件测试表达式示例"><a href="#2-2-1-普通文件测试表达式示例" class="headerlink" title="2.2.1. 普通文件测试表达式示例"></a>2.2.1. 普通文件测试表达式示例</h3><ul>
+<li><p>普通文件（测试文件类型）</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># touch theshu</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># ls -l theshu</span></div><div class="line">-rw-r--r-- <span class="number">1</span> root root <span class="number">0</span> Feb <span class="number">27</span> <span class="number">11</span>:<span class="number">43</span> theshu</div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># [ -f theshu ] &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">1</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>目录文件（测试文件类型）</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# <span class="section">touch</span> theshu</div><div class="line">[root@theshu ~]# mkdir test</div><div class="line">[root@theshu ~]# [ -f test ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span></div><div class="line">[root@theshu ~]# [ -e test ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span></div><div class="line">[root@theshu ~]# [ -d test ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span></div><div class="line">[root@theshu ~]# [ -d teshu ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="2-2-2-测试文件属性示例"><a href="#2-2-2-测试文件属性示例" class="headerlink" title="2.2.2. 测试文件属性示例"></a>2.2.2. 测试文件属性示例</h3><ul>
+<li>范例：文件属性条件表达式测试实践：<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># ll theshu</span></div><div class="line">-rw-r--r-- <span class="number">1</span> root root <span class="number">0</span> Feb <span class="number">27</span> <span class="number">11</span>:<span class="number">43</span> theshu <span class="meta">#&lt;==文件权限默认为644</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># [ -r theshu ] &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">1</span>		<span class="meta">#&lt;==测试theshu是否可读</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># [ -w theshu ] &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">1</span>		<span class="meta">#&lt;==测试theshu是否可写</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># [ -x theshu ] &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">0</span>		<span class="meta">#&lt;==测试theshu是否可执行，输出为0，因为用户权限为没有x</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># chmod 001 theshu	#&lt;==修改theshu的权限位为001</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># ll theshu</span></div><div class="line">---------x <span class="number">1</span> root root <span class="number">0</span> Feb <span class="number">27</span> <span class="number">11</span>:<span class="number">43</span> theshu	<span class="meta">#&lt;==修改后的结果</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># [ -w theshu ] &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">1</span>	<span class="meta">#&lt;==用户权限位命名没有w，为什么还是返回1呢？</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo <span class="string">'echo test'</span> &gt; theshu	#&lt;==因为确实是可以写，这是root用户比较特殊的地方</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># [ -r theshu ] &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">1</span>	<span class="meta">#&lt;==用户权限位明明没有r，为什么还是返回1呢？</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># cat theshu</span></div><div class="line">echo test	<span class="meta">#&lt;==确实是可以读，这是root用户比较特殊的地方</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># [ -x theshu ] &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">1</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># ./theshu	#&lt;==可执行</span></div><div class="line">test</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>提示：测试文件的读、写、执行等属性，不光是根据文件属性<code>rwx</code>的标识来判断，还要看当前执行测试的用户是否真的可以按照对应的权限操作该文件。</p>
+</blockquote>
+<h3 id="2-2-3-测试Shell变量示例"><a href="#2-2-3-测试Shell变量示例" class="headerlink" title="2.2.3. 测试Shell变量示例"></a>2.2.3. 测试Shell变量示例</h3><ul>
+<li><p>首先定义<code>file1</code>和<code>file2</code>两个变量，并分别赋予这两个变量对应的系统文件路径及文件名的值，如下：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# <span class="attribute">file1</span>=/etc/services ; <span class="attribute">file2</span>=/etc/rc.local</div><div class="line">[root@theshu ~]# echo <span class="variable">$file1</span> <span class="variable">$file2</span></div><div class="line">/etc/services /etc/rc.local</div></pre></td></tr></table></figure>
+</li>
+<li><p>范例：对单个文件变量进行测试：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# [ -f <span class="string">"$file1"</span> ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span>	#&lt;==文件存在且为普通文件，所以为真（<span class="number">1</span>）</div><div class="line">[root@theshu ~]# [ -d <span class="string">"$file2"</span> ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span>	#&lt;==是文件而不是目录，所以为假（<span class="number">0</span>）</div><div class="line">[root@theshu ~]# [ -s <span class="string">"$file1"</span> ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span>	#&lt;==文件存在且大小不为<span class="number">0</span>，所有为真（<span class="number">1</span>）</div><div class="line">[root@theshu ~]# [ -e <span class="string">"$file1"</span> ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span>	#&lt;==文件存在，所以为真（<span class="number">1</span>）</div></pre></td></tr></table></figure>
+</li>
+<li><p>范例：对单个目录或文件进行测试：</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># [ -e /etc ] &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">1</span></div><div class="line">[root@theshu ~]<span class="comment"># [ -w /etc/services ] &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">1</span></div><div class="line">[root@theshu ~]<span class="comment"># su - theshu	#&lt;==切换到普通用户</span></div><div class="line">Last login: Tue Feb <span class="number">27</span> <span class="number">10</span>:<span class="number">35</span>:<span class="number">07</span> CST <span class="number">2018</span> <span class="keyword">from</span> <span class="number">221.199</span><span class="number">.162</span><span class="number">.130</span> <span class="literal">on</span> pts/<span class="number">0</span></div><div class="line">[theshu@theshu ~]$ [ -w /etc/services ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span>	<span class="comment">#&lt;==文件不可写，所以返回0</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>测试时变量的特殊写法级问题</p>
+<ul>
+<li><p>用<code>[]</code>测试变量时，如果被测试的变量不加双引号，那么测试结果可能会是不正确的，示例如下：</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $theshu</span></div><div class="line">		<span class="meta">#&lt;==假设theshu变量没有被定义</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># [ -f $theshu ] &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">1</span>		<span class="meta">#&lt;==不加引号测试变量，逻辑结果错误</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># [ -f <span class="string">"$theshu"</span> ] &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">0</span>		<span class="meta">#&lt;==加引号后测试变量，结果正确</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>如果是文件实体路径，那么加引号与不加引号的结果是一样的：</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># [ -f <span class="string">"/etc/services"</span> ] &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">1</span>		<span class="meta">#&lt;==加引号测试，结果正确</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># [ -f /etc/services ] &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">1</span>		<span class="meta">#&lt;==不加引号测试，结果也正确</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>范例：在生产环境下，系统NFS启动脚本（<code>/etc/init.d/nfs</code>）的条件测试：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Source networking configuration.</span></div><div class="line">[ -f /etc/sysconfig<span class="built_in">/network </span>] &amp;&amp; . /etc/sysconfig/network</div><div class="line"></div><div class="line"><span class="comment"># Check for and source configuration file otherwise set defaults</span></div><div class="line">[ -f /etc/sysconfig/nfs ] &amp;&amp; . /etc/sysconfig/nfs</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>特别提示：系统脚本是我们学习编程的第一标杆，新手要多多参考脚本来学习，虽然有些脚本也不是特别规范。</p>
+</blockquote>
+<ul>
+<li>范例：实现系统bind启动脚本named（bind DNS服务）：<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[ -r /etc/sysconfig<span class="built_in">/network </span>] &amp;&amp; . /etc/sysconfig/network</div><div class="line"><span class="comment">#&lt;==若文件存在且可读，则加载/etc/sysconfig/network</span></div><div class="line">[ -x /usr/sbin/<span class="variable">$named</span> ] || exit 5 </div><div class="line"><span class="comment">#&lt;==如果/usr/sbin/$named不可执行，则退出</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>特别提示：前面所将的都是<code>[ -f /etc ] &amp;&amp; echo 1 || echo 0</code>的用法，bind启动脚本<code>[ -x /usr/sbin/$named ] || exit 5</code>的用法更值得注意，这里只用了一部分判断，结果却更简洁。</p>
+</blockquote>
+<ul>
+<li>范例：写出简单高效的测试文件<ul>
+<li>在做测试判断时，不一定非得按照：<code>前面的操作成功了如何，否则如何</code>的方法来进行。直接做部分判断，有时看起来更简洁。例如：<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[ -x theshu ] &amp;&amp; <span class="keyword">echo</span> 1</div><div class="line">[ -f <span class="string">/etc</span>] || <span class="keyword">echo</span> 0</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-3-特殊条件测试表达式案例"><a href="#2-3-特殊条件测试表达式案例" class="headerlink" title="2.3. 特殊条件测试表达式案例"></a>2.3. 特殊条件测试表达式案例</h2><p>以下写法适用于所有的条件测试表达式，是工作中比较常用的替代if语句的方法。判断条件测试表达式的条件成立或不成立后，还需要继续执行多条命令语句的语法形式如下。</p>
+<p>例如：当条件1成立时，同时执行命令1、命令2、命令3.不用if测试表达式的格式如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#&lt;==第一种测试</span></div><div class="line">[ 条件1 ] &amp;&amp; &#123;</div><div class="line">	命令1</div><div class="line">	命令2</div><div class="line">	命令3</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">#&lt;==第二种测试</span></div><div class="line">[[ 条件1 ]] &amp;&amp; &#123;</div><div class="line">	命令1</div><div class="line">	命令2</div><div class="line">	命令3</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">#&lt;==第三种测试</span></div><div class="line"><span class="built_in">test</span> 条件1 &amp;&amp; &#123;</div><div class="line">	命令1</div><div class="line">	命令2</div><div class="line">	命令3</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>上面的判断相当于下面的if语句的效果：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> [ 条件1 ]</div><div class="line"><span class="keyword">then</span></div><div class="line">	命令1</div><div class="line">	命令2</div><div class="line">	命令3</div><div class="line"><span class="keyword">fi</span></div></pre></td></tr></table></figure></p>
+<p>上述的结构是当满足条件执行大括号里面的命令，如果是当条件不满足时才执行大括号里面的命令，那就要把<code>&amp;&amp;</code>换成<code>||</code>。</p>
+<p>范例：当条件不成立时，执行大括号里的多条命令，这里要使用逻辑操作符<code>||</code>：<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat test123.sh</span></div><div class="line">[ -f <span class="string">/etc</span> ] || &#123;	<span class="comment">#&lt;==如果/etc/是普通文件不成立，则执行大括号里的命令集合</span></div><div class="line">        <span class="keyword">echo</span> 1</div><div class="line">        <span class="keyword">echo</span> 2</div><div class="line">        <span class="keyword">echo</span> 3</div><div class="line">&#125;</div><div class="line">[root@theshu ~]<span class="comment"># sh test123.sh</span></div><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td></tr></table></figure></p>
+<p>如果把上述脚本写在一行里面，那么里面的每个命令都需要用分号结尾，示例如下：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="string">[root@theshu ~]</span># <span class="string">[ -f /etc/services ]</span> &amp;&amp; &#123; echo <span class="string">"I am theshu"</span>; echo <span class="string">"I am goodman"</span>; &#125;</div><div class="line">I am theshu</div><div class="line">I am goodman</div></pre></td></tr></table></figure></p>
+<h1 id="3-字符串测试表达式"><a href="#3-字符串测试表达式" class="headerlink" title="3. 字符串测试表达式"></a>3. 字符串测试表达式</h1><h2 id="3-1-字符串测试操作符"><a href="#3-1-字符串测试操作符" class="headerlink" title="3.1. 字符串测试操作符"></a>3.1. 字符串测试操作符</h2><p>字符串测试操作符的作用包括：比较两个字符串是否相同、测试字符串的长度是否为零、字符串是否为NULL等。（NULL是指通过bash区分零长度字符串和空字符串）。</p>
+<p>在书写测试表达式时，可以使用下表中的字符串测试操作符：</p>
+<table>
+<thead>
+<tr>
+<th>常用字符串测试操作符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-n &quot;字符串&quot;</code></td>
+<td>若字符串的长度不为0，则为真，即测试表达式成立，n可以理解为<code>no zero</code></td>
+</tr>
+<tr>
+<td><code>-z &quot;字符串&quot;</code></td>
+<td>若字符串的长度为0，则为真，即测试表达式成立，z可以理解为<code>zero</code>的缩写</td>
+</tr>
+<tr>
+<td><code>&quot;串1&quot;=&quot;串2&quot;</code></td>
+<td>若字符串1等于字符串2，则为真，即测试表达式成立，可使用<code>==</code>代替<code>=</code></td>
+</tr>
+<tr>
+<td><code>&quot;串1&quot;!=&quot;串2&quot;</code></td>
+<td>若字符串1不等于字符串2，则为真，即测试表达式成立，但不能用<code>!==</code>代替<code>!=</code></td>
+</tr>
+</tbody>
+</table>
+<p>以下是针对字符串测试操作符的提示：</p>
+<ul>
+<li>对于字符串的测试，一定要将字符串加双引号之后再进行比较。如<code>[ -n &quot;$myvar&quot; ]</code>，特别是使用<code>[]</code>的场景。</li>
+<li>比较符号（例如<code>=</code>和<code>!=</code>）的两端一定要有空格。</li>
+<li><code>!=</code>和<code>=</code>可用于比较两个字符串是否相同。</li>
+</ul>
+<p>字符串比较时的两个错误用法：</p>
+<ul>
+<li><p>字符串比较是若等号两端没有空格，则会导致判断出现逻辑错误，即使语法没问题，但是结果依然可能不对。示例如下：</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># [ <span class="string">"abc"</span>=<span class="string">"1"</span> ] &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">1</span>	<span class="meta">#&lt;==若等号两端不带空格，则会出现明显的逻辑错误</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># [ <span class="string">"abc"</span> = <span class="string">"1"</span> ] &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">0</span>	<span class="meta">#&lt;==带空格的就是准确的</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>字符串不加双引号，可能会导致判断上出现逻辑错误，即使语法没问题，但是结果依然可能不对。示例如下：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# var=<span class="string">""</span> #&lt;==将变量内容置空</div><div class="line">[root@theshu ~]# [ -n <span class="string">"$var"</span> ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span>	#&lt;==有双引号</div><div class="line"><span class="number">0</span>	#&lt;==给变量加双引号，返回<span class="number">0</span>，-n不为空时为真，因为变量内容为空吗，因此输出<span class="number">0</span>是对的。</div><div class="line">[root@theshu ~]# [ -n $var ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span>	#&lt;==去掉双引号</div><div class="line"><span class="number">1</span>	#&lt;==同样的表达式，不加引号和加双引号后测试的结果相反，可见加双引号的重要性</div><div class="line">[root@theshu ~]# [ -z <span class="string">"$var"</span> ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span>	#&lt;==如果字符串长度为<span class="number">0</span>，则输出<span class="number">1</span>，否则输出<span class="number">0</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="3-2-字符串测试生产案例"><a href="#3-2-字符串测试生产案例" class="headerlink" title="3.2. 字符串测试生产案例"></a>3.2. 字符串测试生产案例</h2><p>范例：有关双引号和等号两端空格的生产系统标准：<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># sed -n '30,31p' /etc/init.d/network	#&lt;==系统网卡启动脚本案例</span></div><div class="line"><span class="comment"># Check that networking is up.</span></div><div class="line">[ <span class="string">"$&#123;NETWORKING&#125;"</span> = <span class="string">"no"</span> ] &amp;&amp; <span class="keyword">exit</span> <span class="number">6</span>	</div><div class="line"><span class="comment">#&lt;==字符串变量和字符串都加了双引号，比较符号两端也都有空格</span></div></pre></td></tr></table></figure></p>
+<h1 id="4-整数二元比较操作符"><a href="#4-整数二元比较操作符" class="headerlink" title="4. 整数二元比较操作符"></a>4. 整数二元比较操作符</h1><h2 id="4-1-整数二元比较操作符介绍"><a href="#4-1-整数二元比较操作符介绍" class="headerlink" title="4.1. 整数二元比较操作符介绍"></a>4.1. 整数二元比较操作符介绍</h2><p>在书写测试表达式时，可以使用下面表中的整数二元比较操作符：</p>
+<table>
+<thead>
+<tr>
+<th><code>[]</code>和<code>test</code>中使用</th>
+<th><code>(())</code>和<code>[[]]</code>中使用</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-eq</code></td>
+<td><code>==</code> 或 <code>=</code></td>
+<td>相等，equal</td>
+</tr>
+<tr>
+<td><code>-ne</code></td>
+<td><code>!=</code></td>
+<td>不想等，not equal</td>
+</tr>
+<tr>
+<td><code>-gt</code></td>
+<td><code>&gt;</code></td>
+<td>大于，greater than</td>
+</tr>
+<tr>
+<td><code>-ge</code></td>
+<td><code>&gt;=</code></td>
+<td>大于等于，greater equal</td>
+</tr>
+<tr>
+<td><code>-lt</code></td>
+<td><code>&lt;</code></td>
+<td>小于</td>
+</tr>
+<tr>
+<td><code>le</code></td>
+<td><code>&lt;=</code></td>
+<td>小于等于，less equal</td>
+</tr>
+</tbody>
+</table>
+<p>以下是针对上述符号的特别说明：</p>
+<ul>
+<li><code>=</code>和<code>!=</code>也可以在<code>[]</code>中做比较使用，但在<code>[]</code>中使用包含<code>&gt;</code>和<code>&lt;</code>的符号时，需要用反斜杠转义，有时不转义虽然语法不会报错，但是结果可能会不对。</li>
+<li>也可以在<code>[[]]</code>中使用包含<code>-gt</code>和<code>-lt</code>的符号，但是不建议这样使用</li>
+<li>比较符号两端也要有空格</li>
+</ul>
+<p>范例：二元数字在<code>[]</code>中使用<code>&lt;</code>、<code>&gt;</code>非标准符号的比较：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# [ <span class="number">2</span> &gt; <span class="number">1</span> ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span></div><div class="line">[root@theshu ~]# [ <span class="number">2</span> &lt; <span class="number">1</span> ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span>	#&lt;==这里的逻辑结果不对，条件不成立，则应该返回<span class="number">0</span>，可见，&lt;操作符在[]里使用时会带来问题</div><div class="line">[root@theshu ~]# [ <span class="number">2</span> \&lt; <span class="number">1</span> ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span>	#&lt;==转义后这里是正确的</div><div class="line">[root@theshu ~]# [ <span class="number">2</span> = <span class="number">1</span> ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span>	#&lt;==比较相等符号是正确的</div><div class="line">[root@theshu ~]# [ <span class="number">2</span> = <span class="number">2</span> ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span>   #&lt;==比较相等符号是正确的</div><div class="line">[root@theshu ~]# [ <span class="number">2</span> != <span class="number">2</span> ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span>	#&lt;==比较不相等符号也是正确的</div></pre></td></tr></table></figure></p>
+<p>对于比较符号的应用，建议尽可能地按照上面表格中标记的方法来使用，以避免出现逻辑错误。</p>
+<p>范例：二元数字在<code>[]</code>中使用<code>-gt</code>、<code>-le</code>类符号的比较：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# [ <span class="number">2</span> -gt <span class="number">1</span> ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span>	#&lt;==<span class="number">2</span>大于<span class="number">1</span>成立，输出<span class="number">1</span></div><div class="line">[root@theshu ~]# [ <span class="number">2</span> -ge <span class="number">1</span> ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span>	#&lt;==<span class="number">2</span>大于等于<span class="number">1</span>成立，输出<span class="number">1</span></div><div class="line">[root@theshu ~]# [ <span class="number">2</span> -le <span class="number">1</span> ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span>	#&lt;==<span class="number">2</span>小于等于<span class="number">1</span>不成立，输出<span class="number">0</span></div><div class="line">[root@theshu ~]# [ <span class="number">2</span> -lt <span class="number">1</span> ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span>	#&lt;==<span class="number">2</span>小于<span class="number">1</span>不成立，输出<span class="number">0</span></div></pre></td></tr></table></figure></p>
+<p>范例：二元数字配合不同种类的操作符在<code>[[]]</code>中的比较：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# [[ <span class="number">5</span> &gt; <span class="number">6</span> ]] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span>	#&lt;==<span class="number">5</span>大于<span class="number">6</span>不成立，输出<span class="number">0</span></div><div class="line">[root@theshu ~]# [[ <span class="number">5</span> &lt; <span class="number">6</span> ]] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span>	#&lt;==<span class="number">5</span>小于<span class="number">6</span>成立，输出<span class="number">1</span></div><div class="line">[root@theshu ~]# [[ <span class="number">5</span> != <span class="number">6</span> ]] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span>	#&lt;==<span class="number">5</span>不等于<span class="number">6</span>成立，输出<span class="number">1</span></div><div class="line">[root@theshu ~]# [[ <span class="number">5</span> = <span class="number">6</span> ]] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span>	#&lt;==<span class="number">5</span>等于<span class="number">6</span>不成立，输出<span class="number">0</span></div><div class="line">[root@theshu ~]# [[ <span class="number">5</span> -gt <span class="number">6</span> ]] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span>	#&lt;==<span class="number">5</span>大于<span class="number">6</span>不成立，输出<span class="number">0</span></div><div class="line">[root@theshu ~]# [[ <span class="number">5</span> -lt <span class="number">6</span> ]] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span>	#&lt;==<span class="number">5</span>小于<span class="number">6</span>成立，输出<span class="number">0</span></div><div class="line">[root@theshu ~]# [[ <span class="number">65</span> &gt; <span class="number">66</span> ]] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span>	#&lt;==<span class="number">65</span>大于<span class="number">66</span>不成立，输出<span class="number">0</span></div><div class="line">[root@theshu ~]# [[ <span class="number">65</span> &lt; <span class="number">66</span> ]] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span>	#&lt;==<span class="number">65</span>小于<span class="number">66</span>成立，输出<span class="number">1</span></div><div class="line">[root@theshu ~]# [[ <span class="number">65</span> = <span class="number">66</span> ]] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span>	#&lt;==<span class="number">65</span>等于<span class="number">66</span>不成立，输出<span class="number">0</span></div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>提示：<code>[[]]</code>是扩展的<code>test</code>命令，其语法更丰富也更复杂。对于实际工作中的常规比较，不建议使用<code>[[]]</code>，会给Shell学习带来很多麻烦，除非是特殊的正则匹配等，在<code>[]</code>无法使用的场景下才hi考虑使用<code>[[]]</code>。</p>
+</blockquote>
+<p>范例：二元数字在<code>(())</code>中的比较：<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># ((3&gt;2)) &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">1</span>	<span class="comment">#&lt;==3大于2成立，输出1</span></div><div class="line">[root@theshu ~]<span class="comment"># ((3&lt;2)) &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">0</span>	<span class="comment">#&lt;==3小于2不成立，输出0</span></div><div class="line">[root@theshu ~]<span class="comment"># ((3==2)) &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">0</span>	<span class="comment">#&lt;==3等于2不成立，输出0</span></div><div class="line">[root@theshu ~]<span class="comment"># ((3!==2)) &amp;&amp; echo 1 || echo 0</span></div><div class="line">-bash: ((: <span class="number">3</span>!==<span class="number">2</span>: syntax error: operand expected (error token <span class="keyword">is</span> <span class="string">"=2"</span>)</div><div class="line"><span class="number">0</span>	<span class="comment">#&lt;== !==符号不可用，语法错误</span></div><div class="line">[root@theshu ~]<span class="comment"># ((3!=2)) &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">1</span>	<span class="comment">#&lt;==3不等于2成立，输出1</span></div></pre></td></tr></table></figure></p>
+<p>有关<code>[]</code>、<code>[[]]</code>、<code>(())</code>用法的小结：</p>
+<ul>
+<li>整数加双引号的比较是对的</li>
+<li><code>[[]]</code>中用类似<code>-eq</code>等的写法是对的，<code>[[]]</code>中用类似<code>&gt;</code>、<code>&lt;</code>的写法也可能不对，有可能会只比较第一位，逻辑结果不对</li>
+<li><code>[]</code>中用类似<code>&gt;</code>、<code>&lt;</code>的写法在语法上虽然可能没错，但逻辑结果不对，可以使用<code>=</code>、<code>!=</code>正确比较</li>
+<li><code>(())</code>中不能使用类似<code>-eq</code>等的写法，可以使用类似<code>&gt;</code>、<code>&lt;</code>的写法</li>
+</ul>
+<blockquote>
+<p>提示：对于工作场景中的整数比较，推荐使用<code>[]</code>（类似<code>-eq</code>的用法），当然使用<code>(())</code>的写法也是可以的。（只需要养成一个习惯即可）</p>
+</blockquote>
+<h2 id="4-2-整数变量测试实践示例"><a href="#4-2-整数变量测试实践示例" class="headerlink" title="4.2. 整数变量测试实践示例"></a>4.2. 整数变量测试实践示例</h2><p>范例：通过<code>[]</code>实现整数条件测试<br><figure class="highlight mel"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# a1=<span class="number">98</span>;a2=<span class="number">99</span></div><div class="line">[root@theshu ~]# [ $a1 -eq $a2 ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span>	#&lt;==测试$a1是否等于$a2</div><div class="line">[root@theshu ~]# [ $a1 -gt $a2 ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span>	#&lt;==测试$a1是否大于$a2</div><div class="line">[root@theshu ~]# [ $a1 -lt $a2 ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span>	#&lt;==测试$a1是否小于$a2</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>提示：有关整数（要确认是整数，否则hi报错）大小的比较，推荐使用本例中的方法。</p>
+</blockquote>
+<p>范例：利用<code>[[]]</code>和<code>(())</code>实现直接通过常规数学运算符进行比较：<br><figure class="highlight mel"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# a1=<span class="number">98</span>;a2=<span class="number">99</span></div><div class="line">[root@theshu ~]# [[ $a1 &gt; $a2 ]] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span>	#&lt;==测试$a1是否大于$a2，尽量不用此写法</div><div class="line">[root@theshu ~]# [[ $a1 &lt; $a2 ]] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span>	#&lt;==测试$a1是否小于$a2，尽量不用此写法</div><div class="line">[root@theshu ~]# (($a1&gt;=$a2)) &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">0</span>	#&lt;==测试$a1是否大于等于$a2，此写法也可以</div><div class="line">[root@theshu ~]# (($a1&lt;=$a2)) &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span>	#&lt;==测试$a1是否小于等于$a2，此写法也可以</div></pre></td></tr></table></figure></p>
+<p>有关整数（要确认是整数，否则会报错）的大小比较，<code>(())</code>语法要优于<code>[[]]</code>，但还是推荐优先使用<code>[]</code>，次选是<code>(())</code>，不推荐使用<code>[[]]</code>。示例如下：<br><figure class="highlight powershell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[ <span class="variable">$num1</span> <span class="nomarkup">-eq</span> <span class="variable">$num2</span> ] <span class="comment">#&lt;==注意比较符号两边的空格和比较符号的写法，必须要有空格</span></div><div class="line">((<span class="variable">$sum1</span>&gt;<span class="variable">$sum2</span>))		<span class="comment">#&lt;==比较符号两边无需空格（多空格也可），使用常规数学的比较符号即可</span></div></pre></td></tr></table></figure></p>
+<h1 id="5-逻辑操作符"><a href="#5-逻辑操作符" class="headerlink" title="5. 逻辑操作符"></a>5. 逻辑操作符</h1><h2 id="5-1-逻辑操作符介绍"><a href="#5-1-逻辑操作符介绍" class="headerlink" title="5.1. 逻辑操作符介绍"></a>5.1. 逻辑操作符介绍</h2><p>在书写测试表达式时，可以使用下表中的逻辑操作符实现复杂的条件测试：</p>
+<table>
+<thead>
+<tr>
+<th><code>[]</code>和<code>test</code>中使用</th>
+<th><code>[[]]</code>和<code>(())</code>中使用</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-a</code></td>
+<td><code>&amp;&amp;</code></td>
+<td>and，与，两端都为真，则结果为真</td>
+</tr>
+<tr>
+<td><code>-o</code></td>
+<td><code>双竖线</code></td>
+<td>or，或，两端有一个为真，则结果为真</td>
+</tr>
+<tr>
+<td><code>!</code></td>
+<td><code>!</code></td>
+<td>not，非，两端相反，则结果为真</td>
+</tr>
+</tbody>
+</table>
+<p>对于上述操作符，有如下提示：</p>
+<ul>
+<li>逻辑操作符前后的表达式是否成立，一般用真假来表示</li>
+<li><code>!</code>的中文意思是<code>反</code>，即与一个逻辑值相反的逻辑值‘</li>
+<li><code>-a</code>的中文意思是<code>与</code>（<code>and</code>或<code>&amp;&amp;</code>），前后两个逻辑值都为<code>真</code>，综合返回值才为<code>真</code>，反之为<code>假</code></li>
+<li><code>-o</code>的中文意思是<code>或</code>（<code>or</code>或<code>||</code>），前后两个逻辑值只要有一个为<code>真</code>,，返回值就为<code>真</code></li>
+<li>连接两含<code>[]</code>、<code>test</code>或<code>[[]]</code>的表达式可用<code>&amp;&amp;</code>或<code>||</code></li>
+</ul>
+<p>逻辑操作符运算规则：</p>
+<ul>
+<li><p><code>-a</code>和<code>&amp;&amp;</code>的运算规则：只有逻辑操作符两端的表达式都成立时才为真；真（true）表示成立，对应的数字为<code>1</code>；假（false）表示不成立，对应的数字为<code>0</code>，这一点相当于如下表达式：</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># [ -f /etc/hosts -a -f /etc/services ] &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">1</span>	<span class="comment">#&lt;==单中括号文件测试</span></div><div class="line">[root@theshu ~]<span class="comment"># [[ -f /etc/hosts &amp;&amp; -f /etc/services ]] &amp;&amp; echo 1 || echo 0</span></div><div class="line"><span class="number">1</span>	<span class="comment">#&lt;==双中括号文件测试</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>使用<code>-a</code>或<code>&amp;&amp;</code>的总和表达式结果，相当于将两端表达式结果的对应数字（0或1）相乘：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">and结果<span class="number">1</span>*<span class="number">0</span>=<span class="number">0</span> 假</div><div class="line">and结果<span class="number">0</span>*<span class="number">1</span>=<span class="number">0</span> 假</div><div class="line">and结果<span class="number">1</span>*<span class="number">1</span>=<span class="number">1</span> 真</div><div class="line">and结果<span class="number">0</span>*<span class="number">0</span>=<span class="number">0</span> 假</div></pre></td></tr></table></figure>
+</li>
+<li><p>结论：<code>and（&amp;&amp;）</code>也称为<code>与</code>，只有两端都是1时才为真，相当于取前后表达式的交集</p>
+</li>
+<li><p><code>-o</code>或<code>||</code>两端都是<code>0</code>才为假，任何一端不为0就是真，这相当于将两边表达式结果的对应数字（0或1）相加，对应的表达式为：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# [ <span class="number">5</span> -eq <span class="number">6</span> -o <span class="number">5</span> -gt <span class="number">3</span> ] &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span></div><div class="line">[root@theshu ~]# ((<span class="number">5</span>==<span class="number">6</span>||<span class="number">5</span>&gt;<span class="number">3</span>)) &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span></div></pre></td></tr></table></figure>
+</li>
+<li><p><code>-o</code>或<code>||</code>的运算规则为：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">or 结果<span class="number">1</span>+<span class="number">0</span>=<span class="number">1</span> 真</div><div class="line">or 结果<span class="number">1</span>+<span class="number">1</span>=<span class="number">2</span> 真（非<span class="number">0</span>即为真）</div><div class="line">or 结果<span class="number">0</span>+<span class="number">1</span>=<span class="number">1</span> 真</div><div class="line">or 结果<span class="number">0</span>+<span class="number">0</span>=<span class="number">0</span> 假</div></pre></td></tr></table></figure>
+</li>
+<li><p>结论：<code>or（||）</code>也称为<code>或</code>，它的两端表达式的结果都是0时才为假，不为0就是真。相当于对前后表达式结果取并集。</p>
+</li>
+</ul>
+<h2 id="5-2-逻辑操作符实践示例"><a href="#5-2-逻辑操作符实践示例" class="headerlink" title="5.2. 逻辑操作符实践示例"></a>5.2. 逻辑操作符实践示例</h2><p>范例：<code>[]</code>里的操作符错用<code>&amp;&amp;</code>等逻辑运算符示例：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="string">[root@theshu ~]</span># f1=/etc/rc.local ; f2=/etc/services</div><div class="line"><span class="string">[root@theshu ~]</span># echo -ne <span class="string">"$f1 $f2\n"</span></div><div class="line">/etc/rc.local /etc/services</div><div class="line"><span class="string">[root@theshu ~]</span># <span class="string">[ -f "$f1" &amp;&amp; -f "$f2" ]</span> &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line">-bash: <span class="string">[: missing `]</span>'	#&lt;==这是错误语法，<span class="string">[]</span>中不能用&amp;&amp;或||</div><div class="line"><span class="number">0</span></div><div class="line"><span class="string">[root@theshu ~]</span># <span class="string">[ -f "$f1" ]</span> &amp;&amp; <span class="string">[ -f "$f2" ]</span> &amp;&amp; echo <span class="number">1</span> || echo <span class="number">0</span></div><div class="line"><span class="number">1</span>	#&lt;==如果在<span class="string">[]</span>中想使用&amp;&amp;，则这样用</div></pre></td></tr></table></figure></p>
+<p>总结前面已讲过的内容：</p>
+<ul>
+<li><code>-a</code>和<code>-o</code>逻辑操作符号需要用于<code>[]</code>中</li>
+<li><code>&amp;&amp;</code>和<code>||</code>逻辑操作符号可用于<code>[[]]</code>或<code>(())</code>中，也可以在外部连接多个<code>[]</code></li>
+<li>注意，在<code>[]</code>和<code>[[]]</code>的两端及比较符号的两端，必须要有空格，但是对于<code>(())</code>不需要。</li>
+<li>提示：<code>[]</code>中使用<code>-a</code>或<code>-o</code>更常见，<code>[[]]</code>中使用<code>&amp;&amp;</code>或<code>||</code>不常见，使用<code>&amp;&amp;</code>或<code>||</code>连接两个<code>[]</code>的多表达式判断也不常见。</li>
+</ul>
+<p>范例：系统启动脚本中有关<code>[[]]</code>的用法和与或非判断的使用案例</p>
+<ul>
+<li>在操作系统中，<code>[[]]</code>的用法不是很多，并且大多数情况都用于与通配符匹配的场景。</li>
+<li><p>这里不得不通过大海捞针的方法（遍历<code>/etc.init.d/</code>下的所有的脚本）来查找<code>[[]]</code>的用法：</p>
+<figure class="highlight lua"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# <span class="keyword">for</span> n <span class="keyword">in</span> `ls /etc/init.d/*`;<span class="keyword">do</span> egrep -wn <span class="string">"\[\[ "</span> $n&amp;&amp;echo $n;done</div><div class="line"><span class="number">50</span>:     <span class="keyword">if</span> <span class="string">[[ $route == *" via "* ]]</span> ; <span class="keyword">then</span></div><div class="line"><span class="number">75</span>:             <span class="keyword">if</span> ! <span class="string">[[ "$SYSLOGADDR" =~ $IPv4_regex ]]</span> &amp;&amp; ! <span class="string">[[ "$SYSLOGADDR" =~ $IPv6_regex ]]</span>; <span class="keyword">then</span></div><div class="line"><span class="number">80</span>:                     <span class="keyword">if</span> <span class="string">[[ $? -eq 2 ]]</span>; <span class="keyword">then</span></div><div class="line"><span class="number">84</span>:                     <span class="keyword">if</span> <span class="string">[[ $? -ne 0 ]]</span>; <span class="keyword">then</span></div><div class="line">/etc/init.d/netconsole</div></pre></td></tr></table></figure>
+</li>
+<li><p>由上述遍历可见，<code>[[]]</code>的普通应用场景不多，但在<code>[[]]</code>通配符匹配的场景下，其它测试表达式无法替代，因此，如果需要通配符或正则匹配就用<code>[[]]</code></p>
+</li>
+</ul>
+<h2 id="5-3-逻辑操作符企业案例"><a href="#5-3-逻辑操作符企业案例" class="headerlink" title="5.3. 逻辑操作符企业案例"></a>5.3. 逻辑操作符企业案例</h2><p>范例：打印选择菜单，按照选项一键安装不同的Web服务。</p>
+<p>示例菜单：<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># sh menu.sh</span></div><div class="line">	<span class="number">1</span>.[install lamp]</div><div class="line">	<span class="number">2</span>.[install lnmp]</div><div class="line">	<span class="number">3</span>.[<span class="keyword">exit</span>]</div><div class="line">	Pls input the num you want:</div></pre></td></tr></table></figure></p>
+<p>要求：</p>
+<ol>
+<li>当用户输入1时，输出”start installing lamp”提示，然后执行/server/scripts/lamp.sh，输出”lamp is installed”，并退出脚本，此为工作中所用的lamp一键安装脚本。</li>
+<li>当用户输入2时，输出”start installing lnmp”提示，然后执行/server/scripts/lnmp.sh，输出”lnmp is installed”，并退出脚本，此为工作中所用的lnmp一键安装脚本。</li>
+<li>当输入3时，退出当前菜单及脚本。</li>
+<li>当输入任何其他字符时，给予提示”Input error”后退出脚本。</li>
+<li>对执行的脚本进行相关的条件判断，例如：脚本文件是否存在，是否可执行等的判断。</li>
+</ol>
+<p>打印简单的所选菜单示例1：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#&lt;==前面的准备工作</span></div><div class="line"><span class="comment"># mkdir -p /server/scripts</span></div><div class="line"><span class="comment"># cd /server/scripts</span></div><div class="line"><span class="comment"># echo "echo lamp is installed" &gt; lamp.sh</span></div><div class="line"><span class="comment"># echo "echo lnmp is installed" &gt; lnmp.sh</span></div><div class="line"><span class="comment"># chmod +x lnmp.sh lamp.sh</span></div><div class="line"><span class="comment">#&lt;==以上步骤模拟lamp和lnmp的安装脚本及过程。</span></div></pre></td></tr></table></figure></p>
+<p>下面是正式脚本的内容：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">path=/server/scripts	<span class="comment">#&lt;==定义脚本路径</span></div><div class="line">[ ! -d <span class="string">"<span class="variable">$path</span>"</span> ] &amp;&amp; mkdir <span class="variable">$path</span> -p	<span class="comment">#&lt;==条件表达式判断，如果目录不存在，则创建目录</span></div><div class="line"><span class="comment">#menu</span></div><div class="line">cat &lt;&lt;END  <span class="comment">#&lt;==利用cat命令打印选择菜单，这里也可以用select语句打印选择菜单</span></div><div class="line">	1.[install lamp]</div><div class="line">	2.[install lnmp]</div><div class="line">	3.[<span class="built_in">exit</span>]</div><div class="line">	Pls input the num you want: </div><div class="line">END</div><div class="line"><span class="built_in">read</span> num	<span class="comment">#&lt;==接受用户选择的数字 </span></div><div class="line">expr <span class="variable">$num</span> + 1 &amp;&gt; /dev/null	<span class="comment">#判断石佛为整数</span></div><div class="line">[ $? -ne 0 ] &amp;&amp; &#123;</div><div class="line">	<span class="built_in">echo</span> <span class="string">"the num you input must be (1|2|3)"</span></div><div class="line">	<span class="built_in">exit</span> 1</div><div class="line">&#125;</div><div class="line"></div><div class="line">[ <span class="string">"<span class="variable">$num</span>"</span> = <span class="string">"1"</span> ] &amp;&amp; &#123;</div><div class="line">	<span class="built_in">echo</span> <span class="string">"start installing LAMP."</span></div><div class="line">	sleep 2;</div><div class="line">	[ -x <span class="string">"<span class="variable">$path</span>/lamp.sh"</span> ] || &#123;</div><div class="line">		<span class="built_in">echo</span> <span class="string">"<span class="variable">$path</span>/lamp.sh does not exist or can not be exec."</span></div><div class="line">		<span class="built_in">exit</span> 1</div><div class="line">	&#125;</div><div class="line">	<span class="variable">$path</span>/lamp.sh <span class="comment">#&lt;==执行脚本安装脚本，工作中建议用source $path/lamp.sh替代</span></div><div class="line">	<span class="comment">#source $path/lamp.sh #&lt;==脚本中执行脚本，使用source比sh或不加解释器等更好一些</span></div><div class="line">	<span class="built_in">exit</span> $?</div><div class="line">&#125;</div><div class="line"></div><div class="line">[ <span class="variable">$num</span> -eq 2 ] &amp;&amp; &#123;</div><div class="line">	<span class="built_in">echo</span> <span class="string">"start installing LNMP."</span></div><div class="line">	sleep 2;</div><div class="line">	[ -x <span class="string">"<span class="variable">$path</span>/lnmp.sh"</span> ] || &#123;</div><div class="line">		<span class="built_in">echo</span> <span class="string">"<span class="variable">$path</span>/lnmp.sh does not exist or can not be exec."</span></div><div class="line">		<span class="built_in">exit</span> 1</div><div class="line">	&#125;</div><div class="line">	<span class="variable">$path</span>/lnmp.sh</div><div class="line">	<span class="comment">#source $path/lnmp.sh</span></div><div class="line">	<span class="built_in">exit</span> $?</div><div class="line">&#125;</div><div class="line"></div><div class="line">[ <span class="variable">$num</span> -eq 3 ] &amp;&amp; &#123;</div><div class="line">	<span class="built_in">echo</span> <span class="built_in">bye</span>.</div><div class="line">	<span class="built_in">exit</span> 3</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">#这里有三种用户的输入不等于1、2或3的综合用法</span></div><div class="line">[[ ! <span class="variable">$num</span> =~  [1-3] ]] &amp;&amp; &#123;		<span class="comment">#&lt;==[[]]的正则匹配方法</span></div><div class="line">	<span class="built_in">echo</span> <span class="string">"the num you input must be (1|2|3)"</span></div><div class="line">	<span class="built_in">echo</span> <span class="string">"Input ERROR"</span></div><div class="line">	<span class="built_in">exit</span> 4</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>提示：这里关于判断用户的输入是否等于1、2或3的用法共给出了三种。请一定要重视。使用菜单时还可以用<code>select</code>语句，不过还是<code>cat</code>的方法更常用，也更简单。</p>
+</blockquote>
+<h1 id="6-测试表达式test、-、-、-的区别总结"><a href="#6-测试表达式test、-、-、-的区别总结" class="headerlink" title="6. 测试表达式test、[]、[[]]、(()) 的区别总结"></a>6. 测试表达式test、[]、[[]]、(()) 的区别总结</h1><p>测试表达式的语法比较复杂且容易混淆，对于初学者，一定要个自己设定个知识边界。下表中列出了测试表达式<code>[]</code>、<code>[[]]</code>、<code>(())</code>、<code>test</code>的区别：</p>
+<table>
+<thead>
+<tr>
+<th>测试表达式符号</th>
+<th><code>[]</code></th>
+<th><code>test</code></th>
+<th><code>[[]]</code></th>
+<th><code>(())</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>边界是否需要空格</td>
+<td>需要</td>
+<td>需要</td>
+<td>需要</td>
+<td>不需要</td>
+</tr>
+<tr>
+<td>逻辑操作符</td>
+<td><code>!</code>、<code>-a</code>、<code>-o</code></td>
+<td><code>!</code>、<code>-a</code>、<code>-o</code></td>
+<td><code>!</code>、<code>&amp;&amp;</code>、<code>双竖线</code></td>
+<td><code>!</code>、<code>&amp;&amp;</code>、<code>双竖线</code></td>
+</tr>
+<tr>
+<td>整数比较操作符</td>
+<td><code>-eq</code>、<code>-gt</code>、<br><code>lt</code> <code>-ge</code>、<br><code>-le</code></td>
+<td><code>-eq</code>、<code>-gt</code>、<br><code>lt</code>、<code>-ge</code> <br><code>-le</code></td>
+<td><code>-eq</code>、<code>-gt</code>、<code>lt</code>、<br><code>-ge</code>、<code>-le</code> <br>或<code>=</code>、<code>&gt;</code>、<code>&lt;</code>、<code>&gt;=</code>、<code>&lt;=</code></td>
+<td><code>=</code>、<code>&gt;</code>、<code>&lt;</code>、<code>&gt;=</code>、<code>&lt;=</code></td>
+</tr>
+<tr>
+<td>字符串比较操作符</td>
+<td><code>=</code>、<code>==</code>、<code>!=</code></td>
+<td><code>=</code>、<code>==</code>、<code>!=</code></td>
+<td><code>=</code>、<code>==</code>、<code>!=</code></td>
+<td><code>=</code>、<code>==</code>、<code>!=</code></td>
+</tr>
+<tr>
+<td>是否支持通配符匹配</td>
+<td>不支持</td>
+<td>不支持</td>
+<td>支持</td>
+<td>不支持</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>提示：普通的读者学习Shell编程主要是为了解决工作中的问题，因此无需掌握全部的语法，建议只用推荐的<code>[]</code>的用法，对其他的语法了解杰克，当有需要时，可以翻看资料或查阅bash文档<code>man bash</code>，以及对应命令<code>man test</code>的帮助。</p>
+</blockquote>
+<hr>
 <blockquote>
 <p>OK</p>
 </blockquote>
@@ -438,6 +871,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
+          
+        </div>
+      
 
       
       
@@ -456,10 +895,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/02/19/Shell/009. Shell学习笔记07-if条件语句的知识与实践/" rel="prev" title="Shell学习笔记07-if条件语句的知识与实践">
-                Shell学习笔记07-if条件语句的知识与实践 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -539,7 +974,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">59</span>
+                    <span class="site-state-item-count">45</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -642,7 +1077,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Shell脚本的条件测试"><span class="nav-text">1. Shell脚本的条件测试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-条件测试方法综述"><span class="nav-text">1.1. 条件测试方法综述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-test条件测试的简单语法及示例"><span class="nav-text">1.2. test条件测试的简单语法及示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-（中括号）条件测试语法及示例"><span class="nav-text">1.3. []（中括号）条件测试语法及示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-条件测试语法及示例"><span class="nav-text">1.4. [[]] 条件测试语法及示例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-文件测试表达式"><span class="nav-text">2. 文件测试表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-文件测试表达式的用法"><span class="nav-text">2.1. 文件测试表达式的用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-文件测试表达式举例"><span class="nav-text">2.2. 文件测试表达式举例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-特殊条件测试表达式案例"><span class="nav-text">2.3. 特殊条件测试表达式案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-字符串测试表达式"><span class="nav-text">3. 字符串测试表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-字符串测试操作符"><span class="nav-text">3.1. 字符串测试操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-字符串测试生产案例"><span class="nav-text">3.2. 字符串测试生产案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-整数二元比较操作符"><span class="nav-text">4. 整数二元比较操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-整数二元比较操作符介绍"><span class="nav-text">4.1. 整数二元比较操作符介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-整数变量测试实践示例"><span class="nav-text">4.2. 整数变量测试实践示例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-逻辑操作符"><span class="nav-text">5. 逻辑操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-逻辑操作符介绍"><span class="nav-text">5.1. 逻辑操作符介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-逻辑操作符实践示例"><span class="nav-text">5.2. 逻辑操作符实践示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-逻辑操作符企业案例"><span class="nav-text">5.3. 逻辑操作符企业案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-测试表达式test、-、-、-的区别总结"><span class="nav-text">6. 测试表达式test、[]、[[]]、(()) 的区别总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Shell脚本的条件测试"><span class="nav-text">1. Shell脚本的条件测试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-条件测试方法综述"><span class="nav-text">1.1. 条件测试方法综述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-test条件测试的简单语法及示例"><span class="nav-text">1.2. test条件测试的简单语法及示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-（中括号）条件测试语法及示例"><span class="nav-text">1.3. []（中括号）条件测试语法及示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-条件测试语法及示例"><span class="nav-text">1.4. [[]] 条件测试语法及示例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-文件测试表达式"><span class="nav-text">2. 文件测试表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-文件测试表达式的用法"><span class="nav-text">2.1. 文件测试表达式的用法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-文件测试表达式举例"><span class="nav-text">2.2. 文件测试表达式举例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-普通文件测试表达式示例"><span class="nav-text">2.2.1. 普通文件测试表达式示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-测试文件属性示例"><span class="nav-text">2.2.2. 测试文件属性示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-3-测试Shell变量示例"><span class="nav-text">2.2.3. 测试Shell变量示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-特殊条件测试表达式案例"><span class="nav-text">2.3. 特殊条件测试表达式案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-字符串测试表达式"><span class="nav-text">3. 字符串测试表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-字符串测试操作符"><span class="nav-text">3.1. 字符串测试操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-字符串测试生产案例"><span class="nav-text">3.2. 字符串测试生产案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-整数二元比较操作符"><span class="nav-text">4. 整数二元比较操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-整数二元比较操作符介绍"><span class="nav-text">4.1. 整数二元比较操作符介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-整数变量测试实践示例"><span class="nav-text">4.2. 整数变量测试实践示例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-逻辑操作符"><span class="nav-text">5. 逻辑操作符</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-逻辑操作符介绍"><span class="nav-text">5.1. 逻辑操作符介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-逻辑操作符实践示例"><span class="nav-text">5.2. 逻辑操作符实践示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-逻辑操作符企业案例"><span class="nav-text">5.3. 逻辑操作符企业案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-测试表达式test、-、-、-的区别总结"><span class="nav-text">6. 测试表达式test、[]、[[]]、(()) 的区别总结</span></a></li></ol></div>
             
 
           </div>
