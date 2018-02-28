@@ -312,7 +312,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/31/Linux/007. Linux用户与用户组管理技术/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/09/20/技术/001. NFS服务简单配置（Aming）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -331,7 +331,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/31/Linux/007. Linux用户与用户组管理技术/" itemprop="url">Linux用户与用户组管理技术</a></h1>
+                <a class="post-title-link" href="/2017/09/20/技术/001. NFS服务简单配置（Aming）/" itemprop="url">NFS服务简单配置（Aming）</a></h1>
         
 
         <div class="post-meta">
@@ -343,7 +343,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-31T08:38:19+08:00">2017-08-31</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-20T22:19:38+08:00">2017-09-20</time>
             
 
             
@@ -364,7 +364,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:31:57+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:37:10+08:00">2018-02-23</time>
             
           </span>
 
@@ -380,7 +380,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
 
                 
                 
@@ -419,12 +419,15 @@
           
 GO
 
-这部分知识在日常工作中用的并不多，但是这些都是属于基础知识，也必须要掌握。
-1. 认识 /etc/passwd 和 /etc/shadow这两个文件是Linux系统中最重要的文件之一。注意，Linux系统关于像这两个与用户和组有关的文件，都会在相应的目录下面自动备份成相应的名字后面加-，如
+NFS用于在网络上共享存储。
+服务端配置NFS安装在CentOS上使用NFS服务需要安装两个包：nfs-utils和rpcbind。在使用yum工具安装nfs-utils时会一并安装rpcbind。如下所示：yum install -y nfs-utils
+说明：
+
+以往的CentOS版本
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/31/Linux/007. Linux用户与用户组管理技术/#more" rel="contents">
+            <a class="btn" href="/2017/09/20/技术/001. NFS服务简单配置（Aming）/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -480,7 +483,7 @@ GO
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/26/Linux/006. Linux文件与目录管理技术/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/09/03/Shell/001. Shell基础知识/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -499,7 +502,7 @@ GO
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/26/Linux/006. Linux文件与目录管理技术/" itemprop="url">Linux文件与目录管理技术</a></h1>
+                <a class="post-title-link" href="/2017/09/03/Shell/001. Shell基础知识/" itemprop="url">Shell基础知识</a></h1>
         
 
         <div class="post-meta">
@@ -511,7 +514,7 @@ GO
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-26T22:49:24+08:00">2017-08-26</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-03T00:02:20+08:00">2017-09-03</time>
             
 
             
@@ -532,7 +535,7 @@ GO
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:31:32+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:35:03+08:00">2018-02-23</time>
             
           </span>
 
@@ -548,7 +551,7 @@ GO
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Shell/" itemprop="url" rel="index"><span itemprop="name">Shell</span></a></span>
 
                 
                 
@@ -587,22 +590,12 @@ GO
           
 GO
 
-0. 几个基本概念- 绝对路径和相对路径
-绝对路径：由根目录写起的路径。如：/usr/local/mysql。
-相对路径：不是由根目录。写起的路径。如：../ 表示上一层路径，./ 表示本层路径。
-
-
-1. 文件管理命令- ls
-ls （list）用于查看某个目录下有何文件。
-
-
-
-
-常用
+这些内容是在学习Shell脚本之前必须要掌握的Shell基础知识。
+Shell 初相识什么是ShellShell 是系统跟计算机硬件交互时使用的中间介质，它只是系统的一个工具。在Shell和计算机硬件中间还有一层东西，那就是系统内核。用户在使用计算机的时候，直接面对的并不是计算机硬件，而是
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/26/Linux/006. Linux文件与目录管理技术/#more" rel="contents">
+            <a class="btn" href="/2017/09/03/Shell/001. Shell基础知识/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -658,7 +651,7 @@ ls （list）用于查看某个目录下有何文件。
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/26/Linux/005. Linux系统目录结构/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/31/Linux/010. Linux软件管理技术/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -677,7 +670,7 @@ ls （list）用于查看某个目录下有何文件。
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/26/Linux/005. Linux系统目录结构/" itemprop="url">Linux系统目录结构</a></h1>
+                <a class="post-title-link" href="/2017/08/31/Linux/010. Linux软件管理技术/" itemprop="url">Linux软件管理技术</a></h1>
         
 
         <div class="post-meta">
@@ -689,7 +682,7 @@ ls （list）用于查看某个目录下有何文件。
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-26T17:24:25+08:00">2017-08-26</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-31T14:24:42+08:00">2017-08-31</time>
             
 
             
@@ -710,7 +703,7 @@ ls （list）用于查看某个目录下有何文件。
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:31:24+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:32:22+08:00">2018-02-23</time>
             
           </span>
 
@@ -765,13 +758,11 @@ ls （list）用于查看某个目录下有何文件。
           
 GO
 
-1. FHS标准
-根据FHS（Filesystem Hierarchy Standard ）官方文件说明，其主要目的是希望让用户可以了解到已安装软件通常放在哪个目录下，所以其希望独立的开发商、操作系统制作者以及想要维护系统的用户，都能够遵循FHS标准。
-FHS将目录定义为四种交互作用的形态
+0. RPM和DPKG两大阵营在 GNU/Linux( 以下简称 Linux) 操作系统中，RPM 和 DPKG 为最常见的两类软件包管理工具，他们分别应用于基于 RPM 软件包的 Linux 发行版本和 DEB 软件包的 Linux 发行版本。软件包管理工具的作用是提供在操作系统中安装，
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/26/Linux/005. Linux系统目录结构/#more" rel="contents">
+            <a class="btn" href="/2017/08/31/Linux/010. Linux软件管理技术/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -816,7 +807,7 @@ FHS将目录定义为四种交互作用的形态
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/10/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/12/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -865,7 +856,7 @@ FHS将目录定义为四种交互作用的形态
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">45</span>
+                    <span class="site-state-item-count">50</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

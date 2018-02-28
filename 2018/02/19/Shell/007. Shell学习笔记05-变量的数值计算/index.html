@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Shell," />
+
+
+<meta name="description" content="GO   1. 算术运算符常见的Shell算术运算符见下表：    算术运算符 意义（*表示常用）     +、- 加法（或正号）、减法（或负号）*   *、/、% 乘法、除法、取余（取模）*   ** 幂运算*   ++、-- 增加及减少，可前置也可放在变量结尾*   !、&amp;amp;&amp;amp;、双竖 逻辑非（取反）、逻辑与（and）、逻辑或（or）*   &amp;lt;、&amp;lt;=、&amp;gt;、&amp;gt">
+<meta name="keywords" content="Shell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell学习笔记05-变量的数值计算">
+<meta property="og:url" content="http://www.theshu.top/2018/02/19/Shell/007. Shell学习笔记05-变量的数值计算/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="GO   1. 算术运算符常见的Shell算术运算符见下表：    算术运算符 意义（*表示常用）     +、- 加法（或正号）、减法（或负号）*   *、/、% 乘法、除法、取余（取模）*   ** 幂运算*   ++、-- 增加及减少，可前置也可放在变量结尾*   !、&amp;amp;&amp;amp;、双竖 逻辑非（取反）、逻辑与（and）、逻辑或（or）*   &amp;lt;、&amp;lt;=、&amp;gt;、&amp;gt">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-02-28T05:01:41.637Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shell学习笔记05-变量的数值计算">
+<meta name="twitter:description" content="GO   1. 算术运算符常见的Shell算术运算符见下表：    算术运算符 意义（*表示常用）     +、- 加法（或正号）、减法（或负号）*   *、/、% 乘法、除法、取余（取模）*   ** 幂运算*   ++、-- 增加及减少，可前置也可放在变量结尾*   !、&amp;amp;&amp;amp;、双竖 逻辑非（取反）、逻辑与（and）、逻辑或（or）*   &amp;lt;、&amp;lt;=、&amp;gt;、&amp;gt">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/02/19/Shell/007. Shell学习笔记05-变量的数值计算/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Shell学习笔记05-变量的数值计算 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/007. Shell学习笔记05-变量的数值计算/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Shell学习笔记05-变量的数值计算</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:37:37+08:00">2018-02-19</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-28T13:01:41+08:00">2018-02-28</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Shell/" itemprop="url" rel="index"><span itemprop="name">Shell</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>GO</p>
+</blockquote>
+<hr>
+<h1 id="1-算术运算符"><a href="#1-算术运算符" class="headerlink" title="1. 算术运算符"></a>1. 算术运算符</h1><p>常见的Shell算术运算符见下表：</p>
+<table>
+<thead>
+<tr>
+<th>算术运算符</th>
+<th>意义（*表示常用）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>+</code>、<code>-</code></td>
+<td>加法（或正号）、减法（或负号）*</td>
+</tr>
+<tr>
+<td><code>*</code>、<code>/</code>、<code>%</code></td>
+<td>乘法、除法、取余（取模）*</td>
+</tr>
+<tr>
+<td><code>**</code></td>
+<td>幂运算*</td>
+</tr>
+<tr>
+<td><code>++</code>、<code>--</code></td>
+<td>增加及减少，可前置也可放在变量结尾*</td>
+</tr>
+<tr>
+<td><code>!</code>、<code>&amp;&amp;</code>、<code>双竖</code></td>
+<td>逻辑非（取反）、逻辑与（and）、逻辑或（or）*</td>
+</tr>
+<tr>
+<td><code>&lt;</code>、<code>&lt;=</code>、<code>&gt;</code>、<code>&gt;=</code></td>
+<td>比较符号（小于、小于等于、大于、大于等于）</td>
+</tr>
+<tr>
+<td><code>==</code>、<code>!=</code>、<code>=</code></td>
+<td>比较符号（相等、不相等，对于字符串<code>=</code>也可以表示相当于）*</td>
+</tr>
+<tr>
+<td><code>&lt;&lt;</code>、<code>&gt;&gt;</code></td>
+<td>向左移位、向右移位</td>
+</tr>
+<tr>
+<td><code>~</code>、<code>单竖</code>、<code>&amp;</code>、<code>^</code></td>
+<td>按位取反、按位异或、按位与、按位或</td>
+</tr>
+<tr>
+<td><code>=</code>、<code>+=</code>、<code>-=</code>、<br><code>*=</code>、<code>/=</code>、<code>%=</code></td>
+<td>赋值运算，例如<code>a+=1</code>相当于<code>a=a+1</code>，<code>a-=1</code>相当于<code>a=a-1</code>*</td>
+</tr>
+</tbody>
+</table>
+<p>上表中的算术运算符号均适用于常见的运算命令。常见的运算命令见下表：</p>
+<table>
+<thead>
+<tr>
+<th>运算操作符与运算命令</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(())</code></td>
+<td>用于整数运算的常用运算符，效率很高</td>
+</tr>
+<tr>
+<td><code>let</code></td>
+<td>用于整数运算，类似于<code>(())</code></td>
+</tr>
+<tr>
+<td><code>expr</code></td>
+<td>可用于整数运算，但还有很多其他的额外功能</td>
+</tr>
+<tr>
+<td><code>bc</code></td>
+<td>Linux下的一个计算器程序（适合整数及小数运算）</td>
+</tr>
+<tr>
+<td><code>$[]</code></td>
+<td>用于整数运算</td>
+</tr>
+<tr>
+<td><code>awk</code></td>
+<td><code>awk</code>既可以用于整数运算，也可以用于小数运算</td>
+</tr>
+<tr>
+<td><code>declare</code></td>
+<td>定义变量值和属性，<code>-i</code>参数可以用于定义整型变量，做运算</td>
+</tr>
+</tbody>
+</table>
+<p>下面的内容，将逐一讲解Shell中的各种运算符号及运算命令。</p>
+<h1 id="2-双小括号-数值运算的基础语"><a href="#2-双小括号-数值运算的基础语" class="headerlink" title="2. 双小括号 (()) 数值运算的基础语"></a>2. 双小括号 (()) 数值运算的基础语</h1><h2 id="2-1-双小括号-数值运算的基础语法"><a href="#2-1-双小括号-数值运算的基础语法" class="headerlink" title="2.1. 双小括号 (()) 数值运算的基础语法"></a>2.1. 双小括号 (()) 数值运算的基础语法</h2><p>双小括号<code>(())</code>的作用是进行数值运算与数值比较，它的效率很高，用法灵活，是企业场景运维人员经常采用的运算操作符，其操作方法见下表：</p>
+<table>
+<thead>
+<tr>
+<th>运算操作符与运算命令</th>
+<th>意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>((i=i+1))</code></td>
+<td>此种书写方法为运算后赋值法，即将<code>i+1</code>的运算结果赋值给变量<code>i</code>。注意，不能用<code>echo ((i=i+))</code>的形式输出表达式的值，但可以用<code>echo $((i=i+1))</code>输出其值</td>
+</tr>
+<tr>
+<td><code>i=$((i+1))</code></td>
+<td>可以在<code>(())</code>前加<code>$</code>符，表示将表达式运算后赋值给<code>i</code></td>
+</tr>
+<tr>
+<td><code>((8&gt;7&amp;&amp;5==5))</code></td>
+<td>可以进行比较操作，还可以加入逻辑与和逻辑或，用于条件判断</td>
+</tr>
+<tr>
+<td><code>echo $((2+1))</code></td>
+<td>需要直接输出运算表达式的运算结果时，可以在<code>(())</code>前加<code>$</code>符</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-2-双小括号-数值运算实践"><a href="#2-2-双小括号-数值运算实践" class="headerlink" title="2.2. 双小括号 (()) 数值运算实践"></a>2.2. 双小括号 (()) 数值运算实践</h2><ul>
+<li><p>例1：利用<code>(())</code>进行简单的数值计算</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $((1+1))</span></div><div class="line"><span class="number">2</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $((6-3))</span></div><div class="line"><span class="number">3</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># ((i=5))</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># ((i=i*2))</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $i</span></div><div class="line"><span class="number">10</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>例2：利用<code>(())</code>进行稍微复杂一些的综合算术运算</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# ((a=<span class="number">1</span>+<span class="number">2</span>**<span class="number">3</span><span class="number">-4</span>%<span class="number">3</span>))	#&lt;==这是一个较复杂的表达式运算并赋值的操作，其中<span class="number">2</span>**<span class="number">3</span>表示<span class="number">2</span>的三次方</div><div class="line">[root@theshu ~]# echo $a</div><div class="line"><span class="number">8</span>	#&lt;==表达式运算后将结果赋值给a ，先乘除后加减</div><div class="line">[root@theshu ~]# b=$((<span class="number">1</span>+<span class="number">2</span>**<span class="number">3</span><span class="number">-4</span>%<span class="number">3</span>))	#&lt;==这是另一种表达式运算后将结果赋值给变量的写法，变量放在了括号的外面</div><div class="line">[root@theshu ~]# echo $b</div><div class="line"><span class="number">8</span></div><div class="line">[root@theshu ~]# echo $((<span class="number">1</span>+<span class="number">2</span>**<span class="number">3</span><span class="number">-4</span>%<span class="number">3</span>))	#&lt;==还可以直接运算表达式并将结果输出，注意，不要落下$符号</div><div class="line"><span class="number">8</span></div><div class="line">[root@theshu ~]# a=$((<span class="number">100</span>*(<span class="number">100</span>+<span class="number">1</span>)/<span class="number">2</span>))	#&lt;==利用公式计算<span class="number">1</span>到<span class="number">100</span>的和</div><div class="line">[root@theshu ~]# echo $a</div><div class="line"><span class="number">5050</span></div><div class="line">[root@theshu ~]# echo $((<span class="number">100</span>*(<span class="number">100</span>+<span class="number">1</span>)/<span class="number">2</span>))	#&lt;==直接输出表达式的结果</div><div class="line"><span class="number">5050</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>例3：特殊运算符号的运算小示例</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># a=8</span></div><div class="line">[root@theshu ~]<span class="comment"># echo $((a=a+1))	#&lt;==将a+1赋值给a，然后输出表达式的值</span></div><div class="line"><span class="number">9</span></div><div class="line">[root@theshu ~]<span class="comment"># echo $((a+=1))		#&lt;==相当于a=a+1</span></div><div class="line"><span class="number">10</span></div><div class="line">[root@theshu ~]<span class="comment"># echo $((a**2))		#&lt;==计算a的平方，**表示幂运算</span></div><div class="line"><span class="number">100</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>例4：利用<code>(())</code>双括号进行比较和判断</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# echo $((<span class="number">3</span>&lt;<span class="number">8</span>))	#&lt;==<span class="number">3</span>&lt;<span class="number">8</span>的结果是成立的，因此输出了<span class="number">1</span>，<span class="number">1</span>表示真</div><div class="line"><span class="number">1</span></div><div class="line">[root@theshu ~]# echo $((<span class="number">8</span>&lt;<span class="number">3</span>))	#&lt;==<span class="number">8</span>&lt;<span class="number">3</span>的结果是不成立的，因此输出了<span class="number">0</span>，<span class="number">0</span>表示假</div><div class="line"><span class="number">0</span></div><div class="line">[root@theshu ~]# echo $((<span class="number">8</span>==<span class="number">8</span>))	#&lt;==判断是否相等</div><div class="line"><span class="number">1</span></div><div class="line">[root@theshu ~]# if ((<span class="number">8</span>&gt;<span class="number">7</span>&amp;&amp;<span class="number">5</span>==<span class="number">5</span>))	#&lt;==如果<span class="number">8</span>&gt;<span class="number">7</span>成立并且<span class="number">5</span>==<span class="number">5</span>成立，则打印yes。</div><div class="line">&gt; then</div><div class="line">&gt; echo yes</div><div class="line">&gt; fi</div><div class="line">yes		#&lt;==显然两个条件都成立，所以打印了yes</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>提示：上面设计的数字及变量必须为整数（整型），不能是小数（浮点数）或字符串。后面的bc和awk命令可以用于进行小数（浮点数）运算，但一般用到的较少。</p>
+</blockquote>
+<ul>
+<li>例5：在变量前后使用<code>--</code>和<code>++</code>特殊运算符的表达式<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># a=10</span></div><div class="line">[root@theshu ~]<span class="comment"># echo $((a++))	</span></div><div class="line"><span class="number">10</span></div><div class="line"><span class="comment">#&lt;==如果a在运算符（++或--）的前面，那么在输出整个表达式时，会输出a的值，因为a为10，所以表达式的值为10</span></div><div class="line">[root@theshu ~]<span class="comment"># echo $a</span></div><div class="line"><span class="number">11</span></div><div class="line"><span class="comment">#&lt;==执行上面的表达式后，因为有a++，因此a会自增1，因此输出a的值为11</span></div><div class="line">[root@theshu ~]<span class="comment"># a=11</span></div><div class="line">[root@theshu ~]<span class="comment"># echo $((a--))</span></div><div class="line"><span class="number">11</span>	<span class="comment">#&lt;==理由同上</span></div><div class="line">[root@theshu ~]<span class="comment"># echo $a</span></div><div class="line"><span class="number">10</span></div><div class="line">[root@theshu ~]<span class="comment"># a=10</span></div><div class="line">[root@theshu ~]<span class="comment"># echo $a</span></div><div class="line"><span class="number">10</span></div><div class="line">[root@theshu ~]<span class="comment"># echo $((--a))</span></div><div class="line"><span class="number">9</span></div><div class="line"><span class="comment">#&lt;==如果a在运算符（++或--）的后面，那么在输出整个表达式时，先进行自增或自减运算，因为a为10，且要自减，所以表达式的值为9</span></div><div class="line">[root@theshu ~]<span class="comment"># echo $a</span></div><div class="line"><span class="number">9</span>	<span class="comment">#&lt;==执行上面的表达式后，a自减1，因此a为9</span></div><div class="line">[root@theshu ~]<span class="comment"># echo $((++a))</span></div><div class="line"><span class="number">10</span>		<span class="comment">#&lt;==理由同上</span></div><div class="line">[root@theshu ~]<span class="comment"># echo $a</span></div><div class="line"><span class="number">10</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>执行<code>echo $((a++))</code>和<code>$((a--))</code>命令输出整个表达式时，输出的值即为a的值，表达式执行完毕后，会对a进行++、–运算，而执行<code>echo $((++a))</code>和<code>echo $((--a))</code>命令输出整个表达式时，会先对a进行++、–的运算，然后再输出表达式的值，即为a运算后的值。</p>
+<blockquote>
+<p>提示：有关<code>++</code>、<code>--</code>运算的记忆方法：变量a在运算符之前，输出表达式的值为a，然后a自增或自减；变量a在运算符之后，输出表达式会先自增或自减，表达式的值就是自增或自减后a的值。</p>
+</blockquote>
+<ul>
+<li>例6：通过<code>(())</code>运算后赋值给变量<figure class="highlight mel"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# myvar=<span class="number">99</span></div><div class="line">[root@theshu ~]# echo $((myvar+<span class="number">1</span>))	#&lt;==<span class="string">"(())"</span>中的变量myvar前也可以加$符号，也可以不加</div><div class="line"><span class="number">100</span></div><div class="line">[root@theshu ~]# echo $(( myvar + <span class="number">1</span> ))	#&lt;==<span class="string">"(())"</span>内部内容的两端有几个空格无所谓，变量和运算符号之间有无空格也无所谓，可以有一个或多个，也可以没有</div><div class="line"><span class="number">100</span></div><div class="line">[root@theshu ~]# myvar=$((myvar+<span class="number">1</span>))	#&lt;==还可以在<span class="string">"(())"</span>表达式前加$符号，将表达式赋值给变量</div><div class="line">[root@theshu ~]# echo $myvar</div><div class="line"><span class="number">100</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>提示：在<code>(())</code>中使用变量时可以去掉变量前的<code>$</code>符号</p>
+</blockquote>
+<ul>
+<li>例7：包含<code>(())</code>的各种常见运算符命令的执行示例<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# echo $((<span class="number">6</span>+<span class="number">2</span>))  #&lt;==加法</div><div class="line"><span class="number">8</span></div><div class="line">[root@theshu ~]# echo $((<span class="number">6</span><span class="number">-2</span>))  #&lt;==减法</div><div class="line"><span class="number">4</span></div><div class="line">[root@theshu ~]# echo $((<span class="number">6</span>*<span class="number">2</span>))  #&lt;==乘法</div><div class="line"><span class="number">12</span></div><div class="line">[root@theshu ~]# echo $((<span class="number">6</span>/<span class="number">2</span>))  #&lt;==除法，取商数</div><div class="line"><span class="number">3</span></div><div class="line">[root@theshu ~]# echo $((<span class="number">6</span>%<span class="number">2</span>))  #&lt;==取模，即取余数</div><div class="line"><span class="number">0</span></div><div class="line">[root@theshu ~]# echo $((<span class="number">6</span>**<span class="number">2</span>))  #&lt;==幂运算</div><div class="line"><span class="number">36</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>提示：</p>
+<ul>
+<li><code>(())</code>表达式在命令执行时不需要加<code>$</code>符号，直接使用<code>((6%2))</code>形式即可，但是如果需要输出，就要加<code>$</code>符号，例如：<code>echo $((6%2))</code></li>
+<li><code>(())</code>里的所有字符之间没有空格、有一个或多个空格都不会影响结果。</li>
+</ul>
+</blockquote>
+<ul>
+<li>例8：各种<code>(())</code>运算的Shell脚本示例<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat test.sh</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">a=6</div><div class="line">b=2</div><div class="line"><span class="built_in">echo</span> <span class="string">"a-b=<span class="variable">$(($a-$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a+b=<span class="variable">$(($a+$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a*b=<span class="variable">$(($a*$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a/b=<span class="variable">$(($a/$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a**b=<span class="variable">$(($a**$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a%b=<span class="variable">$(($a%$b)</span>)"</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>脚本运行如下：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# sh test.sh</div><div class="line"><span class="attribute">a-b</span>=4</div><div class="line">a+<span class="attribute">b</span>=8</div><div class="line">a<span class="number">*b</span>=12</div><div class="line">a/<span class="attribute">b</span>=3</div><div class="line">a*<span class="number">*b</span>=36</div><div class="line">a%<span class="attribute">b</span>=0</div></pre></td></tr></table></figure></p>
+<ul>
+<li>例9：把例8中的a、b两个变量通过命令行脚本传参，以实现混合运算脚本的功能</li>
+</ul>
+<p>这是一个考察实战编程思想的综合实践考试题。</p>
+<p>参考答案1如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat test.sh</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">a=<span class="variable">$1</span>	<span class="comment">#&lt;==直接把特殊位置参数变量$1赋值给a</span></div><div class="line">b=<span class="variable">$2</span>	<span class="comment">#&lt;==并且把特殊位置参数变量$2赋值给b，这样，脚本传参的内容就会赋值给a和b</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a-b=<span class="variable">$(($a-$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a+b=<span class="variable">$(($a+$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a*b=<span class="variable">$(($a*$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a/b=<span class="variable">$(($a/$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a**b=<span class="variable">$(($a**$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a%b=<span class="variable">$(($a%$b)</span>)"</span></div></pre></td></tr></table></figure></p>
+<p>执行结果如下：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# sh test.sh 6 2</div><div class="line"><span class="attribute">a-b</span>=4</div><div class="line">a+<span class="attribute">b</span>=8</div><div class="line">a<span class="number">*b</span>=12</div><div class="line">a/<span class="attribute">b</span>=3</div><div class="line">a*<span class="number">*b</span>=36</div><div class="line">a%<span class="attribute">b</span>=0</div></pre></td></tr></table></figure></p>
+<p>使用脚本传参的好处是可以进行各种数字间的运算，不想前一个脚本，因为是直接定义变量的，所以只能做6和2这两个数字的运算，也就是说，使用传参，可以让脚本更具备通用性。</p>
+<p>参考答案2如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a-b=<span class="variable">$(( $1 - $2 )</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a+b=<span class="variable">$(( $1 + $2 )</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a*b=<span class="variable">$(( $1 * $2 )</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a/b=<span class="variable">$(( $1 / $2 )</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a**b=<span class="variable">$(( $1 ** $2 )</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a%b=<span class="variable">$(( $1 % $2 )</span>)"</span></div></pre></td></tr></table></figure></p>
+<p>这个方法虽然也可以实现同样的功能，但是对源脚本的改动过大，所以，从编程思想方面来说，不如参考答案1。</p>
+<h1 id="3-let运算命令的用法"><a href="#3-let运算命令的用法" class="headerlink" title="3. let运算命令的用法"></a>3. let运算命令的用法</h1><ul>
+<li>let运算命令的语法格式为：<code>let 赋值表达式</code></li>
+<li><p>let赋值表达式的功能等同于<code>((赋值表达式))</code></p>
+</li>
+<li><p>例子：给自变量i加8</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># i=2</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># i=i+8	#&lt;==假如开头不用let进行赋值</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $i	#&lt;==输出时会发现，打印结果为 i+8，也就是没有计算</span></div><div class="line">i+<span class="number">8</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># unset i</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># i=2</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># let i=i+8	#&lt;==采用let赋值后再输出</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $i</span></div><div class="line"><span class="number">10</span>	<span class="meta">#&lt;==结果为10</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>提示：<code>let i=i+8</code>等同于<code>((i=i+8))</code>，但后者效率更高。</p>
+</blockquote>
+<h1 id="4-expr命令的用法"><a href="#4-expr命令的用法" class="headerlink" title="4. expr命令的用法"></a>4. expr命令的用法</h1><h2 id="4-1-expr命令的基本用法示例"><a href="#4-1-expr命令的基本用法示例" class="headerlink" title="4.1. expr命令的基本用法示例"></a>4.1. expr命令的基本用法示例</h2><p><code>expr</code>（evaluate（求值）expressions（表达式））命令既可以用于整数运算，也可以用于相关字符串长度、匹配运算处理。</p>
+<h3 id="1-用法1：expr用于计算"><a href="#1-用法1：expr用于计算" class="headerlink" title="1. 用法1：expr用于计算"></a>1. 用法1：expr用于计算</h3><p>语法：<code>expr Expression</code></p>
+<p>范例：expr命令运算用法实践：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># expr 2 + 2</span></div><div class="line"><span class="number">4</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># expr 2 - 2</span></div><div class="line"><span class="number">0</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># expr 2 * 2	#&lt;==注意，*号要用\来转义，否则语法错误</span></div><div class="line">expr: syntax error</div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># expr 2 \* 2</span></div><div class="line"><span class="number">4</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># expr 2 / 2</span></div><div class="line"><span class="number">1</span></div></pre></td></tr></table></figure></p>
+<p>要注意，在使用<code>expr</code>时：</p>
+<ul>
+<li>运算符及用于计算的数字左右都至少有一个空格，否则会报错</li>
+<li>使用称号时，必须用反斜杠屏蔽其特定含义，因为Shell可能会误解星号的含义</li>
+</ul>
+<h3 id="2-用法2：expr配合变量计算"><a href="#2-用法2：expr配合变量计算" class="headerlink" title="2. 用法2：expr配合变量计算"></a>2. 用法2：expr配合变量计算</h3><p><code>expr</code>在Shell中可配合变量进行计算，但需要用反引号将计算表达式括起来。</p>
+<p>范例：给自变量i加6：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># i=5</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># i=`expr $i + 6`	</span></div><div class="line"><span class="meta">#&lt;注意用反引号将表达式引起来，变量和数字符号两边要有空格</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $i</span></div><div class="line"><span class="number">11</span></div></pre></td></tr></table></figure></p>
+<h2 id="4-2-expr的企业级实战案例详解"><a href="#4-2-expr的企业级实战案例详解" class="headerlink" title="4.2. expr的企业级实战案例详解"></a>4.2. expr的企业级实战案例详解</h2><h3 id="1-判断一个变量值或字符串是否为整数"><a href="#1-判断一个变量值或字符串是否为整数" class="headerlink" title="1. 判断一个变量值或字符串是否为整数"></a>1. 判断一个变量值或字符串是否为整数</h3><p>在Shell编程里，由于函数库很少，所以判断字符串是否为整数就不是一键很容易的事情。在这里介绍一种简单的可以判断一个字符串是否为整数的方法。</p>
+<p>实现原理是，利用以<code>expr</code>做计算时变量或字符串必须是整数的规则，把一个变量或字符串和一个已知的整数（非0）相加，看命令返回值是否为0。若为0，则做加法的变量或字符串为整数，否则就不是整数。下面是几个示例。</p>
+<p>示例：通过expr判断变量或字符串是否为整数<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># i=5</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># expr $i + 6 &amp;&gt; /dev/null</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $?</span></div><div class="line"><span class="number">0</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># i=theshu</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># expr $i + 6 &amp;&gt; /dev/null</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $?</span></div><div class="line"><span class="number">2</span></div></pre></td></tr></table></figure></p>
+<p>结论：利用expr做计算，将一个未知的变量和一个已知的整数相加，看返回值是否为0，如果为0就任务做加法的变量为整数，否则就不是整数。</p>
+<p>示例：通过传参判断输出内容是否为整数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat test.sh</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">expr <span class="variable">$1</span> + 1 &gt; /dev/null 2&gt;&amp;1</div><div class="line">[ $? -eq 0 ] &amp;&amp; <span class="built_in">echo</span> int || <span class="built_in">echo</span> chars</div><div class="line">[root@theshu ~]<span class="comment"># sh test.sh  theshu</span></div><div class="line">chars</div><div class="line">[root@theshu ~]<span class="comment"># sh test.sh  123</span></div><div class="line">int</div></pre></td></tr></table></figure></p>
+<p>示例：通过read读入持续等待输入例子。test.sh的内容如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat test.sh</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="keyword">while</span> <span class="literal">true</span></div><div class="line"><span class="keyword">do</span></div><div class="line">        <span class="built_in">read</span> -p <span class="string">"Pls input:"</span> a</div><div class="line">        expr <span class="variable">$a</span> + 0 &gt; /dev/null 2&gt;&amp;1</div><div class="line">        [ $? -eq 0 ] &amp;&amp; <span class="built_in">echo</span> int || <span class="built_in">echo</span> chars</div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure></p>
+<p>执行结果如下：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# <span class="keyword">sh</span> <span class="keyword">test</span>.<span class="keyword">sh</span></div><div class="line">Pls <span class="keyword">input</span>:theshu</div><div class="line">chars</div><div class="line">Pls <span class="keyword">input</span>:123</div><div class="line">int</div><div class="line">Pls <span class="keyword">input</span>:</div></pre></td></tr></table></figure></p>
+<p>示例：将前文的混合运算小程序改成输入两个参数后进行计算的程序，并且要能判断传参的个数及通过expr判断传入的参数是否为整数。</p>
+<p>待使用的脚本如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat test.sh</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">a=6</div><div class="line">b=2</div><div class="line"><span class="built_in">echo</span> <span class="string">"a-b=<span class="variable">$(($a-$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a+b=<span class="variable">$(($a+$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a*b=<span class="variable">$(($a*$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a/b=<span class="variable">$(($a/$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a**b=<span class="variable">$(($a**$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a%b=<span class="variable">$(($a%$b)</span>)"</span></div></pre></td></tr></table></figure></p>
+<p>这道题的编程思路如下：</p>
+<ul>
+<li>第一关，判断参数个数是否为2，若不是，则给出提示终止运行</li>
+<li>第二关，判断传入的参数是否为整数，若不是，则给出提示终止运行</li>
+<li>第三关，做运算</li>
+</ul>
+<p>参考答案1：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat test1.sh</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="comment"># NO.1 对传入参数个数进行判断</span></div><div class="line">[ <span class="variable">$#</span> -ne 2 ] &amp;&amp; &#123;</div><div class="line">        <span class="built_in">echo</span> $<span class="string">"USAGE <span class="variable">$0</span> NUM1 NUM2"</span></div><div class="line">        <span class="built_in">exit</span> 1</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment"># NO.2 对传入参数是否是整数进行判断</span></div><div class="line">a=<span class="variable">$1</span></div><div class="line">b=<span class="variable">$2</span></div><div class="line">expr <span class="variable">$a</span> + <span class="variable">$b</span> + 110 &amp;&gt; /dev/null</div><div class="line"><span class="keyword">if</span> [ $? -ne 0 ]</div><div class="line"><span class="keyword">then</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"You must input two nums."</span></div><div class="line">        <span class="built_in">exit</span> 2</div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line"><span class="comment"># NO.3 进行运算</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a-b=<span class="variable">$(($a-$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a+b=<span class="variable">$(($a+$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a*b=<span class="variable">$(($a*$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a/b=<span class="variable">$(($a/$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a**b=<span class="variable">$(($a**$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a%b=<span class="variable">$(($a%$b)</span>)"</span></div></pre></td></tr></table></figure></p>
+<p>参考答案2：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat test2.sh</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="comment"># NO.1 对传入参数个数进行判断</span></div><div class="line">[ <span class="variable">$#</span> -ne 2 ] &amp;&amp; &#123;</div><div class="line">        <span class="built_in">echo</span> $<span class="string">"USAGE <span class="variable">$0</span> NUM1 NUM2"</span></div><div class="line">        <span class="built_in">exit</span> 1</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment"># NO.2 对传入参数是否是整数进行判断</span></div><div class="line">a=<span class="variable">$1</span></div><div class="line">b=<span class="variable">$2</span></div><div class="line">expr <span class="variable">$a</span> + 1 &amp;&gt; /dev/null</div><div class="line">RETVAL_A=$?</div><div class="line">expr <span class="variable">$b</span> + 1 &amp;&gt; /dev/null</div><div class="line">RETVAL_B=$?</div><div class="line"><span class="keyword">if</span> [ <span class="variable">$RETVAL_A</span> -ne 0 -o <span class="variable">$RETVAL_B</span> -ne 0 ]</div><div class="line"><span class="keyword">then</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"You must input two nums."</span></div><div class="line">        <span class="built_in">exit</span> 2</div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line"><span class="comment"># NO.3 进行运算</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a-b=<span class="variable">$(($a-$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a+b=<span class="variable">$(($a+$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a*b=<span class="variable">$(($a*$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a/b=<span class="variable">$(($a/$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a**b=<span class="variable">$(($a**$b)</span>)"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"a%b=<span class="variable">$(($a%$b)</span>)"</span></div></pre></td></tr></table></figure></p>
+<p>此外，用expr match功能进行整数判断时，可执行<code>man expr</code>命令获取帮助。如下：</p>
+<h3 id="2-expr的特殊用法：判断文件扩展名是否符合要求"><a href="#2-expr的特殊用法：判断文件扩展名是否符合要求" class="headerlink" title="2. expr的特殊用法：判断文件扩展名是否符合要求"></a>2. expr的特殊用法：判断文件扩展名是否符合要求</h3><p>范例：通过expr判断文件扩展名是否符合要求<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat expr1.sh</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="keyword">if</span> expr <span class="string">"<span class="variable">$1</span>"</span> : <span class="string">".*\.pub"</span> &amp;&gt; /dev/null</div><div class="line"><span class="keyword">then</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"you are using <span class="variable">$1</span>"</span></div><div class="line"><span class="keyword">else</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"pls use *.pub file"</span></div><div class="line"><span class="keyword">fi</span></div><div class="line">[root@theshu ~]<span class="comment"># sh expr1.sh id_dsa.pub</span></div><div class="line">you are using id_dsa.pub</div><div class="line">[root@theshu ~]<span class="comment"># sh expr1.sh id_dsa</span></div><div class="line">pls use *.pub file</div></pre></td></tr></table></figure></p>
+<h3 id="3-通过expr计算字符串的长度"><a href="#3-通过expr计算字符串的长度" class="headerlink" title="3. 通过expr计算字符串的长度"></a>3. 通过expr计算字符串的长度</h3><p>示例：利用expr计算字符串的长度<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># char=<span class="string">"I am goodman"</span></span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># expr length <span class="string">"$char"</span>	#&lt;==利用expr的length函数计算字符串长度</span></div><div class="line"><span class="number">12</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $&#123;#char&#125;	#&lt;==计算变量子串长度的方法</span></div><div class="line"><span class="number">12</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $&#123;char&#125; | wc -L	#&lt;==wc方法</span></div><div class="line"><span class="number">12</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $&#123;char&#125; | awk <span class="string">'&#123;print length($0)&#125;'</span>	#&lt;==利用awk的length函数计算字符串的长度</span></div><div class="line"><span class="number">12</span></div></pre></td></tr></table></figure></p>
+<p>示例：编写Shell脚本，打印下面语句中字符数不大于6的单词：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> n <span class="keyword">in</span> I am theshu linux welcome to our training</div><div class="line"><span class="keyword">do</span> </div><div class="line">	<span class="keyword">if</span> [ `expr length <span class="variable">$n</span>` -le 6 ]</div><div class="line">	<span class="keyword">then</span></div><div class="line">		<span class="built_in">echo</span> <span class="variable">$n</span></div><div class="line">	<span class="keyword">fi</span></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure></p>
+<p>更多expr的用法请查看帮助文件<code>man expr</code></p>
+<h1 id="5-bc命令的用法"><a href="#5-bc命令的用法" class="headerlink" title="5. bc命令的用法"></a>5. bc命令的用法</h1><p>bc是Unix/Linux下的计算器，因此，除了可以作为计算器来使用，还可以作为命令行计算工具使用。</p>
+<p>范例：将bc用在命令行下面，以实现运算功能<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# echo <span class="number">3</span>+<span class="number">5</span> | bc</div><div class="line"><span class="number">8</span></div><div class="line">[root@theshu ~]# echo <span class="number">3.3</span>+<span class="number">5.5</span> | bc</div><div class="line"><span class="number">8.8</span></div><div class="line">[root@theshu ~]# echo <span class="number">8.8</span><span class="number">-5.5</span> | bc</div><div class="line"><span class="number">3.3</span></div><div class="line">[root@theshu ~]# echo <span class="string">"scale=2;355/113"</span> | bc	#&lt;==使用scale=<span class="number">2</span>保留两位小数</div><div class="line"><span class="number">3.14</span></div><div class="line">[root@theshu ~]# echo <span class="string">"scale=6;355/113"</span> | bc	#&lt;==使用scale=<span class="number">6</span>保留<span class="number">6</span>位小数</div><div class="line"><span class="number">3.141592</span></div></pre></td></tr></table></figure></p>
+<p>利用bc配合变量运算：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># i=5</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># i=`echo $i+6 | bc`</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $i</span></div><div class="line"><span class="number">11</span></div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>提示：根据bc所具有的特殊性来看，如果是小数，则选择<code>bc</code>运算没问题（但高手前辈推荐<code>awk</code>）；若是整数场景，可用<code>(())</code>、<code>let</code>、<code>expr</code>等。</p>
+</blockquote>
+<p>范例：通过一条命令计算输出1到10的表达式，并计算出结果，请使用bc命令计算。输出内容如<code>1+2+3+4+5+6+7+8+9+10=55</code></p>
+<p>这里生成上述表达式的方法有：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# seq -s <span class="string">"+"</span> <span class="number">10</span>	#&lt;==seq是生成数字序列，-s是指定数字序列之间的分隔符</div><div class="line"><span class="number">1</span>+<span class="number">2</span>+<span class="number">3</span>+<span class="number">4</span>+<span class="number">5</span>+<span class="number">6</span>+<span class="number">7</span>+<span class="number">8</span>+<span class="number">9</span>+<span class="number">10</span></div><div class="line">[root@theshu ~]# echo &#123;<span class="number">1.</span><span class="number">.10</span>&#125; | tr <span class="string">" "</span> <span class="string">"+"</span></div><div class="line">#&lt;==&#123;<span class="number">1.</span><span class="number">.10</span>&#125;是生成以空格为间隔的数字序列，并交给tr将空格替换为+号</div><div class="line"><span class="number">1</span>+<span class="number">2</span>+<span class="number">3</span>+<span class="number">4</span>+<span class="number">5</span>+<span class="number">6</span>+<span class="number">7</span>+<span class="number">8</span>+<span class="number">9</span>+<span class="number">10</span></div></pre></td></tr></table></figure></p>
+<p>实现本题的多种方法如下：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# echo `seq -s <span class="string">"+"</span> <span class="number">10</span>`=`seq -s <span class="string">"+"</span> <span class="number">10</span> | bc`	#&lt;==使用bc计算</div><div class="line"><span class="number">1</span>+<span class="number">2</span>+<span class="number">3</span>+<span class="number">4</span>+<span class="number">5</span>+<span class="number">6</span>+<span class="number">7</span>+<span class="number">8</span>+<span class="number">9</span>+<span class="number">10</span>=<span class="number">55</span></div><div class="line">[root@theshu ~]# echo <span class="string">"`seq -s "</span>+<span class="string">" 10`="</span>$((`seq -s <span class="string">"+"</span> <span class="number">10</span>`))	#&lt;==使用<span class="string">"(())"</span>计算</div><div class="line"><span class="number">1</span>+<span class="number">2</span>+<span class="number">3</span>+<span class="number">4</span>+<span class="number">5</span>+<span class="number">6</span>+<span class="number">7</span>+<span class="number">8</span>+<span class="number">9</span>+<span class="number">10</span>=<span class="number">55</span></div><div class="line">[root@theshu ~]# echo `seq -s '+' <span class="number">10</span>`=`seq -s <span class="string">" + "</span> <span class="number">10</span> | xargs expr`	#&lt;==使用expr计算</div><div class="line"><span class="number">1</span>+<span class="number">2</span>+<span class="number">3</span>+<span class="number">4</span>+<span class="number">5</span>+<span class="number">6</span>+<span class="number">7</span>+<span class="number">8</span>+<span class="number">9</span>+<span class="number">10</span>=<span class="number">55</span></div><div class="line">[root@theshu ~]# echo `seq -s <span class="string">"+"</span> <span class="number">10</span>`=$(echo $[`seq -s <span class="string">"+"</span> <span class="number">10</span>`])	#&lt;==使用$[]计算</div><div class="line"><span class="number">1</span>+<span class="number">2</span>+<span class="number">3</span>+<span class="number">4</span>+<span class="number">5</span>+<span class="number">6</span>+<span class="number">7</span>+<span class="number">8</span>+<span class="number">9</span>+<span class="number">10</span>=<span class="number">55</span></div></pre></td></tr></table></figure></p>
+<p>只需要记住，<code>bc</code>命令的独有特点是除了支持整数运算之外，还支持小数运算。</p>
+<h1 id="6-awk实现计算"><a href="#6-awk实现计算" class="headerlink" title="6. awk实现计算"></a>6. awk实现计算</h1><p>利用<code>awk</code>进行运算的效果也很好，适合小数和整数，特别是命令行计算，尤其是小数，运算很精确，好用。下面来看一个示例：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# echo <span class="string">"7.7 3.8"</span> | awk '&#123;print ($<span class="number">1</span>-$<span class="number">2</span>)&#125;'</div><div class="line">#&lt;==$<span class="number">1</span>为第一个数字，$<span class="number">2</span>为第二个数字，用空格隔开，下同</div><div class="line"><span class="number">3.9</span></div><div class="line">[root@theshu ~]# echo <span class="string">"358 113"</span> | awk '&#123;print ($<span class="number">1</span><span class="number">-3</span>)/$<span class="number">2</span>&#125;'</div><div class="line"><span class="number">3.14159</span></div><div class="line">[root@theshu ~]# echo <span class="string">"3 9"</span> | awk '&#123;print ($<span class="number">1</span>+<span class="number">3</span>)*$<span class="number">2</span>&#125;'</div><div class="line"><span class="number">54</span></div></pre></td></tr></table></figure></p>
+<h1 id="7-declare（同typeset）命令的用法"><a href="#7-declare（同typeset）命令的用法" class="headerlink" title="7. declare（同typeset）命令的用法"></a>7. declare（同typeset）命令的用法</h1><p>使用<code>typeset</code>定义整数变量，直接进行计算。这个方法不是很常用，因为需要定义才能生效。示例如下：<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># declare -i A=30 B=7	#&lt;==declare -i参数可以将变量定义为整型</span></div><div class="line">[root@theshu ~]<span class="comment"># A=A+B	#&lt;==因为已经声明是整型，因此可以直接进行运算</span></div><div class="line">[root@theshu ~]<span class="comment"># echo $A</span></div><div class="line"><span class="number">37</span></div></pre></td></tr></table></figure></p>
+<h1 id="8-符号的运算示例"><a href="#8-符号的运算示例" class="headerlink" title="8. $[] 符号的运算示例"></a>8. $[] 符号的运算示例</h1><p>关于<code>$[]</code>符号运算的示例如下：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# i=<span class="number">5</span></div><div class="line">[root@theshu ~]# i=$[i+<span class="number">6</span>]</div><div class="line">[root@theshu ~]# echo $i</div><div class="line"><span class="number">11</span></div><div class="line">[root@theshu ~]# echo $[<span class="number">2</span>*<span class="number">3</span>]</div><div class="line"><span class="number">6</span></div><div class="line">[root@theshu ~]# echo $[<span class="number">2</span>**<span class="number">3</span>]</div><div class="line"><span class="number">8</span></div><div class="line">[root@theshu ~]# echo $[<span class="number">3</span>/<span class="number">5</span>]</div><div class="line"><span class="number">0</span></div><div class="line">[root@theshu ~]# echo $[<span class="number">3</span>/<span class="number">2</span>]</div><div class="line"><span class="number">1</span></div><div class="line">[root@theshu ~]# echo $[<span class="number">3</span>%<span class="number">5</span>]</div><div class="line"><span class="number">3</span></div><div class="line">[root@theshu ~]# echo $[ <span class="number">3</span> % <span class="number">5</span> ]</div><div class="line"><span class="number">3</span></div></pre></td></tr></table></figure></p>
+<p>下面是一个打印数学杨辉三角的案例，这个案例只作为学习意义使用，对于运维工作毫无意义：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="keyword">if</span> (<span class="built_in">test</span> -z <span class="variable">$1</span>) ; <span class="keyword">then</span></div><div class="line">        <span class="built_in">read</span> -p <span class="string">"Input Max Lines: "</span> MAX</div><div class="line"><span class="keyword">else</span></div><div class="line">        MAX=<span class="variable">$1</span></div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line">i=1</div><div class="line"><span class="keyword">while</span> [ <span class="variable">$i</span> -le <span class="variable">$MAX</span> ]</div><div class="line"><span class="keyword">do</span></div><div class="line">        j=1</div><div class="line">        <span class="keyword">while</span> [ <span class="variable">$j</span> -le <span class="variable">$i</span> ]</div><div class="line">        <span class="keyword">do</span></div><div class="line">                f=$[i-1]</div><div class="line">                g=$[j-1]</div><div class="line">        <span class="keyword">if</span> [ <span class="variable">$j</span> -eq <span class="variable">$i</span> ] || [ <span class="variable">$j</span> -eq 1 ] ; <span class="keyword">then</span></div><div class="line">                <span class="built_in">declare</span> SUM_<span class="variable">$&#123;i&#125;</span>_<span class="variable">$j</span>=1</div><div class="line">        <span class="keyword">else</span></div><div class="line">                <span class="built_in">declare</span> A=$[SUM_<span class="variable">$&#123;f&#125;</span>_<span class="variable">$j</span>]</div><div class="line">                <span class="built_in">declare</span> B=$[SUM_<span class="variable">$&#123;f&#125;</span>_<span class="variable">$g</span>]</div><div class="line">                <span class="built_in">declare</span> SUM_<span class="variable">$&#123;i&#125;</span>_<span class="variable">$j</span>=`expr <span class="variable">$A</span> + <span class="variable">$B</span>`</div><div class="line">        <span class="keyword">fi</span></div><div class="line">                <span class="built_in">echo</span> -en $[SUM_<span class="variable">$&#123;i&#125;</span>_<span class="variable">$j</span>]<span class="string">" "</span></div><div class="line">                <span class="built_in">let</span> j++</div><div class="line">        <span class="keyword">done</span></div><div class="line">        <span class="built_in">echo</span></div><div class="line">        <span class="built_in">let</span> i++</div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure></p>
+<h1 id="9-基于Shell变量输入read命令的运算实践"><a href="#9-基于Shell变量输入read命令的运算实践" class="headerlink" title="9. 基于Shell变量输入read命令的运算实践"></a>9. 基于Shell变量输入read命令的运算实践</h1><h2 id="9-1-read命令基础"><a href="#9-1-read命令基础" class="headerlink" title="9.1. read命令基础"></a>9.1. read命令基础</h2><p>Shell变量除了可以<strong>直接赋值</strong>或<strong>脚本传参</strong>外，还可以使用<code>read</code>命令从标准输入中获得，<code>read</code>为bash内置命令，可通过<code>help read</code>查看帮助。</p>
+<ul>
+<li>语法格式：<code>read [参数] [变量名]</code></li>
+<li>常用参数如下：<ul>
+<li><code>-p prompt</code> 设置提示信息</li>
+<li><code>-t timeout</code> 设置输入等待时间，单位默认为秒</li>
+</ul>
+</li>
+</ul>
+<p>示例：实现read的基本读入功能：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># read -t 10 -p <span class="string">"Pls input one num: "</span> num</span></div><div class="line"><span class="meta">#&lt;==读入一个输入，赋值给num变量，注意，num变量前需要有空格</span></div><div class="line">Pls input one num: <span class="number">24</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $num</span></div><div class="line"><span class="number">24</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># read -p <span class="string">"Pls input two numbers:"</span> a1 a2	#读入两个输入，依次赋值给变量，注意，变量前后都要有空格</span></div><div class="line">Pls input two numbers:<span class="number">1</span> <span class="number">2</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $a1 $a2</span></div><div class="line"><span class="number">1</span> <span class="number">2</span></div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>提示：read的读入功能就相当于交互式接受用户输入，然后给变量赋值。</p>
+</blockquote>
+<p>上面的<code>read -p</code>的功能可以用<code>echo</code>和<code>read</code>来实现，如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> -n <span class="string">"Pls input two number:"</span></div><div class="line"><span class="built_in">read</span> a1 a2</div></pre></td></tr></table></figure></p>
+<p>以上两句和下面的命令相当（-t排除在外）<br><figure class="highlight armasm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">read</span> -t <span class="number">5</span> -p <span class="string">"Pls input two numbers:"</span> <span class="built_in">a1</span> <span class="built_in">a2</span></div></pre></td></tr></table></figure></p>
+<h2 id="9-2-使用read的常见错误"><a href="#9-2-使用read的常见错误" class="headerlink" title="9.2. 使用read的常见错误"></a>9.2. 使用read的常见错误</h2><p>下面是一些典型使用read命令错误的地方：</p>
+<ul>
+<li><code>read -p &quot;Pls input:&quot;</code> 这里的read没有用，因为没有变量来接收用户的输入</li>
+<li><code>read -p &quot;Pls input:&quot; &quot;$1&quot; &quot;$2&quot;</code> 这里的<code>$1</code>和<code>$2</code>本来是有特定功能的变量，不能用其作为变量来接受read的读入。错误在于，read后面接的是普通变量，并且将传参和read混用了，传参和read可以理解为是两种变量赋值的方法，使用其一即可。</li>
+<li><code>a=$1 ; read -p &quot;Pls input:&quot; $a</code> 作为接收read的变量，不该带<code>$</code>符号。</li>
+</ul>
+<hr>
+<blockquote>
+<p>OK</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/19/Shell/006. Shell学习笔记04-Shell变量知识进阶/" rel="next" title="Shell学习笔记04-Shell变量知识进阶">
+                <i class="fa fa-chevron-left"></i> Shell学习笔记04-Shell变量知识进阶
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/19/Shell/008. Shell学习笔记06-Shell脚本的条件测试与比较/" rel="prev" title="Shell学习笔记06-Shell脚本的条件测试与比较">
+                Shell学习笔记06-Shell脚本的条件测试与比较 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-算术运算符"><span class="nav-text">1. 算术运算符</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-双小括号-数值运算的基础语"><span class="nav-text">2. 双小括号 (()) 数值运算的基础语</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-双小括号-数值运算的基础语法"><span class="nav-text">2.1. 双小括号 (()) 数值运算的基础语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-双小括号-数值运算实践"><span class="nav-text">2.2. 双小括号 (()) 数值运算实践</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-let运算命令的用法"><span class="nav-text">3. let运算命令的用法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-expr命令的用法"><span class="nav-text">4. expr命令的用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-expr命令的基本用法示例"><span class="nav-text">4.1. expr命令的基本用法示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-用法1：expr用于计算"><span class="nav-text">1. 用法1：expr用于计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-用法2：expr配合变量计算"><span class="nav-text">2. 用法2：expr配合变量计算</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-expr的企业级实战案例详解"><span class="nav-text">4.2. expr的企业级实战案例详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-判断一个变量值或字符串是否为整数"><span class="nav-text">1. 判断一个变量值或字符串是否为整数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-expr的特殊用法：判断文件扩展名是否符合要求"><span class="nav-text">2. expr的特殊用法：判断文件扩展名是否符合要求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-通过expr计算字符串的长度"><span class="nav-text">3. 通过expr计算字符串的长度</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-bc命令的用法"><span class="nav-text">5. bc命令的用法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-awk实现计算"><span class="nav-text">6. awk实现计算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-declare（同typeset）命令的用法"><span class="nav-text">7. declare（同typeset）命令的用法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-符号的运算示例"><span class="nav-text">8. $[] 符号的运算示例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-基于Shell变量输入read命令的运算实践"><span class="nav-text">9. 基于Shell变量输入read命令的运算实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#9-1-read命令基础"><span class="nav-text">9.1. read命令基础</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-2-使用read的常见错误"><span class="nav-text">9.2. 使用read的常见错误</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

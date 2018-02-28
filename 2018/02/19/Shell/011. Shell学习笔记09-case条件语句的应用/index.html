@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Shell," />
+
+
+<meta name="description" content="GO   case条件语句相当于多分支的if/elif/else条件语句，但是它比这些条件语句看起来更规范更公正，常被应用于实现系统服务启动脚本等企业应用场景中。 在case语句中，程序会将case获取的变量的值与表达式部分的值1、值2、值3等逐个进行比较，如果获取的变量值和某个值（例如值1）相匹配，就会执行值（例如值1）后面对应的指令（例如指令1，其可能是一组指令），直到执行到双分号（;;）才">
+<meta name="keywords" content="Shell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell学习笔记09-case条件语句的应用">
+<meta property="og:url" content="http://www.theshu.top/2018/02/19/Shell/011. Shell学习笔记09-case条件语句的应用/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="GO   case条件语句相当于多分支的if/elif/else条件语句，但是它比这些条件语句看起来更规范更公正，常被应用于实现系统服务启动脚本等企业应用场景中。 在case语句中，程序会将case获取的变量的值与表达式部分的值1、值2、值3等逐个进行比较，如果获取的变量值和某个值（例如值1）相匹配，就会执行值（例如值1）后面对应的指令（例如指令1，其可能是一组指令），直到执行到双分号（;;）才">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-02-28T09:09:19.735Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shell学习笔记09-case条件语句的应用">
+<meta name="twitter:description" content="GO   case条件语句相当于多分支的if/elif/else条件语句，但是它比这些条件语句看起来更规范更公正，常被应用于实现系统服务启动脚本等企业应用场景中。 在case语句中，程序会将case获取的变量的值与表达式部分的值1、值2、值3等逐个进行比较，如果获取的变量值和某个值（例如值1）相匹配，就会执行值（例如值1）后面对应的指令（例如指令1，其可能是一组指令），直到执行到双分号（;;）才">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/02/19/Shell/011. Shell学习笔记09-case条件语句的应用/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Shell学习笔记09-case条件语句的应用 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/011. Shell学习笔记09-case条件语句的应用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Shell学习笔记09-case条件语句的应用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:39:54+08:00">2018-02-19</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-28T17:09:19+08:00">2018-02-28</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Shell/" itemprop="url" rel="index"><span itemprop="name">Shell</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>GO</p>
+</blockquote>
+<hr>
+<p>case条件语句相当于多分支的if/elif/else条件语句，但是它比这些条件语句看起来更规范更公正，常被应用于实现系统服务启动脚本等企业应用场景中。</p>
+<p>在case语句中，程序会将case获取的变量的值与表达式部分的<code>值1</code>、<code>值2</code>、<code>值3</code>等逐个进行比较，如果获取的变量值和某个值（例如<code>值1</code>）相匹配，就会执行值（例如<code>值1</code>）后面对应的指令（例如<code>指令1</code>，其可能是<code>一组指令</code>），直到执行到双分号（<code>;;</code>）才会停止，然后再跳出<code>case语句主体</code>，执行<code>case语句</code>（即<code>esac</code>字符）后面的其他命令。</p>
+<p>如果没有找到匹配变量的任何值，则执行<code>*)</code>后面的指令（通常是给使用者的使用提示），直到遇到双分号（<code>;;</code>）（此处的双分号可以省略）或<code>esac</code>结束，这部分相当于if多分支语句中最后的else语句部分。另外，case语句中表达式对应值的部分，还可以使用管道等更多功能来匹配。</p>
+<h1 id="1-case条件语句的语法"><a href="#1-case条件语句的语法" class="headerlink" title="1. case条件语句的语法"></a>1. case条件语句的语法</h1><p>case条件语句的语法格式为：<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="string">"变量名"</span> <span class="keyword">in</span></div><div class="line">	值<span class="number">1</span>)</div><div class="line">		指令<span class="number">1.</span>..</div><div class="line">		;;</div><div class="line">	值<span class="number">2</span>)</div><div class="line">		指令<span class="number">2.</span>..</div><div class="line">		;;</div><div class="line">	...</div><div class="line">	*)</div><div class="line">		指令<span class="number">3.</span>..</div><div class="line">esac</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>说明：当变量的值等于<code>值1</code>时，执行<code>指令1</code>；等于<code>值2</code>时执行<code>指令2</code>，以此类推；如果都不符合，则执行<code>*)</code>后面的指令，即<code>指令3</code>。此外，注意不同行内容的缩进距离。</p>
+</blockquote>
+<h1 id="2-case条件语句实践"><a href="#2-case条件语句实践" class="headerlink" title="2. case条件语句实践"></a>2. case条件语句实践</h1><p>范例1：根据用户的输入判断用户输入的是哪个数字</p>
+<p>如果用户输入的是1-9的任意数字，则输出对应输入的数字；如果是其它数字及字符，则返回输入不正确的提示并退出程序。</p>
+<ul>
+<li><p>参考答案1：使用case语句实现：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="built_in">read</span> -p <span class="string">"Plaease input a number:"</span> ans</div><div class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$ans</span>"</span> <span class="keyword">in</span></div><div class="line">	1)</div><div class="line">		<span class="built_in">echo</span> <span class="string">"The num you input is 1"</span></div><div class="line">		;;</div><div class="line">	2)</div><div class="line">		<span class="built_in">echo</span> <span class="string">"The num you input is 2"</span></div><div class="line">		;;</div><div class="line">	[3-9])	<span class="comment">#&lt;==如果用户输入的信息为3-9中的任意数字，注意范围匹配的正则写法，则执行下面的echo输出</span></div><div class="line">		<span class="built_in">echo</span> <span class="string">"The num you input is <span class="variable">$ans</span>"</span></div><div class="line">		;;</div><div class="line">	*)	<span class="comment">#&lt;==如果不匹配上面任何一个值，则执行下面的echo输出</span></div><div class="line">		<span class="built_in">echo</span> <span class="string">"Please input [0-9] int"</span></div><div class="line">		<span class="built_in">exit</span>;</div><div class="line"><span class="keyword">esac</span>	<span class="comment">#&lt;==esac语句结束前的最后一个值匹配，可以省略双分号</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>参考答案2：使用if语句实现</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="built_in">read</span> -p <span class="string">"Please input a number:"</span> ans</div><div class="line"><span class="keyword">if</span> [ <span class="variable">$ans</span> -eq 1 ];<span class="keyword">then</span></div><div class="line">	<span class="built_in">echo</span> <span class="string">"the num you input is 1"</span></div><div class="line"><span class="keyword">elif</span> [ <span class="variable">$ans</span> -eq 2 ];<span class="keyword">then</span></div><div class="line">	<span class="built_in">echo</span> <span class="string">"the num you input is 2"</span></div><div class="line"><span class="keyword">elif</span> [ <span class="variable">$ans</span> -ge 3 -a <span class="variable">$ans</span> -le 9 ];<span class="keyword">then</span></div><div class="line">	<span class="built_in">echo</span> <span class="string">"the num you input is <span class="variable">$ans</span>"</span></div><div class="line"><span class="keyword">else</span></div><div class="line">	<span class="built_in">echo</span> <span class="string">"the num you input must be [1-9]"</span></div><div class="line">	<span class="built_in">exit</span></div><div class="line"><span class="keyword">fi</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>对比case语句和if语句，会发现case语句更简洁更规范，if语句看起来则要更复杂一些。</p>
+<h1 id="3-实践：给输出的字符串加颜色"><a href="#3-实践：给输出的字符串加颜色" class="headerlink" title="3. 实践：给输出的字符串加颜色"></a>3. 实践：给输出的字符串加颜色</h1><h2 id="3-1-给输出的字符串加颜色的基础知识"><a href="#3-1-给输出的字符串加颜色的基础知识" class="headerlink" title="3.1. 给输出的字符串加颜色的基础知识"></a>3.1. 给输出的字符串加颜色的基础知识</h2><p>Linux命令行中给字体加颜色的命令为：</p>
+<ul>
+<li><code>echo -e &quot;\E[1;31m红色字theshu\E[0m&quot;</code></li>
+<li><code>echo -e &quot;\033[31m红色字theshu\033[0m&quot;</code></li>
+</ul>
+<p>在上述命令中：</p>
+<ul>
+<li><code>echo -e</code>可以识别转义字符，这里将识别特殊字符的含义，并输出</li>
+<li><code>\E</code>可以使用<code>\033</code>替代</li>
+<li><code>[1</code>数字1表示加粗显示（可以加不同的数字，以代表不同的意思，详细信息可用<code>man console_codes</code>获得）</li>
+<li><code>31m</code>表示为红色字体，可以换成不通的数字，以代表不同的意思</li>
+<li><code>红色字theshu</code>代表待设置的内容</li>
+<li><code>[0m</code>表示关闭所有属性，可以换成不同的数字，以代表不同的意思</li>
+</ul>
+<p>有关ANSI控制码的说明如下：</p>
+<ul>
+<li><code>\33[0m</code>表示关闭所有属性</li>
+<li><code>\33[1m</code>表示设置高亮度</li>
+<li><code>\33[4m</code>表示下划线</li>
+<li><code>\33[5m</code>表示闪烁</li>
+<li><code>\33[7m</code>表示反显</li>
+<li><code>\33[8m</code>表示消隐</li>
+<li><code>\33[30m</code>–<code>\33[37m</code>表示设置前景色</li>
+<li><code>\33[40m</code>–<code>\33[47m</code>表示设置背景色</li>
+</ul>
+<p>console codes的更多知识可以参考<code>man console_codes</code>，普通读者了解即可。</p>
+<hr>
+<p>在Linux脚本中，可以通过<code>echo</code>的<code>-e</code>参数，结合特殊的数字给不同的字符加上颜色并显示。</p>
+<p>范例：给内容加上不同的颜色</p>
+<ul>
+<li>内容的颜色可用数字表示，范围为<code>30</code>~<code>37</code>，每个数字代表一种颜色。代码如下：<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> -e <span class="string">"\033[30m 黑色字 theshu trainning \033[0m"</span> <span class="comment">#&lt;==30m表示黑色字</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"\033[31m 红色字 theshu trainning \033[0m"</span> <span class="comment">#&lt;==31m表示红色字</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"\033[32m 绿色字 theshu trainning \033[0m"</span> <span class="comment">#&lt;==32m表示绿色字</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"\033[33m 棕色字 theshu trainning \033[0m"</span> <span class="comment">#&lt;==33m表示棕色字</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"\033[34m 蓝色字 theshu trainning \033[0m"</span> <span class="comment">#&lt;==34m表示蓝色字</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"\033[35m 洋红色字 theshu trainning \033[0m"</span> <span class="comment">#&lt;==35m表示洋红色字</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"\033[36m 蓝绿色字 theshu trainning \033[0m"</span> <span class="comment">#&lt;==36m表示蓝绿色字</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"\033[37m 白色字 theshu trainning \033[0m"</span> <span class="comment">#&lt;==37m表示白色字</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>说明：不同的数字对应不同的字体颜色，详情参见系统帮助（<code>man console_codes</code>）</p>
+</blockquote>
+<p>范例：通过定义变量的方式给字体加颜色（推荐使用的方式）<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">RED_COLOR=<span class="string">'\E[1;31m'</span></div><div class="line">GREEN_COLOR=<span class="string">'\E[1;32m'</span></div><div class="line">YELLOW_COLOR=<span class="string">'\E1;33m'</span></div><div class="line">BLUE_COLOR=<span class="string">'\E[1;34m'</span></div><div class="line">PINK=<span class="string">'\E[1;35m'</span></div><div class="line">RES=<span class="string">'\E[0m'</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;RED_COLOR&#125;</span>====red color====<span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;YELLOW_COLOR&#125;</span>====yellow color====<span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;BLUE_COLOR&#125;</span>====blue color====<span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;GREEM_COLOR&#125;</span>====green color====<span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;PINK&#125;</span>====pink color====<span class="variable">$&#123;RES&#125;</span>"</span></div></pre></td></tr></table></figure></p>
+<h2 id="3-2-结合case语句给输出的字符串加颜色"><a href="#3-2-结合case语句给输出的字符串加颜色" class="headerlink" title="3.2. 结合case语句给输出的字符串加颜色"></a>3.2. 结合case语句给输出的字符串加颜色</h2><p>请开发一个给指定内容加指定颜色的脚本。</p>
+<p>要求：使用case语句及通过脚本传入指定内容和指定颜色，在脚本命令行传2个参数，给指定的内容（第一个参数）加指定的颜色（第二个参数）。</p>
+<ul>
+<li><p>实现脚本如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">RED_COLOR=<span class="string">'\E[1;31m'</span></div><div class="line">GREEN_COLOR=<span class="string">'\E[1;32m'</span></div><div class="line">YELLOW_COLOR=<span class="string">'\E[1;33m'</span></div><div class="line">BLUE_COLOR=<span class="string">'\E[1;34m'</span></div><div class="line">PINK_COLOR=<span class="string">'\E[1;35m'</span></div><div class="line">RES=<span class="string">'\E[0m'</span></div><div class="line"><span class="comment">#&lt;==以上部分将颜色字符定义为变量，方便后续使用</span></div><div class="line"><span class="keyword">if</span> [ <span class="variable">$#</span> -ne 2 ];<span class="keyword">then</span></div><div class="line">	<span class="built_in">echo</span> <span class="string">"Usage <span class="variable">$0</span> content &#123;red|yellow|blue|green|pink&#125;"</span></div><div class="line">	<span class="built_in">exit</span></div><div class="line"><span class="keyword">fi</span></div><div class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$2</span>"</span> <span class="keyword">in</span></div><div class="line">	red|RED)</div><div class="line">		<span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;RED_COLOR&#125;</span><span class="variable">$1</span><span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line">		;;</div><div class="line">	yellow|YELLOW)</div><div class="line">		<span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;YELLOW_COLOR&#125;</span><span class="variable">$1</span><span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line">		;;</div><div class="line">	green|GREEN)</div><div class="line">		<span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;GREEN_COLOR&#125;</span><span class="variable">$1</span><span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line">		;;</div><div class="line">	blue|BLUE)</div><div class="line">		<span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;BLUE_COLOR&#125;</span><span class="variable">$1</span><span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line">		;;</div><div class="line">	pink|PINK)</div><div class="line">		<span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;PINK_COLOR&#125;</span><span class="variable">$1</span><span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line">		;;</div><div class="line">	*)</div><div class="line">		<span class="built_in">echo</span> <span class="string">"Usage <span class="variable">$0</span> content &#123;red|yellow|blue|green|pink&#125;"</span></div><div class="line">		<span class="built_in">exit</span></div><div class="line"><span class="keyword">esac</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>如果脚本中要加颜色的内容很多，还可以专门写一个给内容加颜色的函数，如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="function"><span class="title">plus_color</span></span>()&#123;</div><div class="line">	RED_COLOR=<span class="string">'\E[1;31m'</span></div><div class="line">	GREEN_COLOR=<span class="string">'\E[1;32m'</span></div><div class="line">	YELLOW_COLOR=<span class="string">'\E[1;33m'</span></div><div class="line">	BLUE_COLOR=<span class="string">'\E[1;34m'</span></div><div class="line">	PINK_COLOR=<span class="string">'\E[1;35m'</span></div><div class="line">	RES=<span class="string">'\E[0m'</span></div><div class="line">	<span class="keyword">if</span> [ <span class="variable">$#</span> -ne 2 ];<span class="keyword">then</span></div><div class="line">		<span class="built_in">echo</span> <span class="string">"Usage <span class="variable">$0</span> content &#123;red|yellow|blue|green|pink&#125;"</span></div><div class="line">		<span class="built_in">exit</span></div><div class="line">	<span class="keyword">fi</span></div><div class="line">	<span class="keyword">case</span> <span class="string">"<span class="variable">$2</span>"</span> <span class="keyword">in</span></div><div class="line">		red|RED)</div><div class="line">			<span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;RED_COLOR&#125;</span><span class="variable">$1</span><span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line">			;;</div><div class="line">		yellow|YELLOW)</div><div class="line">			<span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;YELLOW_COLOR&#125;</span><span class="variable">$1</span><span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line">			;;</div><div class="line">		green|GREEN)</div><div class="line">			<span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;GREEN_COLOR&#125;</span><span class="variable">$1</span><span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line">			;;</div><div class="line">		blue|BLUE)</div><div class="line">			<span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;BLUE_COLOR&#125;</span><span class="variable">$1</span><span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line">			;;</div><div class="line">		pink|PINK)</div><div class="line">			<span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;PINK_COLOR&#125;</span><span class="variable">$1</span><span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line">			;;</div><div class="line">		*)</div><div class="line">			<span class="built_in">echo</span> <span class="string">"Usage <span class="variable">$0</span> content &#123;red|yellow|blue|green|pink&#125;"</span></div><div class="line">			<span class="built_in">exit</span></div><div class="line">	<span class="keyword">esac</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">plus_color <span class="string">"I"</span> red</div><div class="line">plus_color <span class="string">"am"</span> green</div><div class="line">plus_color <span class="string">"theshu"</span> blue</div></pre></td></tr></table></figure>
+</li>
+<li><p>本题更专业更规范的实现脚本如下，此脚本为全函数模块化、标准化、专业化的实现：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="comment">#&lt;==定义加颜色函数addColor</span></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">addColor</span></span>()&#123;</div><div class="line">	RED_COLOR=<span class="string">'\E[1;31m'</span></div><div class="line">	GREEN_COLOR=<span class="string">'\E[1;32m'</span></div><div class="line">	YELLOW_COLOR=<span class="string">'\E[1;33m'</span></div><div class="line">	BLUE_COLOR=<span class="string">'\E[1;34m'</span></div><div class="line">	PINK_COLOR=<span class="string">'\E[1;35m'</span></div><div class="line">	RES=<span class="string">'\E[0m'</span></div><div class="line">	<span class="keyword">if</span> [ <span class="variable">$#</span> -ne 2 ];<span class="keyword">then</span></div><div class="line">		<span class="built_in">echo</span> <span class="string">"Usage <span class="variable">$0</span> content &#123;red|yellow|blue|green|pink&#125;"</span></div><div class="line">		<span class="built_in">exit</span></div><div class="line">	<span class="keyword">fi</span></div><div class="line">	<span class="keyword">case</span> <span class="string">"<span class="variable">$2</span>"</span> <span class="keyword">in</span></div><div class="line">		red|RED)</div><div class="line">			<span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;RED_COLOR&#125;</span><span class="variable">$1</span><span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line">			;;</div><div class="line">		yellow|YELLOW)</div><div class="line">			<span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;YELLOW_COLOR&#125;</span><span class="variable">$1</span><span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line">			;;</div><div class="line">		green|GREEN)</div><div class="line">			<span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;GREEN_COLOR&#125;</span><span class="variable">$1</span><span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line">			;;</div><div class="line">		blue|BLUE)</div><div class="line">			<span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;BLUE_COLOR&#125;</span><span class="variable">$1</span><span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line">			;;</div><div class="line">		pink|PINK)</div><div class="line">			<span class="built_in">echo</span> -e <span class="string">"<span class="variable">$&#123;PINK_COLOR&#125;</span><span class="variable">$1</span><span class="variable">$&#123;RES&#125;</span>"</span></div><div class="line">			;;</div><div class="line">		*)</div><div class="line">			<span class="built_in">echo</span> <span class="string">"Usage <span class="variable">$0</span> content &#123;red|yellow|blue|green|pink&#125;"</span></div><div class="line">			<span class="built_in">exit</span></div><div class="line">	<span class="keyword">esac</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">#&lt;==定义主函数main</span></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">main</span></span>()&#123;</div><div class="line">	addColor <span class="variable">$1</span> <span class="variable">$2</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">#&lt;==执行主函数</span></div><div class="line">main $*</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="3-3-给输出的字符串加背景颜色"><a href="#3-3-给输出的字符串加背景颜色" class="headerlink" title="3.3. 给输出的字符串加背景颜色"></a>3.3. 给输出的字符串加背景颜色</h2><p>给输出的字符串加不同的背景颜色。字的背景颜色对应的数字的范围为<code>40</code>~<code>47</code>，代码如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> -e <span class="string">"\033[40;37m 黑底白字 theshu \033[0m"</span> <span class="comment">#&lt;==40m表示黑色背景</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"\033[41;37m 红底白字 theshu \033[0m"</span> <span class="comment">#&lt;==41m表示红色背景</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"\033[42;37m 绿底白字 theshu \033[0m"</span> <span class="comment">#&lt;==42m表示绿色背景</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"\033[43;37m 棕底白字 theshu \033[0m"</span> <span class="comment">#&lt;==43m表示棕色背景，和黄色背景相近</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"\033[44;37m 蓝底白字 theshu \033[0m"</span> <span class="comment">#&lt;==44m表示蓝色背景</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"\033[45;37m 洋红底白字 theshu \033[0m"</span> <span class="comment">#&lt;==45m表示洋红色背景，和紫色背景相近</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"\033[46;37m 蓝绿底白字 theshu \033[0m"</span> <span class="comment">#&lt;==46m表示蓝绿色色背景，和浅蓝色背景相近</span></div><div class="line"><span class="built_in">echo</span> -e <span class="string">"\033[47;30m 白底黑字 theshu \033[0m"</span> <span class="comment">#&lt;==47m表示白色背景</span></div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>说明：不同的数字所对应的背景字体颜色见系统帮助（<code>man console_codes</code>）</p>
+</blockquote>
+<h1 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h1><ul>
+<li>case语句和if条件语句的适用性<ul>
+<li>case语句比较适合变量值较少且为固定的数字或字符串集合的情况，如果变量的值是已知固定的<code>start|stop|restart</code>等元素，那么采用case语句来实现就比较合适。</li>
+</ul>
+</li>
+<li>case语句和if语句的常见应用场景<ul>
+<li>case主要是写服务的启动脚本，一般情况下，传参不同且具有少量的字符串，其适用范围较窄。</li>
+<li>if就是取值判断、比较，应用面比case更广。几乎所有的case语句都可以用if条件语句来实现。</li>
+</ul>
+</li>
+<li>case语句的特点及优势<br>  case语句就相当于多分支的if/elif/else语句，但是case语句的优势是更规范、易读。</li>
+</ul>
+<hr>
+<blockquote>
+<p>OK</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/19/Shell/010. Shell学习笔记08-Shell函数的知识/" rel="next" title="Shell学习笔记08-Shell函数的知识">
+                <i class="fa fa-chevron-left"></i> Shell学习笔记08-Shell函数的知识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/19/Shell/012. Shell学习笔记10-while循环和until循环/" rel="prev" title="Shell学习笔记10-while循环和until循环">
+                Shell学习笔记10-while循环和until循环 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-case条件语句的语法"><span class="nav-text">1. case条件语句的语法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-case条件语句实践"><span class="nav-text">2. case条件语句实践</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-实践：给输出的字符串加颜色"><span class="nav-text">3. 实践：给输出的字符串加颜色</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-给输出的字符串加颜色的基础知识"><span class="nav-text">3.1. 给输出的字符串加颜色的基础知识</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-结合case语句给输出的字符串加颜色"><span class="nav-text">3.2. 结合case语句给输出的字符串加颜色</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-给输出的字符串加背景颜色"><span class="nav-text">3.3. 给输出的字符串加背景颜色</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-总结"><span class="nav-text">4. 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

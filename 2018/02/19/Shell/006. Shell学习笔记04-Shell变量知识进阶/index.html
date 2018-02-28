@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Shell," />
+
+
+<meta name="description" content="GO   1. Shell中特殊且重要的变量1.1. Shell中的特殊位置参数变量在Shell中存在一些特殊且重要的变量，例如：$0、$1、$#等，我们称之为特殊位置参数变量。要从命令行、函数或脚本执行等处传递参数时，就需要在Shell脚本中使用位置参数变量。下表为常用的特殊位置参数变量的说明：    位置变量 作用说明     $0 获取当前执行的Shell脚本的文件名，如果执行脚本包含了路">
+<meta name="keywords" content="Shell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell学习笔记04-Shell变量知识进阶">
+<meta property="og:url" content="http://www.theshu.top/2018/02/19/Shell/006. Shell学习笔记04-Shell变量知识进阶/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="GO   1. Shell中特殊且重要的变量1.1. Shell中的特殊位置参数变量在Shell中存在一些特殊且重要的变量，例如：$0、$1、$#等，我们称之为特殊位置参数变量。要从命令行、函数或脚本执行等处传递参数时，就需要在Shell脚本中使用位置参数变量。下表为常用的特殊位置参数变量的说明：    位置变量 作用说明     $0 获取当前执行的Shell脚本的文件名，如果执行脚本包含了路">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-02-28T05:01:21.863Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shell学习笔记04-Shell变量知识进阶">
+<meta name="twitter:description" content="GO   1. Shell中特殊且重要的变量1.1. Shell中的特殊位置参数变量在Shell中存在一些特殊且重要的变量，例如：$0、$1、$#等，我们称之为特殊位置参数变量。要从命令行、函数或脚本执行等处传递参数时，就需要在Shell脚本中使用位置参数变量。下表为常用的特殊位置参数变量的说明：    位置变量 作用说明     $0 获取当前执行的Shell脚本的文件名，如果执行脚本包含了路">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/02/19/Shell/006. Shell学习笔记04-Shell变量知识进阶/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Shell学习笔记04-Shell变量知识进阶 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/006. Shell学习笔记04-Shell变量知识进阶/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Shell学习笔记04-Shell变量知识进阶</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:37:08+08:00">2018-02-19</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-28T13:01:21+08:00">2018-02-28</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Shell/" itemprop="url" rel="index"><span itemprop="name">Shell</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>GO</p>
+</blockquote>
+<hr>
+<h1 id="1-Shell中特殊且重要的变量"><a href="#1-Shell中特殊且重要的变量" class="headerlink" title="1. Shell中特殊且重要的变量"></a>1. Shell中特殊且重要的变量</h1><h2 id="1-1-Shell中的特殊位置参数变量"><a href="#1-1-Shell中的特殊位置参数变量" class="headerlink" title="1.1. Shell中的特殊位置参数变量"></a>1.1. Shell中的特殊位置参数变量</h2><p>在Shell中存在一些特殊且重要的变量，例如：<code>$0</code>、<code>$1</code>、<code>$#</code>等，我们称之为<strong>特殊位置参数变量</strong>。要从命令行、函数或脚本执行等处传递参数时，就需要在Shell脚本中使用位置参数变量。下表为常用的特殊位置参数变量的说明：</p>
+<table>
+<thead>
+<tr>
+<th>位置变量</th>
+<th>作用说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$0</td>
+<td>获取当前执行的Shell脚本的文件名，如果执行脚本包含了路径，那么就包括脚本路径</td>
+</tr>
+<tr>
+<td>$n</td>
+<td>获取当前执行的Shell脚本的第n个参数，n=1..9，当n为0时表示脚本的文件名；如果n大于9，则要用大括号括起来，例如<code>${10}</code>，接的参数以空格隔开</td>
+</tr>
+<tr>
+<td>$#</td>
+<td>获取当前执行的Shell脚本后面接的参数的总个数</td>
+</tr>
+<tr>
+<td>$*</td>
+<td>获取当前Shell脚本所有传参的参数，不加引号和<code>$@</code>相同；如果给<code>$*</code>加上双引号，例如：<code>&quot;$*&quot;</code>，则表示将所有的参数视为单个字符串，相当于<code>$1 $2 $3</code></td>
+</tr>
+<tr>
+<td>$@</td>
+<td>获取当前Shell脚本所有传参的参数，不加引号和<code>$*</code>相同；如果给它加上双引号，例如：<code>$@</code>，则表示将所有的参数视为不同的独立字符串，相当于<code>&quot;$1&quot; &quot;$2&quot; &quot;$3&quot; &quot;...&quot;</code>。这是将多参数传递给其他程序的最佳方式，因为它会保留所有的内嵌在每个参数里的任何空白。当<code>$@</code>和<code>$*</code>都加双引号时，两者是有区别的；都不加双引号时，两者无区别。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1-1-1-n的用法总结"><a href="#1-1-1-n的用法总结" class="headerlink" title="1.1.1. $n的用法总结"></a>1.1.1. $n的用法总结</h3><ul>
+<li>加引号括起来的内容传参，会作为一个字符串参数，如：<code>sh test.sh &quot;theshu boy&quot;</code>中<code>theshu boy</code>作为一个参数</li>
+<li>当<code>$n</code>的n大于9时，必须要这样用才能得到正确的结果：<code>${n}</code>，示例代码如下：<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo \<span class="variable">$&#123;</span><span class="number">1</span>..<span class="number">15</span>&#125; <span class="comment">#&lt;==利用大括号输出15个位置参数，学会了</span></div><div class="line">	该命令就不用手敲代码了。</div><div class="line"><span class="variable">$1</span> <span class="variable">$2</span> <span class="variable">$3</span> <span class="variable">$4</span> <span class="variable">$5</span> <span class="variable">$6</span> <span class="variable">$7</span> <span class="variable">$8</span> <span class="variable">$9</span> <span class="variable">$10</span> <span class="variable">$11</span> <span class="variable">$12</span> <span class="variable">$13</span> <span class="variable">$14</span> <span class="variable">$15</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo \<span class="variable">$&#123;</span><span class="number">1</span>..<span class="number">15</span>&#125; &gt; n.sh	<span class="comment">#&lt;==将15个位置参数定向到文件n.sh</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>vim n.sh		<span class="comment">#&lt;==在代码的最前面添加echo</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>cat n.sh     <span class="comment">#&lt;==最终的测试代码</span></div><div class="line">echo <span class="variable">$1</span> <span class="variable">$2</span> <span class="variable">$3</span> <span class="variable">$4</span> <span class="variable">$5</span> <span class="variable">$6</span> <span class="variable">$7</span> <span class="variable">$8</span> <span class="variable">$9</span> <span class="variable">$10</span> <span class="variable">$11</span> <span class="variable">$12</span> <span class="variable">$13</span> <span class="variable">$14</span> <span class="variable">$15</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo &#123;a..z&#125;  <span class="comment">#&lt;=测试打印26个英文字母并以空格分隔</span></div><div class="line">a b c d e f g h i j k l m n o p q r s t u v w x y z</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>sh n.sh &#123;a..z&#125;	<span class="comment">#&lt;==传入26个英文字母，以空格分隔作为参数</span></div><div class="line">a b c d e f g h i a<span class="number">0</span> a1 a2 a3 a4 a5	<span class="comment">#&lt;==位置参数大于9后，输出的内容就不对了</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>vim n.sh		<span class="comment">#&lt;==修改代码</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>cat n.sh		<span class="comment">#&lt;==最终代码如下</span></div><div class="line">echo <span class="variable">$1</span> <span class="variable">$2</span> <span class="variable">$3</span> <span class="variable">$4</span> <span class="variable">$5</span> <span class="variable">$6</span> <span class="variable">$7</span> <span class="variable">$8</span> <span class="variable">$9</span> <span class="variable">$&#123;</span><span class="number">10</span>&#125; <span class="variable">$&#123;</span><span class="number">11</span>&#125; <span class="variable">$&#123;</span><span class="number">12</span>&#125; <span class="variable">$&#123;</span><span class="number">13</span>&#125; <span class="variable">$&#123;</span><span class="number">14</span>&#125; <span class="variable">$&#123;</span><span class="number">15</span>&#125;</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>sh n.sh &#123;a..z&#125;   <span class="comment">#重新测试</span></div><div class="line">a b c d e f g h i j k l m n o	<span class="comment">#&lt;==位置参数大于9的也正确了</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="1-1-2-0特殊变量的作用及变量实践"><a href="#1-1-2-0特殊变量的作用及变量实践" class="headerlink" title="1.1.2. $0特殊变量的作用及变量实践"></a>1.1.2. $0特殊变量的作用及变量实践</h3><ul>
+<li><p><code>$0</code>的作用为取出执行脚本的名称（包括路径）。若不带路径执行脚本，那么输出结果就是脚本的名字，若使用绝对路径执行脚本，那么输出结果就是全路径加上脚本的名字。示例代码如下：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[theshu@theshu ~]$ <span class="keyword">cat</span> <span class="keyword">n</span>.<span class="keyword">sh</span></div><div class="line">echo <span class="variable">$0</span></div><div class="line">[theshu@theshu ~]$ <span class="keyword">sh</span> <span class="keyword">n</span>.<span class="keyword">sh</span></div><div class="line"><span class="keyword">n</span>.<span class="keyword">sh</span></div><div class="line">[theshu@theshu ~]$ <span class="keyword">sh</span> /home/theshu/<span class="keyword">n</span>.<span class="keyword">sh</span></div><div class="line">/home/theshu/<span class="keyword">n</span>.<span class="keyword">sh</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>当执行的脚本为绝对路径时，$0也会带着路径，这时如果希望单独获取名称或路径，可以利用<code>dirname</code>和<code>basename</code>这两个命令。示例代买如下：</p>
+<figure class="highlight mel"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[theshu@theshu ~]$ <span class="keyword">dirname</span> /home/theshu/n.sh</div><div class="line">/home/theshu	#&lt;==<span class="keyword">dirname</span>命令的作用是获取脚本的路径</div><div class="line">[theshu@theshu ~]$ <span class="keyword">basename</span> /home/theshu/n.sh</div><div class="line">n.sh	#&lt;==<span class="keyword">basename</span>命令的作用是获取脚本的名字</div><div class="line">#&lt;==利用$0和<span class="keyword">dirname</span>以及<span class="keyword">basename</span>命令分别取出脚本名称和脚本路径的代码：</div><div class="line">[theshu@theshu ~]$ cat n.sh</div><div class="line"><span class="keyword">dirname</span> $0</div><div class="line"><span class="keyword">basename</span> $0</div><div class="line">[theshu@theshu ~]$ sh /home/theshu/n.sh</div><div class="line">/home/theshu</div><div class="line">n.sh</div></pre></td></tr></table></figure>
+</li>
+<li><p>有关<code>$0</code>这个位置参数的系统生产场景案例如下，其中采用aegis系统脚本：</p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[theshu@theshu ~]$ tail <span class="number">-6</span> <span class="meta-keyword">/etc/</span>init.d/aegis</div><div class="line">        echo $<span class="string">"Usage: $0 &#123;start|stop|restart|status|uninstall&#125;"</span></div><div class="line"><span class="meta">#&lt;==$0的基本生产场景就是，当用户的输入不符合脚本的要求时，就打印脚本的名字及使用帮助。</span></div><div class="line">        exit <span class="number">1</span></div><div class="line">    ;;</div><div class="line"></div><div class="line">esac</div><div class="line"></div><div class="line">[theshu@theshu ~]$ sudo <span class="meta-keyword">/etc/</span>init.d/aegis	<span class="meta">#&lt;==不带任何参数执行aegis脚本</span></div><div class="line"><span class="symbol">Usage:</span> <span class="meta-keyword">/etc/</span>init.d/<span class="class">aegis </span>&#123;start|stop|restart|status|uninstall&#125;</div><div class="line"><span class="meta">#&lt;==上文/etc/init.d/aegis就是$0从脚本命令行获取的值，当用户输入不符合脚本设定的要求时，打印脚本名字及预期的使用帮助</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="1-1-3-特殊变量获取脚本传参个数的实践"><a href="#1-1-3-特殊变量获取脚本传参个数的实践" class="headerlink" title="1.1.3. $#特殊变量获取脚本传参个数的实践"></a>1.1.3. $#特殊变量获取脚本传参个数的实践</h3><p>例子：通过<code>$#</code>获取脚本传参的个数。<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>cat q.sh</div><div class="line">echo <span class="variable">$1</span> <span class="variable">$2</span> <span class="variable">$3</span> <span class="variable">$4</span> <span class="variable">$5</span> <span class="variable">$6</span> <span class="variable">$7</span> <span class="variable">$8</span> <span class="variable">$9</span></div><div class="line">echo <span class="variable">$#</span>	<span class="comment">#&lt;==此行是打印脚本命令行传参的个数</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>sh q.sh &#123;a..z&#125;	<span class="comment">#&lt;==传入26个字符作为26个参数</span></div><div class="line">a b c d e f g h i	<span class="comment">#&lt;==只接收了9个变量，所以打印9个字符</span></div><div class="line"><span class="number">26</span>	<span class="comment">#&lt;==传入26个字符作为26个参数，因此这里的数字为26，说明传入了26个参数</span></div></pre></td></tr></table></figure></p>
+<p>下面是一个针对<code>$0</code>、<code>$1</code>、<code>$#</code>等多位置参数的综合型企业案例，它的作用是根据用户在命令行的传参个数判断用户的输入，不合要求的给予提示并退出。<br>首先来看条件表达式判断语句的写法，如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[theshu@theshu ~]$ cat t1.sh</div><div class="line">[ <span class="variable">$#</span> -ne 2 ] &amp;&amp; &#123;</div><div class="line">        <span class="built_in">echo</span> <span class="string">"Must be two args"</span></div><div class="line">        <span class="built_in">exit</span> 1</div><div class="line">&#125;</div><div class="line"><span class="built_in">echo</span> ok</div><div class="line">[theshu@theshu ~]$ sh t1.sh</div><div class="line">Must be two args</div><div class="line">[theshu@theshu ~]$ sh t1.sh arg1 arg2</div><div class="line">ok</div></pre></td></tr></table></figure></p>
+<p>然后是if判断语句的写法，如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[theshu@theshu ~]$ cat t2.sh</div><div class="line"><span class="keyword">if</span> [ <span class="variable">$#</span> -ne 2 ]</div><div class="line"><span class="keyword">then</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"USAGE:/bin/sh <span class="variable">$0</span> arg1 arg2"</span></div><div class="line">        <span class="built_in">exit</span> 1</div><div class="line"><span class="keyword">fi</span></div><div class="line"><span class="built_in">echo</span> <span class="variable">$1</span> <span class="variable">$2</span></div><div class="line">[theshu@theshu ~]$ sh t2.sh</div><div class="line">USAGE:/bin/sh t2.sh arg1 arg2</div><div class="line">[theshu@theshu ~]$ sh t2.sh theshu boy</div><div class="line">theshu boy</div></pre></td></tr></table></figure></p>
+<h3 id="1-1-4-和-特殊变量功能及区别说明"><a href="#1-1-4-和-特殊变量功能及区别说明" class="headerlink" title="1.1.4. $*和$@特殊变量功能及区别说明"></a>1.1.4. $*和$@特殊变量功能及区别说明</h3><p>例子：利用<code>set</code>命令设置位置参数（同命令行脚本的传参）<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>set -- <span class="string">"I am"</span> good man.</div><div class="line"><span class="comment">#&lt;==通过set设置了三个字符串参数，"--"表示清除所有的参数变量，重新设置后面的参数变量</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$#</span>	<span class="comment">#&lt;==输出参数的个数</span></div><div class="line"><span class="number">3</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$1</span>	<span class="comment">#&lt;==打印第一个参数值</span></div><div class="line">I am</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$2</span>	<span class="comment">#&lt;==打印第二个参数值</span></div><div class="line">good</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$3</span>	<span class="comment">#&lt;==打印打三个参数值</span></div><div class="line">man.</div></pre></td></tr></table></figure></p>
+<p>测试<code>$*</code>和<code>$@</code>，注意，此时不带双引号：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$*</span>	<span class="comment">#&lt;==打印$*</span></div><div class="line">I am good man.</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$@</span>	<span class="comment">#&lt;==打印$@</span></div><div class="line">I am good man.</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span><span class="keyword">for</span> i <span class="keyword">in</span> <span class="variable">$*</span>;<span class="keyword">do</span> echo <span class="variable">$i</span>;done	<span class="comment">#&lt;==使用for循环输出$*测试</span></div><div class="line">I	<span class="comment">#&lt;==（$*）不加双引号，因此会输出所有参数，然后第一个参数"I am"也拆开输出了</span></div><div class="line">am</div><div class="line">good</div><div class="line">man.</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span><span class="keyword">for</span> i <span class="keyword">in</span> <span class="variable">$@</span>;<span class="keyword">do</span> echo <span class="variable">$i</span>;done	<span class="comment">#&lt;==使用for循环输出$@测试</span></div><div class="line">I	<span class="comment">#&lt;==（$0）不加双引号，因此会输出所有参数，然后第一个参数"I am"也拆开输出了</span></div><div class="line">am</div><div class="line">good</div><div class="line">man.</div></pre></td></tr></table></figure></p>
+<p>测试<code>$*</code>和<code>$@</code>，注意，此时带有双引号：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">[theshu@theshu ~]$ <span class="built_in">echo</span> <span class="string">"$*"</span></div><div class="line">I am good man.</div><div class="line">[theshu@theshu ~]$ <span class="built_in">echo</span> <span class="string">"<span class="variable">$@</span>"</span></div><div class="line">I am good man.</div><div class="line">[theshu@theshu ~]$ <span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"$*"</span>;<span class="keyword">do</span> <span class="built_in">echo</span> <span class="variable">$i</span>;<span class="keyword">done</span></div><div class="line"><span class="comment">#&lt;==在有双引号的情况下"$*"，参数里引号中的内容当作一个参数输出了</span></div><div class="line">I am good man.</div><div class="line">[theshu@theshu ~]$ <span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"<span class="variable">$@</span>"</span>;<span class="keyword">do</span> <span class="built_in">echo</span> <span class="variable">$i</span>;<span class="keyword">done</span></div><div class="line"><span class="comment">#&lt;==在有双引号的情况下，每个参数均以独立的内容输出</span></div><div class="line">I am	<span class="comment">#&lt;==有双引号算一个参数</span></div><div class="line">good</div><div class="line">man.</div><div class="line"><span class="comment">#&lt;==这才真正符合我们传入的参数需求，set -- "I am" good man.</span></div><div class="line">[theshu@theshu ~]$ <span class="keyword">for</span> i;<span class="keyword">do</span> <span class="built_in">echo</span> <span class="variable">$i</span>;<span class="keyword">done</span></div><div class="line"><span class="comment">#&lt;==去掉in变量列表，相当于有引号的in "$@"</span></div><div class="line">I am</div><div class="line">good</div><div class="line">man.</div><div class="line"><span class="comment">#&lt;==这才真正符合我们传入的参数需求，set -- "I am" good man.</span></div></pre></td></tr></table></figure></p>
+<p>可以利用<code>shift</code>将位置参数移位（左移）：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>shift</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$#</span>  <span class="comment">#&lt;==移位（左移）</span></div><div class="line"><span class="number">2</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$1</span>	<span class="comment">#&lt;==这里就打印原来的$2的值了</span></div><div class="line">good</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$2</span>	<span class="comment">#&lt;==这里就打印原来的$3的值了</span></div><div class="line">man.</div></pre></td></tr></table></figure></p>
+<h2 id="1-2-Shell进程中的特殊状态变量"><a href="#1-2-Shell进程中的特殊状态变量" class="headerlink" title="1.2. Shell进程中的特殊状态变量"></a>1.2. Shell进程中的特殊状态变量</h2><p>Shell进程中的特殊状态变量如下表：（提示：下表的查找方式为使用<code>man bash</code>命令，然后搜索关键字<code>Special Parameteers</code>）</p>
+<table>
+<thead>
+<tr>
+<th>位置变量</th>
+<th>作用说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$?</td>
+<td>获取执行上一个指令的执行装填返回值（0为成功，非零为失败），这个变量最常用</td>
+</tr>
+<tr>
+<td>$$</td>
+<td>获取当前执行的Shell脚本的进程号（PID），这个变量不常用，了解即可</td>
+</tr>
+<tr>
+<td>$!</td>
+<td>获取上一个在后台工作的进程的进程号（PID），这个变量不常用，了解即可</td>
+</tr>
+<tr>
+<td>$_</td>
+<td>湖区在此之前执行的命令或脚本的最后一个参数，这个变量不常用，了解即可</td>
+</tr>
+</tbody>
+</table>
+<h3 id="1-2-1-关于-的说明"><a href="#1-2-1-关于-的说明" class="headerlink" title="1.2.1. 关于$?的说明"></a>1.2.1. 关于$?的说明</h3><ul>
+<li>在不通命令的执行结果中，<code>$?</code>的返回值不尽相同，但在工作场景中，常用的就是0和非0两种状态，0表示成功运行，非0表示运行失败。</li>
+<li>若使用源码编译安装软件，可以在每个步骤的结尾获取<code>$?</code>来判断命令执行成功与否。</li>
+<li>对于新手来说，在安装服务时，可以通过获取执行命令的返回值来确定命令的执行状态，从而快速确定命令是否执行成功。不过，有经验的技术人员不需要获取返回值，通过命令的最后过程输出就可以快速判断是否成功。</li>
+<li>当对服务器的数据进行备份时，我们会在执行完关键命令，例如<code>tar</code>或<code>cp</code>后，通过获取返回值来判断命令是否执行成功，备份数据是否完整。</li>
+</ul>
+<p>在企业场景下，<code>$?</code>返回值的用法如下：</p>
+<ol>
+<li>判断命令、脚本或函数等程序是否执行成功</li>
+<li>若在脚本中调用执行<code>exit 数字</code>，则会返回这个数字给<code>$?</code>变量</li>
+<li>如果是在函数里，则通过<code>return 数字</code>把这个数字以函数返回值的形式传给<code>$?</code></li>
+</ol>
+<h3 id="1-2-2-关于-的应用"><a href="#1-2-2-关于-的应用" class="headerlink" title="1.2.2. 关于$$的应用"></a>1.2.2. 关于$$的应用</h3><p>例子：实现系统中多次执行某一个脚本后的进程只有一个（此为$$的企业级应用）</p>
+<p>说明：有时执行定时任务脚本的频率比较快，并不知道上一个脚本是否真的执行完毕，但是，业务要求同一时刻只能有一个同样的脚本在运行，此时就可以利用<code>$$</code>获取上一次运行的脚本进程号，当程序重新运行时，根据获得的进程号，清理掉上一次的进程，运行新的脚本命令。脚本如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line">pidpath=/tmp/a.pid	<span class="comment">#&lt;==定义pid文件</span></div><div class="line"><span class="keyword">if</span> [ -f <span class="string">"<span class="variable">$pidpath</span>"</span> ]	<span class="comment">#&lt;==如附哦pid存在，则执行then后面的命令</span></div><div class="line"><span class="keyword">then</span></div><div class="line">	<span class="built_in">kill</span> `cat <span class="variable">$pidpath</span>` &gt; /dev/null 2&gt;&amp;1 <span class="comment">#&lt;==杀掉与前一个进程号对应的进程</span></div><div class="line">	rm -f <span class="variable">$pidpath</span>	<span class="comment">#&lt;==删除pid文件</span></div><div class="line"><span class="keyword">fi</span></div><div class="line"><span class="built_in">echo</span> $$ &gt; <span class="variable">$pidpath</span>	<span class="comment">#&lt;==将当前Shell进程号记录到pid文件里</span></div><div class="line">sleep 300</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>提示：这是一个生产案例的简单模拟，脚本用于执行启动或定时任务时，相同的脚本中只能有一个在运行，当新脚本运行时，必须关闭未完成或未退出的上一次的同名脚本进程。</p>
+</blockquote>
+<h3 id="1-2-3-关于-的说明及实践"><a href="#1-2-3-关于-的说明及实践" class="headerlink" title="1.2.3. 关于$_的说明及实践"></a>1.2.3. 关于$_的说明及实践</h3><p><code>$_</code>的作用是获得上一条命令的最后一个参数值，此功能用的不多，了解即可。示例如下：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo hello</div><div class="line">hello</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$_</span></div><div class="line">hello</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>ll -d /root/</div><div class="line">dr-xr-x---. <span class="number">9</span> root root <span class="number">4096</span> Feb <span class="number">25</span> <span class="number">17</span><span class="symbol">:</span><span class="number">10</span> /root/</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$_</span></div><div class="line">/root/</div></pre></td></tr></table></figure></p>
+<h3 id="1-2-4-关于-的说明及实践"><a href="#1-2-4-关于-的说明及实践" class="headerlink" title="1.2.4. 关于$!的说明及实践"></a>1.2.4. 关于$!的说明及实践</h3><p><code>$!</code>的功能类似与<code>$$</code>，只不过作用是获取上一次执行脚本的pid，对此，了解即可。范例如下：<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[theshu@theshu ~]$ ps ef <span class="params">| grep pid.sh |</span> grep -v grep</div><div class="line">[theshu@theshu ~]$ sh pid.sh &amp;</div><div class="line">[<span class="number">1</span>] <span class="number">12077</span></div><div class="line">[theshu@theshu ~]$ echo $!</div><div class="line"><span class="number">12077</span></div></pre></td></tr></table></figure></p>
+<h1 id="2-bash-Shell内置变量命令"><a href="#2-bash-Shell内置变量命令" class="headerlink" title="2. bash Shell内置变量命令"></a>2. bash Shell内置变量命令</h1><p>bash Shell包含一些内置命令，它们是由Shell本身提供的。常用的内部命令有：echo、eval、exec、export、read、shift。下面简单介绍几个最常用的内置命令的格式和功能。</p>
+<h2 id="2-1-echo在屏幕上输出信息"><a href="#2-1-echo在屏幕上输出信息" class="headerlink" title="2.1. echo在屏幕上输出信息"></a>2.1. echo在屏幕上输出信息</h2><ul>
+<li>命令格式：<code>echo args</code> （可以是字符串和变量的组成）</li>
+<li>功能说明：将<code>echo</code>命令后面<code>args</code>指定的字符串及变量等显示到标准输出</li>
+<li>常用参数见下表：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>echo参数选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-n</td>
+<td>不换行输出内容</td>
+</tr>
+<tr>
+<td>-e</td>
+<td>解析转义字符（见下面的字符）</td>
+</tr>
+<tr>
+<td>转义字符</td>
+<td></td>
+</tr>
+<tr>
+<td>\n</td>
+<td>换行</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>回车</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>制表符（tab）</td>
+</tr>
+<tr>
+<td>\b</td>
+<td>退格</td>
+</tr>
+<tr>
+<td>\v</td>
+<td>纵向制表符</td>
+</tr>
+</tbody>
+</table>
+<p>参数的应用示例：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo theshu;echo hello</div><div class="line">theshu</div><div class="line">hello</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo -n theshu;echo hello	<span class="comment">#&lt;==-n不换行输出</span></div><div class="line">theshuhello</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="string">"theshu\ttheshu\ntheshu\ttheshu"</span></div><div class="line">theshu\ttheshu\ntheshu\ttheshu</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo -e <span class="string">"theshu\ttheshu\ntheshu\ttheshu"</span>	<span class="comment">#&lt;==加上-e解析"\"开头的字符</span></div><div class="line">theshu  theshu</div><div class="line">theshu  theshu</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>printf <span class="string">"theshu\ttheshu\ntheshu\ttheshu\n"</span></div><div class="line">theshu  theshu</div><div class="line">theshu  theshu</div><div class="line"><span class="comment">#&lt;==printf的转义字符能力与echo类似</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo -e <span class="string">"1\b23"</span>	<span class="comment">#&lt;==加上-e解析以"\"开头的字符，\b退格</span></div><div class="line"><span class="number">23</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>printf <span class="string">"1\b23\n"</span>	<span class="comment">#&lt;==printf的转义字符功能与echo类似</span></div><div class="line"><span class="number">23</span></div></pre></td></tr></table></figure></p>
+<p><code>printf</code>与<code>echo</code>的功能类似，但是printf更强大，当需要特殊复杂的格式时才考虑使用<code>printf</code>。</p>
+<h2 id="2-2-eval（后文有案例讲解）"><a href="#2-2-eval（后文有案例讲解）" class="headerlink" title="2.2. eval（后文有案例讲解）"></a>2.2. eval（后文有案例讲解）</h2><ul>
+<li>命令格式：<code>eval args</code></li>
+<li>功能：当Shell程序执行到eval语句时，Shell读入参数args，并将它们组合成一个新的命令，然后执行。</li>
+<li>范例如下：<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>cat noeval.sh</div><div class="line">echo \<span class="variable">$$</span><span class="comment">#</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>sh noeval.sh arg1 arg2</div><div class="line"><span class="variable">$2</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>cat noeval.sh</div><div class="line">eval <span class="string">"echo \$$# "</span></div><div class="line"><span class="comment">#&lt;==加上eval命令，使得打印的也是位置参数，重新解析输出，而不是输出$2本身。</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>sh noeval.sh arg1 arg2</div><div class="line">arg2	<span class="comment">#&lt;==输出了$2的值</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="2-3-exec"><a href="#2-3-exec" class="headerlink" title="2.3. exec"></a>2.3. exec</h2><ul>
+<li>命令格式：<code>exec 命令参数</code></li>
+<li>功能：<code>exec</code>命令能够在不创建新的子进程的前提下，转去执行指定的命令，当指定的命令执行完毕后，该进程（也就是最初的Shell）就终止了，示例如下：<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root<span class="variable">@theshu</span> ~]<span class="comment"># exec date</span></div><div class="line">Sun Feb <span class="number">25</span> <span class="number">20</span><span class="symbol">:</span><span class="number">24</span><span class="symbol">:</span><span class="number">18</span> CST <span class="number">2018</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$	</span><span class="comment">#&lt;==退到普通用户模式下了</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>当使用exec打开文件后，read命令每次都会将文件指针移动到文件的下一行进行读取，知道文件末尾，利用这个可以实现处理文件内容。exec的功能示例：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[theshu@theshu ~]$ seq <span class="number">5</span> &gt; /tmp/tmp.<span class="built_in">log</span></div><div class="line">[theshu@theshu ~]$ <span class="keyword">cat</span> exec.<span class="keyword">sh</span></div><div class="line">exec &lt; /tmp/tmp.<span class="built_in">log</span>	#&lt;==读取<span class="built_in">log</span>内容</div><div class="line"><span class="keyword">while</span> <span class="keyword">read</span> <span class="built_in">line</span>	#&lt;==利用<span class="keyword">read</span>一行行读取处理</div><div class="line"><span class="keyword">do</span></div><div class="line">    <span class="keyword">echo</span> $<span class="built_in">line</span>	#&lt;==打印输出</div><div class="line">done</div><div class="line"><span class="keyword">echo</span> ok</div><div class="line">[theshu@theshu ~]$ <span class="keyword">sh</span> exec.<span class="keyword">sh</span></div><div class="line"><span class="number">1</span></div><div class="line"><span class="number">2</span></div><div class="line"><span class="number">3</span></div><div class="line"><span class="number">4</span></div><div class="line"><span class="number">5</span></div><div class="line">ok</div></pre></td></tr></table></figure></p>
+<h2 id="2-4-read"><a href="#2-4-read" class="headerlink" title="2.4. read"></a>2.4. read</h2><ul>
+<li>命令格式：<code>read 变量名列表</code></li>
+<li>功能：从标准输入读取字符串等信息，传给Shell程序内部定义的变量。<br>此命令将在后文详细讲解。</li>
+</ul>
+<h2 id="2-5-shift"><a href="#2-5-shift" class="headerlink" title="2.5. shift"></a>2.5. shift</h2><ul>
+<li>命令格式：<code>shift</code></li>
+<li>Shift positional parameters</li>
+<li>功能：shift语句会按如下方式重新命令所有的位置参数变量，即<code>$2</code>成为<code>$1</code>、<code>$3</code>称为<code>$2</code>等，以此类推，在程序中每使用一次shift语句，都会使所有的位置参数一次向左移动一个位置，并使位置参数<code>$#</code>减1，直到减到0为止。</li>
+<li>shift功能介绍：<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[theshu@theshu ~]$ <span class="keyword">help</span> shift</div><div class="line">shift: shift [n]</div><div class="line">    Shift positional parameters.</div><div class="line"></div><div class="line">    <span class="keyword">Rename</span> the positional <span class="keyword">parameters</span> $N+<span class="number">1</span>,$N+<span class="number">2</span> ... <span class="keyword">to</span> $<span class="number">1</span>,$<span class="number">2</span> ...  <span class="keyword">If</span> N <span class="keyword">is</span></div><div class="line">    <span class="keyword">not</span> given, it <span class="keyword">is</span> assumed <span class="keyword">to</span> be <span class="number">1.</span></div><div class="line"></div><div class="line">    <span class="keyword">Exit</span> <span class="keyword">Status</span>:</div><div class="line">    <span class="keyword">Returns</span> <span class="keyword">success</span> unless N <span class="keyword">is</span> negative <span class="keyword">or</span> greater <span class="keyword">than</span> $#.</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>shift命令的主要作用是将位置参数$1、$2等进行左移，即如果位置参数是$3、$2、$1，那么执行一次shift后，$3就变成了$2、$2变成了$1，$1就消失了。</p>
+<p>shift命令的使用示例：<br><figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[theshu@theshu ~]<span class="symbol">$</span> cat n.sh</div><div class="line">echo <span class="symbol">$</span><span class="number">1</span> <span class="symbol">$</span><span class="number">2</span></div><div class="line"><span class="keyword">if</span> [ <span class="symbol">$</span># -<span class="keyword">eq</span> <span class="number">2</span> ];<span class="keyword">then</span></div><div class="line">        shift</div><div class="line">        echo <span class="symbol">$</span><span class="number">1</span></div><div class="line">fi</div><div class="line">[theshu@theshu ~]<span class="symbol">$</span> sh n.sh <span class="number">1</span> <span class="number">2</span></div><div class="line"><span class="number">1</span> <span class="number">2</span>	#&lt;==这是echo <span class="symbol">$</span><span class="number">1</span> <span class="symbol">$</span><span class="number">2</span>的结果</div><div class="line"><span class="number">2</span>	#&lt;==这里是echo <span class="symbol">$</span><span class="number">1</span>的结果，但是输出的是传参时<span class="symbol">$</span><span class="number">2</span>的值</div></pre></td></tr></table></figure></p>
+<p>应用场景：当我们写Shell希望像命令行的命令通过参数控制不同的功能时，就会先传一个类似-c的参数，然后再接内容。<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[theshu@theshu ~]$ <span class="keyword">sh</span> <span class="keyword">n</span>.<span class="keyword">sh</span> -c theshu</div><div class="line">-c theshu	#&lt;==对应<span class="variable">$1</span> <span class="variable">$2</span>的输出</div><div class="line">theshu	#&lt;==对应<span class="variable">$1</span>的输出，因为执行shift，因此第二个参数<span class="variable">$2</span>的内容，就变成了<span class="variable">$1</span></div></pre></td></tr></table></figure></p>
+<h2 id="2-6-exit"><a href="#2-6-exit" class="headerlink" title="2.6. exit"></a>2.6. exit</h2><ul>
+<li>命令格式：<code>exit</code></li>
+<li>Exit the shell</li>
+<li>功能：退出Shell程序。在exit之后可以有选择地指定一个数位作为返回状态。</li>
+</ul>
+<h1 id="3-Shell变量子串知识及实践"><a href="#3-Shell变量子串知识及实践" class="headerlink" title="3. Shell变量子串知识及实践"></a>3. Shell变量子串知识及实践</h1><h2 id="3-1-Shell变量子串介绍"><a href="#3-1-Shell变量子串介绍" class="headerlink" title="3.1. Shell变量子串介绍"></a>3.1. Shell变量子串介绍</h2><p>Shell变量字串的常用操作见下表。可以执行<code>man bash</code>命令之后，搜索<code>Parameter Expansion</code>找到相应的帮助知识，对于Shell新手来说，次部分内容可以暂时忽略，可以学完全部内容之后再学这一部分即可。</p>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>表达式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> 1</td>
+<td><code>${parameter}</code></td>
+<td>返回变量<code>$parameter</code>的内容</td>
+</tr>
+<tr>
+<td> 2</td>
+<td><code>${井parameter}</code></td>
+<td>返回变量<code>$parameter</code>内容的长度（按字符），也适用于特殊变量</td>
+</tr>
+<tr>
+<td> 3</td>
+<td><code>${parameter:offset}</code></td>
+<td>在变量<code>${parameter}</code>中，从位置offset之后开始提取字串到结尾</td>
+</tr>
+<tr>
+<td> 4</td>
+<td><code>${parameter:offset:length}</code></td>
+<td>在变量<code>${parameter}</code>中，从位置offset之后开始提取长度为length的字串</td>
+</tr>
+<tr>
+<td> 5</td>
+<td><code>${parameter#word}</code></td>
+<td>从变量<code>${parameter}</code>开头开始删除最短匹配的word子串</td>
+</tr>
+<tr>
+<td> 6</td>
+<td><code>${parameter##word}</code></td>
+<td>从变量<code>${parameter}</code>开头开始删除最长匹配的word子串</td>
+</tr>
+<tr>
+<td> 7</td>
+<td><code>${parameter%word}</code></td>
+<td>从变量<code>${parameter}</code>结尾开始删除最短匹配的word子串</td>
+</tr>
+<tr>
+<td> 8</td>
+<td><code>${parameter%%word}</code></td>
+<td>从变量<code>${parameter}</code>结尾开始删除最长匹配的word子串</td>
+</tr>
+<tr>
+<td> 9</td>
+<td><code>${parameter/pattern/string}</code></td>
+<td>使用string代替第一个匹配的pattern</td>
+</tr>
+<tr>
+<td> 10</td>
+<td><code>${parameter//pattern/string}</code></td>
+<td>使用string代替所有匹配的pattern</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-2-Shell变量子串的实践"><a href="#3-2-Shell变量子串的实践" class="headerlink" title="3.2. Shell变量子串的实践"></a>3.2. Shell变量子串的实践</h2><ul>
+<li><p>准备：定义THESHU变量，赋值内容为”I am theshu”，操作代码如下：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>THESHU=<span class="string">"I am theshu"</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$&#123;</span>THESHU&#125;</div><div class="line">I am theshu</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$THESHU</span></div><div class="line">I am theshu</div></pre></td></tr></table></figure>
+</li>
+<li><p>例：返回THESHU变量值的长度。通过在变量名前加#，就可以打印变量值的长度：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$&#123;</span>井THESHU&#125;</div><div class="line"><span class="number">11</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>例：Shell的其它打印变量长度的方法。</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$THESHU</span> | wc -L</div><div class="line"><span class="number">11</span>	<span class="comment">#&lt;==输出变量值，然后通过管道交给wc计算长度</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>expr length <span class="string">"$THESHU"</span></div><div class="line"><span class="number">11</span>	<span class="comment">#&lt;==利用expr的length函数计算变量长度</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="string">"$THESHU"</span> | awk <span class="string">'&#123;print length($0)&#125;'</span></div><div class="line"><span class="number">11</span>	<span class="comment">#&lt;==利用awk的length函数计算变量长度，也可无"（$0）"这几个字符</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>提示：上述计算变量长度的方法中，变量的子串方式是最快的，即<code>${井THESHU}</code></p>
+</blockquote>
+<ul>
+<li>例：利用<code>time</code>命令及for循环对几种获取字符串长度的方法进行性能比较</li>
+</ul>
+<ol>
+<li><p>变量自带的获取长度的方法（<code>echo ${井char}</code>）</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[theshu@theshu ~]$ time <span class="keyword">for</span> n <span class="keyword">in</span> &#123;1<span class="built_in">..</span>10000&#125;;<span class="keyword">do</span> <span class="attribute">char</span>=`seq -s <span class="string">"theshu"</span> 100`;echo <span class="variable">$&#123;#char&#125;</span> &amp;&gt; /dev/<span class="literal">null</span>;done</div><div class="line"></div><div class="line">real    0m8.472s	#&lt;==变量自带的获取长度的方法用时最少，效率最高</div><div class="line">user    0m5.331s</div><div class="line">sys     0m3.099s</div></pre></td></tr></table></figure>
+</li>
+<li><p>利用管道加<code>wc</code>的方法（<code>echo ${cahr} | wc -L</code>）</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[theshu@theshu ~]$ time <span class="keyword">for</span> n <span class="keyword">in</span> &#123;1<span class="built_in">..</span>10000&#125;;<span class="keyword">do</span> <span class="attribute">char</span>=`seq -s <span class="string">"theshu"</span> 100`;echo <span class="variable">$&#123;char&#125;</span> | wc -L &amp;&gt; /dev/<span class="literal">null</span>;done</div><div class="line"></div><div class="line">real    0m27.965s	#&lt;==使用了管道加wc -L计算，结果倒数第二，仅次于管道加awk统计的</div><div class="line">user    0m15.910s</div><div class="line">sys     0m11.917s</div></pre></td></tr></table></figure>
+</li>
+<li><p>利用<code>expr</code>自带的length方法（<code>expr length &quot;${char}&quot;</code>）</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[theshu@theshu ~]$ time <span class="keyword">for</span> n <span class="keyword">in</span> &#123;1<span class="built_in">..</span>10000&#125;;<span class="keyword">do</span> <span class="attribute">char</span>=`seq -s <span class="string">"theshu"</span> 100`;expr length <span class="string">"<span class="variable">$&#123;cahr&#125;</span>"</span> &amp;&gt; /dev/<span class="literal">null</span>;done</div><div class="line"></div><div class="line">real    0m15.283s	#&lt;==好于使用管道和wc的计算方法，但是比变量自带的获取长度的方法要差一些</div><div class="line">user    0m9.217s</div><div class="line">sys     0m5.990s</div></pre></td></tr></table></figure>
+</li>
+<li><p>利用<code>awk</code>自带的length函数方法</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[theshu@theshu ~]$ time for n in &#123;<span class="number">1.</span><span class="number">.10000</span>&#125;;do char=`seq -s <span class="string">"theshu"</span> <span class="number">100</span>`;echo $char | awk '&#123;print length($<span class="number">0</span>)&#125;' &amp;&gt; /dev/null;done</div><div class="line"></div><div class="line">real    <span class="number">0</span>m30<span class="number">.363</span>s	#&lt;==使用了管道还有awk的函数计算，结果最差</div><div class="line">user    <span class="number">0</span>m16<span class="number">.500</span>s</div><div class="line">sys     <span class="number">0</span>m13<span class="number">.709</span>s</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>可以看到，这几种方法的速度相差几十到上百倍，一般情况下调用外部命令来处理的方式与使用内置操作的速度相差较大。在Shell编程中，应尽量使用内置操作或函数来完成。</p>
+<p>有关获取字符串长度的几种统计方法的性能比较如下：</p>
+<ul>
+<li>变量自带的计算长度的方法的效率最高，在要求效率的场景中尽量多用</li>
+<li>使用管道统计的方法的效率都比较差，在要求效率的场景中尽量不用</li>
+<li><p>对于日常简单的脚本计算，读者可以根据自己所擅长的或易用的程度去选择</p>
+</li>
+<li><p>例：截取THESHU变量的内容，从第2个字符之后开始截取，默认截取后面字符的全部，第2个字符不包含在内，也可理解为删除前面的多个字符</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$&#123;</span>THESHU&#125;</div><div class="line">I am theshu</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$&#123;</span><span class="symbol">THESHU:</span><span class="number">2</span>&#125;</div><div class="line">am theshu	<span class="comment">#&lt;==相当于从I后面的空格开始计算，截取到了结尾</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>例：截取THESHU变量的内容，从第2个字符之后开始截取，截取2个字符</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$&#123;</span><span class="symbol">THESHU:</span><span class="number">2</span><span class="symbol">:</span><span class="number">2</span>&#125;</div><div class="line">am</div><div class="line">提示：这个功能类似于cut命令-c参数的功能，如下；</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$&#123;</span>THESHU&#125; | cut -c <span class="number">3</span>-<span class="number">4</span></div><div class="line">am</div></pre></td></tr></table></figure>
+</li>
+<li><p>例：从变量$THESHU内容的开头开始删除最短匹配<code>&quot;a*C&quot;</code>及<code>&quot;a*c&quot;</code>的子串</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>THESHU=abcABC123ABCabc</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$THESHU</span></div><div class="line">abcABC123ABCabc</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$&#123;</span>THESHU<span class="comment">#a*C&#125;	#&lt;==从开头开始删除最短匹配"a*C"的子串</span></div><div class="line"><span class="number">123</span>ABCabc		<span class="comment">#&lt;==从开头开始删除了abcABC</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$&#123;</span>THESHU<span class="comment">#a*c&#125;</span></div><div class="line">ABC123ABCabc	<span class="comment">#&lt;==从开头开始删除了abc</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>例：从变量$THESHU开头开始删除最长匹配<code>&quot;a*C&quot;</code>及<code>&quot;a*c&quot;</code>的子串</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>THESHU=abcABC123ABCabc</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$THESHU</span></div><div class="line">abcABC123ABCabc</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$&#123;</span>THESHU<span class="comment">##a*c&#125;	#&lt;==从开头开始删除最长匹配"a*c"的子串</span></div><div class="line">	<span class="comment">#&lt;==结果为空了，说明都匹配了，全部都删除了</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$&#123;</span>THESHU<span class="comment">##a*C&#125;	#&lt;==从开头开始删除最长匹配"a*C"的子串</span></div><div class="line">abc	<span class="comment">#&lt;==结果为abc，说明匹配了abcABC123ABC并删除了这些字符</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>例：从变量$THESHU结尾开始删除最短匹配<code>&quot;a*C&quot;</code>及<code>&quot;a*c&quot;</code>的子串</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>THESHU=abcABC123ABCabc</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$THESHU</span></div><div class="line">abcABC123ABCabc</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$&#123;</span>THESHU%a*C&#125; <span class="comment">#&lt;==从结尾开始删除最短匹配"a*c"的子串</span></div><div class="line">abcABC123ABCabc	<span class="comment">#&lt;==原样输出，因为从结尾开始"a*C"没有匹配上任何子串，因此，没有删除任何字符</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$&#123;</span>THESHU%a*c&#125;	<span class="comment">#&lt;==从结尾开始删除最短匹配"a*c"的子串</span></div><div class="line">abcABC123ABC	<span class="comment">#&lt;==从结尾开始删除最短匹配"a*c"，即删除了结尾的abc三个字符</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>例：从变量$THESHU结尾开始删除最长匹配<code>&quot;a*C&quot;</code>及<code>&quot;a*c&quot;</code>的子串</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>THESHU=abcABC123ABCabc</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$THESHU</span></div><div class="line">abcABC123ABCabc</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$&#123;</span>THESHU%%a*C&#125; <span class="comment">#&lt;==从结尾开始删除最长匹配"a*C"的子串</span></div><div class="line">abcABC123ABCabc	<span class="comment">#&lt;==原样输出，因为从结尾开始"a*C"没有匹配上任何子串，因此，没有删除任何字符</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$&#123;</span>THESHU%%a*c&#125;	<span class="comment">#&lt;==从结尾开始删除最长匹配"a*c"的子串</span></div><div class="line">	<span class="comment">#&lt;==从结尾开始删除最长匹配"a*C"的字符串，即删除全部字符</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>有关上述匹配删除的小结：</p>
+<ul>
+<li><code>#</code>表示从开头删除匹配最短</li>
+<li><code>##</code>表示从开头删除匹配最长</li>
+<li><code>%</code>表示从结尾删除匹配最短</li>
+<li><code>%%</code>表示从结尾删除匹配最长</li>
+<li><code>a*C</code>表示匹配的字符串，<code>*</code>表示匹配所有，<code>a*C</code>匹配开头为a、中间为任意多个字符、结尾为C的字符串</li>
+<li><p><code>a*c</code>表示匹配的字符串，<code>*</code>表示匹配所有，<code>a*c</code>匹配开头为a、中间为任意多个字符、结尾为c的字符串</p>
+</li>
+<li><p>例：使用thewang字符代替变量$THESHU匹配的theshu字符串</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>THESHU=<span class="string">"I am theshu,yes,theshu"</span></div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$THESHU</span></div><div class="line">I am theshu,yes,theshu</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$&#123;</span>THESHU/theshu/thewang&#125;	<span class="comment">#&lt;==替换匹配的第一个字符串</span></div><div class="line">I am thewang,yes,theshu</div><div class="line">[theshu<span class="variable">@theshu</span> ~]<span class="variable">$ </span>echo <span class="variable">$&#123;</span>THESHU/<span class="regexp">/theshu/thewang</span>&#125;	<span class="comment">#&lt;==替换匹配的所有字符串</span></div><div class="line">I am thewang,yes,thewang</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>有关替换的小结：</p>
+<ul>
+<li>一个<code>/</code>表示替换匹配的第一个字符串</li>
+<li>两个<code>/</code>即<code>//</code>表示替换匹配的所有字符串</li>
+</ul>
+<h2 id="3-3-变量子串的生产场景应用案例"><a href="#3-3-变量子串的生产场景应用案例" class="headerlink" title="3.3. 变量子串的生产场景应用案例"></a>3.3. 变量子串的生产场景应用案例</h2><p>可以用来批量修改文件名：假如本目录里有一些文件，这些文件的名字当中都有theshu这个字符串，批量修改去掉它：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> <span class="keyword">for</span> f <span class="keyword">in</span> `ls *theshu*`;<span class="keyword">do</span> mv <span class="variable">$f</span> `<span class="built_in">echo</span> <span class="variable">$&#123;f//theshu/&#125;</span>`;<span class="keyword">done</span></span></div></pre></td></tr></table></figure></p>
+<h1 id="4-Shell特殊扩展变量的知识与实践"><a href="#4-Shell特殊扩展变量的知识与实践" class="headerlink" title="4. Shell特殊扩展变量的知识与实践"></a>4. Shell特殊扩展变量的知识与实践</h1><h2 id="4-1-Shell特殊扩展变量介绍"><a href="#4-1-Shell特殊扩展变量介绍" class="headerlink" title="4.1. Shell特殊扩展变量介绍"></a>4.1. Shell特殊扩展变量介绍</h2><p>Shell的特殊扩展变量说明见下表，也可以执行<code>man bash</code>命令，然后搜索<code>Parameter Expansion</code>查找相关的帮助内容。</p>
+<table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>${parameter:-word}</code></td>
+<td>如果<code>parameter</code>的变量值为空或未赋值，则会返回<code>word</code>字符串并替代变量的值。用途：如果变量未定义，则返回备用的值，防止变量为空值或因未定义而导致异常</td>
+</tr>
+<tr>
+<td><code>${parameter:=word}</code></td>
+<td>如果<code>parameter</code>的变量值为空或未赋值，则设置这个变量值为<code>word</code>，并返回其值。位置变量和特殊变量不适用。用途：基本上同一个${parameter:-word}，但该变量又额外给<code>parameter</code>变量赋值了</td>
+</tr>
+<tr>
+<td><code>${parameter:?word}</code></td>
+<td>如果<code>parameter</code>变量值为空或未赋值，那么<code>word</code>字符串将被作为标准错误输出，否则输出变量的值。用途：用于捕捉由于变量未定义而导致的错误，并退出程序</td>
+</tr>
+<tr>
+<td><code>${parameter:+word}</code></td>
+<td>如果<code>parameter</code>变量值为空或未赋值，则什么都不做，否则<code>word</code>字符串将替代变量的值</td>
+</tr>
+</tbody>
+</table>
+<p>在上表中，每个表达式内的冒号都是可选的。如果省略了表达式中的冒号，则将每个定义中的<code>为空或未赋值</code>部分改为<code>未赋值</code>，也就是说，运算符仅用于测试变量是否未赋值。</p>
+<h2 id="4-2-Shell特殊扩展变量的实践"><a href="#4-2-Shell特殊扩展变量的实践" class="headerlink" title="4.2. Shell特殊扩展变量的实践"></a>4.2. Shell特殊扩展变量的实践</h2><h3 id="4-2-1-parameter-word-功能实践"><a href="#4-2-1-parameter-word-功能实践" class="headerlink" title="4.2.1. ${parameter:-word}功能实践"></a>4.2.1. <code>${parameter:-word}</code>功能实践</h3><p><code>${parameter:-word}</code>的作用是如果parameter变量值为空或未赋值，则会返回word字符串替代变量的值。</p>
+<p>示例1：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $test</span></div><div class="line">		<span class="meta">#&lt;==变量未设置，所以输出时为空</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># result=$&#123;test:-UNSET&#125;	#&lt;==若test没值，则返回UNSET</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $result	#&lt;==打印result变量，返回UNSET，因为test没有赋值</span></div><div class="line">UNSET</div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $&#123;test&#125;</span></div><div class="line">		<span class="meta">#&lt;==注意，此时打印test变量还是为空</span></div></pre></td></tr></table></figure></p>
+<p>结论：对于<code>${test:-UNSET}</code>，当test变量没有值时，就返回变量结尾设置的UNSET字符串。</p>
+<p>示例2：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># test=theshu	#&lt;==给test变量赋值theshu字符串</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $test</span></div><div class="line">theshu</div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># result=$&#123;test:-UNSET&#125;	#&lt;==重新定义result</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $result</span></div><div class="line">theshu	<span class="meta">#&lt;==因为test已赋值，因此，打印result就输出了test的值theshu，而不是原来的UNSET</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># result=$&#123;test-UNSET&#125;</span></div><div class="line"><span class="meta">#&lt;==提示：这个变量的功能可以用来判断变量是否已定义</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $result	#&lt;==定义时忽略了冒号</span></div><div class="line">theshu</div></pre></td></tr></table></figure></p>
+<p>结论：当test有值时，就打印result变量，返回test变量的内容。</p>
+<h3 id="4-2-2-parameter-word-功能实践"><a href="#4-2-2-parameter-word-功能实践" class="headerlink" title="4.2.2. ${parameter:=word}功能实践"></a>4.2.2. <code>${parameter:=word}</code>功能实践</h3><p><code>${parameter:=word}</code>的作用是：如果parameter变量值为空或未赋值，就设置这个变量值为word，并返回其值。位置变量和特殊变量不适用。</p>
+<p>示例：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># unset result	#&lt;==撤销result变量定义</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $result</span></div><div class="line"></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># unset test		#&lt;==撤销test变量定义</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $test</span></div><div class="line"></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># result=$&#123;test:=UNSET&#125;	#&lt;重新对变量result进行定义</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $result</span></div><div class="line">UNSET</div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $test</span></div><div class="line">UNSET	<span class="meta">#&lt;==注意，这里的test原来是没有定义的，现在已经被赋值UNSET了，这是和<span class="string">":-"</span>表达式的区别</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># result=$&#123;test=UNSET&#125;	#&lt;==定义时忽略了冒号</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $result</span></div><div class="line">UNSET	<span class="meta">#&lt;==打印结果和带冒号时没有变化</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $test</span></div><div class="line">UNSET	<span class="meta">#&lt;==打印结果和带冒号时没有变化</span></div></pre></td></tr></table></figure></p>
+<p>当变量<code>result</code>值里的变量<code>test</code>值没有定义时，会给变量<code>result</code>赋值<code>:=</code>后面的内容，同时会把<code>:=</code>后面的内容赋值给变量<code>result</code>值里没有定义的变量<code>test</code>。</p>
+<p>这个变量的功能可以解决变量没有定义的问题，并确保没有定义的变量始终有值。</p>
+<h3 id="4-2-3-parameter-word-功能实践"><a href="#4-2-3-parameter-word-功能实践" class="headerlink" title="4.2.3. ${parameter:?word}功能实践"></a>4.2.3. <code>${parameter:?word}</code>功能实践</h3><p><code>${parameter:?word}</code>的作用是：如果parameter变量值为空或未赋值，那么word字符串将被作为标准错误输出，否则输出变量的值。</p>
+<p>范例：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[root<span class="variable">@theshu</span> ~]<span class="comment"># echo $&#123;key:?not defined&#125;</span></div><div class="line">-<span class="symbol">bash:</span> <span class="symbol">key:</span> <span class="keyword">not</span> <span class="keyword">defined</span>		<span class="comment">#&lt;==错误提示，只不过是事先定义好的错误输出</span></div><div class="line"><span class="comment">#&lt;==key变量没有定义，因此，把"not defined"最为标准错误输出</span></div><div class="line">[root<span class="variable">@theshu</span> ~]<span class="comment"># echo $&#123;key?not defined&#125;	#&lt;==去掉冒号定义，并输出，结果一致</span></div><div class="line">-<span class="symbol">bash:</span> <span class="symbol">key:</span> <span class="keyword">not</span> <span class="keyword">defined</span></div><div class="line">[root<span class="variable">@theshu</span> ~]<span class="comment"># key=1	#&lt;==给变量赋值1</span></div><div class="line">[root<span class="variable">@theshu</span> ~]<span class="comment"># echo $&#123;key:?not defined&#125;	</span></div><div class="line"><span class="number">1</span>	<span class="comment">#&lt;==因为key有值了，所以，打印key的值1</span></div><div class="line">[root<span class="variable">@theshu</span> ~]<span class="comment"># echo $&#123;key?not defined&#125;</span></div><div class="line"><span class="number">1</span>	<span class="comment">#&lt;==去掉冒号定义，并输出，结果一致</span></div><div class="line">[root<span class="variable">@theshu</span> ~]<span class="comment"># unset key	#&lt;==取消key的定义</span></div><div class="line">[root<span class="variable">@theshu</span> ~]<span class="comment"># echo $&#123;key:?not defined&#125;	#&lt;==由打印错误提示了</span></div><div class="line">-<span class="symbol">bash:</span> <span class="symbol">key:</span> <span class="keyword">not</span> <span class="keyword">defined</span></div></pre></td></tr></table></figure></p>
+<p>本例的用法可以用于设定由于变量未定义而报错的具体内容，如：”not defined”。</p>
+<h3 id="4-2-4-parameter-word-功能实践"><a href="#4-2-4-parameter-word-功能实践" class="headerlink" title="4.2.4. ${parameter:+word}功能实践"></a>4.2.4. <code>${parameter:+word}</code>功能实践</h3><p><code>${parameter:+word}</code>的作用是：如果parameter变量值为空或未赋值，则什么都不做，否则word字符串将替代变量的值。</p>
+<p>范例：<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# theshu=$&#123;wang:+word&#125;	#&lt;==wang变量未定义</div><div class="line">[root@theshu ~]# echo $theshu	#&lt;==因为wang变量未定义，所以打印theshu变量值为空</div><div class="line"></div><div class="line">[root@theshu ~]# wang=<span class="number">20</span>	#&lt;==wang变量赋值为<span class="number">20</span></div><div class="line">[root@theshu ~]# theshu=$&#123;wang:+word&#125;	#&lt;==注意，这里一定要重新定义theshu</div><div class="line">[root@theshu ~]# echo $theshu</div><div class="line">word	#&lt;==因为wang变量有值，所以打印theshu变量输出为`:+`后面的内容</div></pre></td></tr></table></figure></p>
+<p>此功能可用于测试变量（<code>wang</code>的位置）是否存在，如果<code>theshu</code>的值为<code>word</code>，则证明<code>wang</code>变量有值。</p>
+<h2 id="4-3-Shell特殊扩展变量的生产场景应用案例"><a href="#4-3-Shell特殊扩展变量的生产场景应用案例" class="headerlink" title="4.3. Shell特殊扩展变量的生产场景应用案例"></a>4.3. Shell特殊扩展变量的生产场景应用案例</h2><p>一个生产案例：删除7天前的过期的数据备份：</p>
+<ul>
+<li><p>如果忘记了定义<code>path</code>变量，又不希望path值为空值，就可以定义<code>/tmp</code>替代<code>path</code>空值的返回值，如下：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# <span class="keyword">cat</span> del.<span class="keyword">sh</span></div><div class="line">find <span class="variable">$&#123;path</span>-/tmp&#125; -name <span class="string">"*.tar.gz"</span> -<span class="keyword">type</span> f -mtime +7 | xargs <span class="keyword">rm</span> -<span class="built_in">f</span></div><div class="line">[root@theshu ~]# <span class="keyword">sh</span> -x del.<span class="keyword">sh</span></div><div class="line">+ find /tmp -name '*.tar.gz' -<span class="keyword">type</span> f -mtime +7	</div><div class="line">+ xargs <span class="keyword">rm</span> -<span class="built_in">f</span></div><div class="line">#&lt;==执行时，系统会自动删除/tmp下的文件</div></pre></td></tr></table></figure>
+</li>
+<li><p>如果忘了定义path变量，并且还未做特殊变量定义，那么命令就会出现意外，如下：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# <span class="keyword">cat</span> a.<span class="keyword">sh</span></div><div class="line">find <span class="variable">$&#123;path&#125;</span> -name <span class="string">"*.tar.gz"</span> -<span class="keyword">type</span> f -mtime +7 | xargs <span class="keyword">rm</span> -<span class="built_in">f</span></div><div class="line">[root@theshu ~]# <span class="keyword">sh</span> -x a.<span class="keyword">sh</span></div><div class="line">+ find -name '*.tar.gz' -<span class="keyword">type</span> f -mtime +7 #&lt;==这条命令明显没有指定路径，因此将会导致异常</div><div class="line">+ xargs <span class="keyword">rm</span> -<span class="built_in">f</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p>OK</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/19/Shell/005. Shell学习笔记03-Shell变量的核心基础知识/" rel="next" title="Shell学习笔记03-Shell变量的核心基础知识">
+                <i class="fa fa-chevron-left"></i> Shell学习笔记03-Shell变量的核心基础知识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/19/Shell/007. Shell学习笔记05-变量的数值计算/" rel="prev" title="Shell学习笔记05-变量的数值计算">
+                Shell学习笔记05-变量的数值计算 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Shell中特殊且重要的变量"><span class="nav-text">1. Shell中特殊且重要的变量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-Shell中的特殊位置参数变量"><span class="nav-text">1.1. Shell中的特殊位置参数变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-1-n的用法总结"><span class="nav-text">1.1.1. $n的用法总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-2-0特殊变量的作用及变量实践"><span class="nav-text">1.1.2. $0特殊变量的作用及变量实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-3-特殊变量获取脚本传参个数的实践"><span class="nav-text">1.1.3. $#特殊变量获取脚本传参个数的实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-4-和-特殊变量功能及区别说明"><span class="nav-text">1.1.4. $*和$@特殊变量功能及区别说明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Shell进程中的特殊状态变量"><span class="nav-text">1.2. Shell进程中的特殊状态变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-1-关于-的说明"><span class="nav-text">1.2.1. 关于$?的说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-2-关于-的应用"><span class="nav-text">1.2.2. 关于$$的应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-3-关于-的说明及实践"><span class="nav-text">1.2.3. 关于$_的说明及实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-4-关于-的说明及实践"><span class="nav-text">1.2.4. 关于$!的说明及实践</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-bash-Shell内置变量命令"><span class="nav-text">2. bash Shell内置变量命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-echo在屏幕上输出信息"><span class="nav-text">2.1. echo在屏幕上输出信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-eval（后文有案例讲解）"><span class="nav-text">2.2. eval（后文有案例讲解）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-exec"><span class="nav-text">2.3. exec</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-read"><span class="nav-text">2.4. read</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-shift"><span class="nav-text">2.5. shift</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-exit"><span class="nav-text">2.6. exit</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Shell变量子串知识及实践"><span class="nav-text">3. Shell变量子串知识及实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Shell变量子串介绍"><span class="nav-text">3.1. Shell变量子串介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Shell变量子串的实践"><span class="nav-text">3.2. Shell变量子串的实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-变量子串的生产场景应用案例"><span class="nav-text">3.3. 变量子串的生产场景应用案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Shell特殊扩展变量的知识与实践"><span class="nav-text">4. Shell特殊扩展变量的知识与实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-Shell特殊扩展变量介绍"><span class="nav-text">4.1. Shell特殊扩展变量介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-Shell特殊扩展变量的实践"><span class="nav-text">4.2. Shell特殊扩展变量的实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-1-parameter-word-功能实践"><span class="nav-text">4.2.1. ${parameter:-word}功能实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-2-parameter-word-功能实践"><span class="nav-text">4.2.2. ${parameter:=word}功能实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-3-parameter-word-功能实践"><span class="nav-text">4.2.3. ${parameter:?word}功能实践</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-4-parameter-word-功能实践"><span class="nav-text">4.2.4. ${parameter:+word}功能实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-Shell特殊扩展变量的生产场景应用案例"><span class="nav-text">4.3. Shell特殊扩展变量的生产场景应用案例</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
