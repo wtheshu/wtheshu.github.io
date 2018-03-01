@@ -105,27 +105,28 @@
 
 
   
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Shell," />
 
 
-<meta name="description" content="GO   1. 当型和直到型循环语法1.1. while循环语句1.2. until循环语句2. 当型和直到型循环的基本范例3. 让Shell脚本在后台运行的知识4. 企业生产实战： while循环语句实践5. while循环按行读文件的方式总结6. 企业级生产高级实战案例7. 小结  OK">
+<meta name="description" content="GO   for循环语句和while循环语句类似，但for循环语句主要用于执行次数有限的循环，而不是用于守护进程及无限循环。for循环语句常见的语法有两种，下面将在不同的语法中对for循环语句进行详尽的讲解。 1. for循环语法结构第一种for循环语句为变量取值型，语法结构如下：1234for 变量名 in 变量取值列表do	指令...done  提示：在此结构中，in 变量取值列表可以省略，">
+<meta name="keywords" content="Shell">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Shell学习笔记10-while循环和until循环的应用实践">
-<meta property="og:url" content="http://www.theshu.top/2018/02/19/Shell/012. Shell学习笔记10-while循环和until循环的应用实践/index.html">
+<meta property="og:title" content="Shell学习笔记11-for和select循环语句">
+<meta property="og:url" content="http://www.theshu.top/2018/02/19/Shell/013. Shell学习笔记11-for和select循环语句/index.html">
 <meta property="og:site_name" content="奇怪先生的博客">
-<meta property="og:description" content="GO   1. 当型和直到型循环语法1.1. while循环语句1.2. until循环语句2. 当型和直到型循环的基本范例3. 让Shell脚本在后台运行的知识4. 企业生产实战： while循环语句实践5. while循环按行读文件的方式总结6. 企业级生产高级实战案例7. 小结  OK">
+<meta property="og:description" content="GO   for循环语句和while循环语句类似，但for循环语句主要用于执行次数有限的循环，而不是用于守护进程及无限循环。for循环语句常见的语法有两种，下面将在不同的语法中对for循环语句进行详尽的讲解。 1. for循环语法结构第一种for循环语句为变量取值型，语法结构如下：1234for 变量名 in 变量取值列表do	指令...done  提示：在此结构中，in 变量取值列表可以省略，">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-19T08:24:18.194Z">
+<meta property="og:updated_time" content="2018-03-01T02:32:58.188Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Shell学习笔记10-while循环和until循环的应用实践">
-<meta name="twitter:description" content="GO   1. 当型和直到型循环语法1.1. while循环语句1.2. until循环语句2. 当型和直到型循环的基本范例3. 让Shell脚本在后台运行的知识4. 企业生产实战： while循环语句实践5. while循环按行读文件的方式总结6. 企业级生产高级实战案例7. 小结  OK">
+<meta name="twitter:title" content="Shell学习笔记11-for和select循环语句">
+<meta name="twitter:description" content="GO   for循环语句和while循环语句类似，但for循环语句主要用于执行次数有限的循环，而不是用于守护进程及无限循环。for循环语句常见的语法有两种，下面将在不同的语法中对for循环语句进行详尽的讲解。 1. for循环语法结构第一种for循环语句为变量取值型，语法结构如下：1234for 变量名 in 变量取值列表do	指令...done  提示：在此结构中，in 变量取值列表可以省略，">
 
 
 
 
 
 
-  <link rel="canonical" href="http://www.theshu.top/2018/02/19/Shell/012. Shell学习笔记10-while循环和until循环的应用实践/"/>
+  <link rel="canonical" href="http://www.theshu.top/2018/02/19/Shell/013. Shell学习笔记11-for和select循环语句/"/>
 
 
 
@@ -134,7 +135,7 @@
     sidebar: "",
   };
 </script>
-  <title>Shell学习笔记10-while循环和until循环的应用实践 | 奇怪先生的博客</title>
+  <title>Shell学习笔记11-for和select循环语句 | 奇怪先生的博客</title>
   
 
 
@@ -312,7 +313,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/012. Shell学习笔记10-while循环和until循环的应用实践/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/013. Shell学习笔记11-for和select循环语句/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -329,7 +330,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Shell学习笔记10-while循环和until循环的应用实践</h1>
+          <h1 class="post-title" itemprop="name headline">Shell学习笔记11-for和select循环语句</h1>
         
 
         <div class="post-meta">
@@ -341,7 +342,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:40:22+08:00">2018-02-19</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:40:49+08:00">2018-02-19</time>
             
 
             
@@ -362,7 +363,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-19T16:24:18+08:00">2018-02-19</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-01T10:32:58+08:00">2018-03-01</time>
             
           </span>
 
@@ -416,7 +417,108 @@
 <p>GO</p>
 </blockquote>
 <hr>
-<h1 id="1-当型和直到型循环语法"><a href="#1-当型和直到型循环语法" class="headerlink" title="1. 当型和直到型循环语法"></a>1. 当型和直到型循环语法</h1><h2 id="1-1-while循环语句"><a href="#1-1-while循环语句" class="headerlink" title="1.1. while循环语句"></a>1.1. while循环语句</h2><h2 id="1-2-until循环语句"><a href="#1-2-until循环语句" class="headerlink" title="1.2. until循环语句"></a>1.2. until循环语句</h2><h1 id="2-当型和直到型循环的基本范例"><a href="#2-当型和直到型循环的基本范例" class="headerlink" title="2. 当型和直到型循环的基本范例"></a>2. 当型和直到型循环的基本范例</h1><h1 id="3-让Shell脚本在后台运行的知识"><a href="#3-让Shell脚本在后台运行的知识" class="headerlink" title="3. 让Shell脚本在后台运行的知识"></a>3. 让Shell脚本在后台运行的知识</h1><h1 id="4-企业生产实战：-while循环语句实践"><a href="#4-企业生产实战：-while循环语句实践" class="headerlink" title="4. 企业生产实战： while循环语句实践"></a>4. 企业生产实战： while循环语句实践</h1><h1 id="5-while循环按行读文件的方式总结"><a href="#5-while循环按行读文件的方式总结" class="headerlink" title="5. while循环按行读文件的方式总结"></a>5. while循环按行读文件的方式总结</h1><h1 id="6-企业级生产高级实战案例"><a href="#6-企业级生产高级实战案例" class="headerlink" title="6. 企业级生产高级实战案例"></a>6. 企业级生产高级实战案例</h1><h1 id="7-小结"><a href="#7-小结" class="headerlink" title="7. 小结"></a>7. 小结</h1><hr>
+<p>for循环语句和while循环语句类似，但for循环语句主要用于执行次数有限的循环，而不是用于守护进程及无限循环。for循环语句常见的语法有两种，下面将在不同的语法中对for循环语句进行详尽的讲解。</p>
+<h1 id="1-for循环语法结构"><a href="#1-for循环语法结构" class="headerlink" title="1. for循环语法结构"></a>1. for循环语法结构</h1><p>第一种for循环语句为变量取值型，语法结构如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> 变量名 <span class="keyword">in</span> 变量取值列表</div><div class="line"><span class="keyword">do</span></div><div class="line">	指令...</div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>提示：在此结构中，<code>in 变量取值列表</code>可以省略，省略时相当于<code>in &quot;$@&quot;</code>，特就是使用<code>for i</code>就相当于使用<code>for i in &quot;$@&quot;</code>。</p>
+</blockquote>
+<p>在这种for循环语句语法中，for关键字后面会有一个<code>变量名</code>，变量名依次获取<code>in</code>关键字后面的变量取值列表内容（以空格分隔），每次仅取一个，然后进入循环（do和done之间的部分）执行循环内的所有指令，当执行到<code>done</code>时结束本次循环。之后，<code>变量名</code>再继续获取变量列表里的下一个变量值，继续执行循环内的所有指令，当执行到<code>done</code>时结束返回，以此类推，知道取完变量列表里的最后一个值并进入循环执行到<code>done</code>结束为止。</p>
+<p>第二种for循环语句称为C语言型for循环语句，其语法结构如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> ((exp1; exp2; exp3))</div><div class="line"><span class="keyword">do</span></div><div class="line">	指令...</div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>说明：此种循环语句和while循环语句类似，但语法结构比while循环更规范、工整。</p>
+</blockquote>
+<p>for关键字后的双括号内是三个表达式，第一个是变量初始化（例如：i=0），第二个为变量的范围（例如：i&lt;100），第三个为变量自增或自减（例如：i++）。当第一个表达式的初始化值符合第二个变量的范围时，就进入循环执行；当条件不满足时就退出循环。</p>
+<p>范例：for循环和while循环对比</p>
+<ul>
+<li><p>for版</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> ((i=1; i&lt;=3; i++))</div><div class="line"><span class="keyword">do</span></div><div class="line">	<span class="built_in">echo</span> <span class="variable">$i</span></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>转化为while版</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">i=1</div><div class="line"><span class="keyword">while</span> ((i&lt;=3))</div><div class="line"><span class="keyword">do</span></div><div class="line">	<span class="built_in">echo</span> <span class="variable">$i</span></div><div class="line">	((i++))</div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>特别说明：</p>
+<ul>
+<li>如果希望程序持续运行，则多用while，包括守护进程。</li>
+<li>如果是有限次循环，则多用for，实际工作中使用for的机会更多。</li>
+</ul>
+<h1 id="2-for循环语句的基础实践"><a href="#2-for循环语句的基础实践" class="headerlink" title="2. for循环语句的基础实践"></a>2. for循环语句的基础实践</h1><p>下面是几个for循环语句的示例：</p>
+<ul>
+<li><p>范例1：竖向打印5、4、3、2、1这个5个数字</p>
+<ul>
+<li><p>参考答案1：直接列出元素的方法：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> num <span class="keyword">in</span> 5 4 3 2 1</div><div class="line"><span class="keyword">do</span></div><div class="line">	<span class="built_in">echo</span> <span class="variable">$num</span></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>参考答案2：利用大括号{}生成数字序列的方法</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> num <span class="keyword">in</span> &#123;5..1&#125;</div><div class="line"><span class="keyword">do</span></div><div class="line">	<span class="built_in">echo</span> <span class="variable">$num</span></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>参考答案3：采用seq生产数字序列的用法</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> num <span class="keyword">in</span> `seq 5 -1 1`</div><div class="line"><span class="keyword">do</span></div><div class="line">	<span class="built_in">echo</span> <span class="variable">$num</span></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>范例2：获取当前目录下的目录或文件名，并将其作为变量列表打印输出</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /<span class="built_in">test</span></div><div class="line"><span class="keyword">for</span> filename <span class="keyword">in</span> `ls`</div><div class="line"><span class="keyword">do</span></div><div class="line">	<span class="built_in">echo</span> <span class="variable">$filename</span></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>范例3：用for循环批量修改文件扩展名（把txt改成jpg）</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="built_in">cd</span> /<span class="built_in">test</span></div><div class="line"><span class="keyword">for</span> filename <span class="keyword">in</span> `ls | grep <span class="string">"txt$"</span>`</div><div class="line"><span class="keyword">do</span></div><div class="line">	mv <span class="variable">$filename</span> `<span class="built_in">echo</span> <span class="variable">$filename</span> | cut -d . -f1`.gif</div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+<ul>
+<li>本题还有更简单的实现方法，即通过rename命令来直接实现，如下：<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> /<span class="built_in">test</span></div><div class="line">rename <span class="string">"gif"</span> <span class="string">"txt"</span> *.gif</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-for循环语句的企业级案例"><a href="#3-for循环语句的企业级案例" class="headerlink" title="3. for循环语句的企业级案例"></a>3. for循环语句的企业级案例</h1><p>范例1：在Linux下批量修改文件名，将文件中的<code>_finished</code>去掉。</p>
+<ul>
+<li>提示：通过此题的解答可以学习到sed、awk、rename、mv等命令的实战应用</li>
+<li><p>参考答案1：采用Shell脚本、for循环加sed的方法</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"><span class="built_in">cd</span> /theshu</div><div class="line"><span class="keyword">for</span> file <span class="keyword">in</span> `ls *.jpg`</div><div class="line"><span class="keyword">do</span></div><div class="line">	mv <span class="variable">$file</span> `<span class="built_in">echo</span> <span class="variable">$file</span> | sed <span class="string">'s/_finished//g'</span>`</div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>参考答案2：使用ls结合awk实现，这个方法中没有for循环，但它可以在很多场景中替换for循环（下例是：给文件名加上”_finished”）：（注意是对文件名的修改，而不是字符串的修改）</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ls | awk -F <span class="string">"."</span> <span class="string">'&#123;print "mv",$0,$1"_finished."$2&#125;'</span> | bash</div></pre></td></tr></table></figure>
+</li>
+<li><p>参考答案3：通过专业的改名命令rename来实现：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rename <span class="string">"_finished"</span> <span class="string">""</span> *.jpg</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>范例2：在生产环境下，批量去掉测试数据所用的bd字符：</p>
+<ul>
+<li>实现命令如下：<code>rename &quot;bd&quot; &quot;&quot; *.html</code></li>
+</ul>
+<h1 id="4-select循环语句介绍及语法"><a href="#4-select循环语句介绍及语法" class="headerlink" title="4. select循环语句介绍及语法"></a>4. select循环语句介绍及语法</h1><p>打印菜单可以用cat方法（被称为here文档），其实还有另外一种实现菜单的方法，即通过select循环语句实现。</p>
+<p>select循环语句的主要作用可能就是创建菜单，在执行带select循环语句的脚本时，输出会按照数字顺序的列表显示一个菜单项，并显示提示符（默认是<code>#?</code>），同时等待用户输入数字进行选择。一下就是关于select的知识。</p>
+<p>第一种for循环语句为变量取值型，语法结构如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">select 变量名 [ <span class="keyword">in</span> 菜单取值列表 ]</div><div class="line"><span class="keyword">do</span></div><div class="line">	指令...</div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure></p>
+<p>在这种select循环语句的语法中，在执行脚本后，select关键字后面会有一个<code>变量名</code>，变量名依次获取<code>in</code>关键字后面的变量取值列表内容（以空格分隔），每次仅取一个，然后进入循环（do和done之间），执行循环内的所有指令，当执行到done时结束返回，之后<code>变量名</code>再继续取变量列表里的下一个变量值，继续执行循环内的所有指令，当执行到done时结束为止。与for循环不同的是，select循环执行后会出现菜单项等待用户选择（不会自动循环所有变量列表），而用户输入的只能是菜单项前面的数字序号，每输入一次对应的序号就会执行一次循环，直到变量后面对应列表取完为止。</p>
+<h1 id="5-select循环语句案例"><a href="#5-select循环语句案例" class="headerlink" title="5. select循环语句案例"></a>5. select循环语句案例</h1><p>范例：用select循环打印简单菜单项的多种实现方法</p>
+<ul>
+<li><p>方法1：直接使用列表字符串</p>
+<ul>
+<li><p>脚本开发</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">	select name <span class="keyword">in</span> theshu theshan wang</div><div class="line">	<span class="keyword">do</span></div><div class="line">		<span class="built_in">echo</span> <span class="variable">$name</span></div><div class="line">	<span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>执行结果如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# sh select1.sh</div><div class="line">1) theshu</div><div class="line">2) theshan</div><div class="line">3) thewang</div><div class="line"><span class="meta">#</span><span class="bash">? 1</span></div><div class="line">	theshu</div><div class="line"><span class="meta">#</span><span class="bash">? 2</span></div><div class="line">	theshan</div><div class="line"><span class="meta">#</span><span class="bash">? 3</span></div><div class="line">	thewang</div><div class="line"><span class="meta">#</span><span class="bash">? 4	<span class="comment">#&lt;==输入错误则返回空</span></span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash">?</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>方法2：采用数组做变量列表</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">array=(theshu theshan thewang)</div><div class="line">select name <span class="keyword">in</span> <span class="string">"<span class="variable">$&#123;array[@]&#125;</span>"</span></div><div class="line"><span class="keyword">do</span></div><div class="line">	<span class="built_in">echo</span> <span class="variable">$name</span></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>方法3：把命令结果作为变量列表（菜单项）</p>
+<ul>
+<li><p>数据准备</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># mkdir -p /tmp/test</span></div><div class="line">[root@theshu ~]<span class="comment"># mkdir -p /tmp/test/&#123;theshu,theshan,thewang&#125;</span></div><div class="line">[root@theshu ~]<span class="comment"># ls -l /tmp/test/</span></div><div class="line">total 12</div><div class="line">drwxr-xr-x<span class="number"> 2 </span>root root<span class="number"> 4096 </span>Mar <span class="number"> 1 </span>10:29 theshan</div><div class="line">drwxr-xr-x<span class="number"> 2 </span>root root<span class="number"> 4096 </span>Mar <span class="number"> 1 </span>10:29 theshu</div><div class="line">drwxr-xr-x<span class="number"> 2 </span>root root<span class="number"> 4096 </span>Mar <span class="number"> 1 </span>10:29 thewang</div></pre></td></tr></table></figure>
+</li>
+<li><p>脚本开发</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">select name <span class="keyword">in</span> `ls /tmp/<span class="built_in">test</span>`</div><div class="line"><span class="keyword">do</span></div><div class="line">		<span class="built_in">echo</span> <span class="variable">$name</span></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>执行结果</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="number">1</span>) theshan</div><div class="line"><span class="number">2</span>) theshu</div><div class="line"><span class="number">3</span>) thewang</div><div class="line">#?</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
 <blockquote>
 <p>OK</p>
 </blockquote>
@@ -438,6 +540,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
+          
+        </div>
+      
 
       
       
@@ -447,8 +555,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/02/19/Shell/011. Shell学习笔记09-case条件语句的应用实践/" rel="next" title="Shell学习笔记09-case条件语句的应用实践">
-                <i class="fa fa-chevron-left"></i> Shell学习笔记09-case条件语句的应用实践
+              <a href="/2018/02/19/Shell/012. Shell学习笔记10-while循环和until循环/" rel="next" title="Shell学习笔记10-while循环和until循环">
+                <i class="fa fa-chevron-left"></i> Shell学习笔记10-while循环和until循环
               </a>
             
           </div>
@@ -457,8 +565,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/02/19/Shell/013. Shell学习笔记11-for和select循环语句的应用实践/" rel="prev" title="Shell学习笔记11-for和select循环语句的应用实践">
-                Shell学习笔记11-for和select循环语句的应用实践 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/02/19/Shell/014. Shell学习笔记12-循环控制及状态返回值/" rel="prev" title="Shell学习笔记12-循环控制及状态返回值">
+                Shell学习笔记12-循环控制及状态返回值 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -539,7 +647,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">59</span>
+                    <span class="site-state-item-count">57</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -642,7 +750,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-当型和直到型循环语法"><span class="nav-text">1. 当型和直到型循环语法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-while循环语句"><span class="nav-text">1.1. while循环语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-until循环语句"><span class="nav-text">1.2. until循环语句</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-当型和直到型循环的基本范例"><span class="nav-text">2. 当型和直到型循环的基本范例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-让Shell脚本在后台运行的知识"><span class="nav-text">3. 让Shell脚本在后台运行的知识</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-企业生产实战：-while循环语句实践"><span class="nav-text">4. 企业生产实战： while循环语句实践</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-while循环按行读文件的方式总结"><span class="nav-text">5. while循环按行读文件的方式总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-企业级生产高级实战案例"><span class="nav-text">6. 企业级生产高级实战案例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-小结"><span class="nav-text">7. 小结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-for循环语法结构"><span class="nav-text">1. for循环语法结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-for循环语句的基础实践"><span class="nav-text">2. for循环语句的基础实践</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-for循环语句的企业级案例"><span class="nav-text">3. for循环语句的企业级案例</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-select循环语句介绍及语法"><span class="nav-text">4. select循环语句介绍及语法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-select循环语句案例"><span class="nav-text">5. select循环语句案例</span></a></li></ol></div>
             
 
           </div>

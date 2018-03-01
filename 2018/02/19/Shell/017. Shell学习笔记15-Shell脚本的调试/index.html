@@ -105,20 +105,21 @@
 
 
   
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Shell," />
 
 
-<meta name="description" content="GO   1. 常见Shell脚本错误范例1.1. if条件语句缺少结尾关键字1.2. 循环语句缺少关键字1.3. 成对的符号落了单1.4. 中括号两端没空格1.5. Shell语法调试小结2. Shell脚本调试技巧2.1. 使用dos2unix命令处理在Windows下开发的脚本2.2. 使用echo命令调试2.3. 使用bash命令参数调试2.4. 使用set命令调试部分脚本内容3. 小结">
+<meta name="description" content="GO   这篇笔记是关于Shell脚本的调试知识，掌握了Shell脚本的调试技巧，可以让我们在开发大型脚本时做到事半功倍。虽然掌握了Shell脚本的调试技巧很重要，但是如果能够掌握并养成良好的Shell脚本开发的规范和习惯，就可以从源头上降低开发脚本的错误率，从而降低脚本调试的难度和时间，达到未雨绸缪的效果。 1. 常见Shell脚本错误范例1.1. if条件语句缺少结尾关键字 范例代码： 12">
+<meta name="keywords" content="Shell">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Shell学习笔记15-Shell脚本的调试">
 <meta property="og:url" content="http://www.theshu.top/2018/02/19/Shell/017. Shell学习笔记15-Shell脚本的调试/index.html">
 <meta property="og:site_name" content="奇怪先生的博客">
-<meta property="og:description" content="GO   1. 常见Shell脚本错误范例1.1. if条件语句缺少结尾关键字1.2. 循环语句缺少关键字1.3. 成对的符号落了单1.4. 中括号两端没空格1.5. Shell语法调试小结2. Shell脚本调试技巧2.1. 使用dos2unix命令处理在Windows下开发的脚本2.2. 使用echo命令调试2.3. 使用bash命令参数调试2.4. 使用set命令调试部分脚本内容3. 小结">
+<meta property="og:description" content="GO   这篇笔记是关于Shell脚本的调试知识，掌握了Shell脚本的调试技巧，可以让我们在开发大型脚本时做到事半功倍。虽然掌握了Shell脚本的调试技巧很重要，但是如果能够掌握并养成良好的Shell脚本开发的规范和习惯，就可以从源头上降低开发脚本的错误率，从而降低脚本调试的难度和时间，达到未雨绸缪的效果。 1. 常见Shell脚本错误范例1.1. if条件语句缺少结尾关键字 范例代码： 12">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-19T08:36:28.928Z">
+<meta property="og:updated_time" content="2018-03-01T08:53:49.942Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shell学习笔记15-Shell脚本的调试">
-<meta name="twitter:description" content="GO   1. 常见Shell脚本错误范例1.1. if条件语句缺少结尾关键字1.2. 循环语句缺少关键字1.3. 成对的符号落了单1.4. 中括号两端没空格1.5. Shell语法调试小结2. Shell脚本调试技巧2.1. 使用dos2unix命令处理在Windows下开发的脚本2.2. 使用echo命令调试2.3. 使用bash命令参数调试2.4. 使用set命令调试部分脚本内容3. 小结">
+<meta name="twitter:description" content="GO   这篇笔记是关于Shell脚本的调试知识，掌握了Shell脚本的调试技巧，可以让我们在开发大型脚本时做到事半功倍。虽然掌握了Shell脚本的调试技巧很重要，但是如果能够掌握并养成良好的Shell脚本开发的规范和习惯，就可以从源头上降低开发脚本的错误率，从而降低脚本调试的难度和时间，达到未雨绸缪的效果。 1. 常见Shell脚本错误范例1.1. if条件语句缺少结尾关键字 范例代码： 12">
 
 
 
@@ -362,7 +363,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-19T16:36:28+08:00">2018-02-19</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-01T16:53:49+08:00">2018-03-01</time>
             
           </span>
 
@@ -416,7 +417,175 @@
 <p>GO</p>
 </blockquote>
 <hr>
-<h1 id="1-常见Shell脚本错误范例"><a href="#1-常见Shell脚本错误范例" class="headerlink" title="1. 常见Shell脚本错误范例"></a>1. 常见Shell脚本错误范例</h1><h2 id="1-1-if条件语句缺少结尾关键字"><a href="#1-1-if条件语句缺少结尾关键字" class="headerlink" title="1.1. if条件语句缺少结尾关键字"></a>1.1. if条件语句缺少结尾关键字</h2><h2 id="1-2-循环语句缺少关键字"><a href="#1-2-循环语句缺少关键字" class="headerlink" title="1.2. 循环语句缺少关键字"></a>1.2. 循环语句缺少关键字</h2><h2 id="1-3-成对的符号落了单"><a href="#1-3-成对的符号落了单" class="headerlink" title="1.3. 成对的符号落了单"></a>1.3. 成对的符号落了单</h2><h2 id="1-4-中括号两端没空格"><a href="#1-4-中括号两端没空格" class="headerlink" title="1.4. 中括号两端没空格"></a>1.4. 中括号两端没空格</h2><h2 id="1-5-Shell语法调试小结"><a href="#1-5-Shell语法调试小结" class="headerlink" title="1.5. Shell语法调试小结"></a>1.5. Shell语法调试小结</h2><h1 id="2-Shell脚本调试技巧"><a href="#2-Shell脚本调试技巧" class="headerlink" title="2. Shell脚本调试技巧"></a>2. Shell脚本调试技巧</h1><h2 id="2-1-使用dos2unix命令处理在Windows下开发的脚本"><a href="#2-1-使用dos2unix命令处理在Windows下开发的脚本" class="headerlink" title="2.1. 使用dos2unix命令处理在Windows下开发的脚本"></a>2.1. 使用dos2unix命令处理在Windows下开发的脚本</h2><h2 id="2-2-使用echo命令调试"><a href="#2-2-使用echo命令调试" class="headerlink" title="2.2. 使用echo命令调试"></a>2.2. 使用echo命令调试</h2><h2 id="2-3-使用bash命令参数调试"><a href="#2-3-使用bash命令参数调试" class="headerlink" title="2.3. 使用bash命令参数调试"></a>2.3. 使用bash命令参数调试</h2><h2 id="2-4-使用set命令调试部分脚本内容"><a href="#2-4-使用set命令调试部分脚本内容" class="headerlink" title="2.4. 使用set命令调试部分脚本内容"></a>2.4. 使用set命令调试部分脚本内容</h2><h1 id="3-小结"><a href="#3-小结" class="headerlink" title="3. 小结"></a>3. 小结</h1><hr>
+<p>这篇笔记是关于Shell脚本的调试知识，掌握了Shell脚本的调试技巧，可以让我们在开发大型脚本时做到事半功倍。虽然掌握了Shell脚本的调试技巧很重要，但是如果能够掌握并养成良好的Shell脚本开发的规范和习惯，就可以从源头上降低开发脚本的错误率，从而降低脚本调试的难度和时间，达到未雨绸缪的效果。</p>
+<h1 id="1-常见Shell脚本错误范例"><a href="#1-常见Shell脚本错误范例" class="headerlink" title="1. 常见Shell脚本错误范例"></a>1. 常见Shell脚本错误范例</h1><h2 id="1-1-if条件语句缺少结尾关键字"><a href="#1-1-if条件语句缺少结尾关键字" class="headerlink" title="1.1. if条件语句缺少结尾关键字"></a>1.1. if条件语句缺少结尾关键字</h2><ul>
+<li><p>范例代码：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat if.sh</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="keyword">if</span> [ 10 -lt 12 ]</div><div class="line"><span class="keyword">then</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"Yes, 10 is less than 12."</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>执行结果如下：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# <span class="keyword">sh</span> <span class="keyword">if</span>.<span class="keyword">sh</span></div><div class="line"><span class="keyword">if</span>.<span class="keyword">sh</span>: <span class="keyword">line</span> 5: <span class="keyword">syntax</span> <span class="keyword">error</span>: unexpected end of <span class="keyword">file</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>结果给出了提示，第5行存在语法错误：这不是所期待的（意外的）文件结尾。根据这个提示，我们知道脚本的尾部有问题，仔细观察发现，原来是缺少了fi结尾。</p>
+<p>说明；</p>
+<ul>
+<li>在Shell脚本开发中，脚本缺少fi关键字是很常见的问题。另外，当执行脚本时提示输出错误后，不要只看那些提示的错误行，而是要观察整个相关的代码段。</li>
+<li>Shell脚本解释器一般不会对脚本错误进行精确的定位，而是在试图结束一个语句时进行错误统计，因此，掌握语法并养成良好的规范和习惯就显得很重要。</li>
+</ul>
+<h2 id="1-2-循环语句缺少关键字"><a href="#1-2-循环语句缺少关键字" class="headerlink" title="1.2. 循环语句缺少关键字"></a>1.2. 循环语句缺少关键字</h2><p>for、while、until和case语句中的错误是指实际语句段不正确，也许是漏写或拼错了固定结构中的一个保留字。</p>
+<p>范例：循环结构语句中缺少关键字引起的错误。</p>
+<ul>
+<li><p>脚本内容</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="keyword">while</span> <span class="literal">true</span></div><div class="line"><span class="keyword">do</span></div><div class="line">        status=`curl -I -s --connect-timeout 10 <span class="variable">$1</span> | awk <span class="string">'&#123;print $2&#125;'</span>`</div><div class="line">        ok=`curl -I -s --connect-timeout 10 | head -1 | cut -d <span class="string">" "</span> -f 3`</div><div class="line">        <span class="keyword">if</span> [ <span class="string">"<span class="variable">$status</span>"</span> = <span class="string">"200"</span> ] &amp;&amp; [ <span class="string">"<span class="variable">$ok</span>"</span> = <span class="string">"ok"</span> ]; the</div><div class="line">                <span class="built_in">echo</span> <span class="string">"this yrl is good"</span></div><div class="line">        <span class="keyword">else</span></div><div class="line">                <span class="built_in">echo</span> <span class="string">"this url is bad"</span></div><div class="line">        <span class="keyword">fi</span></div><div class="line">        sleep 3</div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>执行上述脚本的结果：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span>.<span class="keyword">sh</span>: <span class="keyword">line</span> 8: <span class="keyword">syntax</span> <span class="keyword">error</span> near unexpected <span class="keyword">token</span> <span class="symbol">`else'</span></div><div class="line"><span class="keyword">while</span>.<span class="keyword">sh</span>: <span class="keyword">line</span> 8: `     <span class="keyword">else</span>'</div></pre></td></tr></table></figure>
+</li>
+<li><p>通过提示可知吗，是第8行的语法错误，在<code>else</code>附近。经过前后观察可以发现，<code>the</code>少加了个<code>n</code>，应为<code>then</code>。</p>
+</li>
+<li>如果报错的是循环或条件独立的语句，对上下关联部分语句也都要看一下。</li>
+</ul>
+<h2 id="1-3-成对的符号落了单"><a href="#1-3-成对的符号落了单" class="headerlink" title="1.3. 成对的符号落了单"></a>1.3. 成对的符号落了单</h2><p>成对的符号有<code>[]</code>、<code>()</code>、<code>{}</code>、<code>&quot;&quot;</code>、<code>&#39;&#39;</code>等，如果它们落了单，也会导致一些错误。但是這些错误通过错误提示即可很快排除。</p>
+<h2 id="1-4-中括号两端没空格"><a href="#1-4-中括号两端没空格" class="headerlink" title="1.4. 中括号两端没空格"></a>1.4. 中括号两端没空格</h2><p>中括号两端没空格导致的错误</p>
+<ul>
+<li><p>代码如下：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">a=3</div><div class="line">b=1</div><div class="line"><span class="keyword">if</span> [<span class="variable">$a</span> -lt <span class="variable">$b</span>]</div><div class="line"><span class="keyword">then</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"Yes,<span class="variable">$a</span> &lt; <span class="variable">$b</span>"</span></div><div class="line"><span class="keyword">else</span></div><div class="line">        <span class="built_in">echo</span> <span class="string">"Yes,<span class="variable">$a</span> &gt;= <span class="variable">$b</span>"</span></div><div class="line"><span class="keyword">fi</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>执行结果如下：</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">zhongkuohao.sh: <span class="built_in">line</span> <span class="number">4</span>: [<span class="number">3</span>: <span class="keyword">command</span> <span class="title">not</span> <span class="title">found</span></div><div class="line">Yes,<span class="number">3</span> &gt;= <span class="number">1</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="1-5-Shell语法调试小结"><a href="#1-5-Shell语法调试小结" class="headerlink" title="1.5. Shell语法调试小结"></a>1.5. Shell语法调试小结</h2><p>Shell的语法调试并不是很智能，报错也不是很精准，因此就需要我们在开发规范和书写脚本上多下功夫，企业里的Shell脚本大多都是比较短的，因此，开发起来也相对轻松。</p>
+<p>如果能在开发过程中，重视书写习惯、开发规范和开发制度，那么就会减少脚本调试的难度和次数，提升开发效率。此外，要对Shell的基本语法十分熟练，这样才能更好地利用脚本调试。</p>
+<p>此外，写脚本的思路要清晰，否则将给调试带来困难。可采用的思路如下：</p>
+<ul>
+<li>首先思考开发框架，尽量模块化开发，复杂的脚本要简单化、分段实现。并采用打游戏过关的思想（第一关、第二关、第三关、直到通关）去完善框架结构。</li>
+<li><p>然后利用函数分模块开发，语法结构如下：</p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">函数<span class="number">1</span>()</div><div class="line">函数<span class="number">2</span>()</div><div class="line">main()</div><div class="line">main <span class="variable">$*</span>		<span class="comment">#&lt;==执行主函数</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>需要注意的是，不要强制模块化，分块要合理。</p>
+</li>
+</ul>
+<h1 id="2-Shell脚本调试技巧"><a href="#2-Shell脚本调试技巧" class="headerlink" title="2. Shell脚本调试技巧"></a>2. Shell脚本调试技巧</h1><h2 id="2-1-使用dos2unix命令处理在Windows下开发的脚本"><a href="#2-1-使用dos2unix命令处理在Windows下开发的脚本" class="headerlink" title="2.1. 使用dos2unix命令处理在Windows下开发的脚本"></a>2.1. 使用dos2unix命令处理在Windows下开发的脚本</h2><p>因为Windows系统下的文本文件和Linux系统下的文本文件在一些符号上面有差别（比如结尾换行符），所以，在Windows下编辑的Shell脚本直接放在Linux下执行会出现错误，所以需要用<code>dos2unix</code>工具来转换一下文件。</p>
+<p>格式：<code>dos2unix filename.sh</code></p>
+<p>如果没有<code>dos2unix</code>，则用下面的命令进行安装：<code>yum install dos2unix -y</code></p>
+<h2 id="2-2-使用echo命令调试"><a href="#2-2-使用echo命令调试" class="headerlink" title="2.2. 使用echo命令调试"></a>2.2. 使用echo命令调试</h2><p><code>echo</code>命令是最有用的调试脚本的工具之一。一般应在可能出现问题的脚本的重要部分加入echo命令，例如在变量读取或修改操作的前后加入echo命令，并紧挨着退出命令exit。</p>
+<p>利用echo调试一个简单的判断脚本：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="built_in">read</span> -p <span class="string">"Pls input two num:"</span> a b</div><div class="line"><span class="built_in">echo</span> <span class="variable">$a</span> <span class="variable">$b</span>	<span class="comment">#&lt;==增加打印输出，确认变量值是否符合要求</span></div><div class="line"><span class="built_in">exit</span>		<span class="comment">#&lt;==退出脚本，目的是不执行后面的代码</span></div><div class="line"><span class="comment">###########</span></div><div class="line">后面的代码省略...</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>提示：这个调试方法不是Shell的专利，PHP、ASP、Perl、Python等语言都可以使用这样简单又好用的调试方法。</p>
+</blockquote>
+<h2 id="2-3-使用bash命令参数调试"><a href="#2-3-使用bash命令参数调试" class="headerlink" title="2.3. 使用bash命令参数调试"></a>2.3. 使用bash命令参数调试</h2><p>可以利用<code>bash</code>或<code>sh</code>本身自带的参数进行调试。格式为：<code>sh [-nvx] script.sh</code></p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-n</td>
+<td>不会执行该脚本，仅查询脚本语法是否有问题，并给出错误提示</td>
+</tr>
+<tr>
+<td>-v</td>
+<td>在执行脚本时，先将脚本的内容输出到屏幕上，然后执行脚本，如果有错误，也会给出错误提示</td>
+</tr>
+<tr>
+<td>-x</td>
+<td>将执行的脚本内容及输出显示到屏幕上，这是对调试很有用的参数</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>说明：这些参数同样适用于bash</p>
+</blockquote>
+<h3 id="2-3-1-sh参数-n的测试"><a href="#2-3-1-sh参数-n的测试" class="headerlink" title="2.3.1. sh参数-n的测试"></a>2.3.1. sh参数-n的测试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat script.sh</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Hello <span class="variable">$USER</span>,"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Today is <span class="variable">$(date +%F)</span>"</span></div><div class="line">[root@theshu ~]<span class="comment"># sh -n script.sh	#&lt;==当脚本没错时什么也不显示</span></div><div class="line">[root@theshu ~]<span class="comment"># vim script.sh</span></div><div class="line">[root@theshu ~]<span class="comment"># cat script.sh	#&lt;==修改成有问题的脚本</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Hello <span class="variable">$USER</span>,</span></div><div class="line"><span class="string">echo "</span>Today is $(date +%F)<span class="string">"</span></div><div class="line"><span class="string">[root@theshu ~]# sh -n script.sh	#&lt;==有错误显示</span></div><div class="line"><span class="string">script.sh: line 3: unexpected EOF while looking for matching `"</span><span class="string">'</span></div><div class="line"><span class="string">script.sh: line 4: syntax error: unexpected end of file</span></div></pre></td></tr></table></figure>
+<h3 id="2-3-2-sh参数-v的测试"><a href="#2-3-2-sh参数-v的测试" class="headerlink" title="2.3.2. sh参数-v的测试"></a>2.3.2. sh参数-v的测试</h3><ul>
+<li><p>普通的错误脚本的执行结果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># sh -v script.sh</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Hello <span class="variable">$USER</span>,</span></div><div class="line"><span class="string">echo "</span>Today is $(date +%F)<span class="string">"</span></div><div class="line"><span class="string">script.sh: line 3: unexpected EOF while looking for matching `"</span><span class="string">'</span></div><div class="line"><span class="string">script.sh: line 4: syntax error: unexpected end of file</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>带函数的错误脚本的执行结果如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># sh -v c.sh</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"></div><div class="line"><span class="function"><span class="title">theshu</span></span>()&#123;</div><div class="line">        <span class="built_in">echo</span> <span class="string">"I am theshu!"</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="title">theshan</span></span>()&#123;</div><div class="line">        <span class="built_in">echo</span> <span class="string">"I am theshan "</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">theshu1</div><div class="line">c.sh: line 11: theshu1: <span class="built_in">command</span> not found</div><div class="line">theshan</div><div class="line">I am theshan</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="2-3-3-sh参数-x的测试"><a href="#2-3-3-sh参数-x的测试" class="headerlink" title="2.3.3. sh参数-x的测试"></a>2.3.3. sh参数-x的测试</h3><ul>
+<li><p>跟踪script.sh脚本的执行过程：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat script.sh</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Hello <span class="variable">$USER</span>,"</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Today is <span class="variable">$(date +%F)</span>"</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>执行结果如下：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# <span class="keyword">sh</span> -<span class="keyword">x</span> script.<span class="keyword">sh</span></div><div class="line">+ <span class="keyword">echo</span> <span class="string">'Hello root,'</span></div><div class="line">Hello root,</div><div class="line">++ date +%F</div><div class="line">+ <span class="keyword">echo</span> <span class="string">'Today is 2018-03-01'</span></div><div class="line">Today <span class="keyword">is</span> <span class="number">2018</span>-<span class="number">03</span>-<span class="number">01</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>说明：</p>
+<ul>
+<li>使用<code>-x</code>追踪脚本是一种非常好的方法，它可以在执行前列出所执行的所有程序段</li>
+<li>如果是程序段落，则在输出时，最前面会加上<code>+</code>符号，表示它是程序代码</li>
+<li>一般情况下如果是调试逻辑错误的脚本，用<code>-x</code>的效果更佳</li>
+<li>缺点是：加载系统函数库等很多我们不想看其整个过程的脚本时，会有太多输出，导致很难查看所需的内容</li>
+<li>利用<code>sh -x filename.sh</code>调试的缺点可以用<code>set -x</code>命令来弥补，它可以缩小调试的作用域</li>
+<li><p>在一个比较长的脚本中，你会看到很多的执行跟踪的输出，有时候阅读起来非常费劲，此时，可以在每一行的前面内容修改一下提示符，这会非常有用。要做到这样，只需要设置下面的环境变量：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># set | grep PS[1-5]</span></div><div class="line"><span class="attr">PS1</span>=<span class="string">'[\u@\h \W]\$ '</span></div><div class="line"><span class="attr">PS2</span>=<span class="string">'&gt; '</span></div><div class="line"><span class="attr">PS4</span>=<span class="string">'+ '</span></div><div class="line"><span class="comment">#&lt;==只需修改PS4变量即可，在默认情况下表示加号</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>参数<code>-x</code>是一个不可多得的参数，在生产环境中，经常会通过参数<code>-x</code>来实现调试的目的。一般情况下，如果执行脚本发生问题（非语法问题），利用<code>-x</code>参数，就可以知道问题出在哪一行。</p>
+</li>
+</ul>
+<h2 id="2-4-使用set命令调试部分脚本内容"><a href="#2-4-使用set命令调试部分脚本内容" class="headerlink" title="2.4. 使用set命令调试部分脚本内容"></a>2.4. 使用set命令调试部分脚本内容</h2><p><code>set</code>命令也可以用于辅助脚本调试。以下是set命令常用的调试选项。</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set -n</code></td>
+<td>读命令但并不执行</td>
+</tr>
+<tr>
+<td><code>set -v</code></td>
+<td>显示读取的所有行</td>
+</tr>
+<tr>
+<td><code>set -x</code></td>
+<td>显示所有命令及其参数</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>提示：通过<code>set -x</code>命令开启调试功能，而通过<code>set +x</code>关闭调试功能。</p>
+</blockquote>
+<p>set命令的最大优点是，和<code>bash -x</code>相比，<code>set -x</code>可以缩小调试的作用域。</p>
+<p>范例：调试打印九九乘法表的简版脚本：</p>
+<ul>
+<li><p>脚本内容：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat 99dug.sh</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="built_in">set</span> -x		<span class="comment">#&lt;==表示从这里开启脚本调试</span></div><div class="line"><span class="keyword">for</span> a <span class="keyword">in</span> `seq 9`</div><div class="line"><span class="keyword">do</span></div><div class="line">        <span class="keyword">for</span> b <span class="keyword">in</span> `seq 9`</div><div class="line">        <span class="keyword">do</span></div><div class="line">                [ <span class="variable">$a</span> -ge <span class="variable">$b</span> ] &amp;&amp; <span class="built_in">echo</span> -en <span class="string">"<span class="variable">$a</span> x <span class="variable">$b</span> = <span class="variable">$(expr $a \* $b)</span> "</span></div><div class="line">        <span class="keyword">done</span></div><div class="line"><span class="built_in">set</span> +x	<span class="comment">#&lt;==表示到这里结束脚本调试</span></div><div class="line"><span class="built_in">echo</span> <span class="string">" "</span></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>执行脚本查看调试输出结果：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# sh <span class="number">99</span>dug.sh</div><div class="line">++ seq <span class="number">9</span></div><div class="line">+ for a in '`seq <span class="number">9</span>`'</div><div class="line">++ seq <span class="number">9</span></div><div class="line">+ for b in '`seq <span class="number">9</span>`'</div><div class="line">+ '[' <span class="number">1</span> -ge <span class="number">1</span> ']'</div><div class="line">++ expr <span class="number">1</span> '*' <span class="number">1</span></div><div class="line">+ echo -en '<span class="number">1</span> x <span class="number">1</span> = <span class="number">1</span> '</div><div class="line"><span class="number">1</span> x <span class="number">1</span> = <span class="number">1</span> + for b in '`seq <span class="number">9</span>`'</div><div class="line">+ '[' <span class="number">1</span> -ge <span class="number">2</span> ']'</div><div class="line">+ for b in '`seq <span class="number">9</span>`'</div><div class="line">+ '[' <span class="number">1</span> -ge <span class="number">3</span> ']'</div><div class="line">+ for b in '`seq <span class="number">9</span>`'</div><div class="line">+ '[' <span class="number">1</span> -ge <span class="number">4</span> ']'</div><div class="line">+ for b in '`seq <span class="number">9</span>`'</div><div class="line">+ '[' <span class="number">1</span> -ge <span class="number">5</span> ']'</div><div class="line">+ for b in '`seq <span class="number">9</span>`'</div><div class="line">+ '[' <span class="number">1</span> -ge <span class="number">6</span> ']'</div><div class="line">+ for b in '`seq <span class="number">9</span>`'</div><div class="line">+ '[' <span class="number">1</span> -ge <span class="number">7</span> ']'</div><div class="line">+ for b in '`seq <span class="number">9</span>`'</div><div class="line">+ '[' <span class="number">1</span> -ge <span class="number">8</span> ']'</div><div class="line">+ for b in '`seq <span class="number">9</span>`'</div><div class="line">+ '[' <span class="number">1</span> -ge <span class="number">9</span> ']'</div><div class="line">+ set +x</div><div class="line"></div><div class="line"><span class="number">2</span> x <span class="number">1</span> = <span class="number">2</span> <span class="number">2</span> x <span class="number">2</span> = <span class="number">4</span></div><div class="line"><span class="number">3</span> x <span class="number">1</span> = <span class="number">3</span> <span class="number">3</span> x <span class="number">2</span> = <span class="number">6</span> <span class="number">3</span> x <span class="number">3</span> = <span class="number">9</span></div><div class="line"><span class="number">4</span> x <span class="number">1</span> = <span class="number">4</span> <span class="number">4</span> x <span class="number">2</span> = <span class="number">8</span> <span class="number">4</span> x <span class="number">3</span> = <span class="number">12</span> <span class="number">4</span> x <span class="number">4</span> = <span class="number">16</span></div><div class="line"><span class="number">5</span> x <span class="number">1</span> = <span class="number">5</span> <span class="number">5</span> x <span class="number">2</span> = <span class="number">10</span> <span class="number">5</span> x <span class="number">3</span> = <span class="number">15</span> <span class="number">5</span> x <span class="number">4</span> = <span class="number">20</span> <span class="number">5</span> x <span class="number">5</span> = <span class="number">25</span></div><div class="line"><span class="number">6</span> x <span class="number">1</span> = <span class="number">6</span> <span class="number">6</span> x <span class="number">2</span> = <span class="number">12</span> <span class="number">6</span> x <span class="number">3</span> = <span class="number">18</span> <span class="number">6</span> x <span class="number">4</span> = <span class="number">24</span> <span class="number">6</span> x <span class="number">5</span> = <span class="number">30</span> <span class="number">6</span> x <span class="number">6</span> = <span class="number">36</span></div><div class="line"><span class="number">7</span> x <span class="number">1</span> = <span class="number">7</span> <span class="number">7</span> x <span class="number">2</span> = <span class="number">14</span> <span class="number">7</span> x <span class="number">3</span> = <span class="number">21</span> <span class="number">7</span> x <span class="number">4</span> = <span class="number">28</span> <span class="number">7</span> x <span class="number">5</span> = <span class="number">35</span> <span class="number">7</span> x <span class="number">6</span> = <span class="number">42</span> <span class="number">7</span> x <span class="number">7</span> = <span class="number">49</span></div><div class="line"><span class="number">8</span> x <span class="number">1</span> = <span class="number">8</span> <span class="number">8</span> x <span class="number">2</span> = <span class="number">16</span> <span class="number">8</span> x <span class="number">3</span> = <span class="number">24</span> <span class="number">8</span> x <span class="number">4</span> = <span class="number">32</span> <span class="number">8</span> x <span class="number">5</span> = <span class="number">40</span> <span class="number">8</span> x <span class="number">6</span> = <span class="number">48</span> <span class="number">8</span> x <span class="number">7</span> = <span class="number">56</span> <span class="number">8</span> x <span class="number">8</span> = <span class="number">64</span></div><div class="line"><span class="number">9</span> x <span class="number">1</span> = <span class="number">9</span> <span class="number">9</span> x <span class="number">2</span> = <span class="number">18</span> <span class="number">9</span> x <span class="number">3</span> = <span class="number">27</span> <span class="number">9</span> x <span class="number">4</span> = <span class="number">36</span> <span class="number">9</span> x <span class="number">5</span> = <span class="number">45</span> <span class="number">9</span> x <span class="number">6</span> = <span class="number">54</span> <span class="number">9</span> x <span class="number">7</span> = <span class="number">63</span> <span class="number">9</span> x <span class="number">8</span> = <span class="number">72</span> <span class="number">9</span> x <span class="number">9</span> = <span class="number">81</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>提示：加了<code>set -x</code>，在运行脚本的时候，就不要使用<code>sh -x</code>了。</p>
+</blockquote>
+<p>熟悉sh及set的用法，可以让我们能够得心应手地管理Linux下Shell脚本执行的过程。在Shell脚本的学习上，需要“多看、多模仿，并将已有脚本修改成自己需要的样式”，这是最快的学习手段。网络上有很多实用的脚本，作为初学者，可以先将这些脚本拿过来，将其改成为适合自己服务器的脚本，然后再慢慢熟悉，慢慢尝试开发新的脚本。这种先模仿后开发的学习方法，会让你的学习事半功倍，而且学习起来也会很有兴趣和成就感。</p>
+<p>Linux系统上本来就有很多适合阅读的规范脚本，如果想要更加深入地掌握Shell脚本编程，最好的方法就是阅读系统的这些脚本，然后仔细研究每一行都是什么作用，为什么这样写，久而久之，你的Shell开发水平就会得到大幅度提高。</p>
+<h2 id="2-5-其它调试Shell脚本的工具"><a href="#2-5-其它调试Shell脚本的工具" class="headerlink" title="2.5. 其它调试Shell脚本的工具"></a>2.5. 其它调试Shell脚本的工具</h2><p>下面再引荐两款Shell的调试工具吗，可以作为扩展知识来研究一下。</p>
+<ol>
+<li>Shell调试工具：<code>bashdb</code>：它是一个类似于GDB的调试工具，可以完成对Shell脚本的断点设置、单步执行、变量观察等许多功能。不过一般很少有人使用它。</li>
+<li>Shell调试工具：<code>shellcheck</code>：它是一个可检查sh/bash脚本和命令语法的小工具。一般也是很少有人使用它。</li>
+</ol>
+<h1 id="3-小结"><a href="#3-小结" class="headerlink" title="3. 小结"></a>3. 小结</h1><p>这篇学习笔记主要介绍了Shell的调试技巧，包括：</p>
+<ul>
+<li>要记得首先用<code>dos2unix</code>对脚本（从其它地方拿来用的）进行格式化。</li>
+<li>执行脚本根据报错来调试时，要知道有时所报错误会不准确，应多关联上下文查看。</li>
+<li>可通过<code>sh -x</code>命令调试整个脚本，且显示执行过程。</li>
+<li><code>set -x</code>和<code>set +x</code>命令用于调试部分脚本的执行过程（可在脚本中设置）。</li>
+<li>可通过<code>echo</code>命令输出脚本中要确认的变量及相关内容，然后紧跟着使用<code>exit</code>退出，不执行后面程序，这种方式便于一步步跟踪脚本，对于逻辑错误的调试比较好用。写法即：<code>echo $var; exit</code></li>
+<li>最关键的还是要语法熟练，养成良好的编码习惯，提高编程思想，将错误扼杀在萌芽状态之中，从而降低错误率，减轻调试的负担，提高开发效率。</li>
+</ul>
+<hr>
 <blockquote>
 <p>OK</p>
 </blockquote>
@@ -438,6 +607,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
+          
+        </div>
+      
 
       
       
@@ -457,8 +632,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/02/19/Shell/018. Shell学习笔记16-Shell脚本开发环境的配置和优化实践/" rel="prev" title="Shell学习笔记16-Shell脚本开发环境的配置和优化实践">
-                Shell学习笔记16-Shell脚本开发环境的配置和优化实践 <i class="fa fa-chevron-right"></i>
+              <a href="/2018/02/19/Shell/018. Shell学习笔记16-Shell脚本开发环境的配置和优化/" rel="prev" title="Shell学习笔记16-Shell脚本开发环境的配置和优化">
+                Shell学习笔记16-Shell脚本开发环境的配置和优化 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -539,7 +714,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">59</span>
+                    <span class="site-state-item-count">57</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -642,7 +817,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-常见Shell脚本错误范例"><span class="nav-text">1. 常见Shell脚本错误范例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-if条件语句缺少结尾关键字"><span class="nav-text">1.1. if条件语句缺少结尾关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-循环语句缺少关键字"><span class="nav-text">1.2. 循环语句缺少关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-成对的符号落了单"><span class="nav-text">1.3. 成对的符号落了单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-中括号两端没空格"><span class="nav-text">1.4. 中括号两端没空格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-Shell语法调试小结"><span class="nav-text">1.5. Shell语法调试小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Shell脚本调试技巧"><span class="nav-text">2. Shell脚本调试技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-使用dos2unix命令处理在Windows下开发的脚本"><span class="nav-text">2.1. 使用dos2unix命令处理在Windows下开发的脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-使用echo命令调试"><span class="nav-text">2.2. 使用echo命令调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-使用bash命令参数调试"><span class="nav-text">2.3. 使用bash命令参数调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-使用set命令调试部分脚本内容"><span class="nav-text">2.4. 使用set命令调试部分脚本内容</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-小结"><span class="nav-text">3. 小结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-常见Shell脚本错误范例"><span class="nav-text">1. 常见Shell脚本错误范例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-if条件语句缺少结尾关键字"><span class="nav-text">1.1. if条件语句缺少结尾关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-循环语句缺少关键字"><span class="nav-text">1.2. 循环语句缺少关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-成对的符号落了单"><span class="nav-text">1.3. 成对的符号落了单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-中括号两端没空格"><span class="nav-text">1.4. 中括号两端没空格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-Shell语法调试小结"><span class="nav-text">1.5. Shell语法调试小结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Shell脚本调试技巧"><span class="nav-text">2. Shell脚本调试技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-使用dos2unix命令处理在Windows下开发的脚本"><span class="nav-text">2.1. 使用dos2unix命令处理在Windows下开发的脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-使用echo命令调试"><span class="nav-text">2.2. 使用echo命令调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-使用bash命令参数调试"><span class="nav-text">2.3. 使用bash命令参数调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-1-sh参数-n的测试"><span class="nav-text">2.3.1. sh参数-n的测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-2-sh参数-v的测试"><span class="nav-text">2.3.2. sh参数-v的测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-3-sh参数-x的测试"><span class="nav-text">2.3.3. sh参数-x的测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-使用set命令调试部分脚本内容"><span class="nav-text">2.4. 使用set命令调试部分脚本内容</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-其它调试Shell脚本的工具"><span class="nav-text">2.5. 其它调试Shell脚本的工具</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-小结"><span class="nav-text">3. 小结</span></a></li></ol></div>
             
 
           </div>

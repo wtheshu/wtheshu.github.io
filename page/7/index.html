@@ -312,7 +312,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/01/19/Linux/012. 正则表达式实用技术/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/18/Linux/019. Linux重要命令汇总表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -331,7 +331,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/19/Linux/012. 正则表达式实用技术/" itemprop="url">正则表达式实用技术</a></h1>
+                <a class="post-title-link" href="/2018/02/18/Linux/019. Linux重要命令汇总表/" itemprop="url">Linux重要命令汇总表</a></h1>
         
 
         <div class="post-meta">
@@ -343,7 +343,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-19T12:47:06+08:00">2018-01-19</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-18T12:45:59+08:00">2018-02-18</time>
             
 
             
@@ -364,7 +364,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:32:37+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-26T13:19:21+08:00">2018-02-26</time>
             
           </span>
 
@@ -419,12 +419,40 @@
           
 GO
 
-1. 正则表达式入门1.1. 定义正则表达式是处理字符串的方法，它是以行为单位来进行字符串的处理行为，通过一些特殊符号的辅助，可以轻易达到查找、删除、替换某特定字符的目的。它是一种规则，只要某工具支持正则表达式，便可以使用这种规则。（支持正则的工具有：vi、grep、awk、sed等）
-注
+
+线上查询及帮助命令（2个）
+
+
+命令
+功能说明
+
+
+
+
+man
+查看命令帮助、命令的词典，更复杂的还有info，但不常用
+
+
+help
+查看Linux内置命令的帮助，比如cd命令
+
+
+
+文件和目录操作命令（18个）
+
+
+命令
+功能说明
+
+
+
+
+ls
+全拼list，功能是列出目录的内容及内
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/19/Linux/012. 正则表达式实用技术/#more" rel="contents">
+            <a class="btn" href="/2018/02/18/Linux/019. Linux重要命令汇总表/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -480,7 +508,7 @@ GO
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/01/19/Linux/011. Linux计划任务管理技术/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/01/24/Linux/018. Linux基础部分补充内容/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -499,7 +527,7 @@ GO
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/19/Linux/011. Linux计划任务管理技术/" itemprop="url">Linux计划任务管理技术</a></h1>
+                <a class="post-title-link" href="/2018/01/24/Linux/018. Linux基础部分补充内容/" itemprop="url">Linux基础部分补充内容</a></h1>
         
 
         <div class="post-meta">
@@ -511,7 +539,7 @@ GO
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-19T09:05:17+08:00">2018-01-19</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-24T13:27:40+08:00">2018-01-24</time>
             
 
             
@@ -532,7 +560,7 @@ GO
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:32:30+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:33:28+08:00">2018-02-23</time>
             
           </span>
 
@@ -587,18 +615,41 @@ GO
           
 GO
 
-0. 计划任务服务程序Linux系统的计划任务分为三种：
 
-一次性计划任务（用at命令实现，由atd服务提供）
-周期性计划任务（用crontab命令实现，由crond服务提供）
-系统级别的计划任务及其扩展anacron：在一个指定时间间隔错过后自动执行任务
+1. Linux的一些常用快捷键
 
 
-1. 一次性计划任务1.1.
+快捷键
+功能
+
+
+
+
+stty -echoctl
+取消在屏幕上显示控制的字符，比如Ctrl+C的^C
+
+
+Ctrl+c
+取消命令的输入，中断进程
+
+
+Ctrl+z
+暂停命令（fg恢复）
+
+
+Ctrl+a
+光标到行首
+
+
+Ctrl+e
+光标到行尾
+
+
+
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/19/Linux/011. Linux计划任务管理技术/#more" rel="contents">
+            <a class="btn" href="/2018/01/24/Linux/018. Linux基础部分补充内容/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -654,7 +705,7 @@ GO
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/12/29/Tool/007. 《Vim实用技巧》-开始：Vim解决问题的方式/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/01/24/Linux/017. Linux系统日志介绍/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -673,7 +724,7 @@ GO
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/12/29/Tool/007. 《Vim实用技巧》-开始：Vim解决问题的方式/" itemprop="url">《Vim实用技巧》-开始：Vim解决问题的方式</a></h1>
+                <a class="post-title-link" href="/2018/01/24/Linux/017. Linux系统日志介绍/" itemprop="url">Linux系统日志介绍</a></h1>
         
 
         <div class="post-meta">
@@ -685,7 +736,7 @@ GO
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-29T15:56:24+08:00">2017-12-29</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-24T13:24:10+08:00">2018-01-24</time>
             
 
             
@@ -706,7 +757,7 @@ GO
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:36:10+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:33:18+08:00">2018-02-23</time>
             
           </span>
 
@@ -722,7 +773,7 @@ GO
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
 
                 
                 
@@ -759,17 +810,15 @@ GO
         
           
           
-GO
+GO 
 
 
-技巧1 结识 . 命令理想的编辑模式：用一次按键移动，用另一次按键执行。
-. 命令可以重复上次修改。
-上次修改 可以指很多东西，一次修改的单位可以是字符、整行，甚至是整个文件。
-每次进入插入模式时，也会形成一次修改。从进入插入模式的那一刻起（例如，输入i），直到返回普通模式时为止（输入 
+日志记录了系统每天发生的各种各种的事情，比如监测系统状况、排查系统故障等。你可以通过日志来检查错误发生的原因，或者收到攻击时攻击者留下的痕迹。日志的主要功能是审计和监测，还可以实时地监测系统状态，监测和追踪侵入者等。所以，在以后的工作中，遇到问题，查看日志，才能找到线索，来解决问题。
+
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/12/29/Tool/007. 《Vim实用技巧》-开始：Vim解决问题的方式/#more" rel="contents">
+            <a class="btn" href="/2018/01/24/Linux/017. Linux系统日志介绍/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -814,7 +863,7 @@ GO
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/17/">17</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/6/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><span class="page-number current">7</span><a class="page-number" href="/page/8/">8</a><span class="space">&hellip;</span><a class="page-number" href="/page/19/">19</a><a class="extend next" rel="next" href="/page/8/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -863,7 +912,7 @@ GO
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">50</span>
+                    <span class="site-state-item-count">57</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

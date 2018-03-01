@@ -105,20 +105,21 @@
 
 
   
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Shell," />
 
 
-<meta name="description" content="GO   1. Shell脚本基本规范2. Shell脚本变量命名及引用变量规范3. Shell函数的命名及函数定义规范4. Shell脚本（模块）高级命名规范5. Shell脚本的代码风格5.1 代码框架5.2. 缩进规范6. Shell脚本的变量及文件检查规范  OK">
+<meta name="description" content="GO   Shell脚本开发规范及习惯非常重要，有了好的规范和习惯，才能大大提升开发效率，降低后期的脚本维护成本，特别是在多人协作开发时，有一个互相遵守的规范显得特别重要。即使是自己一个人独自开发，也要采取一套科学的、固定的规范，这样脚本才更易读，易于后期维护。总之，就是要让自己养成一个一出手就是专业和规范的习惯。 1. Shell脚本基本规范1.1. 一些基本规范 在Shell脚本里，第一行通">
+<meta name="keywords" content="Shell">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Shell学习笔记14-Shell脚本开发规范">
 <meta property="og:url" content="http://www.theshu.top/2018/02/19/Shell/016. Shell学习笔记14-Shell脚本开发规范/index.html">
 <meta property="og:site_name" content="奇怪先生的博客">
-<meta property="og:description" content="GO   1. Shell脚本基本规范2. Shell脚本变量命名及引用变量规范3. Shell函数的命名及函数定义规范4. Shell脚本（模块）高级命名规范5. Shell脚本的代码风格5.1 代码框架5.2. 缩进规范6. Shell脚本的变量及文件检查规范  OK">
+<meta property="og:description" content="GO   Shell脚本开发规范及习惯非常重要，有了好的规范和习惯，才能大大提升开发效率，降低后期的脚本维护成本，特别是在多人协作开发时，有一个互相遵守的规范显得特别重要。即使是自己一个人独自开发，也要采取一套科学的、固定的规范，这样脚本才更易读，易于后期维护。总之，就是要让自己养成一个一出手就是专业和规范的习惯。 1. Shell脚本基本规范1.1. 一些基本规范 在Shell脚本里，第一行通">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-02-19T08:33:22.271Z">
+<meta property="og:updated_time" content="2018-03-01T06:40:49.645Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Shell学习笔记14-Shell脚本开发规范">
-<meta name="twitter:description" content="GO   1. Shell脚本基本规范2. Shell脚本变量命名及引用变量规范3. Shell函数的命名及函数定义规范4. Shell脚本（模块）高级命名规范5. Shell脚本的代码风格5.1 代码框架5.2. 缩进规范6. Shell脚本的变量及文件检查规范  OK">
+<meta name="twitter:description" content="GO   Shell脚本开发规范及习惯非常重要，有了好的规范和习惯，才能大大提升开发效率，降低后期的脚本维护成本，特别是在多人协作开发时，有一个互相遵守的规范显得特别重要。即使是自己一个人独自开发，也要采取一套科学的、固定的规范，这样脚本才更易读，易于后期维护。总之，就是要让自己养成一个一出手就是专业和规范的习惯。 1. Shell脚本基本规范1.1. 一些基本规范 在Shell脚本里，第一行通">
 
 
 
@@ -362,7 +363,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-19T16:33:22+08:00">2018-02-19</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-01T14:40:49+08:00">2018-03-01</time>
             
           </span>
 
@@ -416,7 +417,82 @@
 <p>GO</p>
 </blockquote>
 <hr>
-<h1 id="1-Shell脚本基本规范"><a href="#1-Shell脚本基本规范" class="headerlink" title="1. Shell脚本基本规范"></a>1. Shell脚本基本规范</h1><h1 id="2-Shell脚本变量命名及引用变量规范"><a href="#2-Shell脚本变量命名及引用变量规范" class="headerlink" title="2. Shell脚本变量命名及引用变量规范"></a>2. Shell脚本变量命名及引用变量规范</h1><h1 id="3-Shell函数的命名及函数定义规范"><a href="#3-Shell函数的命名及函数定义规范" class="headerlink" title="3. Shell函数的命名及函数定义规范"></a>3. Shell函数的命名及函数定义规范</h1><h1 id="4-Shell脚本（模块）高级命名规范"><a href="#4-Shell脚本（模块）高级命名规范" class="headerlink" title="4. Shell脚本（模块）高级命名规范"></a>4. Shell脚本（模块）高级命名规范</h1><h1 id="5-Shell脚本的代码风格"><a href="#5-Shell脚本的代码风格" class="headerlink" title="5. Shell脚本的代码风格"></a>5. Shell脚本的代码风格</h1><h2 id="5-1-代码框架"><a href="#5-1-代码框架" class="headerlink" title="5.1 代码框架"></a>5.1 代码框架</h2><h2 id="5-2-缩进规范"><a href="#5-2-缩进规范" class="headerlink" title="5.2. 缩进规范"></a>5.2. 缩进规范</h2><h1 id="6-Shell脚本的变量及文件检查规范"><a href="#6-Shell脚本的变量及文件检查规范" class="headerlink" title="6. Shell脚本的变量及文件检查规范"></a>6. Shell脚本的变量及文件检查规范</h1><hr>
+<p>Shell脚本开发规范及习惯非常重要，有了好的规范和习惯，才能大大提升开发效率，降低后期的脚本维护成本，特别是在多人协作开发时，有一个互相遵守的规范显得特别重要。即使是自己一个人独自开发，也要采取一套科学的、固定的规范，这样脚本才更易读，易于后期维护。总之，就是要让自己养成一个一出手就是专业和规范的习惯。</p>
+<h1 id="1-Shell脚本基本规范"><a href="#1-Shell脚本基本规范" class="headerlink" title="1. Shell脚本基本规范"></a>1. Shell脚本基本规范</h1><h2 id="1-1-一些基本规范"><a href="#1-1-一些基本规范" class="headerlink" title="1.1. 一些基本规范"></a>1.1. 一些基本规范</h2><ul>
+<li>在Shell脚本里，第一行通常用于指定脚本解释器。<ul>
+<li>该行内容为：<code>#!/bin/bash</code>或<code>#!/bin/sh</code>。</li>
+<li>说明：此项在Linux系统场景下可能不是必须的，属于优秀规范和习惯</li>
+</ul>
+</li>
+<li><p>在Shell脚本的开头处解释器代码后，最好加上版本版权等信息，如下：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#Date</span>:		<span class="number">13</span>:<span class="number">30</span> <span class="number">2018</span>-<span class="number">03</span>-<span class="number">01</span></div><div class="line"><span class="selector-id">#Author</span>:	Theshu</div><div class="line"><span class="selector-id">#Mail</span>:		theshu@qq.com</div><div class="line"><span class="selector-id">#Function</span>:	This scripts function is...</div><div class="line"><span class="selector-id">#Version</span>:	<span class="number">0.1</span></div></pre></td></tr></table></figure>
+<ul>
+<li>说明：可以在<code>~/.vimrc</code>配置文件时自动加上以上信息的功能。此项在Linux系统场景下不是必须的，属于优秀规范和习惯。</li>
+</ul>
+</li>
+<li>Shell脚本中尽量不要用中文注释，应用英文注释，以防止本机或切换系统环境后出现中文乱码的困扰。如果非要加中文，请根据自身的客户端对系统进行字符集调整，如：<code>export LANG=&quot;zh_CN.UTF-8&quot;</code>，并在脚本中重新定义字符集，使其和系统一致。</li>
+<li>Shell脚本命名应以<code>.sh</code>为扩展名。例如：<code>script-name.sh</code></li>
+<li>Shell脚本应存放在固定的路径下，例如：<code>/server/scripts</code></li>
+</ul>
+<h2 id="1-2-代码书写技巧"><a href="#1-2-代码书写技巧" class="headerlink" title="1.2. 代码书写技巧"></a>1.2. 代码书写技巧</h2><ul>
+<li><p>成对的符号应尽量一次写出来，然后退格在符号里增加内容，以防止遗漏。这些成对的符号包括：</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&#125;、[]、<span class="string">''</span>、``、<span class="string">""</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>中括号<code>[]</code>两端至少要有一个空格，因此，键入中括号的时候即可留出空格<code>[  ]</code>，然后再退格键入中间的内容，并确保两端都至少有一个空格。即：先键入一对中阔后，然后退一个格，输入两个空格，再退一个格，双中括号<code>[[]]</code>的写法也是如此。</p>
+</li>
+<li><p>对于流程控制语句应一次将格式写完，再添加内容。</p>
+<ul>
+<li><p>比如：if语句的格式一次完成应为</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> 条件内容</div><div class="line"><span class="keyword">then</span></div><div class="line">	内容</div><div class="line"><span class="keyword">fi</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>再比如：for循环语句的格式一次完成应为</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span></div><div class="line"><span class="keyword">do</span></div><div class="line">	内容</div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>提示：while和until、case等语句也是一样。</p>
+</li>
+</ul>
+</li>
+<li><p>通过缩进让代码更易读，比如：</p>
+<figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> 条件内容</div><div class="line">then</div><div class="line">	内容</div><div class="line">fi</div><div class="line">############</div><div class="line"><span class="keyword">if</span> 条件内容; then</div><div class="line">	内容</div><div class="line">fi</div></pre></td></tr></table></figure>
+</li>
+<li><p>字符串赋值给变量时应加双引号，并且等号前后不能有空格。例如：<code>THESHU_FILE=&quot;test.txt&quot;</code></p>
+</li>
+<li>脚本中的单引号、双引号及反引号，必须为英文状态下的符号，其实所有的Linux标准字符及符号都应该是英文状态下的符号，这一点需要特别注意。</li>
+</ul>
+<h1 id="2-Shell脚本变量命名及引用变量规范"><a href="#2-Shell脚本变量命名及引用变量规范" class="headerlink" title="2. Shell脚本变量命名及引用变量规范"></a>2. Shell脚本变量命名及引用变量规范</h1><h2 id="2-1-全局变量定义"><a href="#2-1-全局变量定义" class="headerlink" title="2.1. 全局变量定义"></a>2.1. 全局变量定义</h2><p>全局变量也称环境变量，它的定义应全部大写，如<code>APACHE_ERR</code>或<code>APACHEERR</code>，名字对应的语义要尽量清晰，能够正确表达变量内容的含义，对于过长的英文单词可用前几个字符代替。多个单词间可用<code>_</code>符号连接，全局变量的定义一般放在系统的全局路径中，并且最好蚕蛹<code>export</code>来定义，全局变量一般可以在任意子Shell中直接使用（特殊情况除外，例如：定时任务执行Shell时就最好在Shell里重新定义这些全局变量，否则可能会出现问题）。</p>
+<h2 id="2-2-局部变量定义"><a href="#2-2-局部变量定义" class="headerlink" title="2.2. 局部变量定义"></a>2.2. 局部变量定义</h2><p>局部变量也成为普通变量，在常规脚本中，普通变量的命名也要尽可能统一，可以使用用驼峰语法，即第二个单词的首字母大写，如<code>theshuHome</code>，或者每个单词首字母大写，如<code>TheshuHome</code>，当然也有人喜欢采用全部大写或全部小写的方式，例如：<code>theshuhome</code>、<code>THESHUHOME</code>。选择一种适合自己的方式即可。</p>
+<p>Shell函数中的变量可以使用<code>local</code>方式进行定义，使之只在本函数作用域内有效，防止函数中的变量名称与外部程序中的变量相同，从而造成程序异常。下面是在函数中定义变量的例子：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">testFunc</span></span>()&#123;</div><div class="line">	<span class="built_in">local</span> i</div><div class="line">	<span class="keyword">for</span> ((i=0; i&lt;5; i++))</div><div class="line">	<span class="keyword">do</span></div><div class="line">		<span class="built_in">echo</span> <span class="string">"do something"</span></div><div class="line">	<span class="keyword">done</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="2-3-变量的引用规范"><a href="#2-3-变量的引用规范" class="headerlink" title="2.3. 变量的引用规范"></a>2.3. 变量的引用规范</h2><p>在引用变量时，若变量前后都有字符，则需要使用<code>${APACHE_ERR}</code>（加大括号的方式）引用变量，以防止产生歧义；当变量内容为字符串时，需要使用<code>&quot;${APACHE_ERR}&quot;</code>（外面加双引号的方式）引用变量；当变量内容为整数时，则最好直接使用<code>$APACHE_ERR</code>来引用变量。全局变量、局部变量、函数变量、数组变量等都是如此。</p>
+<ul>
+<li>说明：对于需要环境变量的Java程序脚本等，在写脚本之前，最好通过export重新声明环境变量，一面在定时任务等场合的使用中出现问题。</li>
+</ul>
+<h1 id="3-Shell函数的命名及函数定义规范"><a href="#3-Shell函数的命名及函数定义规范" class="headerlink" title="3. Shell函数的命名及函数定义规范"></a>3. Shell函数的命名及函数定义规范</h1><p>Shell函数的命名可采用单词首字母大写的形式，如<code>CreateFile()</code>，并且语义要清晰，比如，使用<code>CreateFile()</code>代替<code>CFILE()</code>。也可以使用小写形式，如<code>createfile()</code>。</p>
+<p>可以加前后缀，如后缀为<code>Max</code>则为最大值，为<code>Min</code>则表示最小值，前缀<code>Is</code>为判断型函数，<code>Get</code>为取值函数，<code>Do</code>则为处理函数，这也有益于对函数功能的理解，使函数名更直观、更清晰。</p>
+<p>范例：对操作系统函数库脚本的函数名进行定义：<br><figure class="highlight coq"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"># /etc/init.d/functions</div><div class="line">if_ignored_file()&#123;</div><div class="line">	<span class="built_in">case</span> <span class="string">"$1"</span> <span class="built_in">in</span></div><div class="line">		*~ | <span class="type">*.bak</span> | <span class="type">*.orig</span> | <span class="type">*.rpmnew</span> | <span class="type">*.rpmorig</span> | <span class="type">*.rpmsave</span></div><div class="line">			<span class="keyword">return</span> <span class="number">0</span></div><div class="line">			;;</div><div class="line">	esac</div><div class="line">	<span class="keyword">return</span> <span class="number">1</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>如果需要区别一些常规的字符串，可在函数名前加上<code>function</code>关键字，如下：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">CreateFile</span><span class="params">()</span></span>&#123;</div><div class="line">	...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>显示函数返回值时，可在函数的结尾内容中包含<code>return语句</code>，并跟上返回值。即使是不关心返回值的函数，也可能在后续调用时无意识地去判断它的返回值并进行一系列动作，使用return语句不会带来多少负担，但确实能让函数的逻辑变得更加清晰和严谨。</p>
+<p>范例：为操作系统函数库脚本函数定义return返回值<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Log a warning</span></div><div class="line"><span class="function"><span class="title">warning</span></span>()&#123;</div><div class="line">	<span class="built_in">local</span> rc=$?</div><div class="line">	[ <span class="string">"<span class="variable">$BOOTUP</span>"</span> != <span class="string">"verbose"</span> -a -z <span class="string">"<span class="variable">$&#123;LSB:-&#125;</span>"</span> ] &amp;&amp; echo_warning</div><div class="line">	<span class="built_in">return</span> <span class="variable">$rc</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="4-Shell脚本（模块）高级命名规范"><a href="#4-Shell脚本（模块）高级命名规范" class="headerlink" title="4. Shell脚本（模块）高级命名规范"></a>4. Shell脚本（模块）高级命名规范</h1><ul>
+<li>常规的Shell脚本使用统一的后缀：<code>.sh</code>，例如<code>theshu.sh</code></li>
+<li>模块的启动和停止脚本统一命名为<code>start_模块名.sh</code>和<code>stop_模块名.sh</code></li>
+<li>监控脚本通常以<code>*_mon.sh</code>为后缀</li>
+<li>控制脚本一般以<code>*_ctl.sh</code>为后缀</li>
+</ul>
+<h1 id="5-Shell脚本的代码风格"><a href="#5-Shell脚本的代码风格" class="headerlink" title="5. Shell脚本的代码风格"></a>5. Shell脚本的代码风格</h1><h2 id="5-1-代码框架"><a href="#5-1-代码框架" class="headerlink" title="5.1 代码框架"></a>5.1 代码框架</h2><p>易变的信息（如报警的收件人、机器名、用户名密码、URL等）最好都定义为变量或使用特殊位置的参数，这会使开发的脚本更具通用性。</p>
+<p>把Shell的通用变量以配置文件的形式单独存放，以<code>功能.cfg</code>来命令，例如<code>nginx.conf</code>，并放在conf目录下；引用时通过在脚本开头使用<code>conf/nginx.conf</code>的形式来加载。</p>
+<p>将程序的功能分段、分模块采用函数等来实现，并存放到单独的函数文件里，如过是通用的公共函数可以存放在<code>/etc/init.d/functions</code>下，调用时采用<code>source 文件全路径</code>即可。</p>
+<p>把脚本中的功能和配置明确分开，主脚本只用于实现程序主干，加载配置及加载函数等功能实现应尽量封装在子函数中。</p>
+<p>规范代码树如下：<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root@theshu scripts]<span class="comment"># tree</span></div><div class="line">.</div><div class="line">|<span class="comment">-- bin</span></div><div class="line">|	`<span class="comment">-- ipsecctl</span></div><div class="line">|<span class="comment">-- conf</span></div><div class="line">|	`<span class="comment">-- ipsec.cfg</span></div><div class="line">`<span class="comment">-- func</span></div><div class="line">	`<span class="comment">-- functions</span></div><div class="line"><span class="number">3</span> directories, <span class="number">3</span> files</div></pre></td></tr></table></figure></p>
+<h2 id="5-2-缩进规范"><a href="#5-2-缩进规范" class="headerlink" title="5.2. 缩进规范"></a>5.2. 缩进规范</h2><p>在使用条件语句时，每进行一层循环或是循环内部的操作时，就使用一个缩进，缩进一般用<code>Tab</code>键加<code>空格</code>。推荐采用4个空格缩进。</p>
+<p>范例：写出脚本缩进规范：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> [ -d theshu_dir ]</div><div class="line"><span class="keyword">then</span></div><div class="line">    <span class="built_in">cd</span> theshu_dir</div><div class="line">	<span class="keyword">if</span> [ -f theshu_file ]</div><div class="line">	<span class="keyword">then</span></div><div class="line">	    <span class="built_in">echo</span> <span class="string">"DoSth"</span></div><div class="line">	<span class="keyword">fi</span></div><div class="line">	<span class="built_in">cd</span> ..</div><div class="line"><span class="keyword">fi</span></div></pre></td></tr></table></figure></p>
+<p>提示：可调整Vim实现自动缩进，建议缩进4个空格。</p>
+<h1 id="6-Shell脚本的变量及文件检查规范"><a href="#6-Shell脚本的变量及文件检查规范" class="headerlink" title="6. Shell脚本的变量及文件检查规范"></a>6. Shell脚本的变量及文件检查规范</h1><p>脚本中要检查配置项是否为空、是否可执行等，尤其是对于一些重要的、会影响下面脚本正常运行的配置想，必须要进行是否为空等的检查，避免配置文件中出现遗漏等问题。</p>
+<p>范例：针对字符串变量进行判断：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> [ -n <span class="string">"<span class="variable">$&#123;FILE_PATH&#125;</span>"</span> ]</div><div class="line"><span class="keyword">then</span></div><div class="line">	<span class="built_in">echo</span> <span class="string">"Do something"</span></div><div class="line"><span class="keyword">fi</span></div></pre></td></tr></table></figure></p>
+<p>范例：给出HTTP脚本变量的定义方式：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">httpd=<span class="variable">$&#123;HTTPD-/usr/sbin/httpd&#125;</span></div><div class="line">prog=httpd</div><div class="line">pidfile=<span class="variable">$&#123;PIDFILE-/var/run/httpd.pid&#125;</span></div><div class="line">lockfile=<span class="variable">$&#123;LOCKFILE-/var/lock/subsys/httpd&#125;</span></div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>提示：这样的定义可以防止变量出现空着，这是变量子串的特殊知识。</p>
+</blockquote>
+<hr>
 <blockquote>
 <p>OK</p>
 </blockquote>
@@ -438,6 +514,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
+          
+        </div>
+      
 
       
       
@@ -447,8 +529,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/02/19/Shell/015. Shell学习笔记13-Shell数组的应用实践/" rel="next" title="Shell学习笔记13-Shell数组的应用实践">
-                <i class="fa fa-chevron-left"></i> Shell学习笔记13-Shell数组的应用实践
+              <a href="/2018/02/19/Shell/015. Shell学习笔记13-Shell数组/" rel="next" title="Shell学习笔记13-Shell数组">
+                <i class="fa fa-chevron-left"></i> Shell学习笔记13-Shell数组
               </a>
             
           </div>
@@ -539,7 +621,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">59</span>
+                    <span class="site-state-item-count">57</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -642,7 +724,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Shell脚本基本规范"><span class="nav-text">1. Shell脚本基本规范</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Shell脚本变量命名及引用变量规范"><span class="nav-text">2. Shell脚本变量命名及引用变量规范</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Shell函数的命名及函数定义规范"><span class="nav-text">3. Shell函数的命名及函数定义规范</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Shell脚本（模块）高级命名规范"><span class="nav-text">4. Shell脚本（模块）高级命名规范</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Shell脚本的代码风格"><span class="nav-text">5. Shell脚本的代码风格</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-代码框架"><span class="nav-text">5.1 代码框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-缩进规范"><span class="nav-text">5.2. 缩进规范</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Shell脚本的变量及文件检查规范"><span class="nav-text">6. Shell脚本的变量及文件检查规范</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Shell脚本基本规范"><span class="nav-text">1. Shell脚本基本规范</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-一些基本规范"><span class="nav-text">1.1. 一些基本规范</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-代码书写技巧"><span class="nav-text">1.2. 代码书写技巧</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Shell脚本变量命名及引用变量规范"><span class="nav-text">2. Shell脚本变量命名及引用变量规范</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-全局变量定义"><span class="nav-text">2.1. 全局变量定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-局部变量定义"><span class="nav-text">2.2. 局部变量定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-变量的引用规范"><span class="nav-text">2.3. 变量的引用规范</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Shell函数的命名及函数定义规范"><span class="nav-text">3. Shell函数的命名及函数定义规范</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Shell脚本（模块）高级命名规范"><span class="nav-text">4. Shell脚本（模块）高级命名规范</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Shell脚本的代码风格"><span class="nav-text">5. Shell脚本的代码风格</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-代码框架"><span class="nav-text">5.1 代码框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-缩进规范"><span class="nav-text">5.2. 缩进规范</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Shell脚本的变量及文件检查规范"><span class="nav-text">6. Shell脚本的变量及文件检查规范</span></a></li></ol></div>
             
 
           </div>

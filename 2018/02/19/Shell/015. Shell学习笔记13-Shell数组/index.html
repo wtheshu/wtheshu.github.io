@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Shell," />
+
+
+<meta name="description" content="GO   1. Shell数组介绍1.1. 为什么会产生Shell数组通常在开发Shell脚本时，定义变量采用的形式为a=1;b=2;c=3，可如果有多个变量呢？这时再逐个地定义就会很费劲，并且要是有多个不确定的变量内容，也会难以进行变量定义，此外，快速读取不同变量的值也是一件很痛苦的事情，于是数组就诞生了，它就是为了解决上述问题而出现的。 1.2. 什么是Shell数组简单地说，Shell的数">
+<meta name="keywords" content="Shell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell学习笔记13-Shell数组">
+<meta property="og:url" content="http://www.theshu.top/2018/02/19/Shell/015. Shell学习笔记13-Shell数组/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="GO   1. Shell数组介绍1.1. 为什么会产生Shell数组通常在开发Shell脚本时，定义变量采用的形式为a=1;b=2;c=3，可如果有多个变量呢？这时再逐个地定义就会很费劲，并且要是有多个不确定的变量内容，也会难以进行变量定义，此外，快速读取不同变量的值也是一件很痛苦的事情，于是数组就诞生了，它就是为了解决上述问题而出现的。 1.2. 什么是Shell数组简单地说，Shell的数">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-01T04:57:33.583Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shell学习笔记13-Shell数组">
+<meta name="twitter:description" content="GO   1. Shell数组介绍1.1. 为什么会产生Shell数组通常在开发Shell脚本时，定义变量采用的形式为a=1;b=2;c=3，可如果有多个变量呢？这时再逐个地定义就会很费劲，并且要是有多个不确定的变量内容，也会难以进行变量定义，此外，快速读取不同变量的值也是一件很痛苦的事情，于是数组就诞生了，它就是为了解决上述问题而出现的。 1.2. 什么是Shell数组简单地说，Shell的数">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/02/19/Shell/015. Shell学习笔记13-Shell数组/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Shell学习笔记13-Shell数组 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/015. Shell学习笔记13-Shell数组/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Shell学习笔记13-Shell数组</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:41:39+08:00">2018-02-19</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-01T12:57:33+08:00">2018-03-01</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Shell/" itemprop="url" rel="index"><span itemprop="name">Shell</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>GO</p>
+</blockquote>
+<hr>
+<h1 id="1-Shell数组介绍"><a href="#1-Shell数组介绍" class="headerlink" title="1. Shell数组介绍"></a>1. Shell数组介绍</h1><h2 id="1-1-为什么会产生Shell数组"><a href="#1-1-为什么会产生Shell数组" class="headerlink" title="1.1. 为什么会产生Shell数组"></a>1.1. 为什么会产生Shell数组</h2><p>通常在开发Shell脚本时，定义变量采用的形式为<code>a=1;b=2;c=3</code>，可如果有多个变量呢？这时再逐个地定义就会很费劲，并且要是有多个不确定的变量内容，也会难以进行变量定义，此外，快速读取不同变量的值也是一件很痛苦的事情，于是数组就诞生了，它就是为了解决上述问题而出现的。</p>
+<h2 id="1-2-什么是Shell数组"><a href="#1-2-什么是Shell数组" class="headerlink" title="1.2. 什么是Shell数组"></a>1.2. 什么是Shell数组</h2><p>简单地说，Shell的数组就是一个元素集合，它把有限个元素（变量或字符内容）用一个名字来命令，然后用编号对它们进行区分。这名字就称为<strong>数组名</strong>，用于区分不同内容的编号就称为<strong>数组下标</strong>。组成数组的各个元素（变量）称为<strong>数组的元素</strong>，有时也称为<strong>下标变量</strong>。</p>
+<p>有了Shell数组之后，就可以用相同名字来引用一系列变量及变量值了，并通过<strong>数字（索引）</strong>来识别使用它们。在很多场合中，使用数组可以缩短和简化程序开发。</p>
+<h1 id="2-Shell数组的定义与增删改查"><a href="#2-Shell数组的定义与增删改查" class="headerlink" title="2. Shell数组的定义与增删改查"></a>2. Shell数组的定义与增删改查</h1><h2 id="2-1-Shell数组的定义"><a href="#2-1-Shell数组的定义" class="headerlink" title="2.1. Shell数组的定义"></a>2.1. Shell数组的定义</h2><p>Shell数组的定义有多种方法，列举如下：</p>
+<h3 id="方法1"><a href="#方法1" class="headerlink" title="方法1"></a>方法1</h3><p>用小括号将变量值括起来赋值给数组变量，每个变量值之间要用空格进行分隔。</p>
+<p>语法：<code>array=(value1 value2 value3 ...)</code></p>
+<p>示例如下：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# array=(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span>)	#&lt;==数组定义</div><div class="line">[root@theshu ~]# echo $&#123;array[*]&#125;	#&lt;==输出上面定义的数组的所有元素值，注意语法</div><div class="line"><span class="number">1</span> <span class="number">2</span> <span class="number">3</span></div></pre></td></tr></table></figure></p>
+<h3 id="方法2"><a href="#方法2" class="headerlink" title="方法2"></a>方法2</h3><p>用小括号将变量值括起来，同时采用键值对的形式赋值。</p>
+<p>语法：<code>array=([1]=one [2]=two [3]=three)</code></p>
+<p>此种方法为<code>key-value</code>键值对的形式，小括号里对应的数字为数组下标，等号后面的内容为下标对应的数组变量的值，此方法比较复杂，不推荐使用。</p>
+<p>示例如下：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="string">[root@theshu ~]</span># array=(<span class="string">[1]</span>=one <span class="string">[2]</span>=two <span class="string">[3]</span>=three)	#&lt;==数组定义</div><div class="line"><span class="string">[root@theshu ~]</span># echo $&#123;array<span class="string">[*]</span>&#125;	#&lt;==输出上面定义的数组的所有元素值</div><div class="line">one two three</div><div class="line"><span class="string">[root@theshu ~]</span># echo $&#123;array<span class="string">[1]</span>&#125;	#&lt;==输出上面定义的数组的第一个元素值</div><div class="line">one</div><div class="line"><span class="string">[root@theshu ~]</span># echo $&#123;array<span class="string">[2]</span>&#125;	#&lt;==输出上面定义的数组的第二个元素值</div><div class="line">two</div><div class="line"><span class="string">[root@theshu ~]</span># echo $&#123;array<span class="string">[3]</span>&#125;	#&lt;==输出上面定义的数组的第三个元素值</div><div class="line">three</div></pre></td></tr></table></figure></p>
+<h3 id="方法3"><a href="#方法3" class="headerlink" title="方法3"></a>方法3</h3><p>通过分别定义数组变量的方法来定义。</p>
+<p>语法：<code>array[0]=a; array[1]=b; array[2]=c</code></p>
+<p>此种定义方法比较麻烦，不推荐使用。</p>
+<p>示例如下：<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># array[0]=a</span></div><div class="line">[root@theshu ~]<span class="comment"># array[1]=b</span></div><div class="line">[root@theshu ~]<span class="comment"># array[2]=c</span></div><div class="line">[root@theshu ~]<span class="comment"># array[3]=d</span></div><div class="line">[root@theshu ~]<span class="comment"># echo $&#123;array[*]&#125;</span></div><div class="line">a b c d</div></pre></td></tr></table></figure></p>
+<h3 id="方法4"><a href="#方法4" class="headerlink" title="方法4"></a>方法4</h3><p>动态地定义数组变量，并使用命令的输出结果作为数组的内容。</p>
+<p>语法：<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">array=($(命令))</div><div class="line">或 </div><div class="line">array=(`命令`)</div></pre></td></tr></table></figure></p>
+<p>示例如下：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># mkdir /array/ -p</span></div><div class="line">[root@theshu ~]<span class="comment"># touch /array/&#123;1..3&#125;.txt</span></div><div class="line">[root@theshu ~]<span class="comment"># ll /array/</span></div><div class="line">total 0</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 0 </span>Mar <span class="number"> 1 </span>11:31 1.txt</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 0 </span>Mar <span class="number"> 1 </span>11:31 2.txt</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 0 </span>Mar <span class="number"> 1 </span>11:31 3.txt</div><div class="line">[root@theshu ~]<span class="comment"># array=($(ls /array))</span></div><div class="line">[root@theshu ~]<span class="comment"># echo $&#123;array[*]&#125;</span></div><div class="line">1.txt 2.txt 3.txt</div></pre></td></tr></table></figure></p>
+<h3 id="方法5"><a href="#方法5" class="headerlink" title="方法5"></a>方法5</h3><p>还可以使用<code>declare -a array</code>来定义数组类型，但是这样用的情况比较少。一般不用。了解即可。    </p>
+<h2 id="2-2-Shell数组的打印及输出"><a href="#2-2-Shell数组的打印及输出" class="headerlink" title="2.2. Shell数组的打印及输出"></a>2.2. Shell数组的打印及输出</h2><h3 id="1-打印数组元素"><a href="#1-打印数组元素" class="headerlink" title="1. 打印数组元素"></a>1. 打印数组元素</h3><p>此为常用知识点，需要重点掌握。</p>
+<ul>
+<li>打印单个数组元素用<code>${数组名[下标]}</code>，当未指定数组小标时，数组的小标将从0开始。</li>
+<li>使用<code>*</code>或<code>@</code>可以得到整个数组的内容。</li>
+</ul>
+<p>示例如下：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# array=(<span class="keyword">one</span> <span class="keyword">two</span> three)</div><div class="line">[root@theshu ~]# echo <span class="variable">$&#123;array</span>[0]&#125;</div><div class="line"><span class="keyword">one</span></div><div class="line">[root@theshu ~]# echo <span class="variable">$&#123;array</span>[1]&#125;</div><div class="line"><span class="keyword">two</span></div><div class="line">[root@theshu ~]# echo <span class="variable">$&#123;array</span>[2]&#125;</div><div class="line">three</div><div class="line">[root@theshu ~]# echo <span class="variable">$&#123;array</span>[*]&#125;</div><div class="line"><span class="keyword">one</span> <span class="keyword">two</span> three</div><div class="line">[root@theshu ~]# echo <span class="variable">$&#123;array</span>[@]&#125;</div><div class="line"><span class="keyword">one</span> <span class="keyword">two</span> three</div></pre></td></tr></table></figure></p>
+<h3 id="2-打印数组元素的个数"><a href="#2-打印数组元素的个数" class="headerlink" title="2. 打印数组元素的个数"></a>2. 打印数组元素的个数</h3><p>此为常用知识点，需要重点掌握。</p>
+<ul>
+<li>使用<code>${井数组名[@或*]}</code>可以得到数组的长度。</li>
+<li>这和变量子串的知识是一样的，因为数组也是变量，只不过是特殊的变量，因此变量的子串替换等知识也适用于数组。</li>
+</ul>
+<p>示例如下：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="string">[root@theshu ~]</span># echo $&#123;array<span class="string">[*]</span>&#125;</div><div class="line">one two three</div><div class="line"><span class="string">[root@theshu ~]</span># echo $&#123;#array<span class="string">[*]</span>&#125;</div><div class="line"><span class="number">3</span></div><div class="line"><span class="string">[root@theshu ~]</span># echo $&#123;array<span class="string">[@]</span>&#125;</div><div class="line">one two three</div><div class="line"><span class="string">[root@theshu ~]</span># echo $&#123;#array<span class="string">[@]</span>&#125;</div><div class="line"><span class="number">3</span></div></pre></td></tr></table></figure></p>
+<h3 id="3-数组赋值"><a href="#3-数组赋值" class="headerlink" title="3. 数组赋值"></a>3. 数组赋值</h3><p>此知识不常用，了解即可。</p>
+<ul>
+<li>可直接通过<code>数组名[下标]</code>对数组进行引用赋值，如果下标不存在，则自动添加一个新的数组元素，如果小标存在，则覆盖原来的值。</li>
+</ul>
+<p>示例如下：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># array=(one two three)</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $&#123;array[*]&#125;</span></div><div class="line">one two three</div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># array[3]=four</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $&#123;array[*]&#125;</span></div><div class="line">one two three four</div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># array[0]=theshu</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $&#123;array[*]&#125;</span></div><div class="line">theshu two three four</div></pre></td></tr></table></figure></p>
+<h3 id="4-数组的删除"><a href="#4-数组的删除" class="headerlink" title="4. 数组的删除"></a>4. 数组的删除</h3><p>因为数组本质上还是变量，因此可通过<code>unset 数组[下标]</code>清除相应的数组元素，如果不带下标，则表示清除整个数组的所有数据。</p>
+<p>示例如下：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $&#123;array[*]&#125;</span></div><div class="line">theshu two three four</div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># unset array[1]</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $&#123;array[*]&#125;</span></div><div class="line">theshu three four</div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># unset array</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># echo $&#123;array[*]&#125;</span></div></pre></td></tr></table></figure></p>
+<h3 id="5-数组内容的截取和替换"><a href="#5-数组内容的截取和替换" class="headerlink" title="5. 数组内容的截取和替换"></a>5. 数组内容的截取和替换</h3><p>这里和变量子串的替换是一样的，因为数组是特殊的变量。</p>
+<p>数组元素部分的内容截取的示例如下：<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># array=(1 2 3 4 5)</span></div><div class="line">[root@theshu ~]<span class="comment"># echo $&#123;array[@]:1:3&#125;	#&lt;==截取1号到3号数组元素</span></div><div class="line"><span class="number">2</span> <span class="number">3</span> <span class="number">4</span></div><div class="line">[root@theshu ~]<span class="comment"># array=($(echo &#123;a..z&#125;))	#&lt;==将变量的结果赋值给数组变量</span></div><div class="line">[root@theshu ~]<span class="comment"># echo $&#123;array[@]&#125;</span></div><div class="line">a b c d e f g h i j k l m n o p q r s t u v w x y z</div><div class="line">[root@theshu ~]<span class="comment"># echo $&#123;array[@]:1:3&#125;	#&lt;==截取下标为1到3的数组元素</span></div><div class="line">b c d</div><div class="line">[root@theshu ~]<span class="comment"># echo $&#123;array[@]:0:2&#125;	#&lt;==截取下标为0到2的数组元素</span></div><div class="line">a b</div></pre></td></tr></table></figure></p>
+<p>替换数组元素部分内容的代码如下：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# array=(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">1</span> <span class="number">1</span>)</div><div class="line">[root@theshu ~]# echo $&#123;array[@]/<span class="number">1</span>/b&#125;</div><div class="line">b <span class="number">2</span> <span class="number">3</span> b b</div><div class="line">#&lt;==把数组中的<span class="number">1</span>替换成b，原数组未被修改，和sed很像</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>提示：调用方法为<code>${数组名[@或*]/查找字符/替换字符}</code>，该操作不会改变原先数组的内容，如果需要修改，可以参考上面的例子，重新定义数组。</p>
+</blockquote>
+<p>删除数组元素部分内容的代码如下：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# array=(<span class="keyword">one</span> <span class="keyword">two</span> three four five)</div><div class="line">[root@theshu ~]# echo <span class="variable">$&#123;array</span>[@]&#125;</div><div class="line"><span class="keyword">one</span> <span class="keyword">two</span> three four five</div><div class="line">[root@theshu ~]# echo <span class="variable">$&#123;array</span>[@]#o*&#125;	#&lt;==从左边开始匹配最短的数组元素，并删除</div><div class="line">ne <span class="keyword">two</span> three four five</div><div class="line">[root@theshu ~]# echo <span class="variable">$&#123;array</span>[@]##o*&#125;	#&lt;==从左边开始匹配最长的数组元素，并删除</div><div class="line"><span class="keyword">two</span> three four five</div><div class="line">[root@theshu ~]# echo <span class="variable">$&#123;array</span>[@]%f*&#125;	#&lt;==从右边开始匹配最短的数组元素，并删除</div><div class="line"><span class="keyword">one</span> <span class="keyword">two</span> three</div><div class="line">[root@theshu ~]# echo <span class="variable">$&#123;array</span>[@]%%f*&#125;	#&lt;==从右边开始匹配最长的数组元素，并删除</div><div class="line"><span class="keyword">one</span> <span class="keyword">two</span> three</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>提示：数组也是变量，因此也适合于前面讲解过的变量的子串处理的功能应用。数组的其他相关知识可通过<code>man bash</code>命令然后搜索<code>Areays</code>来了解。</p>
+</blockquote>
+<h1 id="3-Shell数组脚本开发实践"><a href="#3-Shell数组脚本开发实践" class="headerlink" title="3. Shell数组脚本开发实践"></a>3. Shell数组脚本开发实践</h1><p>范例1：使用循环批量输出数组的元素</p>
+<ul>
+<li><p>方法1：通过C语言型的for循环语句打印数组元素</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">array=(1 2 3 4 5)</div><div class="line"><span class="keyword">for</span> ((i=0; i&lt;<span class="variable">$&#123;#array[*]&#125;</span>; i++))</div><div class="line"><span class="keyword">do</span></div><div class="line">	<span class="built_in">echo</span> <span class="variable">$&#123;array[i]&#125;</span></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>方法2：通过普通for循环语句打印数组元素</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">array=(1 2 3 4 5)</div><div class="line"><span class="keyword">for</span> n <span class="keyword">in</span> <span class="variable">$&#123;array[*]&#125;</span></div><div class="line"><span class="keyword">do</span></div><div class="line">	<span class="built_in">echo</span> <span class="variable">$n</span></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>方法3：使用while循环语句打印数组元素</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">array=(1 2 3 4 5)</div><div class="line">i=0</div><div class="line"><span class="keyword">while</span> ((i&lt;<span class="variable">$&#123;#array[*]&#125;</span>))	</div><div class="line"><span class="keyword">do</span></div><div class="line">	<span class="built_in">echo</span> <span class="variable">$&#123;array[i]&#125;</span></div><div class="line">	((i++))</div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>范例2：通过竖向列举法定义数组元素并批量打印<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">array=(</div><div class="line">	theshu</div><div class="line">	theshan</div><div class="line">	thepi</div><div class="line">	thewang</div><div class="line">	)</div><div class="line"><span class="keyword">for</span> ((i=0; i&lt;<span class="comment">#&#123;#array[*]&#125;; i++))\</span></div><div class="line"><span class="keyword">do</span></div><div class="line">	<span class="built_in">echo</span> <span class="string">"This is num <span class="variable">$i</span>, then content is <span class="variable">$&#123;array[$i]&#125;</span>"</span></div><div class="line"><span class="keyword">done</span></div><div class="line"><span class="built_in">echo</span> ------------------</div><div class="line"><span class="built_in">echo</span> <span class="string">"array len:<span class="variable">$&#123;#array[*]&#125;</span>"</span></div></pre></td></tr></table></figure></p>
+<h1 id="4-Shell数组的重要命令"><a href="#4-Shell数组的重要命令" class="headerlink" title="4. Shell数组的重要命令"></a>4. Shell数组的重要命令</h1><h2 id="4-1-定义命令"><a href="#4-1-定义命令" class="headerlink" title="4.1. 定义命令"></a>4.1. 定义命令</h2><ul>
+<li>静态数组：<code>array=(1 2 3)</code></li>
+<li>动态数组：<code>array=($(ls))</code></li>
+<li>为数组赋值：<code>array[3]=4</code></li>
+</ul>
+<h2 id="4-2-打印命令"><a href="#4-2-打印命令" class="headerlink" title="4.2. 打印命令"></a>4.2. 打印命令</h2><ul>
+<li>打印所有元素：<code>${array[@]}</code>或<code>${array[*]}</code></li>
+<li>打印数组长度：<code>${井array[@]}</code>或<code>${井array[*]}</code></li>
+<li>打印单个元素：<code>${array[i]}</code>其中i是数组下标</li>
+</ul>
+<h2 id="4-3-循环打印的常用基本语法"><a href="#4-3-循环打印的常用基本语法" class="headerlink" title="4.3. 循环打印的常用基本语法"></a>4.3. 循环打印的常用基本语法</h2><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">arr=(</div><div class="line">	10.0.0.11</div><div class="line">	10.0.0.22</div><div class="line">	10.0.0.33</div><div class="line">)</div><div class="line"><span class="comment">#&lt;==C语言型for循环语法</span></div><div class="line"><span class="keyword">for</span> ((i=0; i&lt;<span class="variable">$&#123;#arr[*]; i++&#125;</span>))</div><div class="line"><span class="keyword">do</span></div><div class="line">	<span class="built_in">echo</span> <span class="string">"<span class="variable">$&#123;arr[$i]&#125;</span>"</span></div><div class="line"><span class="keyword">done</span></div><div class="line"><span class="built_in">echo</span> ----------------</div><div class="line"><span class="comment">#&lt;==普通for循环语法</span></div><div class="line"><span class="keyword">for</span> n <span class="keyword">in</span> <span class="variable">$&#123;arr[*]&#125;</span></div><div class="line"><span class="keyword">do</span></div><div class="line">	<span class="built_in">echo</span> <span class="string">"<span class="variable">$n</span>"</span></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+<h1 id="5-Shell数组相关面试题及高级实战案例"><a href="#5-Shell数组相关面试题及高级实战案例" class="headerlink" title="5. Shell数组相关面试题及高级实战案例"></a>5. Shell数组相关面试题及高级实战案例</h1><h2 id="5-1-范例1"><a href="#5-1-范例1" class="headerlink" title="5.1. 范例1"></a>5.1. 范例1</h2><p>利用bash for循环打印下面这句话中字母数不大于6的单词（某企业面试真题）：<code>I am theshu teacher welcome to theshu training class</code></p>
+<p>解答思路具体如下：</p>
+<ul>
+<li>先把所有的单词放到数组里，然后一次进行判断。命令：<code>array=(I am theshu teache welcome to theshu training class)</code></li>
+<li><p>计算变量内容的长度。常见的方法有4种：<code>char=theshu</code></p>
+<ul>
+<li><code>echo $char | wc -L</code></li>
+<li><code>echo ${井char}</code></li>
+<li><code>expr length $char</code></li>
+<li><code>echo $char | awk &#39;{print length($0)}&#39;</code></li>
+</ul>
+</li>
+<li><p>方法1：通过数组方法来实现（本例给出了用两种for循环打印数组元素的方法）：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">arr=(I am theshu teacher welcome to theshu training class)</div><div class="line"><span class="keyword">for</span> ((i=0; i&lt;<span class="variable">$&#123;#arr[*]; i++&#125;</span>))</div><div class="line"><span class="keyword">do</span></div><div class="line">	<span class="keyword">if</span> [ <span class="variable">$&#123;#arr[$i]&#125;</span> -lt 6 ]</div><div class="line">	<span class="keyword">then</span></div><div class="line">		<span class="built_in">echo</span> <span class="string">"<span class="variable">$&#123;arr[$i]&#125;</span>"</span></div><div class="line">	<span class="keyword">fi</span></div><div class="line"><span class="keyword">done</span></div><div class="line"><span class="built_in">echo</span> ------------</div><div class="line"><span class="keyword">for</span> word <span class="keyword">in</span> <span class="variable">$&#123;array[*]&#125;</span></div><div class="line"><span class="keyword">do</span></div><div class="line">	<span class="keyword">if</span> [ `expr length <span class="variable">$word</span>` -lt 6 ];<span class="keyword">then</span></div><div class="line">		<span class="built_in">echo</span> <span class="variable">$word</span></div><div class="line">	<span class="keyword">fi</span></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>方法2：使用for循环列举取值列表法：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> word <span class="keyword">in</span> I am theshu teacher welcome to trheshu training class</div><div class="line"><span class="keyword">do</span></div><div class="line">	<span class="keyword">if</span> [ `<span class="built_in">echo</span> <span class="variable">$word</span> | wc -L` -lt 6 ]; <span class="keyword">then</span></div><div class="line">		<span class="built_in">echo</span> <span class="variable">$word</span></div><div class="line">	<span class="keyword">fi</span></div><div class="line"><span class="keyword">done</span></div><div class="line"></div><div class="line"></div><div class="line">chars=<span class="string">"I am theshu teacher welcome to theshu training class"</span></div><div class="line"><span class="keyword">for</span> word <span class="keyword">in</span> <span class="variable">$chars</span></div><div class="line"><span class="keyword">do</span></div><div class="line">	<span class="keyword">if</span> [ `<span class="built_in">echo</span> <span class="variable">$word</span> | wc -L` -lt 6 ]; <span class="keyword">then</span></div><div class="line">		<span class="built_in">echo</span> <span class="variable">$word</span></div><div class="line">	<span class="keyword">fi</span></div><div class="line"><span class="keyword">done</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>方法3：通过awk循环实现</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">chars-<span class="string">"I am theshu teacher welcome ti theshu training class"</span></div><div class="line"><span class="built_in">echo</span> <span class="variable">$chars</span> | awk <span class="string">'&#123;for(i=1;i&lt;NF;i++) if(length($i)&lt;=6) print $i&#125;'</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="5-2-范例2"><a href="#5-2-范例2" class="headerlink" title="5.2. 范例2"></a>5.2. 范例2</h2><p>批量检查多个网站地址是否正常。要求如下：</p>
+<ul>
+<li>使用Shell数组的方法实现，检测策略尽量模拟用户访问</li>
+<li>每10秒进行一次全部检测，无法访问的输出报警</li>
+<li>待检测的地址如下：<figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">http:</span><span class="comment">//blog.theshu1.com</span></div><div class="line"><span class="symbol">http:</span><span class="comment">//blog.theshu2.com</span></div><div class="line"><span class="symbol">http:</span><span class="comment">//blog.theshu3.com</span></div><div class="line"><span class="symbol">http:</span><span class="comment">//10.0.0.7</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>解体思路：</p>
+<ul>
+<li>把URL定义成数组，形成函数</li>
+<li>编写URL检查脚本函数，传入数组的元素，即URL</li>
+<li>组合实现整个案例，编写main主函数（即执行函数），每隔10秒检查一次</li>
+</ul>
+<p>下面的参考答案采用了Shell数组的方法，同时检测多个URL是否正常，并给出专业的展示效果：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">. /etc/init.d/<span class="built_in">functions</span></div><div class="line"></div><div class="line">check_count=0</div><div class="line">url_list=(</div><div class="line">http://blog.theshu1.com		  </div><div class="line">http://blog.theshu2.com		  </div><div class="line">http://blog.theshu3.com		  </div><div class="line">http://10.0.0.7</div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">wait</span></span>()&#123;</div><div class="line">	<span class="built_in">echo</span> -n <span class="string">'3秒后，执行检查URL操作.'</span>;</div><div class="line">	<span class="keyword">for</span> ((i=0; i&lt;3; i++))</div><div class="line">	<span class="keyword">do</span></div><div class="line">		<span class="built_in">echo</span> -n <span class="string">"."</span>; sleep 1</div><div class="line">	<span class="keyword">done</span></div><div class="line">	<span class="keyword">done</span></div><div class="line">	<span class="built_in">echo</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">check_url</span></span>()&#123;</div><div class="line">	<span class="built_in">wait</span></div><div class="line">	<span class="keyword">for</span> ((i=0; i&lt;`<span class="built_in">echo</span> <span class="variable">$&#123;#url_list[*]&#125;</span>`; i++))</div><div class="line">	<span class="keyword">do</span></div><div class="line">		wget -o /dev/null -T 3 --tries=1 --spider <span class="variable">$&#123;url_list[$i]&#125;</span> &gt;/dev/null 2&gt;&amp;1</div><div class="line">		<span class="keyword">if</span> [ $? -eq 0 ]</div><div class="line">		<span class="keyword">then</span></div><div class="line">			action <span class="string">"<span class="variable">$&#123;url_list[$i]&#125;</span>"</span> /bin/<span class="literal">true</span></div><div class="line">		<span class="keyword">else</span></div><div class="line">			action <span class="string">"<span class="variable">$&#123;url_list[$i]&#125;</span>"</span> /bin/<span class="literal">false</span></div><div class="line">		<span class="keyword">fi</span></div><div class="line">	<span class="keyword">done</span></div><div class="line">	((check_count++))</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="title">main</span></span>()&#123;</div><div class="line">	<span class="keyword">while</span> <span class="literal">true</span></div><div class="line">	<span class="keyword">do</span></div><div class="line">		check_url</div><div class="line">		<span class="built_in">echo</span> <span class="string">"------------check count:<span class="variable">$&#123;check_count&#125;</span>----------"</span></div><div class="line">		sleep 10</div><div class="line">	<span class="keyword">done</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">main</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>提示：实际使用时，一些基础的函数脚本（例如：加颜色的函数）是放在函数文件里的（例如：放在/etc/init.d/functions里），与执行的脚本内容部分分离，这样看起来会更清爽，大型的语言程序都是这样开发的。</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>OK</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/19/Shell/014. Shell学习笔记12-循环控制及状态返回值/" rel="next" title="Shell学习笔记12-循环控制及状态返回值">
+                <i class="fa fa-chevron-left"></i> Shell学习笔记12-循环控制及状态返回值
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/19/Shell/016. Shell学习笔记14-Shell脚本开发规范/" rel="prev" title="Shell学习笔记14-Shell脚本开发规范">
+                Shell学习笔记14-Shell脚本开发规范 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">57</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">10</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Shell数组介绍"><span class="nav-text">1. Shell数组介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-为什么会产生Shell数组"><span class="nav-text">1.1. 为什么会产生Shell数组</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-什么是Shell数组"><span class="nav-text">1.2. 什么是Shell数组</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Shell数组的定义与增删改查"><span class="nav-text">2. Shell数组的定义与增删改查</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-Shell数组的定义"><span class="nav-text">2.1. Shell数组的定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方法1"><span class="nav-text">方法1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法2"><span class="nav-text">方法2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法3"><span class="nav-text">方法3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法4"><span class="nav-text">方法4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#方法5"><span class="nav-text">方法5</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-Shell数组的打印及输出"><span class="nav-text">2.2. Shell数组的打印及输出</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-打印数组元素"><span class="nav-text">1. 打印数组元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-打印数组元素的个数"><span class="nav-text">2. 打印数组元素的个数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-数组赋值"><span class="nav-text">3. 数组赋值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-数组的删除"><span class="nav-text">4. 数组的删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-数组内容的截取和替换"><span class="nav-text">5. 数组内容的截取和替换</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Shell数组脚本开发实践"><span class="nav-text">3. Shell数组脚本开发实践</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Shell数组的重要命令"><span class="nav-text">4. Shell数组的重要命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-定义命令"><span class="nav-text">4.1. 定义命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-打印命令"><span class="nav-text">4.2. 打印命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-循环打印的常用基本语法"><span class="nav-text">4.3. 循环打印的常用基本语法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Shell数组相关面试题及高级实战案例"><span class="nav-text">5. Shell数组相关面试题及高级实战案例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-范例1"><span class="nav-text">5.1. 范例1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-范例2"><span class="nav-text">5.2. 范例2</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
