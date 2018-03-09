@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="技术,LAMP,Apache," />
+
+
+<meta name="description" content="这篇学习笔记，是工作中经常用到的Apache的基本配置，一定要熟练掌握。  1. 默认虚拟主机1.1. 虚拟主机和默认虚拟主机首先我们要了解一下虚拟主机的概念。早期的Linux服务器上，一个服务器只能运行一个网站。但随着技术的发展，一个服务器上可以跑多个网站了，这样可以帮助我们节省成本。其实，这里的服务器就叫做主机，早期一个主机对应一个站点。而现在，一个主机可以跑多个站点，所以就有了虚拟主机的概念">
+<meta name="keywords" content="技术,LAMP,Apache">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LAMP之Apache的初始配置">
+<meta property="og:url" content="http://www.theshu.top/2018/03/07/技术/005. LAMP之Apache的初始配置/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="这篇学习笔记，是工作中经常用到的Apache的基本配置，一定要熟练掌握。  1. 默认虚拟主机1.1. 虚拟主机和默认虚拟主机首先我们要了解一下虚拟主机的概念。早期的Linux服务器上，一个服务器只能运行一个网站。但随着技术的发展，一个服务器上可以跑多个网站了，这样可以帮助我们节省成本。其实，这里的服务器就叫做主机，早期一个主机对应一个站点。而现在，一个主机可以跑多个站点，所以就有了虚拟主机的概念">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-08T11:36:42.232Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LAMP之Apache的初始配置">
+<meta name="twitter:description" content="这篇学习笔记，是工作中经常用到的Apache的基本配置，一定要熟练掌握。  1. 默认虚拟主机1.1. 虚拟主机和默认虚拟主机首先我们要了解一下虚拟主机的概念。早期的Linux服务器上，一个服务器只能运行一个网站。但随着技术的发展，一个服务器上可以跑多个网站了，这样可以帮助我们节省成本。其实，这里的服务器就叫做主机，早期一个主机对应一个站点。而现在，一个主机可以跑多个站点，所以就有了虚拟主机的概念">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/03/07/技术/005. LAMP之Apache的初始配置/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>LAMP之Apache的初始配置 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/07/技术/005. LAMP之Apache的初始配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LAMP之Apache的初始配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-07T13:58:31+08:00">2018-03-07</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-08T19:36:42+08:00">2018-03-08</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这篇学习笔记，是工作中经常用到的Apache的基本配置，一定要熟练掌握。</p>
+<hr>
+<h1 id="1-默认虚拟主机"><a href="#1-默认虚拟主机" class="headerlink" title="1. 默认虚拟主机"></a>1. 默认虚拟主机</h1><h2 id="1-1-虚拟主机和默认虚拟主机"><a href="#1-1-虚拟主机和默认虚拟主机" class="headerlink" title="1.1. 虚拟主机和默认虚拟主机"></a>1.1. 虚拟主机和默认虚拟主机</h2><p>首先我们要了解一下虚拟主机的概念。早期的Linux服务器上，一个服务器只能运行一个网站。但随着技术的发展，一个服务器上可以跑多个网站了，这样可以帮助我们节省成本。其实，这里的服务器就叫做主机，早期一个主机对应一个站点。而现在，一个主机可以跑多个站点，所以就有了<strong>虚拟主机</strong>的概念。</p>
+<p>既然服务器上可以有多个虚拟主机，每个虚拟主机都会定义一个域名（当然也可以定义多个），只要把这个域名解析指向到该台服务器，我们自然就可以访问这个站点了。域名解析服务器IP地址，是由DNS服务器来完成的。</p>
+<p>加入你访问的域名指向了你的服务器，而你又在这台服务器上配置标记了这个域名，这样这个域名就能够被正常访问。但是如果没有标记的域名也指向了这台服务器，那会有什么情况发生呢？这就又有了默认虚拟主机的概念产生。</p>
+<p>httpd有一个特点，它首先是支持多个虚拟主机的，也就是可以在一个服务器上运行多个站点，标记多个域名。有标记的域名指向这台服务器，就会由对应的虚拟主机来处理。任何一个其它的没有标记的域名指向这台服务器，即只要没有对应的虚拟主机，就会由默认虚拟主机来处理。</p>
+<p>那么这个默认虚拟主机该如何配置呢？下面就是配置它的方法。</p>
+<h2 id="1-2-虚拟主机的配置"><a href="#1-2-虚拟主机的配置" class="headerlink" title="1.2. 虚拟主机的配置"></a>1.2. 虚拟主机的配置</h2><p>httpd的主配置文件是http.conf。我们先来在主配置文件中找到虚拟主机的配置语句，并开启这个功能，如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> vim /usr/<span class="built_in">local</span>/apache2.4/conf/httpd.conf</span></div><div class="line"><span class="meta">#</span><span class="bash">&lt;==搜索关键字 httpd-vhost</span></div><div class="line">...</div><div class="line"><span class="meta">#</span><span class="bash"> Virtual hosts</span></div><div class="line">Include conf/extra/httpd-vhosts.conf</div><div class="line">...</div><div class="line"><span class="meta">#</span><span class="bash">&lt;==找到上面这行把行首的井号删除，后面的绝对路径文件名即是虚拟主机的配置文件。保存退出</span></div></pre></td></tr></table></figure></p>
+<p>在httpd的主配置文件httpd.conf中开启了虚拟主机的功能之后，再来编辑虚拟主机配置文件/usr/local/apache2.4/conf/extra/httpd-vhosts.conf，后面的操作都是在这个文件里面完成的。</p>
+<p>打开虚拟主机的配置文件，可以先看看该文件最后面两端（以<code>&lt;VirtualHost *:80&gt;</code>开头，以<code>&lt;/VirtualHost&gt;</code>结尾），这样一段就是一个虚拟主机，在这里面可以定义网站的域名和对应的网站程序所在目录。而默认虚拟主机就是第一个配置段。做实验：把该配置文件里面的两端<code>&lt;VirtualHost&gt;</code>重新编辑如下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;VirtualHost *:<span class="number">80</span>&gt;</div><div class="line">    ServerAdmin admin@localhost.com</div><div class="line">    DocumentRoot <span class="string">"/data/wwwroot/aming.com"</span></div><div class="line">    ServerName aming.com</div><div class="line">    ServerAlias www<span class="selector-class">.aming</span><span class="selector-class">.com</span></div><div class="line">    ErrorLog <span class="string">"logs/aming.com-error_log"</span></div><div class="line">    CustomLog <span class="string">"logs/aming.com-access_log"</span> common</div><div class="line">&lt;/VirtualHost&gt;</div><div class="line"></div><div class="line">&lt;VirtualHost *:<span class="number">80</span>&gt;</div><div class="line">    DocumentRoot <span class="string">"/data/wwwroot/www.123.com"</span></div><div class="line">    ServerName www.<span class="number">123</span>.com</div><div class="line">&lt;/VirtualHost&gt;</div></pre></td></tr></table></figure></p>
+<p>上述配置说明：</p>
+<ul>
+<li><code>ServerAdmin</code>指定管理员邮箱，这个没有什么实质作用，平时不用它。</li>
+<li><code>DocumentRoot</code>为该虚拟主机站点的根目录，网站的程序就放在这个目录下面。</li>
+<li><code>ServerName</code>为网站的域名，在这后面只能写一个域名。</li>
+<li><code>ServerAlias</code>为网站的第二域名，在这后面可以写多个域名，用空格分隔。</li>
+<li><code>ErrorLog</code>为站点的错误日志。</li>
+<li><code>CustomLog</code>为站点的访问日志，在工作中这个访问日志用得很多，需要关注一下。</li>
+</ul>
+<p>假如在虚拟主机配置文件中，我们只定义了两个站点：aming.com和123.com，那么当把第三个域名abc.com指向本机的时候，当在浏览器访问abc.com时，会去访问aming.com（因为它是第一段定义的，所以是默认虚拟主机）。不妨来做个实验：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># mkdir -p /data/wwwroot/aming.com /data/wwwroot/www.123.com</span></div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># echo <span class="string">"aming.com"</span> &gt; /data/wwwroot/aming.com/index.html</span></div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># echo <span class="string">"123.com"</span> &gt; /data/wwwroot/www.123.com/index.html</span></div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># /usr/local/apache2.4/bin/apachectl -t</span></div><div class="line">Syntax OK	<span class="meta">#&lt;==检查httpd配置是否正确</span></div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># /usr/local/apache2.4/bin/apachectl graceful	</span></div><div class="line">httpd <span class="literal">not</span> running, trying <span class="keyword">to</span> start	<span class="meta">#&lt;==热重启httpd服务，即不停止服务重新加载配置文件</span></div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># curl -x127.0.0.1:80 aming.com</span></div><div class="line">aming.com</div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># curl -x127.0.0.1:80 www.123.com</span></div><div class="line"><span class="number">123.</span>com</div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># curl -x127.0.0.1:80 www.abc.com</span></div><div class="line">aming.com</div></pre></td></tr></table></figure></p>
+<p>由上例可以看出，默认虚拟主机为aming.com，不过把什么域名指向该服务器，只要配置文件中没有标记，就会访问这个默认虚拟主机。</p>
+<hr>
+<h1 id="2-用户认证"><a href="#2-用户认证" class="headerlink" title="2. 用户认证"></a>2. 用户认证</h1><h2 id="2-1-对整站做用户认证"><a href="#2-1-对整站做用户认证" class="headerlink" title="2.1. 对整站做用户认证"></a>2.1. 对整站做用户认证</h2><p>这个功能就是在用户访问网站的时候，需要输入用户名和密码才能顺利访问。一些比较重要的站点或者网站后台通常会加上用户认证，目的是保证安全。</p>
+<p>先来对123.com站点做一个全站的用户认证：把123.com那个虚拟主机编辑成如下内容：<br><figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf</span></div><div class="line"><span class="string">...</span></div><div class="line">&lt;VirtualHost *<span class="function">:80</span>&gt;</div><div class="line">    DocumentRoot <span class="string">"/data/wwwroot/www.123.com"</span></div><div class="line">    ServerName www.123.com</div><div class="line">    &lt;Directory <span class="string">/data/wwwroot/www.123.com</span>&gt;</div><div class="line">        AllowOverride AuthConfig</div><div class="line">        AuthName <span class="string">"123.com user auth"</span></div><div class="line">        AuthType Basic</div><div class="line">        AuthUserFile <span class="string">/data/.htpasswd</span></div><div class="line">        require valid-user</div><div class="line">    &lt;<span class="string">/Directory</span>&gt;</div><div class="line">&lt;<span class="string">/VirtualHost</span>&gt;</div><div class="line"><span class="string">...</span></div></pre></td></tr></table></figure></p>
+<p>以上配置文件中的说明：</p>
+<ul>
+<li><code>&lt;Directory /data/wwwroot/www.123.com&gt;</code> 指定认证的目录</li>
+<li><code>AllowOverride AuthConfig</code> 这个相当于打开认证的开关</li>
+<li><code>AuthName &quot;123.com user auth&quot;</code> 自定义认证的名字，作用不大</li>
+<li><code>AuthType Basic</code> 认证的类型，一般为Basic，其它类型几乎不用</li>
+<li><code>AuthUserFile /data/.htpasswd</code> 指定密码文件所在位置</li>
+<li><code>require valid-user</code> 指定需要认证的用户为全部可用用户</li>
+<li><code>&lt;/Directory&gt;</code> 结束标识</li>
+</ul>
+<p>这样httpd的配置文件就配置完成了，但还需要创建密码文件，操作步骤如下：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# /usr/local/apache2.4/bin/htpasswd -cm /data/.htpasswd aming</div><div class="line">New password:</div><div class="line">Re-type new password:</div><div class="line">Adding password <span class="keyword">for</span><span class="built_in"> user </span>aming</div><div class="line">[root@localhost ~]# /usr/local/apache2.4/bin/apachectl -t</div><div class="line">Syntax OK	#&lt;==验证没有问题后才能重启或者重新加载</div><div class="line">[root@localhost ~]# /usr/local/apache2.4/bin/apachectl graceful</div></pre></td></tr></table></figure></p>
+<p>上述配置文件中的说明：</p>
+<ul>
+<li><code>htpasswd</code>命令为创建用户的工具，<code>-c</code>为create（创建），<code>-m</code>指定密码加密方式为MD5。</li>
+<li><code>/data/.htpasswd</code>为密码文件，<code>aming</code>为要创建的用户。</li>
+<li>第一次执行该命令需要加<code>-c</code>，第二次再创建新的用户时，就不用加<code>-c</code>了，否则<code>/data/.htpasswd</code>文件会被重置，之前的用户被清空。</li>
+</ul>
+<p>配置完成后，用浏览器访问一下www.123.com，不过得提前在真实机上面更改一下hosts文件，把www.123.com域名指向这台Linux机器，这样才能通过浏览器访问成功。</p>
+<p>若是访问成功了，就会出现一个认证的提示框，需要输入用户名和密码。输入正确的用户名和密码后，才能进入到www.123.com的网站。</p>
+<h2 id="2-2-针对某个目录或文件做用户认证"><a href="#2-2-针对某个目录或文件做用户认证" class="headerlink" title="2.2. 针对某个目录或文件做用户认证"></a>2.2. 针对某个目录或文件做用户认证</h2><p>当然也可以针对某个目录或文件做用户认证，比如要对www.123.com/admin/目录进行认证，只需要修改一个地方，把<code>&lt;Directory /data/wwwroot/www.123.com&gt;</code> 改为 <code>&lt;Directory /data/wwwroot/www.123.com/admin/&gt;</code>。如果是一个文件，比如www.123.com/admin.php，则需要这样做：<br><figure class="highlight apache"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="section">&lt;VirtualHost *:80&gt;</span></div><div class="line">    <span class="attribute"><span class="nomarkup">DocumentRoot</span></span> <span class="string">"/data/wwwroot/www.123.com"</span></div><div class="line">    <span class="attribute"><span class="nomarkup">ServerName</span></span> www.123.com</div><div class="line">    <span class="section">&lt;FilesMatch admin.php&gt;</span>		<span class="comment">#&lt;==修改这里</span></div><div class="line">        <span class="attribute">AllowOverride</span> AuthConfig</div><div class="line">        <span class="attribute">AuthName</span> <span class="string">"123.com user auth"</span></div><div class="line">        <span class="attribute">AuthType</span> Basic</div><div class="line">        <span class="attribute">AuthUserFile</span> /data/.htpasswd</div><div class="line">        <span class="attribute">require</span> valid-user</div><div class="line">    <span class="section">&lt;/FilesMatch&gt;</span>	<span class="comment">#&lt;==以及修改这里</span></div><div class="line"><span class="section">&lt;/VirtualHost&gt;</span></div></pre></td></tr></table></figure></p>
+<p>但是这样修改后会有一个问题，网址中带有admin.php的链接都会弹出认证窗口。</p>
+<hr>
+<h1 id="3-配置域名301跳转"><a href="#3-配置域名301跳转" class="headerlink" title="3. 配置域名301跳转"></a>3. 配置域名301跳转</h1><p>这个用法比较普遍，一个网站可能会有多个域名，但是输入指向的一个网站的多个域名可能会发现，浏览器里的网址总是会变成一个固定的域名，这其实就是域名的跳转功能。</p>
+<p>做域名跳转有什么用呢？主要是有两方面的作用：</p>
+<ol>
+<li>一个站点有多个域名会对SEO有影响，说白了就是百度搜索关键词的排名有影响，如果把多个域名全部跳转到指定的一个域名，这样以这个域名为中心，就可以把权重集中在这个域名上，所以搜索关键词的排名也就靠前了。</li>
+<li>如果之前的某个域名不再使用了，但是搜索引擎还留着之前老域名的链接，这意味着用户可能会搜到我们的网站并且点击老的域名，因此需要把老域名做个跳转，跳到新域名，这样用户搜的时候，也可以访问到网站。</li>
+</ol>
+<p>下面来做实验实现这样一个需求，把123.com域名跳转到www.123.com，配置如下：<br><figure class="highlight apache"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="section">&lt;VirtualHost *:80&gt;</span></div><div class="line">    <span class="attribute"><span class="nomarkup">DocumentRoot</span></span> <span class="string">"/data/wwwroot/www.123.com"</span></div><div class="line">    <span class="attribute"><span class="nomarkup">ServerName</span></span> www.123.com</div><div class="line">    <span class="attribute">ServerAlias</span> 123.com</div><div class="line">    <span class="section">&lt;IfModule mod_rewrite.c&gt;</span></div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteEngine</span></span> <span class="literal">on</span></div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteCond</span></span> <span class="variable">%&#123;HTTP_HOST&#125;</span> ^123.com$</div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteRule</span></span> ^/(.*)$ http://www.123.com/<span class="number">$1</span><span class="meta"> [R=301,L]</span></div><div class="line">    <span class="section">&lt;/IfModule&gt;</span></div><div class="line"><span class="section">&lt;/VirtualHost&gt;</span></div></pre></td></tr></table></figure></p>
+<p>上述配置文件的说明：</p>
+<ul>
+<li><code>&lt;IfModule mod_rewrite.c&gt;</code> 要实现跳转功能需要mod_rewrite模块支持。</li>
+<li><code>RewriteEngine on</code> 打开rewrite功能</li>
+<li><code>RewriteCond %{HTTP_HOST} !^www.123.com$</code> 定义rewrite的条件，当主机名（域名）是123.com的时候满足条件。</li>
+<li><code>RewriteRule ^/(.*)$ http://www.123.com/$1 [R=301,L]</code> 定义rewrite的规则，当满足上面的条件时，这条规则才会执行。这里是有正则表达式存在的。RewriteRule后面由空格分成三个部分，第一部分为当前的URL，不过这个URL是不把主机头（也就是域名）算在内的；第二部分为要跳转的目标地址，这个地址可以写全（包含了主机头），当然也可以不加主机头，默认就是前面定义的ServerName；第三部分为一些选项，需要用方括号括起来，301为状态码，它称作”永久重定向”（还有一种跳转码为302，叫做”临时重定向”），L表示”last”，意思是跳转一次就结束了。</li>
+</ul>
+<p>要实现域名跳转，需要有<code>rewrite</code>模块支持，所以先查看httpd是否已经加载该模块，如果没有还需要配置：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># /usr/local/apache2.4/bin/apachectl -M | grep -i rewrite</span></div><div class="line"><span class="meta">#&lt;==没有任何输出，则需要编辑httpd的主配置文件</span></div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># vim /usr/local/apache2.4/conf/httpd.conf</span></div><div class="line"><span class="meta">#&lt;==搜索rewrite，找到那行把前面的井号去掉</span></div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># /usr/local/apache2.4/bin/apachectl  graceful</span></div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># /usr/local/apache2.4/bin/apachectl -M | grep -i rewrite</span></div><div class="line"> rewrite_module (shared)	<span class="meta">#&lt;==有这一行输出说明正常加载rewrite模块</span></div></pre></td></tr></table></figure></p>
+<p>配置完后，进行测试，可以用curl测试也可以看到效果，如下：<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# curl -x127<span class="meta">.0</span><span class="meta">.0</span><span class="meta">.1</span>:<span class="number">80</span> -I <span class="number">123.</span>com</div><div class="line">HTTP/<span class="number">1.1</span> <span class="number">301</span> Moved Permanently</div><div class="line"><span class="symbol">Date:</span> Wed, <span class="number">07</span> Mar <span class="number">2018</span> <span class="number">18</span>:<span class="number">28</span>:<span class="number">47</span> GMT</div><div class="line"><span class="symbol">Server:</span> Apache/<span class="number">2.4</span><span class="meta">.29</span> (Unix) PHP/<span class="number">5.6</span><span class="meta">.34</span></div><div class="line"><span class="symbol">Location:</span> http://www<span class="meta">.123</span>.com/</div><div class="line">Content-Type: text/html<span class="comment">; charset=iso-8859-1</span></div></pre></td></tr></table></figure></p>
+<p>可以看到状态码为301，跳转后的网站（Location那行）为<a href="http://www.123.com。" target="_blank" rel="external">http://www.123.com。</a></p>
+<p>如果是多个域名，应该这样配置：<br><figure class="highlight apache"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="section">&lt;VirtualHost *:80&gt;</span></div><div class="line">    <span class="attribute"><span class="nomarkup">DocumentRoot</span></span> <span class="string">"/data/wwwroot/www.123.com"</span></div><div class="line">    <span class="attribute"><span class="nomarkup">ServerName</span></span> www.123.com</div><div class="line">    <span class="attribute">ServerAlias</span> 123.com 456.com</div><div class="line">    <span class="section">&lt;IfModule mod_rewrite.c&gt;</span></div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteEngine</span></span> <span class="literal">on</span></div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteCond</span></span> <span class="variable">%&#123;HTTP_HOST&#125;</span> ^123.com$<span class="meta"> [OR]</span></div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteCond</span></span> <span class="variable">%&#123;HTTP_HOST&#125;</span> ^456.com$</div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteRule</span></span> ^/(.*)$ http://www.123.com/<span class="number">$1</span><span class="meta"> [R=301,L]</span></div><div class="line">    <span class="section">&lt;/IfModule&gt;</span></div><div class="line"><span class="section">&lt;/VirtualHost&gt;</span></div></pre></td></tr></table></figure></p>
+<p>或者<br><figure class="highlight apache"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="section">&lt;VirtualHost *:80&gt;</span></div><div class="line">    <span class="attribute"><span class="nomarkup">DocumentRoot</span></span> <span class="string">"/data/wwwroot/www.123.com"</span></div><div class="line">    <span class="attribute"><span class="nomarkup">ServerName</span></span> www.123.com</div><div class="line">    <span class="attribute">ServerAlias</span> 123.com 456.com</div><div class="line">    <span class="section">&lt;IfModule mod_rewrite.c&gt;</span></div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteEngine</span></span> <span class="literal">on</span></div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteCond</span></span> <span class="variable">%&#123;HTTP_HOST&#125;</span> !^www/123.com$</div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteRule</span></span> ^/(.*)$ http://www.123.com/<span class="number">$1</span><span class="meta"> [R=301,L]</span></div><div class="line">    <span class="section">&lt;/IfModule&gt;</span></div><div class="line"><span class="section">&lt;/VirtualHost&gt;</span></div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="4-配置访问日志"><a href="#4-配置访问日志" class="headerlink" title="4. 配置访问日志"></a>4. 配置访问日志</h1><p>这一节包含了两个内容，一个是Apache日志切割，另一个是不记录指定文件类型日志。</p>
+<p>访问日志的作用很大，不仅可以记录网站的访问情况，还可以在网站有异常发生时帮助我们定位问题，比如当有攻击时，是可以通过查看日志看到一些规律的。要配置httpd访问日志，首先要在主配置文件中定义日志的格式，打开主配置文件：<br><figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># vim /usr/local/apache2.4/conf/httpd.conf	#&lt;==搜索LogFormat</span></div><div class="line">LogFormat <span class="string">"%h %l %u %t \"%r\" %&gt;s %b \"%&#123;Referer&#125;i\" \"%&#123;User-Agent&#125;i\""</span> combined</div><div class="line">LogFormat <span class="string">"%h %l %u %t \"%r\" %&gt;s %b"</span> common</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>可以阿奎那到有两个格式的日志，建议使用第一个，记录的信息会更全。</li>
+<li>日志格式的说明如下：<ul>
+<li><code>%h</code> 为访问网站的IP</li>
+<li><code>%l</code> 为远程登陆名，这个字段基本上为”-“</li>
+<li><code>%u</code> 为用户名，当使用用户认证时，这个字段为认证的用户名</li>
+<li><code>%t</code> 为时间</li>
+<li><code>%r</code> 为请求的动作（比如用<code>curel -I</code>时就为HEADE）</li>
+<li><code>%s</code> 为请求的状态码，写成<code>%&gt;s</code>为最后的状态码</li>
+<li><code>%b</code> 为传输数据大小</li>
+<li><code>%{Referer}i</code> 为referer信息（请求本次地址上一次的地址就为referer，比如在百度中搜索到该网站的地址，然后通过百度的搜索结果页面点击进入该网站，那这次请求的referer就是baidu，当然这个地址是很长的）</li>
+<li><code>%{User-Agent}i</code> 为浏览器标识，比如你用Firefox或者Chrome浏览器，则该字段显示内容不一样，是带有浏览器的标识的。</li>
+</ul>
+</li>
+<li>对于这个日志格式，还可以自定义调整各个字段的位置，也可以额外增加其他字段，比如可以增加<code>%D</code>（请求耗费时间）</li>
+<li>在工作中一般不会去改它，默认的日志格式就够用了</li>
+</ul>
+<p>然后继续编辑虚拟主机的配置文件，添加一行内容，即改成如下：<br><figure class="highlight apache"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="section">&lt;VirtualHost *:80&gt;</span></div><div class="line">    <span class="attribute"><span class="nomarkup">DocumentRoot</span></span> <span class="string">"/data/wwwroot/www.123.com"</span></div><div class="line">    <span class="attribute"><span class="nomarkup">ServerName</span></span> www.123.com</div><div class="line">    <span class="attribute">ServerAlias</span> 123.com 456.com</div><div class="line">    <span class="section">&lt;IfModule mod_rewrite.c&gt;</span></div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteEngine</span></span> <span class="literal">on</span></div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteCond</span></span> <span class="variable">%&#123;HTTP_HOST&#125;</span> !^www.123.com$</div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteRule</span></span> ^/(.*)$ http://www.123.com/<span class="number">$1</span><span class="meta"> [R=301,L]</span></div><div class="line">    <span class="section">&lt;/IfModule&gt;</span></div><div class="line">    <span class="attribute">CustomLog</span> <span class="string">"logs/123.com-access_log"</span> combined	#&lt;==就是添加这一行</div><div class="line"><span class="section">&lt;/VirtualHost&gt;</span></div></pre></td></tr></table></figure></p>
+<p>保存配置文件后，测试语法并重新加载配置：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="string">[root@localhost ~]</span># /usr/local/apache2.<span class="number">4</span>/bin/apachectl -t</div><div class="line">Syntax OK</div><div class="line"><span class="string">[root@localhost ~]</span># /usr/local/apache2.<span class="number">4</span>/bin/apachectl graceful</div><div class="line"><span class="string">[root@localhost ~]</span># curl -x127.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>:<span class="number">80</span> -I <span class="number">123</span>.com</div><div class="line"><span class="string">[root@localhost ~]</span># tail /usr/local/apache2.<span class="number">4</span>/logs/<span class="number">123</span>.com-access_log</div><div class="line"><span class="number">127.0.0.1</span> - - <span class="string">[08/Mar/2018:04:51:07 +0800]</span> <span class="string">"<span class="keyword">HEAD</span> http://123.com/ HTTP/1.1"</span> <span class="number">301</span> - <span class="string">"-"</span> <span class="string">"curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.21 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2"</span></div></pre></td></tr></table></figure></p>
+<p>发现生成了日志，并且有相关的日志记录。另外，用浏览器访问一下，再次查看日志，多了一行，如下所示：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="number">192.168.1.2</span> - - <span class="string">[08/Mar/2018:04:52:54 +0800]</span> <span class="string">"<span class="keyword">GET</span> / HTTP/1.1"</span> <span class="number">304</span> - <span class="string">"-"</span> <span class="string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"</span></div></pre></td></tr></table></figure></p>
+<hr>
+<p>一个网站会有很多元素，尤其是图片、js、css等静态文件非常多，用户每请求一个页面就会访问诸多的图片、js等静态元素，这些元素的请求都会被记录到日志中。如果一个站点访问量很大，那么访问日志文件增长会非常快，一天可以达到几GB。这不仅对于服务器的磁盘空间造成影响，更重要的是会影响磁盘的读写速度。而且，访问日志很重要，又不能不去记录，这该怎么办呢？</p>
+<p>好在这些巨量的静态元素请求记录到日志里意义并不大，所以可以限制这些静态元素去记录日志，并且需要把日志按天归档，一天一个日志，这样也可以防止单个日志文件过大。配置如下：<br><figure class="highlight apache"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="section">&lt;VirtualHost *:80&gt;</span></div><div class="line">    <span class="attribute"><span class="nomarkup">DocumentRoot</span></span> <span class="string">"/data/wwwroot/www.123.com"</span></div><div class="line">    <span class="attribute"><span class="nomarkup">ServerName</span></span> www.123.com</div><div class="line">    <span class="attribute">ServerAlias</span> 123.com 456.com</div><div class="line">    <span class="section">&lt;IfModule mod_rewrite.c&gt;</span></div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteEngine</span></span> <span class="literal">on</span></div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteCond</span></span> <span class="variable">%&#123;HTTP_HOST&#125;</span> !^www.123.com$</div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteRule</span></span> ^/(.*)$ http://www.123.com/<span class="number">$1</span><span class="meta"> [R=301,L]</span></div><div class="line">    <span class="section">&lt;/IfModule&gt;</span></div><div class="line">    <span class="attribute">SetEnvIf</span> Request_URI <span class="string">".*\.gif$"</span> image-request	#&lt;==主要是从这开始到下面的这些代码</div><div class="line">    <span class="attribute">SetEnvIf</span> Request_URI <span class="string">".*\.jpg$"</span> image-request</div><div class="line">    <span class="attribute">SetEnvIf</span> Request_URI <span class="string">".*\.png$"</span> image-request</div><div class="line">    <span class="attribute">SetEnvIf</span> Request_URI <span class="string">".*\.bmp$"</span> image-request</div><div class="line">    <span class="attribute">SetEnvIf</span> Request_URI <span class="string">".*\.swf$"</span> image-request</div><div class="line">    <span class="attribute">SetEnvIf</span> Request_URI <span class="string">".*\.js$"</span> image-request</div><div class="line">    <span class="attribute">SetEnvIf</span> Request_URI <span class="string">".*\.css$"</span> image-request</div><div class="line">    <span class="attribute">CustomLog</span> <span class="string">"|/usr/local/apache2.4/bin/rotatelogs -l logs/123.com-access_%Y%m%d.log 86400"</span> combined env=!image-request</div><div class="line"><span class="section">&lt;/VirtualHost&gt;</span></div></pre></td></tr></table></figure></p>
+<p>上面配置文件的说明：</p>
+<ul>
+<li>先定义了一个<code>image-request</code>环境变量，把gif、jpg、png、bmp、swf、js、css等格式的文件全部归类到<code>image-request</code>里</li>
+<li>后面的<code>env=!image-request</code>有用到一个<code>!</code>，相当于取反，意思是把<code>image-request</code>以外的类型文件记录到日志里</li>
+<li>正常应该<code>CustomLog</code>后面为日志文件名，但在这里用了一个管道，它会把日志内容交给后面的<code>rotatelogs</code>命令处理。</li>
+<li>这个<code>rotatelogs</code>为httpd自带切割日志的工具，它会把访问日志按照我们定义的文件名格式进行切割，其中86400单位为秒，相当于一天。<code>-l</code>的作用是校准时区为UTC，也就是北京时间。</li>
+</ul>
+<p>保存配置文件后，测试配置文件是否有错误，没有错误重新加载服务，然后测试看是否有我们自己定义的格式日志产生：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># /usr/local/apache2.4/bin/apachectl -t</span></div><div class="line">Syntax OK</div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># /usr/local/apache2.4/bin/apachectl graceful</span></div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># curl -x127.0.0.1:80 -I 123.com</span></div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># ll /usr/local/apache2.4/logs/</span></div><div class="line">-rw-r--r-- <span class="number">1</span> root root   <span class="number">196</span> <span class="number">3</span>月   <span class="number">8</span> <span class="number">05</span>:<span class="number">11</span> <span class="number">123.</span>com-access_20180308.<span class="built_in">log</span></div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>这里的123.com-access_20180308.log就是新生成的日志，而且以后每天生成一个按日期命名的日志。</p>
+<p>接下来测试一下”在日志不记录静态元素”的配置：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="string">[root@localhost ~]</span># touch /data/wwwroot/www.<span class="number">123</span>.com/aming.jpg</div><div class="line"><span class="string">[root@localhost ~]</span># touch /data/wwwroot/www.<span class="number">123</span>.com/aming.txt</div><div class="line"><span class="string">[root@localhost ~]</span># curl -x127.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>:<span class="number">80</span> www.<span class="number">123</span>.com/aming.jpg</div><div class="line"><span class="string">[root@localhost ~]</span># curl -x127.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>:<span class="number">80</span> www.<span class="number">123</span>.com/aming.txt</div><div class="line"><span class="string">[root@localhost ~]</span># cat /usr/local/apache2.<span class="number">4</span>/logs/<span class="number">123</span>.com-access_20180308.log</div><div class="line"><span class="number">127.0.0.1</span> - - <span class="string">[08/Mar/2018:05:11:42 +0800]</span> <span class="string">"<span class="keyword">HEAD</span> http://123.com/ HTTP/1.1"</span> <span class="number">301</span> - <span class="string">"-"</span> <span class="string">"curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.21 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2"</span></div><div class="line"><span class="number">127.0.0.1</span> - - <span class="string">[08/Mar/2018:05:15:49 +0800]</span> <span class="string">"<span class="keyword">GET</span> http://www.123.com/aming.txt HTTP/1.1"</span> <span class="number">200</span> - <span class="string">"-"</span> <span class="string">"curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.21 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2"</span></div></pre></td></tr></table></figure></p>
+<p>可以看到，123.com-access_20180308日志中只有aming.txt的请求日志，但没有aming.jpg的请求日志。这说明去除静态元素的记录日志配置成功了，这样一来，日志文件会瘦身很多。</p>
+<p>当然，httpd的错误日志的切割也一样，如下：<br><figure class="highlight apache"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="section">&lt;VirtualHost *:80&gt;</span></div><div class="line">    <span class="attribute"><span class="nomarkup">DocumentRoot</span></span> <span class="string">"/data/wwwroot/www.123.com"</span></div><div class="line">    <span class="attribute"><span class="nomarkup">ServerName</span></span> www.123.com</div><div class="line">    <span class="attribute">ServerAlias</span> 123.com 456.com</div><div class="line">    <span class="section">&lt;IfModule mod_rewrite.c&gt;</span></div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteEngine</span></span> <span class="literal">on</span></div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteCond</span></span> <span class="variable">%&#123;HTTP_HOST&#125;</span> !^www.123.com$</div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteRule</span></span> ^/(.*)$ http://www.123.com/<span class="number">$1</span><span class="meta"> [R=301,L]</span></div><div class="line">    <span class="section">&lt;/IfModule&gt;</span></div><div class="line">    <span class="attribute">SetEnvIf</span> Request_URI <span class="string">".*\.gif$"</span> image-request</div><div class="line">    <span class="attribute">SetEnvIf</span> Request_URI <span class="string">".*\.jpg$"</span> image-request</div><div class="line">    <span class="attribute">SetEnvIf</span> Request_URI <span class="string">".*\.png$"</span> image-request</div><div class="line">    <span class="attribute">SetEnvIf</span> Request_URI <span class="string">".*\.bmp$"</span> image-request</div><div class="line">    <span class="attribute">SetEnvIf</span> Request_URI <span class="string">".*\.swf$"</span> image-request</div><div class="line">    <span class="attribute">SetEnvIf</span> Request_URI <span class="string">".*\.js$"</span> image-request</div><div class="line">    <span class="attribute">SetEnvIf</span> Request_URI <span class="string">".*\.css$"</span> image-request</div><div class="line">    <span class="attribute">ErrorLog</span> <span class="string">"|/usr/local/apache2.4/bin/rotatelogs -l logs/123.com-error_%Y%m%d.log 86400"</span>	#&lt;==这行是错误日志</div><div class="line">    <span class="attribute">CustomLog</span> <span class="string">"|/usr/local/apache2.4/bin/rotatelogs -l logs/123.com-access_%Y%m%d.log 86400"</span> combined env=!image-request</div><div class="line"><span class="section">&lt;/VirtualHost&gt;</span></div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>日志切割的是两行，注意不要写成多于两行。</li>
+<li>ErrorLog是访问日志，CustomLog是访问日志。</li>
+</ul>
+<hr>
+<h1 id="5-配置静态元素过期时间"><a href="#5-配置静态元素过期时间" class="headerlink" title="5. 配置静态元素过期时间"></a>5. 配置静态元素过期时间</h1><p>有时，会在日志里发现有这样的状态码304，这个状态码表示该文件已经缓存在用户的电脑里了，再次请求它的时候就不用从服务器上下载，而是直接访问用户电脑里面的缓存。这样做的目的是降低服务器的资源消耗，还可以提升用户访问网站的速度。平时我们访问一个网站时，很多元素为静态的小图片，那这些小图片完全可以缓存在咱们的电脑里，这样再次访问该站点时，速度就会很快。</p>
+<p>那到底能够缓存多久呢？如果服务器上的某个图片更新了，那么应该访问新的图片才对。这就涉及一个静态文件缓存时长的问题，也叫做<strong>缓存过期时间</strong>。在httpd的配置文件中，我们是可以控制这个时间的。</p>
+<p>编辑虚拟主机配置文件，内容如下：<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="meta"># vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf</span></div><div class="line">&lt;VirtualHost *:<span class="number">80</span>&gt;</div><div class="line">    DocumentRoot <span class="string">"/data/wwwroot/www.123.com"</span></div><div class="line">    ServerName www<span class="number">.123</span>.com</div><div class="line">    ServerAlias <span class="number">123.</span>com <span class="number">456.</span>com</div><div class="line">    &lt;IfModule mod_rewrite.c&gt;</div><div class="line">        RewriteEngine on</div><div class="line">        RewriteCond %&#123;HTTP_HOST&#125; !^www<span class="number">.123</span>.com$</div><div class="line">        RewriteRule ^/(.*)$ http:<span class="comment">//www.123.com/$1 [R=301,L]</span></div><div class="line">    &lt;/IfModule&gt;</div><div class="line">    SetEnvIf Request_URI <span class="string">".*\.gif$"</span> <span class="built_in">image</span>-request</div><div class="line">    SetEnvIf Request_URI <span class="string">".*\.jpg$"</span> <span class="built_in">image</span>-request</div><div class="line">    SetEnvIf Request_URI <span class="string">".*\.png$"</span> <span class="built_in">image</span>-request</div><div class="line">    SetEnvIf Request_URI <span class="string">".*\.bmp$"</span> <span class="built_in">image</span>-request</div><div class="line">    SetEnvIf Request_URI <span class="string">".*\.swf$"</span> <span class="built_in">image</span>-request</div><div class="line">    SetEnvIf Request_URI <span class="string">".*\.js$"</span> <span class="built_in">image</span>-request</div><div class="line">    SetEnvIf Request_URI <span class="string">".*\.css$"</span> <span class="built_in">image</span>-request</div><div class="line">    CustomLog <span class="string">"|/usr/local/apache2.4/bin/rotatelogs -l logs/123.com-access_%Y%m%d.log 86400"</span> combined env=!<span class="built_in">image</span>-request</div><div class="line">    &lt;IfModule mod_expires.c&gt;		#&lt;==添加从此行开始以及下面的内容</div><div class="line">        ExpiresActive on</div><div class="line">        ExpiresByType <span class="built_in">image</span>/gif <span class="string">"access plus 1 days"</span></div><div class="line">        ExpiresByType <span class="built_in">image</span>/jpeg <span class="string">"access plus 24 hours"</span></div><div class="line">        ExpiresByType <span class="built_in">image</span>/png <span class="string">"access plus 24 hours"</span></div><div class="line">        ExpiresByType <span class="built_in">text</span>/css <span class="string">"access plus 2 hours"</span></div><div class="line">        ExpiresByType application/x-javascript <span class="string">"now plus 2 hours"</span></div><div class="line">        ExpiresByType application/javascript <span class="string">"now plus 2 hours"</span></div><div class="line">        ExpiresByType application/x-shockwave-flash <span class="string">"now plus 2 hours"</span></div><div class="line">        ExpiresDefault <span class="string">"now plus 0 min"</span></div><div class="line">    &lt;/IfModule&gt;</div><div class="line">&lt;/VirtualHost&gt;</div></pre></td></tr></table></figure></p>
+<p>这部分用到了<code>mod_expires</code>模块。这里gif、jpeg、png格式的文件过期时长为1天，css、js、flash格式文件过期时长为2小时，其它文件过期时长为0，也就是不缓存。保存配置文件，检查配置是否有问题，没问题重新加载服务：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># /usr/local/apache2.4/bin/apachectl -t</span></div><div class="line">Syntax OK</div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># /usr/local/apache2.4/bin/apachectl graceful</span></div></pre></td></tr></table></figure></p>
+<p>检查httpd是否加载expires模块：<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># /usr/local/apache2.4/bin/apachectl -M | grep -i expires</span></div><div class="line"><span class="comment">#&lt;==没有任何输出，说明当前httpd并不支持expires模块，所以需要修改httpd主配置文件，打开该模块</span></div><div class="line">[root@localhost ~]<span class="comment"># vim /usr/local/apache2.4/conf/httpd.conf</span></div><div class="line"><span class="comment">#&lt;==搜索expires关键词，找到下面的行，将前面的井号删除，保存退出</span></div><div class="line"><span class="comment">#LoadModule expires_module modules/mod_expires.so</span></div><div class="line">[root@localhost ~]<span class="comment"># /usr/local/apache2.4/bin/apachectl graceful	#&lt;==重新加载服务</span></div><div class="line">[root@localhost ~]<span class="comment"># /usr/local/apache2.4/bin/apachectl -M | grep -i expires</span></div><div class="line"> expires_module (shared)	<span class="comment">#&lt;==有这行输出，说明已经正确加载expires模块</span></div></pre></td></tr></table></figure></p>
+<p>下面使用curl来测试它的效果：<br><figure class="highlight ldif"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># curl -x127.0.0.1:80 -I www.123.com/aming.jpg</span></div><div class="line"><span class="attribute">HTTP/1.1 200 OK</span></div><div class="line"><span class="attribute">Date</span>: Wed, 07 Mar 2018 22:12:16 GMT</div><div class="line"><span class="attribute">Server</span>: Apache/2.4.29 (Unix) PHP/5.6.34</div><div class="line"><span class="attribute">Last-Modified</span>: Wed, 07 Mar 2018 21:14:46 GMT</div><div class="line"><span class="attribute">ETag</span>: "0-566d90c73d095"</div><div class="line"><span class="attribute">Accept-Ranges</span>: bytes</div><div class="line"><span class="attribute">Cache-Control</span>: max-age=86400</div><div class="line"><span class="attribute">Expires</span>: Thu, 08 Mar 2018 22:12:16 GMT</div><div class="line"><span class="attribute">Content-Type</span>: image/jpeg</div></pre></td></tr></table></figure></p>
+<p>可以看到max-age=86400，这说明jpg的图片将缓存86400秒，也就是一天。而这里的状态码为200而不是304，这是因为测试工具是curl，没有缓存功能。再测试一下txt文件：<br><figure class="highlight ldif"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># curl -x127.0.0.1:80 -I www.123.com/aming.txt</span></div><div class="line"><span class="attribute">HTTP/1.1 200 OK</span></div><div class="line"><span class="attribute">Date</span>: Wed, 07 Mar 2018 22:13:59 GMT</div><div class="line"><span class="attribute">Server</span>: Apache/2.4.29 (Unix) PHP/5.6.34</div><div class="line"><span class="attribute">Last-Modified</span>: Wed, 07 Mar 2018 21:14:49 GMT</div><div class="line"><span class="attribute">ETag</span>: "0-566d90ca252d5"</div><div class="line"><span class="attribute">Accept-Ranges</span>: bytes</div><div class="line"><span class="attribute">Cache-Control</span>: max-age=0</div><div class="line"><span class="attribute">Expires</span>: Wed, 07 Mar 2018 22:13:59 GMT</div><div class="line"><span class="attribute">Content-Type</span>: text/plain</div></pre></td></tr></table></figure></p>
+<p>其中max-age=0，说明没有缓存该类型的文件。</p>
+<hr>
+<h1 id="6-配置防盗链"><a href="#6-配置防盗链" class="headerlink" title="6. 配置防盗链"></a>6. 配置防盗链</h1><p>配置防盗链非常的重要，这也是在工作中经常会做的工作。</p>
+<p>防盗链，通俗讲，就是不让别人盗用你网站上上的资源，这个资源，通常指的是图片、视频、歌曲、文档等。讲解防盗链配置之前，先了解一下referer的概念，上面在讲解日志格式的时候也提到过它。当你通过A网站的一个页面里面的连接去访问B网站的一个页面时，那么这个B网站页面的referer就是A网站的页面地址。</p>
+<p>接下来配置防盗链的过程：<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">[root<span class="meta">@localhost</span> ~]<span class="comment"># vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf</span></div><div class="line"><span class="comment">#&lt;==编辑虚拟机配置文件，为了方便查看特定的重要设置，已经把前面所进行的实验功能删去。</span></div><div class="line"><span class="comment">#&lt;==新添加的内容如下”</span></div><div class="line"><span class="variable">&lt;VirtualHost *:80&gt;</span></div><div class="line">    DocumentRoot <span class="string">"/data/wwwroot/www.123.com"</span></div><div class="line">    ServerName www.123.com</div><div class="line">    ServerAlias 123.com 456.com</div><div class="line">    CustomLog <span class="string">"|/usr/local/apache2.4/bin/rotatelogs -l logs/123.com-access_%Y%m%d.log 86400"</span> combined env=!image-request</div><div class="line">    <span class="variable">&lt;Directory /data/wwwroot/www.123.com&gt;</span>	<span class="comment">#&lt;==从这开始配置防盗链的功能的</span></div><div class="line">        SetEnvIfNoCase Referer <span class="string">"http://www.123.com"</span> local_ref</div><div class="line">        SetEnvIfNoCase Referer <span class="string">"http://123.com"</span> local_ref</div><div class="line">        SetEnvIfNoCase Referer <span class="string">"^$"</span> local_ref</div><div class="line">        <span class="variable">&lt;filesmatch "\.(txt|doc|mp3|zip|rar|jpg|gif)"&gt;</span></div><div class="line">            Order Allow,Deny</div><div class="line">            Allow from env=local_ref</div><div class="line">        <span class="variable">&lt;/filesmatch&gt;</span></div><div class="line">    <span class="variable">&lt;/Directory&gt;</span></div><div class="line"><span class="variable">&lt;/VirtualHost&gt;</span></div></pre></td></tr></table></figure></p>
+<p>上面配置内容的说明：</p>
+<ul>
+<li>首先定义允许访问链接的referer，其中<code>^$</code>为空referer，当直接在浏览器里输入图片地址去访问它时，它的referer就为空。</li>
+<li>然后又使用filesmatch来定义需要保护的文件类型，访问txt、doc、mp3、zip、rar、jpg、gif格式的文件，当访问这样类型的文件时就会被限制。</li>
+</ul>
+<p>下面是测试过程：<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="meta"># /usr/local/apache2.4/bin/apachectl -t</span></div><div class="line">Syntax OK</div><div class="line">[root@localhost ~]<span class="meta"># /usr/local/apache2.4/bin/apachectl graceful</span></div><div class="line">[root@localhost ~]<span class="meta"># curl -x127.0.0.1:80 -I -e <span class="string">"http://www.123.com/123.txt"</span> http:<span class="comment">//www.123.com/aming.jpg</span></span></div><div class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</div><div class="line"><span class="symbol">Date:</span> Wed, <span class="number">07</span> Mar <span class="number">2018</span> <span class="number">22</span>:<span class="number">33</span>:<span class="number">45</span> GMT</div><div class="line"><span class="symbol">Server:</span> Apache/<span class="number">2.4</span><span class="number">.29</span> (Unix) PHP/<span class="number">5.6</span><span class="number">.34</span></div><div class="line">Last-Modified: Wed, <span class="number">07</span> Mar <span class="number">2018</span> <span class="number">21</span>:<span class="number">14</span>:<span class="number">46</span> GMT</div><div class="line"><span class="symbol">ETag:</span> <span class="string">"0-566d90c73d095"</span></div><div class="line">Accept-Ranges: bytes</div><div class="line">Content-Type: image/jpeg</div><div class="line"><span class="meta">#&lt;==使用-e来定义referer，这个referer一定要以http:<span class="comment">//开头，否则不管用</span></span></div><div class="line"></div><div class="line">[root@localhost ~]<span class="meta"># curl -x127.0.0.1:80 -I -e <span class="string">"http://www.1234.com/1.txt"</span> http:<span class="comment">//www.123.com/aming.jpg</span></span></div><div class="line">HTTP/<span class="number">1.1</span> <span class="number">403</span> Forbidden</div><div class="line"><span class="symbol">Date:</span> Wed, <span class="number">07</span> Mar <span class="number">2018</span> <span class="number">22</span>:<span class="number">34</span>:<span class="number">54</span> GMT</div><div class="line"><span class="symbol">Server:</span> Apache/<span class="number">2.4</span><span class="number">.29</span> (Unix) PHP/<span class="number">5.6</span><span class="number">.34</span></div><div class="line">Content-Type: text/html; charset=iso<span class="number">-8859</span><span class="number">-1</span></div><div class="line"><span class="meta">#&lt;==使用非允许的referer会返回403的状态码</span></div><div class="line"></div><div class="line">[root@localhost ~]<span class="meta"># curl -x127.0.0.1:80 -I -e <span class="string">"http://www.1234.com/1.txt"</span> http:<span class="comment">//www.123.com/index.html</span></span></div><div class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</div><div class="line"><span class="symbol">Date:</span> Wed, <span class="number">07</span> Mar <span class="number">2018</span> <span class="number">22</span>:<span class="number">35</span>:<span class="number">07</span> GMT</div><div class="line"><span class="symbol">Server:</span> Apache/<span class="number">2.4</span><span class="number">.29</span> (Unix) PHP/<span class="number">5.6</span><span class="number">.34</span></div><div class="line">Last-Modified: Wed, <span class="number">07</span> Mar <span class="number">2018</span> <span class="number">17</span>:<span class="number">20</span>:<span class="number">54</span> GMT</div><div class="line"><span class="symbol">ETag:</span> <span class="string">"8-566d5c8150174"</span></div><div class="line">Accept-Ranges: bytes</div><div class="line">Content-Length: <span class="number">8</span></div><div class="line">Content-Type: text/html</div><div class="line"><span class="meta">#&lt;==访问HTML类型的文件时，也不会被保护</span></div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="7-访问控制"><a href="#7-访问控制" class="headerlink" title="7. 访问控制"></a>7. 访问控制</h1><p>对于一些比较重要的网站内容，除了可以使用用户认证限制访问之外，还可以通过其他一些方法做到限制，比如可以限制IP，也可以限制user_agent。限制IP指的是限制访问网站的来源IP，而限制user_agent，通常用来限制恶意或者不正常的请求。</p>
+<p>有的公司使用httpd，会对安全要求非常严格，凡是涉及后台的访问都要做IP限制，只允许公司内网IP或者被信任的公网IP访问。这样做的目的是为了防止别有用心的人拿到后台权限，并获得内部数据。</p>
+<p>先来看如何限制IP访问，编辑虚拟机配置文件，改成如下内容：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# <span class="keyword">vim</span> /usr/local/apache2.<span class="number">4</span>/<span class="keyword">conf</span>/extra/httpd-vhosts.<span class="keyword">conf</span></div><div class="line">&lt;VirtualHost *:<span class="number">80</span>&gt;</div><div class="line">    DocumentRoot <span class="string">"/data/wwwroot/www.123.com"</span></div><div class="line">    ServerName www.<span class="number">123</span>.<span class="keyword">com</span></div><div class="line">    ServerAlias <span class="number">123</span>.<span class="keyword">com</span> <span class="number">456</span>.<span class="keyword">com</span></div><div class="line">    CustomLog <span class="string">"|/usr/local/apache2.4/bin/rotatelogs -l logs/123.com-access_%Y%m%d.log 86400"</span> combined</div><div class="line">    &lt;Directory /data/wwwroot/www.<span class="number">123</span>.<span class="keyword">com</span>/admin&gt;	#&lt;==就是配置这里</div><div class="line">        Order deny,allow</div><div class="line">        Deny from <span class="keyword">all</span></div><div class="line">        Allow from <span class="number">127.0</span>.<span class="number">0.1</span></div><div class="line">    &lt;/Directory&gt;</div><div class="line">&lt;/VirtualHost&gt;</div></pre></td></tr></table></figure></p>
+<p>上述配置文件的说明：</p>
+<ul>
+<li>使用<code>&lt;Directory&gt;</code>来指定要限制访问的目录</li>
+<li><code>Order</code>定义控制顺序，哪个在前面就先匹配哪个规则。在本例中<code>deny</code>在前，所以先匹配<code>Deny from all</code>，这样所有的来源IP都会被限制，然后匹配<code>Allow from 127.0.0.1</code>，这样又允许了127.0.0.1这个IP。</li>
+<li>最终的效果就是，只允许来源IP为127.0.0.1的访问。</li>
+</ul>
+<p>下面是验证过程：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="string">[root@localhost ~]</span># mkdir /data/wwwroot/www.<span class="number">123</span>.com/admin/</div><div class="line"><span class="string">[root@localhost ~]</span># echo <span class="string">"admin"</span> &gt; /data/wwwroot/www.<span class="number">123</span>.com/admin/index.html</div><div class="line"><span class="string">[root@localhost ~]</span># &gt; /usr/local/apache2.<span class="number">4</span>/logs/<span class="number">123</span>.com-access_20180309.log</div><div class="line"><span class="string">[root@localhost ~]</span># curl -x192.<span class="number">168</span>.<span class="number">1</span>.<span class="number">111</span>:<span class="number">80</span> -I www.<span class="number">123</span>.com/admin/index.html</div><div class="line">HTTP/<span class="number">1</span>.<span class="number">1</span> <span class="number">403</span> Forbidden</div><div class="line">Date: Thu, <span class="number">08</span> Mar <span class="number">2018</span> <span class="number">18</span>:<span class="number">33</span>:<span class="number">52</span> GMT</div><div class="line">Server: Apache/<span class="number">2</span>.<span class="number">4</span>.<span class="number">29</span> (Unix) PHP/<span class="number">5</span>.<span class="number">6</span>.<span class="number">34</span></div><div class="line">Content-Type: text/html; charset=iso-<span class="number">8859</span>-<span class="number">1</span></div><div class="line"></div><div class="line"><span class="string">[root@localhost ~]</span># curl -x127.<span class="number">0</span>.<span class="number">0</span>.<span class="number">1</span>:<span class="number">80</span> -I www.<span class="number">123</span>.com/admin/index.html</div><div class="line">HTTP/<span class="number">1</span>.<span class="number">1</span> <span class="number">200</span> OK</div><div class="line">Date: Thu, <span class="number">08</span> Mar <span class="number">2018</span> <span class="number">18</span>:<span class="number">34</span>:<span class="number">05</span> GMT</div><div class="line">Server: Apache/<span class="number">2</span>.<span class="number">4</span>.<span class="number">29</span> (Unix) PHP/<span class="number">5</span>.<span class="number">6</span>.<span class="number">34</span></div><div class="line">Last-Modified: Thu, <span class="number">08</span> Mar <span class="number">2018</span> <span class="number">18</span>:<span class="number">24</span>:<span class="number">51</span> GMT</div><div class="line">ETag: <span class="string">"6-566eaca9c8e06"</span></div><div class="line">Accept-Ranges: bytes</div><div class="line">Content-Length: <span class="number">6</span></div><div class="line">Content-Type: text/html</div><div class="line"></div><div class="line"><span class="string">[root@localhost ~]</span># cat /usr/local/apache2.<span class="number">4</span>/logs/<span class="number">123</span>.com-access_20180309.log</div><div class="line"><span class="number">192.168.1.111</span> - - <span class="string">[09/Mar/2018:02:33:52 +0800]</span> <span class="string">"<span class="keyword">HEAD</span> http://www.123.com/admin/index.html HTTP/1.1"</span> <span class="number">403</span> - <span class="string">"-"</span> <span class="string">"curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.21 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2"</span></div><div class="line"><span class="number">127.0.0.1</span> - - <span class="string">[09/Mar/2018:02:34:05 +0800]</span> <span class="string">"<span class="keyword">HEAD</span> http://www.123.com/admin/index.html HTTP/1.1"</span> <span class="number">200</span> - <span class="string">"-"</span> <span class="string">"curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.21 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2"</span></div></pre></td></tr></table></figure></p>
+<p>在上例中，本机有两个IP，一个是192.168.1.111，另一个是127.0.0.1，通过这两个IP都可以访问到站点。而来源IP分别为192.168.1.111和127.0.0.1，其实和本机IP是一样的。可以看到，我们所配置的功能已经实现了：用192.168.1.111访问的状态是403，表示没有权限；用127.0.0.1访问的状态是200，表示成功访问。</p>
+<p>再来用浏览器测试一下，测试完成后查看一下httpd的访问日志：<br><figure class="highlight accesslog"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="string">[root@localhost ~]</span># tail -<span class="number">1</span> /usr/local/apache2.<span class="number">4</span>/logs/<span class="number">123</span>.com-access_20180309.log</div><div class="line"><span class="number">192.168.1.2</span> - - <span class="string">[09/Mar/2018:02:39:34 +0800]</span> <span class="string">"<span class="keyword">GET</span> /admin/index.html HTTP/1.1"</span> <span class="number">403</span> <span class="number">225</span> <span class="string">"-"</span> <span class="string">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"</span></div></pre></td></tr></table></figure></p>
+<p>也可以单独针对某个文件来做限制，编辑虚拟机配置文件，修改如下：<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[root<span class="meta">@localhost</span> ~]<span class="comment"># vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf</span></div><div class="line"><span class="variable">&lt;VirtualHost *:80&gt;</span></div><div class="line">    DocumentRoot <span class="string">"/data/wwwroot/www.123.com"</span></div><div class="line">    ServerName www.123.com</div><div class="line">    ServerAlias 123.com</div><div class="line">    CustomLog <span class="string">"|/usr/local/apache2.4/bin/rotatelogs -l logs/123.com-access_%Y%m%d.log 86400"</span> combined</div><div class="line">    <span class="variable">&lt;Directory /data/wwwroot/www.123.com&gt;</span>	<span class="comment">#&lt;==就是配置这里</span></div><div class="line">        <span class="variable">&lt;Filesmatch "admin.php(.*)"&gt;</span></div><div class="line">            Order deny,allow</div><div class="line">            Deny from all</div><div class="line">            Allow from 127.0.0.1</div><div class="line">        <span class="variable">&lt;/Filesmatch&gt;</span></div><div class="line">    <span class="variable">&lt;/Directory&gt;</span></div><div class="line"><span class="variable">&lt;/VirtualHost&gt;</span></div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="8-禁止解析PHP"><a href="#8-禁止解析PHP" class="headerlink" title="8. 禁止解析PHP"></a>8. 禁止解析PHP</h1><p>对于使用PHP语言编写的网站，有一些目录是有需求上传文件的。如果网站的代码有漏洞，让一些别有用心的人上传了一个用PHP代码写的木马，由于网站可以执行PHP程序，最终会让别人拿到服务器的权限。为了避免这种情况发生，我们需要把能上传文件的目录直接禁止解析PHP代码（不用担心会影响网站的访问，若是这种目录也需要解析PHP，那说明程序员不合格）。</p>
+<p>配置如下：<br><figure class="highlight apache"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="section">&lt;VirtualHost *:80&gt;</span></div><div class="line">    <span class="attribute"><span class="nomarkup">DocumentRoot</span></span> <span class="string">"/data/wwwroot/www.123.com"</span></div><div class="line">    <span class="attribute"><span class="nomarkup">ServerName</span></span> www.123.com</div><div class="line">    <span class="attribute">ServerAlias</span> 123.com</div><div class="line">    <span class="attribute">CustomLog</span> <span class="string">"|/usr/local/apache2.4/bin/rotatelogs -l logs/123.com-access_%Y%m%d.log 86400"</span> combined</div><div class="line">    <span class="section">&lt;Directory /data/wwwroot/www.123.com/upload&gt;</span>	<span class="comment">#&lt;==就是配置这里</span></div><div class="line">        <span class="attribute">php_admin_flag</span> engine <span class="literal">off</span></div><div class="line">    <span class="section">&lt;/Directory&gt;</span></div><div class="line"><span class="section">&lt;/VirtualHost&gt;</span></div></pre></td></tr></table></figure></p>
+<p>验证过程如下：<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># /usr/local/apache2.4/bin/apachectl -t</span></div><div class="line">Syntax OK</div><div class="line">[root@localhost ~]<span class="comment"># /usr/local/apache2.4/bin/apachectl graceful</span></div><div class="line">[root@localhost ~]<span class="comment"># mkdir /data/wwwroot/www.123.com/upload/</span></div><div class="line">[root@localhost ~]<span class="comment"># cp /usr/local/apache2.4/htdocs/1.php /data/wwwroot/www.123.com/upload/</span></div><div class="line">[root@localhost ~]<span class="comment"># curl -x127.0.0.1:80 www.123.com/upload/1.php</span></div><div class="line">&lt;?php</div><div class="line">        echo <span class="string">"PHP解析正常！"</span></div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure></p>
+<p>显示了PHP的源代码，这说明PHP没有被正常解析。</p>
+<hr>
+<h1 id="9-禁止指定的user-agent访问"><a href="#9-禁止指定的user-agent访问" class="headerlink" title="9. 禁止指定的user_agent访问"></a>9. 禁止指定的user_agent访问</h1><p>user_agent是浏览器标识，当用curl访问时user_agent为<code>&quot;curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.21 Basic ECC zlib/1.2.3 libidn/1.18 libssh2/1.4.2&quot;</code>，当用Chrome浏览器访问时user_agent为<code>&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36&quot;</code>。</p>
+<p>通常在工作中会对user_agent做一些访问，比如可以限制一些不太友好的搜索引擎爬虫。你之所以能在百度上面搜到某个网站，是因为百度会派一些蜘蛛爬虫来抓取网站的数据。蜘蛛爬虫抓取数据类似于用户用浏览器访问网站，当蜘蛛爬虫太多或者访问太频繁，就会浪费服务器的资源。另外，也可以限制恶意请求，这种恶意请求我们通常称作<strong>cc攻击</strong>，它的原理很简单，就是用很多用户的电脑同时访问同一个站点，当访问量或者频率达到一定层次，会耗尽服务器资源，从而使之不能正常提供服务。这种cc攻击其实有很明显的规律，其中这些恶意请求的user_agent相同或者相似，那么我们就可以通过限制user_agent发挥防攻击的作用。</p>
+<p>下面是针对user_agent来做访问控制：<br><figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf</span></div><div class="line">&lt;VirtualHost *:<span class="number">80</span>&gt;</div><div class="line">    DocumentRoot <span class="string">"/data/wwwroot/www.123.com"</span></div><div class="line">    ServerName www.<span class="number">123</span>.com</div><div class="line">    ServerAlias <span class="number">123</span>.com</div><div class="line">    CustomLog <span class="string">"|/usr/local/apache2.4/bin/rotatelogs -l logs/123.com-access_%Y%m%d.log 86400"</span> combined</div><div class="line">    &lt;IfModule mod_rewrite.c&gt;	<span class="comment">#&lt;==从这里开始配置</span></div><div class="line">        RewriteEngine On</div><div class="line">        RewriteEngine %&#123;HTTP_USER_AGENT&#125; .*curl.* [NC,OR]</div><div class="line">        RewriteEngine %&#123;HTTP_USER_AGENT&#125; .*baidu.com.*</div><div class="line">[NC]</div><div class="line">        RewriteEngine .* - [F]</div><div class="line">    &lt;<span class="regexp">/IfModule&gt;</span></div><div class="line"><span class="regexp">&lt;/</span>VirtualHost&gt;</div></pre></td></tr></table></figure></p>
+<p>上述配置的说明：</p>
+<ul>
+<li>这个需求也用到了<code>rewrite</code>模块</li>
+<li><code>%{HTTP_USER_AGENT}</code>为user_agent的内置变量</li>
+<li>在本例中当user_agent匹配usrl或者baidu.com时，都会触发下面的规则。</li>
+<li>方括号中的<code>OR</code>表示或者，<code>NC</code>表示不区分大小写，<code>F</code>表示Forbidden。</li>
+</ul>
+<p>验证过程如下：<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# /usr/local/apache2<span class="meta">.4</span>/bin/apachectl -t</div><div class="line">Syntax OK</div><div class="line">[root@localhost ~]# /usr/local/apache2<span class="meta">.4</span>/bin/apachectl graceful</div><div class="line">[root@localhost ~]# curl -I -x127<span class="meta">.0</span><span class="meta">.0</span><span class="meta">.1</span>:<span class="number">80</span> www<span class="meta">.123</span>.com/upload/<span class="number">1.</span>php</div><div class="line">HTTP/<span class="number">1.1</span> <span class="number">403</span> Forbidden</div><div class="line"><span class="symbol">Date:</span> Thu, <span class="number">08</span> Mar <span class="number">2018</span> <span class="number">19</span>:<span class="number">17</span>:<span class="number">34</span> GMT</div><div class="line"><span class="symbol">Server:</span> Apache/<span class="number">2.4</span><span class="meta">.29</span> (Unix) PHP/<span class="number">5.6</span><span class="meta">.34</span></div><div class="line">Content-Type: text/html<span class="comment">; charset=iso-8859-1</span></div><div class="line"></div><div class="line">[root@localhost ~]# curl -A <span class="string">"123123"</span> -I -x127<span class="meta">.0</span><span class="meta">.0</span><span class="meta">.1</span>:<span class="number">80</span> www<span class="meta">.123</span>.com/upload/<span class="number">1.</span>php</div><div class="line">HTTP/<span class="number">1.1</span> <span class="number">200</span> OK</div><div class="line"><span class="symbol">Date:</span> Thu, <span class="number">08</span> Mar <span class="number">2018</span> <span class="number">19</span>:<span class="number">18</span>:<span class="number">59</span> GMT</div><div class="line"><span class="symbol">Server:</span> Apache/<span class="number">2.4</span><span class="meta">.29</span> (Unix) PHP/<span class="number">5.6</span><span class="meta">.34</span></div><div class="line">X-Powered-By: PHP/<span class="number">5.6</span><span class="meta">.34</span></div><div class="line">Content-Type: text/html<span class="comment">; charset=UTF-8</span></div></pre></td></tr></table></figure></p>
+<p>curl的-A选项指定user_agent。第一个请求，user_agent为”usrl…”的，匹配了第一个条件，所以会403.第二个请求，user_agent为自定义的”123123”，没有匹配任何条件，所以状态码为200。</p>
+<hr>
+<h1 id="10-Apache通过rewrite限制某个目录"><a href="#10-Apache通过rewrite限制某个目录" class="headerlink" title="10. Apache通过rewrite限制某个目录"></a>10. Apache通过rewrite限制某个目录</h1><p>我们可以用allow和deny去限制网站根目录下的某个子目录，当然，利用<code>rewrite</code>也可以实现，配置如下：<br><figure class="highlight apache"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="section">&lt;VirtualHost *:80&gt;</span></div><div class="line">    <span class="attribute"><span class="nomarkup">DocumentRoot</span></span> <span class="string">"/data/wwwroot/www.123.com"</span></div><div class="line">    <span class="attribute"><span class="nomarkup">ServerName</span></span> www.123.com</div><div class="line">    <span class="attribute">ServerAlias</span> 123.com</div><div class="line">    <span class="attribute">CustomLog</span> <span class="string">"|/usr/local/apache2.4/bin/rotatelogs -l logs/123.com-access_%Y%m%d.log 86400"</span> combined</div><div class="line">    <span class="section">&lt;IfModule mod_rewrite.c&gt;</span>	<span class="comment">#&lt;==从这里开始配置</span></div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteEngine</span></span> <span class="literal">on</span></div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteCond</span></span> <span class="variable">%&#123;REQUEST_URI&#125;</span> ^.*/tmp/.*<span class="meta"> [NC]</span></div><div class="line">        <span class="attribute"><span class="nomarkup">RewriteRule</span></span> .* -<span class="meta"> [F]</span></div><div class="line">    <span class="section">&lt;/IfModule&gt;</span></div><div class="line"><span class="section">&lt;/VirtualHost&gt;</span></div></pre></td></tr></table></figure></p>
+<p>这段配置，会把只要包含/tmp/字样的请求都限制了。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术/" rel="tag"><i class="fa fa-tag"></i> 技术</a>
+          
+            <a href="/tags/LAMP/" rel="tag"><i class="fa fa-tag"></i> LAMP</a>
+          
+            <a href="/tags/Apache/" rel="tag"><i class="fa fa-tag"></i> Apache</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/07/技术/004. LAMP之Yum方式安装/" rel="next" title="LAMP之Yum方式安装">
+                <i class="fa fa-chevron-left"></i> LAMP之Yum方式安装
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/07/技术/006. LAMP之PHP的初始配置/" rel="prev" title="LAMP之PHP的初始配置">
+                LAMP之PHP的初始配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-默认虚拟主机"><span class="nav-text">1. 默认虚拟主机</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-虚拟主机和默认虚拟主机"><span class="nav-text">1.1. 虚拟主机和默认虚拟主机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-虚拟主机的配置"><span class="nav-text">1.2. 虚拟主机的配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-用户认证"><span class="nav-text">2. 用户认证</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-对整站做用户认证"><span class="nav-text">2.1. 对整站做用户认证</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-针对某个目录或文件做用户认证"><span class="nav-text">2.2. 针对某个目录或文件做用户认证</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-配置域名301跳转"><span class="nav-text">3. 配置域名301跳转</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-配置访问日志"><span class="nav-text">4. 配置访问日志</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-配置静态元素过期时间"><span class="nav-text">5. 配置静态元素过期时间</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-配置防盗链"><span class="nav-text">6. 配置防盗链</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-访问控制"><span class="nav-text">7. 访问控制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-禁止解析PHP"><span class="nav-text">8. 禁止解析PHP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-禁止指定的user-agent访问"><span class="nav-text">9. 禁止指定的user_agent访问</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10-Apache通过rewrite限制某个目录"><span class="nav-text">10. Apache通过rewrite限制某个目录</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

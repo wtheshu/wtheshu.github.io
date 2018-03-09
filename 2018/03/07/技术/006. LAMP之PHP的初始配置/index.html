@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="技术,LAMP,PHP," />
+
+
+<meta name="description" content="1. PHP的配置文件虽然PHP是以httpd的一个模块的形式存在的，但是PHP本身也有自己的配置文件，那就是php.ini。在前面安装时，我们已经拷贝了一个php.ini文件到/usr/local/php/etc/目录下面，这是我们已经知道了php.ini所在的路径在哪里。但有时候我们并不知道php.ini所在路路径，这时候就需要通过命令来查一查在哪里：123[root@localhost ~]">
+<meta name="keywords" content="技术,LAMP,PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LAMP之PHP的初始配置">
+<meta property="og:url" content="http://www.theshu.top/2018/03/07/技术/006. LAMP之PHP的初始配置/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="1. PHP的配置文件虽然PHP是以httpd的一个模块的形式存在的，但是PHP本身也有自己的配置文件，那就是php.ini。在前面安装时，我们已经拷贝了一个php.ini文件到/usr/local/php/etc/目录下面，这是我们已经知道了php.ini所在的路径在哪里。但有时候我们并不知道php.ini所在路路径，这时候就需要通过命令来查一查在哪里：123[root@localhost ~]">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-09T03:01:29.788Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LAMP之PHP的初始配置">
+<meta name="twitter:description" content="1. PHP的配置文件虽然PHP是以httpd的一个模块的形式存在的，但是PHP本身也有自己的配置文件，那就是php.ini。在前面安装时，我们已经拷贝了一个php.ini文件到/usr/local/php/etc/目录下面，这是我们已经知道了php.ini所在的路径在哪里。但有时候我们并不知道php.ini所在路路径，这时候就需要通过命令来查一查在哪里：123[root@localhost ~]">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/03/07/技术/006. LAMP之PHP的初始配置/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>LAMP之PHP的初始配置 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/07/技术/006. LAMP之PHP的初始配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LAMP之PHP的初始配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-07T14:09:04+08:00">2018-03-07</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-09T11:01:29+08:00">2018-03-09</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-PHP的配置文件"><a href="#1-PHP的配置文件" class="headerlink" title="1. PHP的配置文件"></a>1. PHP的配置文件</h1><p>虽然PHP是以httpd的一个模块的形式存在的，但是PHP本身也有自己的配置文件，那就是php.ini。在前面安装时，我们已经拷贝了一个php.ini文件到/usr/local/php/etc/目录下面，这是我们已经知道了php.ini所在的路径在哪里。但有时候我们并不知道php.ini所在路路径，这时候就需要通过命令来查一查在哪里：<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# /usr/local/php/bin/php -i | grep -i <span class="string">"loaded configuration file"</span></div><div class="line">Loaded <span class="keyword">Configuration</span> <span class="keyword">File</span> =&gt; /usr/local/php/etc/php.ini</div><div class="line">PHP <span class="literal">Warning</span>:  Unknown: It <span class="keyword">is</span> <span class="keyword">not</span> safe <span class="keyword">to</span> rely <span class="keyword">on</span> the system<span class="symbol">'s</span> timezone settings. You are *required* <span class="keyword">to</span> <span class="keyword">use</span> the date.timezone setting <span class="keyword">or</span> the date_default_timezone_set() <span class="keyword">function</span>. <span class="keyword">In</span> <span class="keyword">case</span> you used any <span class="keyword">of</span> those methods <span class="keyword">and</span> you are still getting this <span class="literal">warning</span>, you most likely misspelled the timezone identifier. We selected the timezone <span class="symbol">'UTC</span>' <span class="keyword">for</span> now, but please set date.timezone <span class="keyword">to</span> <span class="keyword">select</span> your timezone. <span class="keyword">in</span> Unknown <span class="keyword">on</span> <span class="literal">line</span> <span class="number">0</span></div></pre></td></tr></table></figure></p>
+<p>通过上面的查找可以看出php.ini的绝对路径为/usrl/local/php/etc/php.ini，下面的Warning为警告信息，可以忽略。若是想取消这个警告需要编辑php.ini，找到date.timezone设置如下：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">date<span class="selector-class">.timezone</span> = Asia/Shanghai</div></pre></td></tr></table></figure></p>
+<p>再次执行将不再提示警告信息：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># /usr/local/php/bin/php -i | grep -i <span class="string">"loaded configuration file"</span></span></div><div class="line">Loaded Configuration File =&gt; /usr/<span class="keyword">local</span>/php/etc/php.ini</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="2-PHP的disable-functions"><a href="#2-PHP的disable-functions" class="headerlink" title="2. PHP的disable_functions"></a>2. PHP的disable_functions</h1><p>PHP有很多内置的函数，有一些函数（比如exec）会直接调取Linux系统命令，如果开放将会非常危险。因此，基于安全考虑应该把一些存在安全风险的函数禁掉。一般我们应该禁掉的函数的配置改成如下即可，打开php.ini，搜索disable_functions并改成这样子：<code>disable_functions = eval,assert,popen,passthru,escapeshellarg,escapeshellcmd,exec,system,chroot,scandir,chgrp,chown,shell_exec,proc_get_status,ini_alter,ini_restore,dl,pfsockopen,openlog,syslog,readlink,symlink,leak,popepassthru,stream_socket_server,proc_open,proc_close</code></p>
+<p>关于这些所列出来的函数，暂时不用细究，将来遇到问题要记得曾经禁用掉了一些函数，这些被禁掉的函数是不能在PHP代码中调用的。更改完php.ini后，由于需要在httpd中调用PHP，所以需要重启httpd服务使其生效。</p>
+<hr>
+<h1 id="3-配置error-log"><a href="#3-配置error-log" class="headerlink" title="3. 配置error_log"></a>3. 配置error_log</h1><p>PHP的日志对于程序员来讲非常重要，它是排查问题的重要手段。设置PHP错误日志，有诸多步骤：<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># vim /usr/local/php/etc/php.ini</span></div><div class="line"><span class="comment">#&lt;==搜索log_errors，改成如下</span></div><div class="line"><span class="attr">log_errors</span> = <span class="literal">On</span></div><div class="line"><span class="comment">#&lt;==搜索error_log，改为</span></div><div class="line"><span class="attr">error_log</span> = /var/log/php/php_errors.log</div><div class="line"><span class="comment">#&lt;==搜索error_reporting，改为</span></div><div class="line"><span class="attr">error_reporting</span> = E_ALL &amp; ~E_NOTICE</div><div class="line"><span class="comment">#&lt;==搜索display_error，改为</span></div><div class="line"><span class="attr">display_error</span> = <span class="literal">Off</span></div></pre></td></tr></table></figure></p>
+<p>上述配置文件说明：</p>
+<ul>
+<li><code>log_errors</code>可以设置为<code>On</code>或<code>Off</code>，如果想让PHP记录错误日志，需要设置为<code>On</code>。</li>
+<li><code>error_log</code>设定错误日志路径。</li>
+<li><code>error_reporting</code>设定错误日志的级别，<code>E_ALL</code>为所有类型的日志，不管是提醒还是警告都会记录。在开发环境下面设置为<code>E_ALL</code>，可以方便程序员排查问题，但也会造成日志记录很多无意义的内容。<code>&amp;</code>符号表示并且，<code>~</code>表示排除，所以两个组合在一起<code>E_ALL &amp; ~E_NOTICE</code>就是在E_ALL的基础上排除掉notice相关的日志。</li>
+<li><code>display_errors</code>设置为<code>On</code>，则会把错误日志直接显示在浏览器里，这样对于用户访问来说体验不好，而且还会暴露网站的一些文件路径等重要信息，所以要设置为<code>Off</code>。</li>
+</ul>
+<p>设置完php.ini后，还需要做一些额外的操作：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># mkdir /var/log/php</span></div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># chmod 777 /var/log/php/</span></div><div class="line"><span class="meta">#&lt;==需要保证PHP的错误日志所在目录存在，并且权限为可写。</span></div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># /usr/local/apache2.4/bin/apachectl graceful</span></div></pre></td></tr></table></figure></p>
+<p>下面是测试过程：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# vim /data/wwwroot/www.123.com/test.php</div><div class="line"><span class="comment">#&lt;==写入如下内容，故意把后面的分号;丢掉</span></div><div class="line">&lt;?php</div><div class="line">echo 111</div><div class="line"></div><div class="line">[root@localhost ~]# curl -A <span class="string">"123"</span> -I -x127.0.0.1:80 www.123.com/test.php</div><div class="line">HTTP/1.0 500 Internal<span class="built_in"> Server </span>Error</div><div class="line">Date: Fri, 09 Mar 2018 08:45:30 GMT</div><div class="line">Server: Apache/2.4.29 (Unix) PHP/5.6.34</div><div class="line">X-Powered-By: PHP/5.6.34</div><div class="line">Connection: close</div><div class="line">Content-Type: text/html; <span class="attribute">charset</span>=UTF-8</div></pre></td></tr></table></figure></p>
+<p>可以看到这里的状态码为500，这说明我们访问的页面是存在错误的，此时需要查看PHP的错误日志来判断错误的原因，如下：</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# <span class="keyword">cat</span> /<span class="keyword">var</span>/<span class="keyword">log</span>/php/php_errors.<span class="built_in">log</span></div><div class="line">[09-Mar-2018 16:45:30 Asia/Shanghai] PHP <span class="keyword">Parse</span> <span class="keyword">error</span>:  <span class="keyword">syntax</span> <span class="keyword">error</span>, unexpected end of <span class="keyword">file</span>, expecting ',' or ';' <span class="keyword">in</span> /data/wwwroot/www.123.com/<span class="keyword">test</span>.php <span class="keyword">on</span> <span class="keyword">line</span> 3</div></pre></td></tr></table></figure>
+<p>查看PHP的错误日志，有一条错误的记录，通过日志可以判断，test.php文件的第三行少了分号。</p>
+<hr>
+<h1 id="4-配置open-basedir"><a href="#4-配置open-basedir" class="headerlink" title="4. 配置open_basedir"></a>4. 配置open_basedir</h1><p>一个服务器上跑很多网站，这是几乎所有小公司为节省成本采用的做法，但这样做也会有一些弊端：多个网站跑在同一服务器上，如果其中一个网站被黑，很有可能连累到其它的站点。为了避免这种尴尬的事情发生，我们应当做一些预防手段。</p>
+<p>好在PHP有一个概念叫做open_basedir，它的作用是讲网站限定在指定目录里，就算该站点被黑了，骇客也只能在该目录下面作为，而不能左右其它的目录。如果你的服务器上只有一个站点，那可以直接在php.ini中设置<code>open_basedir</code>参数。但是如果服务器上跑的站点比较多，那在php.ini中设置就不合适了，因为在php.ini中只能定义一次，也就是说所有站点都一起定义限定的目录，那这样似乎起不到隔离多个站点的目的。</p>
+<h2 id="4-1-php-ini中设置open-basedir"><a href="#4-1-php-ini中设置open-basedir" class="headerlink" title="4.1. php.ini中设置open_basedir"></a>4.1. php.ini中设置open_basedir</h2><p>在php.ini中设置open_basedir：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root<span class="variable">@localhost</span> ~]<span class="comment"># vim /usr/local/php/etc/php.ini</span></div><div class="line"><span class="comment">#&lt;==搜索open_basedir，改成如下内容，并保存退出</span></div><div class="line">open_basedir = <span class="regexp">/tmp:/data</span><span class="regexp">/wwwroot/www</span>.<span class="number">123</span>.com</div></pre></td></tr></table></figure></p>
+<p>上述配置的说明：</p>
+<ul>
+<li><code>open_basedir</code>可以是多个目录，用<code>:</code>分隔</li>
+</ul>
+<p>接下来验证一下open_basedir的作用，因为已经限制PHP只能在/tmp和/fata/wwwroot/www.123.com两个目录下面活动，所以这次拿aming.com来演示：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# /usr/local/apache2.4/bin/apachectl graceful</div><div class="line">[root@localhost ~]# cp /usr/local/apache2.4/htdocs/1.php /data/wwwroot/aming.com/</div><div class="line">[root@localhost ~]# curl -x127.0.0.1:80 -I aming.com/1.php</div><div class="line">HTTP/1.0 500 Internal<span class="built_in"> Server </span>Error</div><div class="line">Date: Fri, 09 Mar 2018 09:06:46 GMT</div><div class="line">Server: Apache/2.4.29 (Unix) PHP/5.6.34</div><div class="line">X-Powered-By: PHP/5.6.34</div><div class="line">Connection: close</div><div class="line">Content-Type: text/html; <span class="attribute">charset</span>=UTF-8</div></pre></td></tr></table></figure></p>
+<p>由上述演示发现aming.com/1.php确实不能访问了，状态码为500，所以查看一下错误日志，得到信息如下：<br><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[<span class="number">09</span>-Mar-<span class="number">2018</span> <span class="number">17</span>:<span class="number">06</span>:<span class="number">46</span> Asia/Shanghai] PHP <span class="literal">Warning</span>:  Unknown: open_basedir restriction <span class="keyword">in</span> effect. <span class="keyword">File</span>(/data/wwwroot/aming.com/<span class="number">1</span>.php) <span class="keyword">is</span> <span class="keyword">not</span> within the allowed path(s): (/tmp:/data/wwwroot/www.<span class="number">123</span>.com) <span class="keyword">in</span> Unknown <span class="keyword">on</span> <span class="literal">line</span> <span class="number">0</span></div><div class="line">[<span class="number">09</span>-Mar-<span class="number">2018</span> <span class="number">17</span>:<span class="number">06</span>:<span class="number">46</span> Asia/Shanghai] PHP <span class="literal">Warning</span>:  Unknown: failed <span class="keyword">to</span> <span class="keyword">open</span> stream: Operation <span class="keyword">not</span> permitted <span class="keyword">in</span> Unknown <span class="keyword">on</span> <span class="literal">line</span> <span class="number">0</span></div><div class="line">[<span class="number">09</span>-Mar-<span class="number">2018</span> <span class="number">17</span>:<span class="number">06</span>:<span class="number">46</span> Asia/Shanghai] PHP Fatal <span class="literal">error</span>:  Unknown: Failed opening required '/data/wwwroot/aming.com/<span class="number">1</span>.php' (include_path='.:/usr/local/php/lib/php') <span class="keyword">in</span> Unknown <span class="keyword">on</span> <span class="literal">line</span> <span class="number">0</span></div></pre></td></tr></table></figure></p>
+<h2 id="4-2-虚拟主机配置中设置open-basedir"><a href="#4-2-虚拟主机配置中设置open-basedir" class="headerlink" title="4.2. 虚拟主机配置中设置open_basedir"></a>4.2. 虚拟主机配置中设置open_basedir</h2><p>下面的设置是给单个虚拟主机配置open_basedir。对于php.ini里面的配置，在虚拟主机的配置文件中也是可以配置的：<br><figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># vim /usr/local/apache2.4/conf/extra/httpd-vhosts.conf</span></div><div class="line"><span class="comment">#&lt;==编辑成如下：</span></div><div class="line">&lt;VirtualHost *:<span class="number">80</span>&gt;</div><div class="line">    DocumentRoot <span class="string">"/data/wwwroot/www.123.com"</span></div><div class="line">    ServerName www.<span class="number">123</span>.com</div><div class="line">    ServerAlias <span class="number">123</span>.com</div><div class="line">    CustomLog <span class="string">"|/usr/local/apache2.4/bin/rotatelogs -l logs/123.com-access_%Y%m%d.log 86400"</span> combined</div><div class="line">    php_admin_value open_basedir <span class="string">"/data/wwwroot/www.123.com/:/tmp/"</span>	<span class="comment">#&lt;==就是这一行配置</span></div><div class="line">&lt;<span class="regexp">/VirtualHost&gt;</span></div></pre></td></tr></table></figure></p>
+<p>上述配置内容的说明：</p>
+<ul>
+<li>起作用的就是这一句：<code>php_admin_value</code>，它可以定义php.ini里面的参数，除此之外像error_log之类的也可以定义。</li>
+</ul>
+<p>这样就可以实现，一个虚拟主机定义一个open_basedir。</p>
+<hr>
+<h1 id="5-PHP动态模块安装"><a href="#5-PHP动态模块安装" class="headerlink" title="5. PHP动态模块安装"></a>5. PHP动态模块安装</h1><p>编辑httpd时，有涉及动态和静态模块，其实PHP也一样有这种说法。在记录PHP安装的学习笔记中，所有的模块全部都为静态，并没有任何动态的模块。所谓动态，就是一个独立存在的<code>.so文件</code>，在httpd中php就是以动态模块的形式被加载的。</p>
+<p>首先，应该学会查看PHP都加载了哪些功能模块：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# /usr/local/php/bin/php -m</div><div class="line">[PHP Modules]</div><div class="line">bz2</div><div class="line">Core</div><div class="line">ctype</div><div class="line">date</div><div class="line">dom</div><div class="line">ereg</div><div class="line">exif</div><div class="line">fileinfo</div><div class="line">filter</div><div class="line">gd</div><div class="line">hash</div><div class="line">iconv</div><div class="line">json</div><div class="line">libxml</div><div class="line">mbstring</div><div class="line">mcrypt</div><div class="line">mysql</div><div class="line">openssl</div><div class="line">pcre</div><div class="line">PDO</div><div class="line">pdo_sqlite</div><div class="line">Phar</div><div class="line">posix</div><div class="line">Reflection</div><div class="line">session</div><div class="line">SimpleXML</div><div class="line">soap</div><div class="line">sockets</div><div class="line">SPL</div><div class="line">sqlite3</div><div class="line">standard</div><div class="line">tokenizer</div><div class="line">xml</div><div class="line">xmlreader</div><div class="line">xmlwriter</div><div class="line">zlib</div><div class="line"></div><div class="line">[Zend Modules]</div></pre></td></tr></table></figure></p>
+<p>PHP和核心文件为/usr/local/php/bin/php，针对apache的是/usr/local/apache2.4/modules/libphp5.so模块。这两个文件是核心，我们在编译PHP的时候会提前让它支持一些功能，比如支持mysql，这个功能其实是PHP的一个模块，只不过这个模块是直接和PHP或者libphp5.so文件编译在一起的。当我们编译完PHP后，发现我们还需要让PHP支持另外的模块，即要想再增加一个功能模块的话，要么重新编译PHP，要么直接编译一个扩展模块（即生成一个.so文件），然后在php.ini中配置一下，让PHP去调用它，就可以被加载使用了。</p>
+<p>下面是两个示例：</p>
+<h2 id="5-1-示例1：安装redis扩展模块"><a href="#5-1-示例1：安装redis扩展模块" class="headerlink" title="5.1. 示例1：安装redis扩展模块"></a>5.1. 示例1：安装redis扩展模块</h2><p>下载redis扩展模块安装包并解压：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># cd /usr/local/src/</span></div><div class="line">[root<span class="symbol">@localhost</span> src]<span class="meta"># wget https://codeload.github.com/phpredis/phpredis/zip/develop</span></div><div class="line">[root<span class="symbol">@localhost</span> src]<span class="meta"># mv develop phpredis-develop.zip</span></div><div class="line">[root<span class="symbol">@localhost</span> src]<span class="meta"># unzip !$</span></div><div class="line">[root<span class="symbol">@localhost</span> src]<span class="meta"># cd phpredis-develop</span></div></pre></td></tr></table></figure></p>
+<p>下面是安装步骤：<br><figure class="highlight smali"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root@localhost phpredis-develop]<span class="comment"># /usr/local/php/bin/phpize</span></div><div class="line">Configuring for:</div><div class="line">PHP Api Version:         20131106</div><div class="line">Zend Module Api No:      20131226</div><div class="line">Zend Extension Api No:   220131226</div><div class="line">Cannot find autoconf. Please<span class="built_in"> check </span>your autoconf installation<span class="built_in"> and </span>the</div><div class="line">$PHP_AUTOCONF environment variable. Then, rerun this script.</div></pre></td></tr></table></figure></p>
+<p>这一步的作用是生产configure文件，但是在这一步并没有执行成功，可以看到有一个错误:<code>Cannot find autoconf</code>，这需要安装autoconf：<code>yum install -y autoconf</code>，然后再次执行该步骤：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root@localhost phpredis-develop]<span class="comment"># /usr/local/php/bin/phpize</span></div><div class="line">Configuring <span class="symbol">for:</span></div><div class="line">PHP Api <span class="symbol">Version:</span>         <span class="number">20131106</span></div><div class="line">Zend Module Api <span class="symbol">No:</span>      <span class="number">20131226</span></div><div class="line">Zend Extension Api <span class="symbol">No:</span>   <span class="number">220131226</span></div><div class="line">[root@localhost phpredis-develop]<span class="comment"># ./configure --with-php-config=/usr/local/php/bin/php-config</span></div><div class="line">[root@localhost phpredis-develop]<span class="comment"># make</span></div><div class="line">[root@localhost phpredis-develop]<span class="comment"># make install</span></div><div class="line">Installing shared <span class="symbol">extensions:</span>     /usr/local/php/<span class="class"><span class="keyword">lib</span>/<span class="title">php</span>/<span class="title">extensions</span>/<span class="title">no</span>-<span class="title">debug</span>-<span class="title">zts</span>-20131226/</span></div></pre></td></tr></table></figure></p>
+<p>上述步骤的说明：</p>
+<ul>
+<li><code>make install</code>的时候会把编译好的<code>redis.so</code>放到这个目录下面：<code>/usr/local/php/lib/php/extensions/no-debug-zts-20131226</code>，这个目录也是扩展模块存放目录。</li>
+<li>查看扩展模块存放目录的方法：<code>/usr/local/php/bin/php -i | grep extension_dir</code>我们也可以在php.ini中自定义该目录</li>
+</ul>
+<p>接下来是在php.ini中添加调用模块的配置：<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="section">[root@localhost phpredis-develop]</span><span class="comment"># vim /usr/local/php/etc/php.ini</span></div><div class="line"><span class="comment">#&lt;==添加一行配置，可以放到文件最后一行</span></div><div class="line"><span class="attr">extension</span> = redis.so</div></pre></td></tr></table></figure></p>
+<p>然后查看是否加载了redis模块：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> phpredis-develop]<span class="meta"># /usr/local/php/bin/php -m | grep redis</span></div><div class="line">redis</div></pre></td></tr></table></figure></p>
+<p>到此，PHP的redis模块就安装和配置成功了。</p>
+<h2 id="5-2-示例2：安装memcache扩展模块"><a href="#5-2-示例2：安装memcache扩展模块" class="headerlink" title="5.2. 示例2：安装memcache扩展模块"></a>5.2. 示例2：安装memcache扩展模块</h2><p>下载memcache模块安装包：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> phpredis-develop]<span class="meta"># cd /usr/local/src/</span></div><div class="line">[root<span class="symbol">@localhost</span> src]<span class="meta"># wget http://pecl.php.net/get/memcache-3.0.8.tgz</span></div></pre></td></tr></table></figure></p>
+<p>安装memcache模块：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[root@localhost src]<span class="comment"># tar zxf memcache-3.0.8.tgz</span></div><div class="line">[root@localhost src]<span class="comment"># cd memcache-3.0.8</span></div><div class="line">[root@localhost memcache-<span class="number">2.2</span>.<span class="number">3</span>]<span class="comment"># /usr/local/php/bin/phpize</span></div><div class="line">[root@localhost memcache-<span class="number">2.2</span>.<span class="number">3</span>]<span class="comment"># ./configure --with-php-config=/usr/local/php/bin/php-config</span></div><div class="line">[root@localhost memcache-<span class="number">2.2</span>.<span class="number">3</span>]<span class="comment"># make</span></div><div class="line">[root@localhost memcache-<span class="number">3.0</span>.<span class="number">8</span>]<span class="comment"># echo $?</span></div><div class="line"><span class="number">0</span></div><div class="line">[root@localhost memcache-<span class="number">3.0</span>.<span class="number">8</span>]<span class="comment"># make install</span></div><div class="line">Installing shared <span class="symbol">extensions:</span>     /usr/local/php/<span class="class"><span class="keyword">lib</span>/<span class="title">php</span>/<span class="title">extensions</span>/<span class="title">no</span>-<span class="title">debug</span>-<span class="title">zts</span>-20131226/</span></div><div class="line"><span class="comment">#&lt;==查看已安装模块</span></div><div class="line">[root@localhost memcache-<span class="number">3.0</span>.<span class="number">8</span>]<span class="comment"># ll /usr/local/php/lib/php/extensions/no-debug-zts-20131226/</span></div><div class="line">总用量 <span class="number">2696</span></div><div class="line">-rwxr-xr-x <span class="number">1</span> root root  <span class="number">464145</span> <span class="number">3</span>月   <span class="number">9</span> <span class="number">18</span>:<span class="number">42</span> memcache.so</div><div class="line">-rwxr-xr-x <span class="number">1</span> root root  <span class="number">555981</span> <span class="number">3</span>月   <span class="number">6</span> <span class="number">23</span>:<span class="number">42</span> opcache.so</div><div class="line">-rwxr-xr-x <span class="number">1</span> root root <span class="number">1732634</span> <span class="number">3</span>月   <span class="number">9</span> <span class="number">18</span>:<span class="number">21</span> redis.so</div></pre></td></tr></table></figure></p>
+<p>配置php.ini文件以使PHP调用模块：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> phpredis-develop]<span class="meta"># vim /usr/local/php/etc/php.ini</span></div><div class="line"><span class="meta">#&lt;==添加一行配置，可以放到文件最后一行</span></div><div class="line">extension = memcache.so</div><div class="line"><span class="meta">#&lt;==保存退出后查看PHP是否成功加载了该模块：</span></div><div class="line">[root<span class="symbol">@localhost</span> memcache<span class="number">-3.0</span><span class="number">.8</span>]<span class="meta"># /usr/local/php/bin/php -m | grep memcache</span></div><div class="line">memcache</div></pre></td></tr></table></figure></p>
+<p>至此，memcache模块安装成功。</p>
+<p>加入，我们把安装的模块放在了自定义的扩展模块存放目录里面，那该如何配置呢？示例如下：<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="section">[root@localhost ~]</span><span class="comment"># vim /usr/local/php/etc/php.ini</span></div><div class="line"><span class="comment">#&lt;==编辑php.ini文件，查找extension_dir，并添加一条配置成如下：</span></div><div class="line"><span class="attr">extension_dir</span> = <span class="string">"/usr/local/php/ext"</span></div></pre></td></tr></table></figure></p>
+<p>保存退出后我们做一下测试：<br><figure class="highlight elixir"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[root<span class="variable">@localhost</span> ~]<span class="comment"># mkdir /usr/local/php/ext</span></div><div class="line">[root<span class="variable">@localhost</span> ~]<span class="comment"># mv /usr/local/php/lib/php/extensions/no-debug-zts-20131226/memcache.so /usr/local/php/ext/</span></div><div class="line">[root<span class="variable">@localhost</span> ~]<span class="comment"># /usr/local/php/bin/php -m | grep memcache</span></div><div class="line">memcache</div><div class="line">[root<span class="variable">@localhost</span> ~]<span class="comment"># /usr/local/php/bin/php -i | grep extension_dir</span></div><div class="line">extension_dir =&gt; <span class="regexp">/usr/local</span><span class="regexp">/php/ext</span> =&gt; <span class="regexp">/usr/local</span><span class="regexp">/php/ext</span></div><div class="line">sqlite3.extension_dir =&gt; no value =&gt; no value</div></pre></td></tr></table></figure></p>
+<p>通过上述测试我们知道，存放在我们自定义的模块存放目录下的memcache模块能被调用，并且用命令查看模块存放目录也是我们所自定义的目录，这说明我们配置成功了。</p>
+<hr>
+<p>如果以后遇到增加模块的需求，都可以按照上面两个例子的步骤和方法来安装。另外，要想在PHP网站上面使用新安装的模块，还需要重启一下httpd服务。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术/" rel="tag"><i class="fa fa-tag"></i> 技术</a>
+          
+            <a href="/tags/LAMP/" rel="tag"><i class="fa fa-tag"></i> LAMP</a>
+          
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i> PHP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/07/技术/005. LAMP之Apache的初始配置/" rel="next" title="LAMP之Apache的初始配置">
+                <i class="fa fa-chevron-left"></i> LAMP之Apache的初始配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/09/技术/007. LNMP之源码安装搭建/" rel="prev" title="LNMP之源码安装搭建">
+                LNMP之源码安装搭建 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-PHP的配置文件"><span class="nav-text">1. PHP的配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-PHP的disable-functions"><span class="nav-text">2. PHP的disable_functions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-配置error-log"><span class="nav-text">3. 配置error_log</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-配置open-basedir"><span class="nav-text">4. 配置open_basedir</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-php-ini中设置open-basedir"><span class="nav-text">4.1. php.ini中设置open_basedir</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-虚拟主机配置中设置open-basedir"><span class="nav-text">4.2. 虚拟主机配置中设置open_basedir</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-PHP动态模块安装"><span class="nav-text">5. PHP动态模块安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-示例1：安装redis扩展模块"><span class="nav-text">5.1. 示例1：安装redis扩展模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-示例2：安装memcache扩展模块"><span class="nav-text">5.2. 示例2：安装memcache扩展模块</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

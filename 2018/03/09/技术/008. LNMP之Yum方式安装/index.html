@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="LNMP," />
+
+
+<meta name="description" content="1. 实验环境本实验是在CentOS7版本上面进行的，所以实验环境是CentOS7的64位机器。 2. 配置YUM源根据YUM的特性，我们可以通过yum命令来非常方便的安装LNMP环境。 2.1. 更新系统的YUM源CentOS7的默认YUM源里的软件包版本可能不是最新的，如果要安装最新的软件包就得配置下YUM源。 配置YUM源可以通过直接安装RPM包，或者修改Repository，本篇学习笔记讲">
+<meta name="keywords" content="LNMP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LNMP之Yum方式安装">
+<meta property="og:url" content="http://www.theshu.top/2018/03/09/技术/008. LNMP之Yum方式安装/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="1. 实验环境本实验是在CentOS7版本上面进行的，所以实验环境是CentOS7的64位机器。 2. 配置YUM源根据YUM的特性，我们可以通过yum命令来非常方便的安装LNMP环境。 2.1. 更新系统的YUM源CentOS7的默认YUM源里的软件包版本可能不是最新的，如果要安装最新的软件包就得配置下YUM源。 配置YUM源可以通过直接安装RPM包，或者修改Repository，本篇学习笔记讲">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-09T11:47:41.624Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LNMP之Yum方式安装">
+<meta name="twitter:description" content="1. 实验环境本实验是在CentOS7版本上面进行的，所以实验环境是CentOS7的64位机器。 2. 配置YUM源根据YUM的特性，我们可以通过yum命令来非常方便的安装LNMP环境。 2.1. 更新系统的YUM源CentOS7的默认YUM源里的软件包版本可能不是最新的，如果要安装最新的软件包就得配置下YUM源。 配置YUM源可以通过直接安装RPM包，或者修改Repository，本篇学习笔记讲">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/03/09/技术/008. LNMP之Yum方式安装/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>LNMP之Yum方式安装 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/09/技术/008. LNMP之Yum方式安装/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LNMP之Yum方式安装</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T11:30:03+08:00">2018-03-09</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-09T19:47:41+08:00">2018-03-09</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-实验环境"><a href="#1-实验环境" class="headerlink" title="1. 实验环境"></a>1. 实验环境</h1><p>本实验是在CentOS7版本上面进行的，所以实验环境是CentOS7的64位机器。</p>
+<h1 id="2-配置YUM源"><a href="#2-配置YUM源" class="headerlink" title="2. 配置YUM源"></a>2. 配置YUM源</h1><p>根据YUM的特性，我们可以通过yum命令来非常方便的安装LNMP环境。</p>
+<h2 id="2-1-更新系统的YUM源"><a href="#2-1-更新系统的YUM源" class="headerlink" title="2.1. 更新系统的YUM源"></a>2.1. 更新系统的YUM源</h2><p>CentOS7的默认YUM源里的软件包版本可能不是最新的，如果要安装最新的软件包就得配置下YUM源。</p>
+<p>配置YUM源可以通过直接安装RPM包，或者修改<code>Repository</code>，本篇学习笔记讲解通过安装RPM包的方式来进行配置。</p>
+<p>首先需要安装EPEL的YUM源，用以解决部分依赖包不存在的问题：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">yum <span class="keyword">install</span> -y epel-<span class="keyword">release</span></div></pre></td></tr></table></figure></p>
+<h2 id="2-2-添加MySQL的YUM源"><a href="#2-2-添加MySQL的YUM源" class="headerlink" title="2.2. 添加MySQL的YUM源"></a>2.2. 添加MySQL的YUM源</h2><p>MySQL官网给出了配置教程，因为本文实验用的是CentOS7，所以我们只需要安装对应的RPM包就行了。</p>
+<p>安装RPM包前需要导入RPM-GPG-KEY文件，不然安装过程会出错。将<a href="https://dev.mysql.com/doc/refman/5.6/en/checking-gpg-signature.html" target="_blank" rel="external">MySQL RPM-GPG-KEY</a>另存为<code>mysql_pubkey.asc</code>，并导入：<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm --<span class="keyword">import</span> mysql_pubkey.asc</div></pre></td></tr></table></figure></p>
+<p>导入后安装CentOS7的MySQL RPM包：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -Uvh <span class="string">http:</span><span class="comment">//repo.mysql.com/mysql-community-release-el7-5.noarch.rpm</span></div></pre></td></tr></table></figure></p>
+<h2 id="2-3-添加PHP的YUM源"><a href="#2-3-添加PHP的YUM源" class="headerlink" title="2.3. 添加PHP的YUM源"></a>2.3. 添加PHP的YUM源</h2><p>PHP最新的RPM包，可以使用<a href="http://rpms.remirepo.net/" target="_blank" rel="external">Remi’s RPM repository</a>。</p>
+<p>导入PHP RPM-GPG-KEY（remi）：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm --<span class="keyword">import</span> <span class="string">http:</span><span class="comment">//rpms.remirepo.net/RPM-GPG-KEY-remi</span></div></pre></td></tr></table></figure></p>
+<p>安装PHP RPM（remi）包：<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -Uvh http:<span class="regexp">//</span>remi.mirrors.arminco.com<span class="regexp">/enterprise/</span>remi-release-<span class="number">7</span>.rpm</div></pre></td></tr></table></figure></p>
+<h2 id="2-4-添加Nginx的YUM源"><a href="#2-4-添加Nginx的YUM源" class="headerlink" title="2.4. 添加Nginx的YUM源"></a>2.4. 添加Nginx的YUM源</h2><p>Nginx官网也给出了配置教程。</p>
+<p>可以在这<a href="http://nginx.org/keys/nginx_signing.key" target="_blank" rel="external">Nginx RPM-GPG-KEY</a>导入Nginx RPM-GPG-KEY包：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm --<span class="keyword">import</span> <span class="string">http:</span><span class="comment">//nginx.org/packages/keys/nginx_signing.key</span></div></pre></td></tr></table></figure></p>
+<p>安装Nginx RPM包：<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">rpm -Uvh http:<span class="regexp">//</span>nginx.org<span class="regexp">/packages/</span>centos<span class="regexp">/7/</span>noarch<span class="regexp">/RPMS/</span>nginx-release-centos-<span class="number">7</span>-<span class="number">0</span>.el7.ngx.noarch.rpm</div></pre></td></tr></table></figure></p>
+<h2 id="2-5-YUM源最后的配置和调整"><a href="#2-5-YUM源最后的配置和调整" class="headerlink" title="2.5. YUM源最后的配置和调整"></a>2.5. YUM源最后的配置和调整</h2><p>到此，YUM源已经安装好了，但是还得进行最后的配置和调整。</p>
+<p>MySQL的YUM源默认启用的是MySQL-5.6版本，PHP的YUM源默认都没有启用，Nginx的YUM源默认启用的是Nginx-1.8版本。</p>
+<p>定位到<code>/etc/yum.repos.d/</code>目录下面，对后缀为<code>.repo</code>的文件进行编辑，修改<code>enabled</code>为<code>1</code>启用。示例如下：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">[root@AmingLinux-105 ~]<span class="comment"># cd /etc/yum.repos.d</span></div><div class="line">[root@AmingLinux-105 yum.repos.d]<span class="comment"># ll</span></div><div class="line">总用量 72</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 1664 </span>8月 <span class="number"> 18 </span>2017 CentOS-Base.repo</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 1309 </span>8月 <span class="number"> 18 </span>2017 CentOS-CR.repo</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root <span class="number"> 649 </span>8月 <span class="number"> 18 </span>2017 CentOS-Debuginfo.repo</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root <span class="number"> 314 </span>8月 <span class="number"> 18 </span>2017 CentOS-fasttrack.repo</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root <span class="number"> 630 </span>8月 <span class="number"> 18 </span>2017 CentOS-Media.repo</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 1331 </span>8月 <span class="number"> 18 </span>2017 CentOS-Sources.repo</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 2893 </span>8月 <span class="number"> 18 </span>2017 CentOS-Vault.repo</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root <span class="number"> 957 </span>12月<span class="number"> 28 </span>2016 epel.repo</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 1056 </span>12月<span class="number"> 28 </span>2016 epel-testing.repo</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 1209 </span>1月 <span class="number"> 29 </span>2014 mysql-community.repo</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 1060 </span>1月 <span class="number"> 29 </span>2014 mysql-community-source.repo</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root <span class="number"> 113 </span>7月 <span class="number"> 15 </span>2014 nginx.repo</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root <span class="number"> 456 </span>1月 <span class="number"> 16 </span>15:06 remi-php54.repo</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 1314 </span>1月 <span class="number"> 16 </span>15:06 remi-php70.repo</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 1314 </span>1月 <span class="number"> 16 </span>15:06 remi-php71.repo</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 1314 </span>1月 <span class="number"> 16 </span>15:06 remi-php72.repo</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root<span class="number"> 2605 </span>1月 <span class="number"> 16 </span>15:06 remi.repo</div><div class="line">-rw-r--r--<span class="number"> 1 </span>root root <span class="number"> 750 </span>1月 <span class="number"> 16 </span>15:06 remi-safe.repo</div></pre></td></tr></table></figure></p>
+<p>启用PHP-7.0的示例：</p>
+<ul>
+<li>修改<code>/etc/yum.repos.d/remi.repo</code>，将<code>[remi]</code>和<code>[remi-test]</code>下面的<code>enabled=0</code>改为<code>enabled=1</code></li>
+<li>修改<code>/etc/yum.repos.d/remi-php70.repo</code>，将<code>[remi-php70]</code>下面的<code>enabled=0</code>改为<code>enabled=1</code></li>
+<li>示例操作如下：<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sed -<span class="selector-tag">i</span> <span class="string">"/remi\/mirror/&#123;n;s/enabled=0/enabled=1/g&#125;"</span> /etc/yum<span class="selector-class">.repos</span><span class="selector-class">.d</span>/remi.repo</div><div class="line">sed -<span class="selector-tag">i</span> <span class="string">"/test\/mirror/&#123;n;n;s/enabled=0/enabled=1/g&#125;"</span> /etc/yum<span class="selector-class">.repos</span><span class="selector-class">.d</span>/remi.repo</div><div class="line">sed -<span class="selector-tag">i</span> <span class="string">"/php70\/mirror/&#123;n;s/enabled=0/enabled=1/g&#125;"</span> /etc/yum<span class="selector-class">.repos</span><span class="selector-class">.d</span>/remi-php70.repo</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>到这异步YUM配置就算全部完成了，清除并生成YUM缓存使之生效：<br><figure class="highlight ada"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">yum clean <span class="keyword">all</span></div><div class="line">yum makecache</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="3-安装MySQL-PHP-Nginx-phpMyAdmin"><a href="#3-安装MySQL-PHP-Nginx-phpMyAdmin" class="headerlink" title="3. 安装MySQL+PHP+Nginx+phpMyAdmin"></a>3. 安装MySQL+PHP+Nginx+phpMyAdmin</h1><p>YUM源配置好了后，现在直接安装MySQL+PHP+Nginx+phpMyAdmin，命令如下：<br><figure class="highlight livescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">yum install -y mysql-community-server <span class="string">\</span></div><div class="line">nginx php php-bcmath php-fpm php-gd php-json <span class="string">\</span></div><div class="line">php-mbstring php-mcrypt php-mysqlnd php-opcache <span class="string">\</span></div><div class="line">php-pdo php-pdo_dblib php-pgsql php-recode php-snmp <span class="string">\</span></div><div class="line">php-soap php-xml php-pecl-zip phpMyAdmin</div></pre></td></tr></table></figure></p>
+<p>注意：上面安装的<code>php-*</code>可以根据实际使用情况选择安装。</p>
+<hr>
+<p>安装完成后，进行下一步的环境配置，MySQL的配置文件在<code>/etc/my.conf.d/</code>，PHP的配置文件在<code>/etc/php-fpm.d/</code>，Nginx的配置文件在<code>/etc/nginx/</code>，phpMyAdmin的配置文件在<code>/etc/phpMyAdmin/</code>。</p>
+<hr>
+<h1 id="4-配置MySQL"><a href="#4-配置MySQL" class="headerlink" title="4. 配置MySQL"></a>4. 配置MySQL</h1><p>MySQL配置文件保持默认即可，运行一次安全配置即可。</p>
+<p>启动MySQL：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl <span class="literal">start</span> mysqld.service</div></pre></td></tr></table></figure></p>
+<p>安全配置MySQL：设置root密码、删除匿名用、禁止root远程登陆、删除test数据库、重新加载权限表，一路<code>Y</code>下去<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql_secure_installation</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="5-配置PHP"><a href="#5-配置PHP" class="headerlink" title="5. 配置PHP"></a>5. 配置PHP</h1><p>PHP默认配置文件使用的是监听9000端口进行通信，针对小型单一、没有做负载均衡的服务器，可以使用<code>unix sock</code>方式通信。</p>
+<p>使用<code>unix sock</code>方式需要修改PHP配置文件：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">#更换监听方式</div><div class="line">listen = /dev/shm/php-fpm-default.sock</div><div class="line"></div><div class="line">#监听队列最大长度为不限</div><div class="line">listen<span class="selector-class">.backlog</span> = -<span class="number">1</span></div><div class="line">#指定监听用户和用户组（需存在）</div><div class="line">listen<span class="selector-class">.owner</span> = www</div><div class="line">listen<span class="selector-class">.group</span> = www</div></pre></td></tr></table></figure></p>
+<p>启动<code>php-fpm</code>：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl <span class="literal">start</span> php-fpm.service</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="6-配置Nginx"><a href="#6-配置Nginx" class="headerlink" title="6. 配置Nginx"></a>6. 配置Nginx</h1><p>让服务器默认访问显示为400提示页。<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#新建名为 nginx-<span class="keyword">default</span>.conf 的配置文件</div><div class="line">touch <span class="regexp">/etc/</span>nginx<span class="regexp">/conf.d/</span>nginx-<span class="keyword">default</span>.conf</div><div class="line">#编辑配置文件</div><div class="line">vi <span class="regexp">/etc/</span>nginx<span class="regexp">/conf.d/</span>nginx-<span class="keyword">default</span>.conf</div></pre></td></tr></table></figure></p>
+<p>将以下信息输入到nginx-defualt.conf中：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">server</div><div class="line">&#123;</div><div class="line">    listen 80 default;</div><div class="line">    return 400;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>保存退出后，再进行防火墙放行HTPP端口访问：<br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">firewall-<span class="keyword">cmd</span><span class="bash"> --permanent --zone=public --add-service=http</span></div><div class="line"><span class="bash">firewall-cmd --reload</span></div></pre></td></tr></table></figure></p>
+<p>启动Nginx：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">systemctl <span class="literal">start</span> nginx.service</div></pre></td></tr></table></figure></p>
+<p>这时，在浏览器地址栏输入当前服务器IP就会看到一个400的提示页面了。</p>
+<h1 id="7-Nginx的进阶配置"><a href="#7-Nginx的进阶配置" class="headerlink" title="7. Nginx的进阶配置"></a>7. Nginx的进阶配置</h1><p>这一节是进阶的配置，内容有：绑定域名、站点目录、保存日志、运行PHP的配置文件。</p>
+<p>配置如下内容：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># vim /etc/nginx/conf.d/default.conf</span></div><div class="line">server</div><div class="line">&#123;</div><div class="line">    <span class="attribute">listen</span> <span class="number">80</span>; <span class="comment">#监听80端口</span></div><div class="line">    <span class="attribute">server_name</span> default.com www.default.com; <span class="comment">#绑定域名 default.com 和 www.default.com</span></div><div class="line">    <span class="attribute">index</span> index.html index.htm index.php; <span class="comment">#设置首页文件，越前优先级越高</span></div><div class="line">    <span class="attribute">charset</span> utf-<span class="number">8</span>; <span class="comment">#设置网页编码</span></div><div class="line"></div><div class="line">    <span class="attribute">root</span>  /home/wwwroot/default; <span class="comment">#设置站点根目录</span></div><div class="line"></div><div class="line">    <span class="comment">#运行 PHP</span></div><div class="line">    <span class="attribute">location</span> <span class="regexp">~ .*\.php$</span></div><div class="line"><span class="regexp"></span>    &#123;</div><div class="line">        <span class="attribute">fastcgi_pass</span>  <span class="number">127.0.0.1:9000</span> <span class="comment">#默认使用9000端口和PHP通信</span></div><div class="line">        <span class="comment">#fastcgi_pass  unix:/dev/shm/php-fpm-default.sock; #使用 unix sock 和PHP通信</span></div><div class="line">        fastcgi_index index.php;</div><div class="line">        <span class="attribute">fastcgi_param</span> DOCUMENT_ROOT  /home/wwwroot/default; <span class="comment">#PHP 文档根目录</span></div><div class="line">        <span class="attribute">fastcgi_param</span> SCRIPT_FILENAME  /home/wwwroot/default<span class="variable">$fastcgi_script_name</span>; <span class="comment">#PHP 脚本目录</span></div><div class="line">        <span class="attribute">include</span> fastcgi_params;</div><div class="line">        <span class="attribute">try_files</span> <span class="variable">$uri</span> = <span class="number">404</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">#设置文件过期时间</span></div><div class="line">    <span class="attribute">location</span> <span class="regexp">~ .*\.(gif|jpg|jpeg|png|bmp|swf|flv|mp3|wma)$</span></div><div class="line"><span class="regexp"></span>    &#123;</div><div class="line">        <span class="attribute">expires</span>      <span class="number">30d</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">#设置文件过期时间</span></div><div class="line">    <span class="attribute">location</span> <span class="regexp">~ .*\.(js|css)$</span></div><div class="line"><span class="regexp"></span>    &#123;</div><div class="line">        <span class="attribute">expires</span>      <span class="number">12h</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">#设置文件访问权限</span></div><div class="line">    <span class="attribute">location</span> <span class="regexp">~* /templates(/.*)\.(bak|html|htm|ini|old|php|tpl)$</span> &#123;</div><div class="line">        <span class="attribute">allow</span> <span class="number">127.0.0.1</span>;</div><div class="line">        <span class="attribute">deny</span> all;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">#设置文件访问权限</span></div><div class="line">    <span class="attribute">location</span> <span class="regexp">~* \.(ftpquota|htaccess|htpasswd|asp|aspx|jsp|asa|mdb)?$</span> &#123;</div><div class="line">        <span class="attribute">deny</span> all;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">#保存日志</span></div><div class="line">    <span class="attribute">access_log</span> /var/log/nginx/default-access.log main;</div><div class="line">    <span class="attribute">error_log</span> /var/log/nginx/default-<span class="literal">error</span>.log <span class="literal">crit</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<p>到此，以YUM方式搭建LNMP的环境就完成了。接下来的工作便是优化一下其中各个组件的配置等。</p>
+<hr>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/LNMP/" rel="tag"><i class="fa fa-tag"></i> LNMP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/09/技术/007. LNMP之源码安装搭建/" rel="next" title="LNMP之源码安装搭建">
+                <i class="fa fa-chevron-left"></i> LNMP之源码安装搭建
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/09/技术/009. LNMP之Nginx初始配置/" rel="prev" title="LNMP之Nginx初始配置">
+                LNMP之Nginx初始配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-实验环境"><span class="nav-text">1. 实验环境</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-配置YUM源"><span class="nav-text">2. 配置YUM源</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-更新系统的YUM源"><span class="nav-text">2.1. 更新系统的YUM源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-添加MySQL的YUM源"><span class="nav-text">2.2. 添加MySQL的YUM源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-添加PHP的YUM源"><span class="nav-text">2.3. 添加PHP的YUM源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-添加Nginx的YUM源"><span class="nav-text">2.4. 添加Nginx的YUM源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-YUM源最后的配置和调整"><span class="nav-text">2.5. YUM源最后的配置和调整</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-安装MySQL-PHP-Nginx-phpMyAdmin"><span class="nav-text">3. 安装MySQL+PHP+Nginx+phpMyAdmin</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-配置MySQL"><span class="nav-text">4. 配置MySQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-配置PHP"><span class="nav-text">5. 配置PHP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-配置Nginx"><span class="nav-text">6. 配置Nginx</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-Nginx的进阶配置"><span class="nav-text">7. Nginx的进阶配置</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

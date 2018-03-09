@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="技术,LAMP,MySQL,Apache,PHP," />
+
+
+<meta name="description" content="1. 介绍LAMP是Linux + Apache + MySQL + PHP的简写，其实就是把Apache、MySQL以及PHP安装在Linux系统上，组成一个环境来运行PHP的脚本语言，通常是网站。 我们可以把Apache+PHP安装在一台机器上，再把MySQL安装在另外一台机器上，也可以把它们三个安装在同一台机器上。但Apache和PHP需要在同一台机器上，这是因为PHP是作为Apache的一">
+<meta name="keywords" content="技术,LAMP,MySQL,Apache,PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LAMP之源码安装搭建">
+<meta property="og:url" content="http://www.theshu.top/2018/03/06/技术/003. LAMP之源码安装搭建/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="1. 介绍LAMP是Linux + Apache + MySQL + PHP的简写，其实就是把Apache、MySQL以及PHP安装在Linux系统上，组成一个环境来运行PHP的脚本语言，通常是网站。 我们可以把Apache+PHP安装在一台机器上，再把MySQL安装在另外一台机器上，也可以把它们三个安装在同一台机器上。但Apache和PHP需要在同一台机器上，这是因为PHP是作为Apache的一">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-09T04:37:51.179Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LAMP之源码安装搭建">
+<meta name="twitter:description" content="1. 介绍LAMP是Linux + Apache + MySQL + PHP的简写，其实就是把Apache、MySQL以及PHP安装在Linux系统上，组成一个环境来运行PHP的脚本语言，通常是网站。 我们可以把Apache+PHP安装在一台机器上，再把MySQL安装在另外一台机器上，也可以把它们三个安装在同一台机器上。但Apache和PHP需要在同一台机器上，这是因为PHP是作为Apache的一">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/03/06/技术/003. LAMP之源码安装搭建/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>LAMP之源码安装搭建 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/06/技术/003. LAMP之源码安装搭建/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LAMP之源码安装搭建</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-06T10:23:14+08:00">2018-03-06</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-09T12:37:51+08:00">2018-03-09</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-介绍"><a href="#1-介绍" class="headerlink" title="1. 介绍"></a>1. 介绍</h1><p>LAMP是Linux + Apache + MySQL + PHP的简写，其实就是把Apache、MySQL以及PHP安装在Linux系统上，组成一个环境来运行PHP的脚本语言，通常是网站。</p>
+<p>我们可以把Apache+PHP安装在一台机器上，再把MySQL安装在另外一台机器上，也可以把它们三个安装在同一台机器上。但Apache和PHP需要在同一台机器上，这是因为PHP是作为Apache的一个模块存在的，它们两个必须在一起。</p>
+<h1 id="2-安装"><a href="#2-安装" class="headerlink" title="2. 安装"></a>2. 安装</h1><h2 id="2-1-安装MySQL"><a href="#2-1-安装MySQL" class="headerlink" title="2.1. 安装MySQL"></a>2.1. 安装MySQL</h2><h3 id="2-1-1-实验版本"><a href="#2-1-1-实验版本" class="headerlink" title="2.1.1. 实验版本"></a>2.1.1. 实验版本</h3><p>在平时安装MySQL都是源码包安装的，但是由于它的编译需要很长的时间，所以在这里选用二进制免编译包。目前比较常用的MySQL版本为mysql-5.6以上版本，但在工作场景中具体使用哪个版本还是根基具体的平台和需求而定。所以，在这里选用5.6版本的作为演示。</p>
+<h3 id="2-1-2-下载软件包"><a href="#2-1-2-下载软件包" class="headerlink" title="2.1.2. 下载软件包"></a>2.1.2. 下载软件包</h3><p>可以到MySQL官网去下载MySQL的包。可以使用免编译二进制包。但是需要注意的是，这个软件包是区分平台的。CentOS7之前的版本都有区分32位和64位，但是如果使用的是CentOS7，那么直接选择64位的包下载。</p>
+<p>查看Linux是多少位的方法：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># uname -i</span></div><div class="line">x86_64</div></pre></td></tr></table></figure></p>
+<p>下载源码包，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/src/	<span class="comment">#&lt;==建议把所有的软件包都放在这个目录下面，方便管理</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> wget http://mirrors.sohu.com/mysql/MySQL-5.6/mysql-5.6.35-linux-glibc2.5-x86_64.tar.gz  <span class="comment">#&lt;==下载MySQL安装包</span></span></div></pre></td></tr></table></figure></p>
+<h3 id="2-1-3-初始化"><a href="#2-1-3-初始化" class="headerlink" title="2.1.3. 初始化"></a>2.1.3. 初始化</h3><p>接下来的初始化过程如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> tar zxf mysql-5.6.35-linux-glibc2.5-x86_64.tar.gz	 <span class="comment">#&lt;==解压</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> [ -d /usr/<span class="built_in">local</span>/mysql ] &amp;&amp; mv /usr/<span class="built_in">local</span>/mysql /usr/<span class="built_in">local</span>/mysql_old</span></div><div class="line"><span class="meta">#</span><span class="bash"> mv mysql-5.6.35-linux-glibc2.5-x86_64 /usr/<span class="built_in">local</span>/mysql	<span class="comment">#&lt;==挪动位置</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> useradd -s /sbin/nologin mysql	<span class="comment">#&lt;==建立mysql用户，因为启动MySQL需要该用户</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/mysql	<span class="comment">#&lt;==进入mysql目录</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> mkdir -p /data/mysql	<span class="comment">#&lt;==创建datadir，数据库文件会放到这里面</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> chown -R mysql:mysql /data/mysql	<span class="comment">#&lt;==更改文件属主和属组为mysql，不更改后续操作会出问题</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> ./scripts/mysql_install_db --user=mysql --datadir=/data/mysql</span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> $?</span></div><div class="line">0</div></pre></td></tr></table></figure></p>
+<p>上面的最后一个命令中，<code>--user</code>表示定义数据库以哪个用户的身份在运行，<code>--datadir</code>表示定义数据库的安装目录（建议放到大空间的分区上）。这个目录需要自行创建。这一步很关键，如果看到两个OK说明执行正确，否则请仔细查看错误信息。</p>
+<p>在执行完最后上面的最后一条命令后，有时会有错误而执行失败。（即<code>echo $?</code>不为0）。错误信息是这样的：<code>FATAL ERROR: please install the following Perl modules before executing ./scripts/mysql_install_db: Data::Dumper</code>，这是因为缺少包<code>perl-Module-Install</code>，使用命令<code>yum install -y perl-Module-Install</code>安装它。如果还有其它错误，仔细查看错误信息，利用网络资源来解决。</p>
+<h3 id="2-1-4-配置MySQL"><a href="#2-1-4-配置MySQL" class="headerlink" title="2.1.4. 配置MySQL"></a>2.1.4. 配置MySQL</h3><p>首先复制配置文件，如下所示：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># <span class="keyword">cp</span> support-<span class="keyword">files</span>/my-default.<span class="keyword">cnf</span> /etc/my.<span class="keyword">cnf</span></div><div class="line"><span class="keyword">cp</span>：是否覆盖<span class="string">"/etc/my.cnf"</span>？ <span class="keyword">y</span></div></pre></td></tr></table></figure></p>
+<p>因为系统默认就有/etc/my.cnf，所以会提示是否覆盖，直接按y即可。然后打开配置文件，做一些简单的配置，把配置文件改成如下内容：<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># vim /etc/my.cnf</span></div><div class="line"></div><div class="line"><span class="comment"># For advice on how to change settings please see</span></div><div class="line"><span class="comment"># http://dev.mysql.com/doc/refman/5.6/en/server-configuration-defaults.html</span></div><div class="line"><span class="comment"># *** DO NOT EDIT THIS FILE. It's a template which will be copied to the</span></div><div class="line"><span class="comment"># *** default location during install, and will be replaced if you</span></div><div class="line"><span class="comment"># *** upgrade to a newer version of MySQL.</span></div><div class="line"></div><div class="line"><span class="section">[mysqld]</span></div><div class="line"></div><div class="line"><span class="comment"># Remove leading # and set to the amount of RAM for the most important data</span></div><div class="line"><span class="comment"># cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.</span></div><div class="line"><span class="attr">innodb_buffer_pool_size</span> = <span class="number">128</span>M</div><div class="line"></div><div class="line"><span class="comment"># Remove leading # to turn on a very important data integrity option: logging</span></div><div class="line"><span class="comment"># changes to the binary log between backups.</span></div><div class="line"><span class="attr">log_bin</span> = localhost</div><div class="line"></div><div class="line"><span class="comment"># These are commonly set, remove the # and set as required.</span></div><div class="line"><span class="attr">basedir</span> = /usr/local/mysql</div><div class="line"><span class="attr">datadir</span> = /data/mysql</div><div class="line"><span class="attr">port</span> = <span class="number">3306</span></div><div class="line"><span class="attr">server_id</span> = <span class="number">128</span></div><div class="line"><span class="attr">socket</span> = /tmp/mysql.sock</div><div class="line"></div><div class="line"><span class="comment"># Remove leading # to set options mainly useful for reporting servers.</span></div><div class="line"><span class="comment"># The server defaults are faster for transactions and fast SELECTs.</span></div><div class="line"><span class="comment"># Adjust sizes as needed, experiment to find the optimal values.</span></div><div class="line"><span class="attr">join_buffer_size</span> = <span class="number">128</span>M</div><div class="line"><span class="attr">sort_buffer_size</span> = <span class="number">2</span>M</div><div class="line"><span class="attr">read_rnd_buffer_size</span> = <span class="number">2</span>M</div><div class="line"></div><div class="line"><span class="attr">sql_mode</span>=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES</div></pre></td></tr></table></figure></p>
+<p>其中，basedir是MySQL包所在的路径，datadir是定义的存放数据的地方，默认情况下，错误日志也会记录在这个目录下面。port定义MySQL服务监听的端口，如果不定义默认就是3306。server_id定义该MySQL服务的ID号，这个参数用在做主从配置的时候。socket定义MySQL服务监听的套接字地址，在Linux系统下面，很多服务不仅可以监听一个端口（通过TCP/IP的方式通信），也可以监听socket，两个进程就可以通过这个socket文件通信。下面几个buffer是关于内存的配置参数，保持默认即可。</p>
+<p>然后复制启动脚本文件并修改其属性，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> cp support-files/mysql.server /etc/init.d/mysqld</span></div><div class="line"><span class="meta">#</span><span class="bash"> chmod 755 /etc/init.d/mysqld</span></div></pre></td></tr></table></figure></p>
+<p>然后修改启动脚本（<code>vim /etc/init.d/mysqld</code>）。需要修改的地方有<code>datadir=/data/mysql</code>（前面初始化数据库时定义的目录）。把启动脚本加入系统服务项，设定开机启动并启动MySQL，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> chkconfig --add mysqld	<span class="comment">#&lt;==把mysqld服务加入到系统服务列表中</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> chkconfig mysqld on		<span class="comment">#&lt;==使其开机启动</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> service mysqld start		<span class="comment">#&lt;==启动服务</span></span></div><div class="line">Starting MySQL.Logging to '/data/mysql/localhost.localdomain.err'.</div><div class="line">.. SUCCESS!</div></pre></td></tr></table></figure></p>
+<p>如果启动不了，请到/data/mysql/目录下查看错误日志，这个日志名通常是<code>主机名.err</code>。检查MySQL是否启动的命令为：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> ps aux | grep mysql | grep -v grep</span></div><div class="line"><span class="meta">#</span><span class="bash">&lt;==显示结果应该大于2行</span></div><div class="line"><span class="meta">#</span><span class="bash"> netstat -lnp | grep 3306	<span class="comment">#&lt;==看看有没有监听3306端口</span></span></div><div class="line">tcp     0      0 :::3306     :::*      LISTEN      1904/mysqld</div></pre></td></tr></table></figure></p>
+<h2 id="2-2-安装Apache"><a href="#2-2-安装Apache" class="headerlink" title="2.2. 安装Apache"></a>2.2. 安装Apache</h2><h3 id="2-2-1-实验版本"><a href="#2-2-1-实验版本" class="headerlink" title="2.2.1. 实验版本"></a>2.2.1. 实验版本</h3><p>Apache其实是一个软件基金会组织的名字，早期他们开发的Web Server软件非常流行，当时名字就焦作Apache，不过后来改名字叫作httpd了。所以，大家所说的Apache其实就是在说httpd。Apache基金会下面有很多开源的软件，其中就包含了Tomcat。</p>
+<p>可以到httpd的官网去下载合适的版本，目前使用较多的版本为2.2或者2.4。在这里选用2.4版本来进行演示。不过2.4版本有一个比较麻烦的事情，还需要手动编译安装apr以及apr-util包。其中apr（包含apr和apr-util）可以理解成一个通用的函数库，主要为上层应用提供支持。在这里，httpd是依赖apr和apr-util的，如果不安装这两个东西，httpd就无法工作。</p>
+<h3 id="2-2-2-下载软件包"><a href="#2-2-2-下载软件包" class="headerlink" title="2.2.2. 下载软件包"></a>2.2.2. 下载软件包</h3><p>首先下载所需要的安装包并解压<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/src/</span></div><div class="line"><span class="meta">#</span><span class="bash"> wget http://mirrors.shu.edu.cn/apache//httpd/httpd-2.4.29.tar.gz</span></div><div class="line"><span class="meta">#</span><span class="bash"> wget http://mirrors.hust.edu.cn/apache/apr/apr-1.6.3.tar.gz</span></div><div class="line"><span class="meta">#</span><span class="bash"> wget http://mirrors.hust.edu.cn/apache/apr/apr-util-1.6.1.tar.gz</span></div><div class="line"><span class="meta">#</span><span class="bash"> tar zxvf httpd-2.4.29.tar.gz</span></div><div class="line"><span class="meta">#</span><span class="bash"> tar zxvf apr-1.6.3.tar.gz</span></div><div class="line"><span class="meta">#</span><span class="bash"> tar zxvf apr-util-1.6.1.tar.gz</span></div></pre></td></tr></table></figure></p>
+<h3 id="2-2-3-准备工作"><a href="#2-2-3-准备工作" class="headerlink" title="2.2.3. 准备工作"></a>2.2.3. 准备工作</h3><p>接下来先安装apr以及apr-util<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/src/apr-1.6.3</span></div><div class="line"><span class="meta">#</span><span class="bash"> ./configure --prefix=/usr/<span class="built_in">local</span>/apr</span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> $?</span></div><div class="line">0</div><div class="line"><span class="meta">#</span><span class="bash"> make &amp;&amp; make install</span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> $?</span></div><div class="line">0</div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/src/apr-util-1.6.1</span></div><div class="line"><span class="meta">#</span><span class="bash"> ./configure --prefix=/usr/<span class="built_in">local</span>/apr-util --with-apr=/usr/<span class="built_in">local</span>/apr</span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> $?</span></div><div class="line">0</div><div class="line"><span class="meta">#</span><span class="bash"> make &amp;&amp; make install</span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> $?</span></div><div class="line">0</div></pre></td></tr></table></figure></p>
+<p>如果在安装apr-util时出现如下错误：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">libtool:</span> <span class="string">link:</span> cannot find the library `<span class="regexp">/usr/</span>local<span class="regexp">/src/</span>apr-util<span class="number">-1.6</span><span class="number">.1</span><span class="regexp">/xml/</span>expat<span class="regexp">/libexpat.la' or unhandled argument `/</span>usr<span class="regexp">/local/</span>src<span class="regexp">/apr-util-1.6.1/</span>xml<span class="regexp">/expat/</span>libexpat.la<span class="string">'</span></div></pre></td></tr></table></figure></p>
+<p>解决办法是：<code>yum install -y expat-devel</code></p>
+<h3 id="2-2-4-正式安装"><a href="#2-2-4-正式安装" class="headerlink" title="2.2.4. 正式安装"></a>2.2.4. 正式安装</h3><p>安装完apr及apr-util，继续安装httpd，配置编译参数，如下所示：<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"># cd /usr/local/src/httpd-2.4.29</div><div class="line"># ./configure \</div><div class="line">-<span class="ruby">-prefix=<span class="regexp">/usr/local</span><span class="regexp">/apache2.4 \</span></span></div><div class="line"><span class="ruby">--with-apr=<span class="regexp">/usr/local</span><span class="regexp">/apr \</span></span></div><div class="line"><span class="ruby">--with-apr-util=<span class="regexp">/usr/local</span><span class="regexp">/apr-util/</span> \</span></div><div class="line"><span class="ruby">--enable-so \</span></div><div class="line"><span class="ruby">--enable-mods-shared=most</span></div><div class="line"><span class="ruby"><span class="comment"># echo $?</span></span></div><div class="line"><span class="ruby"><span class="number">0</span></span></div></pre></td></tr></table></figure></p>
+<p>这里，–prefix指定安装目录，–enable-so表示启用DSO。DSO的意思是，把某些功能以模块（一个模块就是一个so文件，这些文件在编译完httpd后就会看到）的形式展现出来。enable-mods-shared=most表示以共享的方式安装大多数功能模块，安装后会在modules目录下面看到这些文件。因为选择了大多数，所以后面的编译时间就会大大增加。</p>
+<p>另外，为了避免在make的时候出现错误，最好提前安装好一些库文件：<code>yum install -y pcre pcre-devel</code></p>
+<p>最后编译和安装：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> make</span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> $?</span></div><div class="line">0</div><div class="line"><span class="meta">#</span><span class="bash"> make install</span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> $?</span></div><div class="line">0</div></pre></td></tr></table></figure></p>
+<p>安装完成后，可以执行下面的命令，查看httpd的目录结构以及modules目录下面的模块文件：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># ls /usr/local/apache2.4/</span></div><div class="line">bin    cgi-bin  <span class="builtin-name">error</span>   icons    logs  manual</div><div class="line">build  conf     htdocs  include  man   modules</div><div class="line"><span class="comment"># ls /usr/local/apache2.4/modules/	#&lt;==下面有很多绿色的.so文件，也就是编译时定义了一个most参数</span></div></pre></td></tr></table></figure></p>
+<p>这些模块并不会全部加载，如果你想使用哪个模块，在配置文件里配置即可。插卡加载了哪些模块，使用命令：<br><figure class="highlight vbnet"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># /usr/local/apache2.4/bin/apachectl -M</span></div><div class="line">AH00558: httpd: Could <span class="keyword">not</span> reliably determine the server<span class="comment">'s fully qualified domain name, using localhost.localdomain. Set the 'ServerName' directive globally to suppress this message</span></div><div class="line">Loaded Modules:</div><div class="line"> core_module (<span class="keyword">static</span>)</div><div class="line"> so_module (<span class="keyword">static</span>)</div><div class="line"> http_module (<span class="keyword">static</span>)</div><div class="line"> mpm_event_module (<span class="keyword">static</span>)</div><div class="line"> authn_file_module (<span class="keyword">shared</span>)</div><div class="line"> authn_core_module (<span class="keyword">shared</span>)</div><div class="line"> authz_host_module (<span class="keyword">shared</span>)</div><div class="line"> authz_groupfile_module (<span class="keyword">shared</span>)</div><div class="line"> authz_user_module (<span class="keyword">shared</span>)</div><div class="line"> authz_core_module (<span class="keyword">shared</span>)</div><div class="line"> access_compat_module (<span class="keyword">shared</span>)</div><div class="line"> auth_basic_module (<span class="keyword">shared</span>)</div><div class="line"> reqtimeout_module (<span class="keyword">shared</span>)</div><div class="line"> filter_module (<span class="keyword">shared</span>)</div><div class="line"> mime_module (<span class="keyword">shared</span>)</div><div class="line"> log_config_module (<span class="keyword">shared</span>)</div><div class="line"> env_module (<span class="keyword">shared</span>)</div><div class="line"> headers_module (<span class="keyword">shared</span>)</div><div class="line"> setenvif_module (<span class="keyword">shared</span>)</div><div class="line"> version_module (<span class="keyword">shared</span>)</div><div class="line"> unixd_module (<span class="keyword">shared</span>)</div><div class="line"> status_module (<span class="keyword">shared</span>)</div><div class="line"> autoindex_module (<span class="keyword">shared</span>)</div><div class="line"> dir_module (<span class="keyword">shared</span>)</div><div class="line"> alias_module (<span class="keyword">shared</span>)</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>前面以AH0058开头的行，并不是错误，仅仅是一个警告，可在配置文件中定义ServerName使其消失。</li>
+<li>这些带有shared字样的，表示该模块为动态共享模块</li>
+<li>当然还有statix字样的，它表示以静态的形式存在。</li>
+<li>动态和静态的区别在于，静态模块直接和主程序（/usr/local/apache2.4/bin/httpd）绑定在一起，我们看不到，而动态的模块都是一个个独立存在的文件（modules目录下面的.so文件即是）。</li>
+<li>其中以mpm_开头的就是apache的mpm工作模式，2.2版本的httpd默认的mpm工作模式为prefork。除了prefork外，常见的工作模式还有worker以及event。2.4版本的httpd默认是event工作模式。</li>
+</ul>
+<h3 id="2-2-5-apache安装完后的服务启动设置"><a href="#2-2-5-apache安装完后的服务启动设置" class="headerlink" title="2.2.5. apache安装完后的服务启动设置"></a>2.2.5. apache安装完后的服务启动设置</h3><p>Apache安装后可通过其安装路径的bin目录下的apachectl脚本控制服务的启动和停止。服务控制脚本为：<code>/usr/local/apache2.4/bin/apachectl</code></p>
+<ul>
+<li>启动Apache服务：<code>/usr/local/apache2.4/bin/apachectl start</code></li>
+<li>停止Apache服务：<code>/usr/local/apache2.4/bin/apachectl stop</code></li>
+<li>开机执行启动命令：<code>echo &quot;/usr/local/apache2.4/bin/apachectl start&quot; &gt;&gt; /etc/rc.local</code></li>
+</ul>
+<p>下面接受如何把Apache加入到系统服务，用service命令来控制Apache的启动和停止：</p>
+<ul>
+<li>首先以apachectl脚本为模板生成Apache服务控制脚本：<code>grep -v &quot;#&quot; /usr/local/apache2.4/bin/apachectl &gt; /etc/init.d/apache</code></li>
+<li><p>编辑Apache服务控制脚本/etc/init.d/apache，在文件的最前面插入下面的内容，使其支持chkconfig命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"><span class="comment"># chkconfig: 2345 85 15</span></div><div class="line"><span class="comment"># description: Apache is a World Wide Webserver.</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>保存退出后，增加Apache服务控制脚本执行权限：<code>chmod +x /etc/init.d/apache</code></p>
+</li>
+<li>将Apache服务加入到系统服务列表：<code>chkconfig --add apache</code></li>
+<li>检查Apache服务是否成功加入：<code>chkconfig --list apache</code><ul>
+<li>命令输出类似这种：<code>apache        0:off 1:off 2:on 3:on 4:on 5:on 6:off</code>表明成功</li>
+</ul>
+</li>
+<li>可使用service命令控制Apache的启动和停止<ul>
+<li>启动Apache服务：<code>service apache start</code></li>
+<li>停止Apache服务：<code>service apache stop</code></li>
+<li>开机自启动Apache的运行级别为3、5：<code>chkconfig --level 35 apache on</code></li>
+<li>关闭开机自启动：<code>chkconfig apache off</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="2-3-安装PHP"><a href="#2-3-安装PHP" class="headerlink" title="2.3. 安装PHP"></a>2.3. 安装PHP</h2><h3 id="2-3-1-实验版本"><a href="#2-3-1-实验版本" class="headerlink" title="2.3.1. 实验版本"></a>2.3.1. 实验版本</h3><p>为什么要把PHP放在最后来安装，是有原因的，因为我们在编译PHP的时候，有指定MySQL以及Apache的路径，如果不事先安装好MySQL和Apache就没有办法安装PHP。而Apache和MySQL的安装顺序就无所谓了。</p>
+<p>关于PHP的版本，目前大多数企业都会使用5.4版本及更高版本，甚至越来越多的企业使用PHP7版本。7和5两个版本还是有很大差异的，据说7版本有很大的性能提升，但是毕竟7版本还是太新了，和很多企业的网站不一定能兼容。所以，在本实验中还是以5版本为主，用的是5.6的版本。可以去PHP的官网去下载。</p>
+<h3 id="2-3-2-下载软件包"><a href="#2-3-2-下载软件包" class="headerlink" title="2.3.2. 下载软件包"></a>2.3.2. 下载软件包</h3><p>首先下载和解压PHP源码包，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/src/</span></div><div class="line"><span class="meta">#</span><span class="bash"> wget http://hk2.php.net/distributions/php-5.6.34.tar.gz</span></div><div class="line"><span class="meta">#</span><span class="bash"> tar zxf php-5.6.34.tar.gz</span></div></pre></td></tr></table></figure></p>
+<h3 id="2-3-3-编译安装时错误的总结"><a href="#2-3-3-编译安装时错误的总结" class="headerlink" title="2.3.3. 编译安装时错误的总结"></a>2.3.3. 编译安装时错误的总结</h3><p>在执行编译参数这一步时可能会遇到很多错误，只有把这些错误全部解决才能正确进行下一步。下面是常见的一些错误及其解决办法：</p>
+<p>总的来说，对于一台新机器，只需要安装上在编译过程中要用到的东西便能正常成功安装，总结下面的各个错误，只需要执行一条命令即可把所有的这些东西都安装上：<code>yum install -y libxml2-devel openssl openssl-devel bzip2 bzip2-devel libpng libpng-devel freetype freetype-devel libmcrypt-devel libjpeg-devel</code></p>
+<ul>
+<li>错误1<ul>
+<li>configure: error: xml2-config not found. Pleasen check your libxml2 installation.</li>
+<li>解决办法：<code>yum install -y libxml2-devel</code></li>
+</ul>
+</li>
+<li>错误2<ul>
+<li>configure: error: Cannot find OpenSSL’s &lt; evp.h></li>
+<li>解决办法：<code>yum install -y openssl openssl-devel</code></li>
+</ul>
+</li>
+<li>错误3<ul>
+<li>checking for BZip2 in default path… not found </li>
+<li>configure: error: Please reinstall the BZip2 distribution</li>
+<li>解决办法：<code>yum install -y bzip2 bzip2-devel</code></li>
+</ul>
+</li>
+<li>错误4<ul>
+<li>configure: error: png.h not found</li>
+<li>解决办法：<code>yum install -y libpng libpng-devel</code></li>
+</ul>
+</li>
+<li>错误5<ul>
+<li>configure: error: freetype.h not found.</li>
+<li>或 configure: error: freetype-config not found.</li>
+<li>解决办法：<code>yum install -y freetype freetype-devel</code></li>
+</ul>
+</li>
+<li>错误6<ul>
+<li>configure: error: mcrypt.h not found. Please reinstall libmcrypt.</li>
+<li>解决办法：<code>yum install -y epel-release</code>、<code>yum install -y libmcrypt-devel</code></li>
+<li>CentOS默认的yum源没有libmcrypt-devel这个包，所以只能借助epel yum源</li>
+</ul>
+</li>
+<li>错误7<ul>
+<li>configure: error: libjpeg.(a/so) not found.</li>
+<li>或 configure: error: jpeglib.h not found.</li>
+<li>解决办法：<code>yum install -y libjpeg-devel</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="2-3-4-最后的编译安装"><a href="#2-3-4-最后的编译安装" class="headerlink" title="2.3.4. 最后的编译安装"></a>2.3.4. 最后的编译安装</h3><p>解决编译时出现的所有错误后，就可以成功配置编译参数了：<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"># cd php-5.6.34</div><div class="line"># ./configure \</div><div class="line">-<span class="ruby">-prefix=<span class="regexp">/usr/local</span><span class="regexp">/php \</span></span></div><div class="line"><span class="ruby">--with-apxs2=<span class="regexp">/usr/local</span><span class="regexp">/apache2.4/bin</span><span class="regexp">/apxs \</span></span></div><div class="line"><span class="ruby">--with-config-file-path=<span class="regexp">/usr/local</span><span class="regexp">/php/etc</span> \</span></div><div class="line"><span class="ruby">--with-mysql=<span class="regexp">/usr/local</span><span class="regexp">/mysql \</span></span></div><div class="line"><span class="ruby">--with-libxml-dir \</span></div><div class="line"><span class="ruby">--with-gd \</span></div><div class="line"><span class="ruby">--with-jpeg-dir \</span></div><div class="line"><span class="ruby">--with-png-dir \</span></div><div class="line"><span class="ruby">--with-freetype-dir \</span></div><div class="line"><span class="ruby">--with-iconv-dir \</span></div><div class="line"><span class="ruby">--with-zlib-dir \</span></div><div class="line"><span class="ruby">--with-bz2 \</span></div><div class="line"><span class="ruby">--with-openssl \</span></div><div class="line"><span class="ruby">--with-mcrypt \</span></div><div class="line"><span class="ruby">--enable-soap \</span></div><div class="line"><span class="ruby">--enable-gd-native-ttf \</span></div><div class="line"><span class="ruby">--enable-mbstring \</span></div><div class="line"><span class="ruby">--enable-sockets \</span></div><div class="line"><span class="ruby">--enable-exif \</span></div><div class="line"><span class="ruby">--disable-ipv6</span></div><div class="line"><span class="ruby"><span class="comment"># echo $?</span></span></div><div class="line"><span class="ruby"><span class="number">0</span></span></div></pre></td></tr></table></figure></p>
+<p>关于PHP的编译参数比较多，暂时不需要钻牛角尖，但是大体意思是：编译PHP可以指定我们需要的功能额模块，跟Apache的类似。至于需要哪些，这取决于你所在的公司需要什么功能。上面提供的这些比较常用，如果没有特殊需求，直接使用这些参数即可。有一个地方需要注意一下，apxs为httpd的一个工具，因为有它才会自动把PHP模块安装到httpd的modules目录下，也就是说PHP将会以一个模块的形式和httpd结合在一起工作。</p>
+<p>然后是编译和安装，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> make		<span class="comment">#&lt;==编译的时间可能有些长，得大概五分钟以上，耐心等待即可</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> $?</span></div><div class="line">0</div><div class="line"><span class="meta">#</span><span class="bash"> make <span class="built_in">test</span>		<span class="comment">#&lt;==编译完后建议执行这一步，也可以省略这一步，因为这一步很花时间</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> make install	<span class="comment">#&lt;==安装</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> $?</span></div><div class="line">0</div></pre></td></tr></table></figure></p>
+<p>然后复制配置文件：<code>cp php.ini-production /usr/local/php/etc/php.ini</code></p>
+<h2 id="2-4-配置httpd支持PHP"><a href="#2-4-配置httpd支持PHP" class="headerlink" title="2.4. 配置httpd支持PHP"></a>2.4. 配置httpd支持PHP</h2><p>httpd的主配置文件为/usr/local/apache2.4/conf/httpd.conf，编辑这个文件：<code>vim /usr/local/apache2.4/conf/httpd.conf</code>：</p>
+<ul>
+<li>搜索<code>ServerName</code>，把<code>#ServerName www.example.com:80</code>前面的井号删除，并修改成<code>ServerName localhost:80</code>。</li>
+<li><p>找到如下内容：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="section">&lt;Directory /&gt;</span></div><div class="line">    <span class="attribute">AllowOverride</span> none</div><div class="line">    <span class="attribute">Require</span> <span class="literal">all</span> denied</div><div class="line"><span class="section">&lt;/Directory&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>改成如下：修改它的目的是，允许所有的请求，如果不设置该行，则我们访问的时候会报403错误。</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="section">&lt;Directory /&gt;</span></div><div class="line">    <span class="attribute">AllowOverride</span> none</div><div class="line">    <span class="attribute">Require</span> <span class="literal">all</span> granted</div><div class="line"><span class="section">&lt;/Directory&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>再搜索这一行<code>AddType application/x-gzip .gz .tgz</code>，在该行下面添加一行：</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Addtype <span class="built_in">application</span>/x-httpd-php .php</div></pre></td></tr></table></figure>
+</li>
+<li><p>接着再找到下面这一段：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="section">&lt;IfModule dir_module&gt;</span></div><div class="line">    <span class="attribute">DirectoryIndex</span> index.html</div><div class="line"><span class="section">&lt;/IfModule&gt;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>修改成：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;IfModule dir_module&gt;</div><div class="line">    DirectoryIndex index<span class="selector-class">.html</span> index.php</div><div class="line">&lt;/IfModule&gt;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="2-5-测试LAMP是否成功"><a href="#2-5-测试LAMP是否成功" class="headerlink" title="2.5. 测试LAMP是否成功"></a>2.5. 测试LAMP是否成功</h2><p>httpd、MySQL和PHP安装之后，需要先检验httpd的配置文件是否正确，只有配置正确才可以正确解析PHP文件。</p>
+<h3 id="2-5-1-测试配置文件是否正确"><a href="#2-5-1-测试配置文件是否正确" class="headerlink" title="2.5.1. 测试配置文件是否正确"></a>2.5.1. 测试配置文件是否正确</h3><p>启动httpd之前需要先检验配置文件是否正确，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> /usr/<span class="built_in">local</span>/apache2.4/bin/apachectl -t</span></div><div class="line">Syntax OK</div></pre></td></tr></table></figure></p>
+<p>显示<code>Syntax OK</code>则说明配置正确。否则，需要修改配置文件httpd.conf。</p>
+<p>启动httpd：<code>/usr/local/apache2.4/bin/apachectl start</code></p>
+<p>查看是否启动的命令如下：<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># netstat -lnp | grep httpd</div><div class="line">tcp        <span class="number">0</span>      <span class="number">0</span> :::<span class="number">80</span>      :::*     LISTEN      <span class="number">85564</span>/httpd</div></pre></td></tr></table></figure></p>
+<p>如果显示这一行则说明已经启动了httpd。</p>
+<p>另外，我们也可以使用<code>curl</code>命令进行简单的测试，如下所示：<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># curl localhost</span></div><div class="line"><span class="params">&lt;html&gt;</span><span class="params">&lt;body&gt;</span><span class="params">&lt;h1&gt;</span>It works!<span class="params">&lt;/h1&gt;</span><span class="params">&lt;/body&gt;</span><span class="params">&lt;/html&gt;</span></div></pre></td></tr></table></figure></p>
+<p>如果显示了这一行则说明测试成功。</p>
+<h3 id="2-5-2-测试是否正确解析PHP"><a href="#2-5-2-测试是否正确解析PHP" class="headerlink" title="2.5.2. 测试是否正确解析PHP"></a>2.5.2. 测试是否正确解析PHP</h3><p>首先编写一个测试脚本，如下所示：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># vim /usr/local/apache2.4/htdocs/1.php</div><div class="line"><span class="php"><span class="meta">&lt;?php</span></span></div><div class="line"><span class="php">        <span class="keyword">echo</span> <span class="string">"PHP解析正常！\n"</span></span></div><div class="line"><span class="php"><span class="meta">?&gt;</span></span></div></pre></td></tr></table></figure></p>
+<p>保存脚本后继续测试，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> curl localhost/1.php</span></div><div class="line">PHP解析正常！</div></pre></td></tr></table></figure></p>
+<p>如果显示以上信息则说明PHP解析正确。</p>
+<h3 id="2-5-3-用浏览器通过IP访问"><a href="#2-5-3-用浏览器通过IP访问" class="headerlink" title="2.5.3. 用浏览器通过IP访问"></a>2.5.3. 用浏览器通过IP访问</h3><p>可以用浏览器来访问该Linux主机的IP，比如，IP为192.168.1.111，那么在浏览器输入：<code>http://192.168.1.111/1.php</code>，看是否能够访问到。</p>
+<p>如果不能访问，请检查Linux的防火墙和SeLinux设置：</p>
+<ul>
+<li><code>iptables -nvL</code> 如果有一些规则，则请执行下面命令来清除规则</li>
+<li><code>iptables -F</code>、<code>service iptables save</code></li>
+<li>关闭SeLinux：<code>setenforce 0</code></li>
+</ul>
+<hr>
+<p>到此为止，我们把LAMP环境搭建好了。其实仅仅是安装上了软件，我们还有很多具体的配置工作要做，所以需要多多练习配置httpd和PHP。下面的内容，便是具体的用法。应该熟悉httpd的配置。</p>
+<hr>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术/" rel="tag"><i class="fa fa-tag"></i> 技术</a>
+          
+            <a href="/tags/LAMP/" rel="tag"><i class="fa fa-tag"></i> LAMP</a>
+          
+            <a href="/tags/MySQL/" rel="tag"><i class="fa fa-tag"></i> MySQL</a>
+          
+            <a href="/tags/Apache/" rel="tag"><i class="fa fa-tag"></i> Apache</a>
+          
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i> PHP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/05/Shell/Shell脚本案例05-解决DOS攻击/" rel="next" title="Shell脚本案例05-解决DOS攻击">
+                <i class="fa fa-chevron-left"></i> Shell脚本案例05-解决DOS攻击
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/07/技术/004. LAMP之Yum方式安装/" rel="prev" title="LAMP之Yum方式安装">
+                LAMP之Yum方式安装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-介绍"><span class="nav-text">1. 介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-安装"><span class="nav-text">2. 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-安装MySQL"><span class="nav-text">2.1. 安装MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1-实验版本"><span class="nav-text">2.1.1. 实验版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-2-下载软件包"><span class="nav-text">2.1.2. 下载软件包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-3-初始化"><span class="nav-text">2.1.3. 初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-4-配置MySQL"><span class="nav-text">2.1.4. 配置MySQL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-安装Apache"><span class="nav-text">2.2. 安装Apache</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-实验版本"><span class="nav-text">2.2.1. 实验版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-下载软件包"><span class="nav-text">2.2.2. 下载软件包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-3-准备工作"><span class="nav-text">2.2.3. 准备工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-4-正式安装"><span class="nav-text">2.2.4. 正式安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-5-apache安装完后的服务启动设置"><span class="nav-text">2.2.5. apache安装完后的服务启动设置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-安装PHP"><span class="nav-text">2.3. 安装PHP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-1-实验版本"><span class="nav-text">2.3.1. 实验版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-2-下载软件包"><span class="nav-text">2.3.2. 下载软件包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-3-编译安装时错误的总结"><span class="nav-text">2.3.3. 编译安装时错误的总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-4-最后的编译安装"><span class="nav-text">2.3.4. 最后的编译安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-配置httpd支持PHP"><span class="nav-text">2.4. 配置httpd支持PHP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-测试LAMP是否成功"><span class="nav-text">2.5. 测试LAMP是否成功</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-1-测试配置文件是否正确"><span class="nav-text">2.5.1. 测试配置文件是否正确</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-2-测试是否正确解析PHP"><span class="nav-text">2.5.2. 测试是否正确解析PHP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-3-用浏览器通过IP访问"><span class="nav-text">2.5.3. 用浏览器通过IP访问</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

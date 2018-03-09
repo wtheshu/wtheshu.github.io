@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="技术,LNMP,Nginx," />
+
+
+<meta name="description" content="这一篇学习笔记主要讲述的是在LNMP刚刚搭建完后需要做的一些常用的配置和优化。 1. 默认虚拟主机和httpd类似，在Nginx中也有默认虚拟主机，第一个被Nginx加载的虚拟主机就是默认虚拟主机。但是和httpd不同的是，它还有一个配置用来标记默认虚拟主机。也就是说，如果没有这个标记，第一个虚拟主机为默认虚拟主机。 修改配置文件nginx.conf，在结束符号}上面加入一行配置，改写如下：12">
+<meta name="keywords" content="技术,LNMP,Nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LNMP之Nginx初始配置">
+<meta property="og:url" content="http://www.theshu.top/2018/03/09/技术/009. LNMP之Nginx初始配置/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="这一篇学习笔记主要讲述的是在LNMP刚刚搭建完后需要做的一些常用的配置和优化。 1. 默认虚拟主机和httpd类似，在Nginx中也有默认虚拟主机，第一个被Nginx加载的虚拟主机就是默认虚拟主机。但是和httpd不同的是，它还有一个配置用来标记默认虚拟主机。也就是说，如果没有这个标记，第一个虚拟主机为默认虚拟主机。 修改配置文件nginx.conf，在结束符号}上面加入一行配置，改写如下：12">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-09T13:11:33.171Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LNMP之Nginx初始配置">
+<meta name="twitter:description" content="这一篇学习笔记主要讲述的是在LNMP刚刚搭建完后需要做的一些常用的配置和优化。 1. 默认虚拟主机和httpd类似，在Nginx中也有默认虚拟主机，第一个被Nginx加载的虚拟主机就是默认虚拟主机。但是和httpd不同的是，它还有一个配置用来标记默认虚拟主机。也就是说，如果没有这个标记，第一个虚拟主机为默认虚拟主机。 修改配置文件nginx.conf，在结束符号}上面加入一行配置，改写如下：12">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/03/09/技术/009. LNMP之Nginx初始配置/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>LNMP之Nginx初始配置 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/09/技术/009. LNMP之Nginx初始配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LNMP之Nginx初始配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T19:48:57+08:00">2018-03-09</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-09T21:11:33+08:00">2018-03-09</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这一篇学习笔记主要讲述的是在LNMP刚刚搭建完后需要做的一些常用的配置和优化。</p>
+<h1 id="1-默认虚拟主机"><a href="#1-默认虚拟主机" class="headerlink" title="1. 默认虚拟主机"></a>1. 默认虚拟主机</h1><p>和httpd类似，在Nginx中也有默认虚拟主机，第一个被Nginx加载的虚拟主机就是默认虚拟主机。但是和httpd不同的是，它还有一个配置用来标记默认虚拟主机。也就是说，如果没有这个标记，第一个虚拟主机为默认虚拟主机。</p>
+<p>修改配置文件nginx.conf，在结束符号<code>}</code>上面加入一行配置，改写如下：<br><figure class="highlight actionscript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">	<span class="meta"><span class="meta-keyword">include</span> vhost/*.conf;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>意思是，/usr/local/nginx/conf/vhost/下面的所有以<code>.conf</code>结尾的文件都会加载，这样我们就可以把所有虚拟主机配置文件放到vhost目录下面了。</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># mkdir /usr/local/nginx/conf/vhost</span></div><div class="line">[root@localhost ~]<span class="comment"># cd /usr/local/nginx/conf/vhost/</span></div><div class="line">[root@localhost vhost]<span class="comment"># vim default.conf</span></div><div class="line"><span class="comment">#&lt;==写入如下内容</span></div><div class="line">server</div><div class="line">&#123;</div><div class="line">    <span class="keyword">listen</span> <span class="number">80</span> default_server;	<span class="comment">#&lt;==有这个default_server标记的就是默认虚拟主机</span></div><div class="line">    server_name aaa.com;</div><div class="line">    <span class="keyword">index</span> index.html index.htm index.php;</div><div class="line">    root /data/nginx/default;</div><div class="line">&#125;</div><div class="line"><span class="comment">#&lt;==保存退出</span></div><div class="line"></div><div class="line">[root@localhost vhost]<span class="comment"># /usr/local/nginx/sbin/nginx -t	#&lt;==测试配置文件是否有误</span></div><div class="line">nginx: the configuration file /usr/<span class="keyword">local</span>/nginx/conf/nginx.conf syntax is ok</div><div class="line">nginx: configuration file /usr/<span class="keyword">local</span>/nginx/conf/nginx.conf test is successful</div><div class="line">[root@localhost vhost]<span class="comment"># /usr/local/nginx/sbin/nginx -s reload	#&lt;==重新加载nginx的配置文件</span></div><div class="line"></div><div class="line">[root@localhost vhost]<span class="comment"># mkdir -p /data/nginx/default/</span></div><div class="line">[root@localhost vhost]<span class="comment"># echo "default_server" &gt; /data/nginx/default/index.html</span></div><div class="line">[root@localhost vhost]<span class="comment"># ll /data/nginx/default/</span></div><div class="line">总用量 <span class="number">4</span></div><div class="line">-rw-r--r-- <span class="number">1</span> root root <span class="number">15</span> <span class="number">3</span>月   <span class="number">7</span> <span class="number">03</span>:<span class="number">34</span> index.html</div><div class="line"><span class="comment">#&lt;==上面的步骤是创建索引页</span></div><div class="line"></div><div class="line">[root@localhost vhost]<span class="comment"># curl -x127.0.0.1:80 aaa.com	#&lt;==访问aaa.com</span></div><div class="line">default_server</div><div class="line">[root@localhost vhost]<span class="comment"># curl -x127.0.0.1:80 1212.com</span></div><div class="line">default_server	<span class="comment">#&lt;==访问一个没有定义过的域名，也会访问到aaa.com</span></div></pre></td></tr></table></figure>
+<hr>
+<h1 id="2-用户认证"><a href="#2-用户认证" class="headerlink" title="2. 用户认证"></a>2. 用户认证</h1><p>再来创建一个新的虚拟主机：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">[root@localhost vhost]# <span class="keyword">cd</span> /usr/<span class="keyword">local</span>/nginx/<span class="keyword">conf</span>/vhost/</div><div class="line">[root@localhost vhost]# vim <span class="keyword">test</span>.com.<span class="keyword">conf</span></div><div class="line">#&lt;==加入如下内容</div><div class="line"></div><div class="line">server</div><div class="line">&#123;</div><div class="line">    listen 80;</div><div class="line">    server_name <span class="keyword">test</span>.com;</div><div class="line">    index index.html index.htm index.php;</div><div class="line">    root /data/nginx/<span class="keyword">test</span>.com;</div><div class="line"></div><div class="line">    location /	#&lt;==就是配置这里</div><div class="line">    &#123;</div><div class="line">        auth_basic              <span class="string">"Auth"</span>;</div><div class="line">        auth_basic_user_file    /usr/<span class="keyword">local</span>/nginx/<span class="keyword">conf</span>/htpasswd;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">#&lt;==保存退出</div><div class="line"></div><div class="line">[root@localhost vhost]# yum install -y httpd</div><div class="line">#&lt;==安装httpd，用来生成密码文件</div><div class="line">[root@localhost vhost]# htpasswd -c /usr/<span class="keyword">local</span>/nginx/<span class="keyword">conf</span>/htpasswd aming	#&lt;==创建aming用户</div><div class="line">New password:</div><div class="line">Re-<span class="keyword">type</span> new password:</div><div class="line">Adding password <span class="keyword">for</span> user aming</div><div class="line">[root@localhost vhost]# /usr/<span class="keyword">local</span>/nginx/sbin/nginx -t</div><div class="line">nginx: the configuration <span class="keyword">file</span> /usr/<span class="keyword">local</span>/nginx/<span class="keyword">conf</span>/nginx.<span class="keyword">conf</span> <span class="keyword">syntax</span> is ok</div><div class="line">nginx: configuration <span class="keyword">file</span> /usr/<span class="keyword">local</span>/nginx/<span class="keyword">conf</span>/nginx.<span class="keyword">conf</span> <span class="keyword">test</span> is successful</div><div class="line">[root@localhost vhost]# /usr/<span class="keyword">local</span>/nginx/sbin/nginx -s reload</div></pre></td></tr></table></figure></p>
+<p>上述配置说明：</p>
+<ul>
+<li>核心配置语句就两行<ul>
+<li><code>auth_basic</code> 打开认证</li>
+<li><code>auth_basic_user_file</code> 指定用户密码文件，当然前提是这个用户密码文件存在。</li>
+</ul>
+</li>
+<li>生成用户密码文件的工具需要借助httpd的htpasswd，Nginx不自带这个工具。</li>
+</ul>
+<p>下面使用curl工具来验证：<br><figure class="highlight julia"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root<span class="meta">@localhost</span> vhost]<span class="comment"># mkdir /data/nginx/test.com</span></div><div class="line">[root<span class="meta">@localhost</span> vhost]<span class="comment"># echo "test.com" &gt; /data/nginx/test.com/index.html</span></div><div class="line">[root<span class="meta">@localhost</span> vhost]<span class="comment"># curl -I -x127.0.0.1:80 test.com</span></div><div class="line">HTTP/<span class="number">1.1</span> <span class="number">401</span> Unauthorized</div><div class="line">Server: nginx/<span class="number">1.10</span><span class="number">.3</span></div><div class="line"><span class="built_in">Date</span>: Tue, <span class="number">06</span> Mar <span class="number">2018</span> <span class="number">19</span>:<span class="number">49</span>:<span class="number">38</span> GMT</div><div class="line">Content-<span class="built_in">Type</span>: text/html</div><div class="line">Content-Length: <span class="number">195</span></div><div class="line">Connection: keep-alive</div><div class="line">WWW-Authenticate: Basic realm=<span class="string">"Auth"</span></div><div class="line"></div><div class="line"><span class="comment">#&lt;==状态码为401，说明该网站需要用户验证。</span></div></pre></td></tr></table></figure></p>
+<p>如果是用浏览器打开该网站，则会有提示框，输入用户名和密码，正确输入后才可以成功访问到网站的内容。</p>
+<p>如果是针对某个目录做用户认证，需要修改<code>location</code>后面的路径：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">location</span> <span class="title">/admin</span>/</div><div class="line">&#123;</div><div class="line">	auth_basic			    <span class="string">"Auth"</span></div><div class="line">	auth_basic_user_file	<span class="string">"/usr/local/nginx/conf/htpasswd;"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="3-域名重定向"><a href="#3-域名重定向" class="headerlink" title="3. 域名重定向"></a>3. 域名重定向</h1><p>Nginx的域名重定向和httpd的类似，但更容易理解，如下：<br><figure class="highlight axapta"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[root@localhost vhost]<span class="meta"># vim /usr/local/nginx/conf/vhost/test.com.conf</span></div><div class="line"><span class="meta">#&lt;==添加如下内容</span></div><div class="line"></div><div class="line"><span class="keyword">server</span></div><div class="line">&#123;</div><div class="line">    listen <span class="number">80</span>;</div><div class="line">    server_name test.com test1.com test2.com	<span class="meta">#&lt;==配置多个域名</span></div><div class="line">    <span class="keyword">index</span> <span class="keyword">index</span>.html <span class="keyword">index</span>.htm <span class="keyword">index</span>.php;</div><div class="line">    root /data/nginx/test.com;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ($host != <span class="string">'test.com'</span> )	<span class="meta">#&lt;==这段配置域名重定向</span></div><div class="line">    &#123;</div><div class="line">        rewrite ^/(.*)$ http:<span class="comment">//test.com/$1 permanent;</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>在Nginx配置中：<ul>
+<li><code>server_name</code> 后面可以跟多个域名</li>
+<li><code>permanent</code> 为永久重定向，相当于httpd的<code>R=301</code></li>
+<li>还有一个常用的<code>redirect</code>，相当于httpd的<code>R=302</code></li>
+</ul>
+</li>
+</ul>
+<p>测试过程如下：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root@localhost vhost]# /usr/<span class="keyword">local</span>/nginx/sbin/nginx -t</div><div class="line">nginx: the configuration <span class="keyword">file</span> /usr/<span class="keyword">local</span>/nginx/<span class="keyword">conf</span>/nginx.<span class="keyword">conf</span> <span class="keyword">syntax</span> is ok</div><div class="line">nginx: configuration <span class="keyword">file</span> /usr/<span class="keyword">local</span>/nginx/<span class="keyword">conf</span>/nginx.<span class="keyword">conf</span> <span class="keyword">test</span> is successful</div><div class="line">[root@localhost vhost]# /usr/<span class="keyword">local</span>/nginx/sbin/nginx -s reload</div><div class="line">[root@localhost vhost]# curl -x127.0.0.1:80 test1.com/123.txt -<span class="built_in">I</span></div><div class="line">HTTP/1.1 301 Moved Permanently</div><div class="line">Server: nginx/1.10.3</div><div class="line">Date: Tue, 06 Mar 2018 20:07:03 GMT</div><div class="line">Content-<span class="keyword">Type</span>: text/html</div><div class="line">Content-Length: 185</div><div class="line">Connection: <span class="keyword">keep</span>-alive</div><div class="line">Location: http:<span class="comment">//test.com/123.txt</span></div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="4-Nginx的访问日志"><a href="#4-Nginx的访问日志" class="headerlink" title="4. Nginx的访问日志"></a>4. Nginx的访问日志</h1><h2 id="4-1-配置Nginx的日志格式"><a href="#4-1-配置Nginx的日志格式" class="headerlink" title="4.1. 配置Nginx的日志格式"></a>4.1. 配置Nginx的日志格式</h2><p>先来看看Nginx的日志格式：<br><figure class="highlight nsis"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@localhost vhost]<span class="comment"># grep -A2 log_format /usr/local/nginx/conf/nginx.conf</span></div><div class="line">    log_format combined_realip <span class="string">'<span class="variable">$remote_addr</span> <span class="variable">$http_x_forwarded_for</span> [<span class="variable">$time_local</span>]'</span></div><div class="line">    <span class="string">' <span class="variable">$host</span> "<span class="variable">$request_uri</span>" <span class="variable">$status</span>'</span></div><div class="line">    <span class="string">' "<span class="variable">$http_referer</span>" "<span class="variable">$http_user_agent</span>"'</span><span class="comment">;</span></div></pre></td></tr></table></figure></p>
+<p>和httpd类似，也是在主配置文件中定义的日志格式。</p>
+<ul>
+<li><code>combined_realip</code> 为日志格式的名字，后面可以调用它</li>
+<li><code>$remote_addr</code> 为访问网站的用户的出口IP</li>
+<li><code>$http_x_forwarded_for</code> 为代理服务器的IP，如果使用了代理，则会记录代理的IP</li>
+<li><code>$time_local</code> 为当前的时间</li>
+<li><code>$host</code> 为访问的主机名</li>
+<li><code>$request_uri</code> 为访问的URL地址</li>
+<li><code>$status</code> 为状态码</li>
+<li><code>$http_referer</code> 为referer地址</li>
+<li><code>$http_user_agent</code> 为user_agent</li>
+</ul>
+<p>然后再到虚拟主机配置文件中指定访问日志的路径：<br><figure class="highlight axapta"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[root@localhost vhost]<span class="meta"># vim /usr/local/nginx/conf/vhost/test.com.conf</span></div><div class="line"><span class="meta">#&lt;==配置内容如下：</span></div><div class="line"></div><div class="line"><span class="keyword">server</span></div><div class="line">&#123;</div><div class="line">    listen <span class="number">80</span>;</div><div class="line">    server_name test.com test1.com test2.com;</div><div class="line">    <span class="keyword">index</span> <span class="keyword">index</span>.html <span class="keyword">index</span>.htm <span class="keyword">index</span>.php;</div><div class="line">    root /data/nginx/test.com;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> ($host != <span class="string">'test.com'</span> )</div><div class="line">    &#123;</div><div class="line">        rewrite ^/(.*)$ http:<span class="comment">//test.com/$1 permanent;</span></div><div class="line">    &#125;</div><div class="line">    access_log /tmp/<span class="number">1.</span>log combined_realip;	<span class="meta">#&lt;==只是这一行配置</span></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>使用<code>access_log</code>来指定日志的存储路径，最后面指定日志的格式名字，测试过程如下：<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[root@localhost vhost]<span class="meta"># /usr/local/nginx/sbin/nginx -t</span></div><div class="line"><span class="symbol">nginx:</span> the configuration file <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/nginx/</span>conf/nginx.conf syntax is ok</div><div class="line"><span class="symbol">nginx:</span> configuration file <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/nginx/</span>conf/nginx.conf test is successful</div><div class="line">[root@localhost vhost]<span class="meta"># /usr/local/nginx/sbin/nginx -s reload</span></div><div class="line">[root@localhost vhost]<span class="meta"># curl -x127.0.0.1:80 test.com/111</span></div><div class="line"><span class="params">&lt;html&gt;</span></div><div class="line"><span class="params">&lt;head&gt;</span><span class="params">&lt;title&gt;</span><span class="number">404</span> Not Found<span class="params">&lt;/title&gt;</span><span class="params">&lt;/head&gt;</span></div><div class="line"><span class="params">&lt;body bgcolor="white"&gt;</span></div><div class="line"><span class="params">&lt;center&gt;</span><span class="params">&lt;h1&gt;</span><span class="number">404</span> Not Found<span class="params">&lt;/h1&gt;</span><span class="params">&lt;/center&gt;</span></div><div class="line"><span class="params">&lt;hr&gt;</span><span class="params">&lt;center&gt;</span>nginx/<span class="number">1.10</span><span class="number">.3</span><span class="params">&lt;/center&gt;</span></div><div class="line"><span class="params">&lt;/body&gt;</span></div><div class="line"><span class="params">&lt;/html&gt;</span></div><div class="line">[root@localhost vhost]<span class="meta"># cat /tmp/1.log</span></div><div class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> - [<span class="number">07</span>/Mar/<span class="number">2018</span>:<span class="number">04</span>:<span class="number">20</span>:<span class="number">07</span> +<span class="number">0800</span>] test.com <span class="string">"/111"</span> <span class="number">404</span> <span class="string">"-"</span> <span class="string">"curl/7.19.7 (x86_64-redhat-linux-gnu) libcurl/7.19.7 NSS/3.27.1 zlib/1.2.3 libidn/1.18 libssh2/1.4.2"</span></div></pre></td></tr></table></figure></p>
+<h2 id="4-2-Nginx的日志切割"><a href="#4-2-Nginx的日志切割" class="headerlink" title="4.2. Nginx的日志切割"></a>4.2. Nginx的日志切割</h2><p>Nginx的日志很简单，不像httpd还有自带的切割工具，要想切割Nginx日志需要借助系统的切割工具或者自定义脚本。</p>
+<p>在这里，用一个Nginx的日志切割脚本：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[root@localhost vhost]<span class="comment"># vim /usr/local/sbin/nginx_log_rotate.sh</span></div><div class="line"><span class="comment">#&lt;==写入如下代码</span></div><div class="line"></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="comment"># 假设nginx的日志存放路径为/data/logs/</span></div><div class="line">d=`date -d <span class="string">"-1 day"</span> +%Y%m%d`</div><div class="line">logdir=<span class="string">"/data/logs"</span></div><div class="line">nginx_pid=<span class="string">"/usr/local/nginx/logs/nginx.pid"</span></div><div class="line"><span class="built_in">cd</span> <span class="variable">$logdir</span></div><div class="line"><span class="keyword">for</span> <span class="built_in">log</span> <span class="keyword">in</span> `ls *.<span class="built_in">log</span>`</div><div class="line"><span class="keyword">do</span></div><div class="line">	mv <span class="variable">$log</span> <span class="variable">$log</span>-<span class="variable">$d</span></div><div class="line"><span class="keyword">done</span></div><div class="line">/bin/<span class="built_in">kill</span> -HUP `cat <span class="variable">$nginx_pid</span>`</div></pre></td></tr></table></figure></p>
+<p>写完脚本后，还需要增加任务计划：<br><figure class="highlight basic"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">0 </span><span class="number">0</span> * * * /bin/bash /<span class="keyword">usr</span>/local/sbin/nginx_log_rotate.sh</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="5-配置静态文件不记录日志并添加过期时间"><a href="#5-配置静态文件不记录日志并添加过期时间" class="headerlink" title="5. 配置静态文件不记录日志并添加过期时间"></a>5. 配置静态文件不记录日志并添加过期时间</h1><hr>
+<h1 id="6-Nginx防盗链"><a href="#6-Nginx防盗链" class="headerlink" title="6. Nginx防盗链"></a>6. Nginx防盗链</h1><h1 id="7-控制访问"><a href="#7-控制访问" class="headerlink" title="7. 控制访问"></a>7. 控制访问</h1><h1 id="8-Nginx解析PHP"><a href="#8-Nginx解析PHP" class="headerlink" title="8. Nginx解析PHP"></a>8. Nginx解析PHP</h1><h1 id="9-Nginx代理"><a href="#9-Nginx代理" class="headerlink" title="9. Nginx代理"></a>9. Nginx代理</h1><h1 id="10-Nginx配置SSL"><a href="#10-Nginx配置SSL" class="headerlink" title="10. Nginx配置SSL"></a>10. Nginx配置SSL</h1>
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术/" rel="tag"><i class="fa fa-tag"></i> 技术</a>
+          
+            <a href="/tags/LNMP/" rel="tag"><i class="fa fa-tag"></i> LNMP</a>
+          
+            <a href="/tags/Nginx/" rel="tag"><i class="fa fa-tag"></i> Nginx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/09/技术/008. LNMP之Yum方式安装/" rel="next" title="LNMP之Yum方式安装">
+                <i class="fa fa-chevron-left"></i> LNMP之Yum方式安装
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/09/技术/010. LNMP之php-fpm初始配置/" rel="prev" title="LNMP之php-fpm初始配置">
+                LNMP之php-fpm初始配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-默认虚拟主机"><span class="nav-text">1. 默认虚拟主机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-用户认证"><span class="nav-text">2. 用户认证</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-域名重定向"><span class="nav-text">3. 域名重定向</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Nginx的访问日志"><span class="nav-text">4. Nginx的访问日志</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-配置Nginx的日志格式"><span class="nav-text">4.1. 配置Nginx的日志格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-Nginx的日志切割"><span class="nav-text">4.2. Nginx的日志切割</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-配置静态文件不记录日志并添加过期时间"><span class="nav-text">5. 配置静态文件不记录日志并添加过期时间</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Nginx防盗链"><span class="nav-text">6. Nginx防盗链</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-控制访问"><span class="nav-text">7. 控制访问</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-Nginx解析PHP"><span class="nav-text">8. Nginx解析PHP</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-Nginx代理"><span class="nav-text">9. Nginx代理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10-Nginx配置SSL"><span class="nav-text">10. Nginx配置SSL</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

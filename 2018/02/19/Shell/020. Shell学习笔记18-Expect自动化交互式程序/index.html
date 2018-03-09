@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Shell," />
+
+
+<meta name="description" content="GO   1. Expect介绍1.1. 什么是ExpectExpect是一个用来实现自动交互功能的软件套件（Expect is a softeare suite for automating interactive tools，这是作者的定义），是基于TCL（全拼为Tool Command Language，是一种脚本语言，由John Ousterhout创建。TCL功能很强大，经常被用于快速">
+<meta name="keywords" content="Shell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell学习笔记18-Expect自动化交互式程序">
+<meta property="og:url" content="http://www.theshu.top/2018/02/19/Shell/020. Shell学习笔记18-Expect自动化交互式程序/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="GO   1. Expect介绍1.1. 什么是ExpectExpect是一个用来实现自动交互功能的软件套件（Expect is a softeare suite for automating interactive tools，这是作者的定义），是基于TCL（全拼为Tool Command Language，是一种脚本语言，由John Ousterhout创建。TCL功能很强大，经常被用于快速">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-03T13:14:50.876Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shell学习笔记18-Expect自动化交互式程序">
+<meta name="twitter:description" content="GO   1. Expect介绍1.1. 什么是ExpectExpect是一个用来实现自动交互功能的软件套件（Expect is a softeare suite for automating interactive tools，这是作者的定义），是基于TCL（全拼为Tool Command Language，是一种脚本语言，由John Ousterhout创建。TCL功能很强大，经常被用于快速">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/02/19/Shell/020. Shell学习笔记18-Expect自动化交互式程序/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Shell学习笔记18-Expect自动化交互式程序 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/020. Shell学习笔记18-Expect自动化交互式程序/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Shell学习笔记18-Expect自动化交互式程序</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:43:58+08:00">2018-02-19</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-03T21:14:50+08:00">2018-03-03</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Shell/" itemprop="url" rel="index"><span itemprop="name">Shell</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>GO</p>
+</blockquote>
+<hr>
+<h1 id="1-Expect介绍"><a href="#1-Expect介绍" class="headerlink" title="1. Expect介绍"></a>1. Expect介绍</h1><h2 id="1-1-什么是Expect"><a href="#1-1-什么是Expect" class="headerlink" title="1.1. 什么是Expect"></a>1.1. 什么是Expect</h2><p>Expect是一个用来实现自动交互功能的软件套件（Expect is a softeare suite for automating interactive tools，这是作者的定义），是基于TCL（全拼为Tool Command Language，是一种脚本语言，由John Ousterhout创建。TCL功能很强大，经常被用于快速原型开发、脚本编程、GUI和测试等方面，不过现在用得不多了）的脚本编程工具语言，方便学习，功能强大。</p>
+<h2 id="1-2-为什么要使用Expect"><a href="#1-2-为什么要使用Expect" class="headerlink" title="1.2. 为什么要使用Expect"></a>1.2. 为什么要使用Expect</h2><p>在现今的企业运维中，自动化运维已经称为运维的主流趋势，但是在很多情况下，执行系统命令或程序时，系统会以交互式的形式要求运维人员输入指定的字符串，之后才能继续执行命令。例如，为用户设置密码时，一般情况下就需要手工输入2次密码；再比如使用SSH远程连接服务器时，第一次连接要和系统实现两次交互式输入。</p>
+<p>简单的说，Expect就是用来自动实现与交互式程序通信的，而无需管理员的手工干预。比如SSH、FTP远程连接等，正常情况下都需要手工与它们进行交互，而使用Except就可以模拟手工交互的过程，实现自动与远端程序的交互，从而达到自动化运维的目的。</p>
+<p>以下是Except的自动交互工作流程的简单说明，依次执行如下操作：</p>
+<p><code>spawn</code>启动指定进程—-&gt;<code>expect</code>获取期待的关键字—-&gt;<code>send</code>向指定进程发送指定字符—-&gt;进程执行完毕，退出结束。</p>
+<h1 id="2-安装Expect软件"><a href="#2-安装Expect软件" class="headerlink" title="2. 安装Expect软件"></a>2. 安装Expect软件</h1><p>首先，要确保机器可以正常上网，并设置好yum安装源，然后执行<code>yum install expect -y</code>命令安装Except软件，安装过程如下：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># rpm -qa expect   #&lt;==检测是否安装</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># yum install expect -y	#&lt;==若没有安装则安装</span></div><div class="line">[root<span class="symbol">@theshu</span> ~]<span class="meta"># rpm -qa expect		#&lt;==再次检查</span></div><div class="line">expect<span class="number">-5.45</span><span class="number">-14.</span>el7_1.x86_64</div></pre></td></tr></table></figure></p>
+<h1 id="3-小试牛刀：实现Expect自动交互功能"><a href="#3-小试牛刀：实现Expect自动交互功能" class="headerlink" title="3. 小试牛刀：实现Expect自动交互功能"></a>3. 小试牛刀：实现Expect自动交互功能</h1><ul>
+<li><p>编写theshu.exp    #&lt;==扩展名使用exp代表是Expect脚本</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/expect	#&lt;==脚本开头解释器，和Shell类似，表示程序使用Expect解析</span></div><div class="line">spawn ssh root@192.168.33.130 uptime	<span class="comment">#&lt;==实行ssh命令（注意开头必须要有spawn，否则无法实现交互）</span></div><div class="line">expect <span class="string">"*password"</span>	<span class="comment">#&lt;==利用Except获取执行上述ssh命令输出的字符串是否为期待的字符串*password，这里的*是通配符</span></div><div class="line">send <span class="string">"123456\n"</span>	<span class="comment">#&lt;==当获取到期待的字符串*password时，则发送12345密码给系统。\n为换行。</span></div><div class="line">expect eof	<span class="comment">#&lt;==处理完毕后结束Except</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>执行Expect：<code>expect theshu.exp</code></p>
+</li>
+</ul>
+<h1 id="4-Expect程序自动交互的重要命令及实践"><a href="#4-Expect程序自动交互的重要命令及实践" class="headerlink" title="4. Expect程序自动交互的重要命令及实践"></a>4. Expect程序自动交互的重要命令及实践</h1><p>Expect程序中的命令是Expect的核心，需要重点掌握。</p>
+<h2 id="4-1-spawn命令"><a href="#4-1-spawn命令" class="headerlink" title="4.1. spawn命令"></a>4.1. spawn命令</h2><p>在Expect自动交互程序执行的过程中，<code>spawn</code>命令是一开始就需要使用的命令，通过<code>spawn</code>执行一个命令或程序，之后所有的Expect操作都会在这个执行过的命令或程序进程中进行，包括自动交互功能，因此如果没有<code>spawn</code>命令，Expect程序将会无法实现自动交互。</p>
+<p><code>spawn</code>命令的语法为：<code>spawn [选项] [需要自动交互的命令或程序]</code></p>
+<p>例如：<code>spawn ssh root@192.168.33.130 uptime</code></p>
+<p>在<code>spawn</code>命令的后面，直接加上要执行的命令或程序（例如这里的ssh命令）等，除此之外，<code>spawn</code>还支持如下一些选项：</p>
+<ul>
+<li><code>-open</code>：表示启动文件进程</li>
+<li><code>-ignore</code>：表示忽略某些信号</li>
+<li>提示：这些选项不常用，了解即可，无需深入。</li>
+</ul>
+<p>使用<code>spawn</code>命令是Expect程序实现自动交互工作流程中的第一步，也是最关键的一步。</p>
+<h2 id="4-2-expect命令"><a href="#4-2-expect命令" class="headerlink" title="4.2. expect命令"></a>4.2. expect命令</h2><h3 id="4-2-1-expect命令语法"><a href="#4-2-1-expect命令语法" class="headerlink" title="4.2.1. expect命令语法"></a>4.2.1. expect命令语法</h3><p>在Expect自动交互程序的执行过程中，当使用<code>spawn</code>命令执行一个命令或程序之后，会提示某些交互式信息，<code>expect</code>命令的作用就是获取<code>spawn</code>命令执行后的信息，看看是否和其事先指定的相匹配，一旦匹配上指定的内容就执行<code>expect</code>后面的动作，<code>expect</code>命令也有一些选项，相对用得多的是<code>-re</code>，表示使用正则表达式的方式来匹配。</p>
+<p>expect命令的语法为：<code>expect 表达式 [动作]</code></p>
+<p>示例如下：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">spawn</span> <span class="selector-tag">ssh</span> <span class="selector-tag">root</span>@<span class="keyword">192</span>.<span class="keyword">168</span>.<span class="keyword">33</span>.<span class="keyword">130</span> uptime</div><div class="line">expect <span class="string">"*password"</span> &#123;<span class="selector-tag">send</span> "123456\<span class="selector-tag">r</span>"&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意，上述命令不能直接在Linux命令行中执行，需要放入Expect脚本中执行。</p>
+</blockquote>
+<h3 id="4-2-2-expect命令的实践"><a href="#4-2-2-expect命令的实践" class="headerlink" title="4.2.2. expect命令的实践"></a>4.2.2. expect命令的实践</h3><p>范例1：执行ssh命令远程获取服务器负载值，并要求实现自动输入密码。</p>
+<ul>
+<li>方法1：将<code>expect</code>和<code>send</code>放在一行：<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># which expect</span></div><div class="line">/bin/expect			<span class="comment">#&lt;==expect程序的绝对路径</span></div><div class="line">[root@theshu ~]<span class="comment"># cat test1.exp</span></div><div class="line"><span class="comment">#!/bin/expect		#&lt;==指定expect解释器</span></div><div class="line">spawn ssh theshu@67.<span class="number">216.210</span>.<span class="number">110</span> -p <span class="number">29643</span> uptime	<span class="comment">#&lt;==开启expect自动交互式，执行ssh命令</span></div><div class="line">expect <span class="string">"*password"</span> &#123;<span class="keyword">send</span> <span class="string">"theshu..\n"</span>&#125;	<span class="comment">#&lt;==如果ssh命令输出匹配*oassword，就发送theshu..给系统</span></div><div class="line">expect <span class="keyword">eof</span>	<span class="comment">#&lt;==要想输出结果，还必须加eof，表示expect结束</span></div><div class="line">[root@theshu ~]<span class="comment"># expect test1.exp	#&lt;==采用expect执行脚本，就相当于使用sh执行Shell脚本</span></div><div class="line">spawn ssh theshu@67.<span class="number">216.210</span>.<span class="number">110</span> -p <span class="number">29643</span> uptime</div><div class="line">theshu@67.<span class="number">216.210</span>.<span class="number">110</span><span class="string">'s password:	#&lt;==Expect程序自动帮我们输入了密码</span></div><div class="line"><span class="string"> 07:56:00 up 33 days,  1:39,  0 users,  load average: 0.00, 0.00, 0.00</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>从上面的例子可以看出，<code>expect</code>命令是依附于<code>spawn</code>命令的，即通过<code>spawn</code>执行ssh命令后，系统会提示输入密码，此时的expect命令按照事先的配置匹配ssh命令执行后的字符串password，如果匹配到了指定的passeord字符串，则会执行紧随其后包含在大括号中的<code>send</code>或<code>exp_send</code>动作，匹配的动作也可以放在下一行，这样就不需要使用大括号了，就像下面这样，实际完成的功能与上面的一样。</p>
+<ul>
+<li>方法2：<code>expect</code>和<code>send</code>放在不同行<figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat test2.exp</span></div><div class="line"><span class="comment">#!/bin/expect</span></div><div class="line">spawn ssh theshu@67.<span class="number">216.210</span>.<span class="number">110</span> -p <span class="number">29643</span> uptime</div><div class="line">expect <span class="string">"*password"</span></div><div class="line"><span class="keyword">send</span> <span class="string">"theshu..\n"</span></div><div class="line">expect <span class="keyword">eof</span></div><div class="line">[root@theshu ~]<span class="comment"># expect test2.exp</span></div><div class="line">spawn ssh theshu@67.<span class="number">216.210</span>.<span class="number">110</span> -p <span class="number">29643</span> uptime</div><div class="line">theshu@67.<span class="number">216.210</span>.<span class="number">110</span><span class="string">'s password:</span></div><div class="line"><span class="string"> 08:04:38 up 33 days,  1:47,  0 users,  load average: 0.00, 0.00, 0.00</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p><code>expect</code>命令还有一种高级用法，即它可以在一个<code>expect</code>匹配中多次匹配不同的字符串，并给出不通的处理动作，此时只需要将匹配的所有字符串放在一个大括号里就可以了，当然还要借助<code>exp_continue</code>指令实现继续匹配。</p>
+<p>范例3：执行ssh命令远程获取服务器负载值，并自动输入<code>yes</code>及用户密码。<br><figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat test3.exp</span></div><div class="line"><span class="comment">#!/bin/expect</span></div><div class="line">spawn ssh theshu@67.<span class="number">216.210</span>.<span class="number">110</span> -p <span class="number">29643</span> uptime</div><div class="line">expect &#123;	<span class="comment">#&lt;==起始大括号前要有空格</span></div><div class="line">        <span class="string">"yes/no"</span>        &#123;exp_send <span class="string">"yes\r"</span>;exp_continue&#125;	<span class="comment">#&lt;==exp_send和send类似</span></div><div class="line">        <span class="string">"*password"</span> &#123;exp_send <span class="string">"theshu..\r"</span>&#125;</div><div class="line">&#125;</div><div class="line">expect <span class="keyword">eof</span></div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li><code>exp_send</code>和<code>sed</code>类似，后面的<code>\r（回车）</code>和前文的<code>\n（换行）</code>类似。</li>
+<li><code>expect{}</code>，类似多行<code>expect</code>。</li>
+<li>匹配多个字符串，需要在每次匹配并执行动作后，加上<code>exp_continue</code></li>
+</ul>
+<h2 id="4-3-send命令"><a href="#4-3-send命令" class="headerlink" title="4.3. send命令"></a>4.3. send命令</h2><p><code>send</code>和<code>exp_send</code>这两个命令是Expect中的动作命令，用法类似，即在<code>expect</code>命令匹配指定的字符串后，发送指定的字符串给系统，这些命令可以支持一些特殊的转义符号。例如：<code>\r</code>表示回车、<code>\n</code>表示换成、<code>\t</code>表示制表符等，这些用法与TCL中的特殊符号相同。</p>
+<p>示例如下：<br><figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/expect</span></div><div class="line">spawn /bin/sh test.sh</div><div class="line">expect &#123;</div><div class="line">	<span class="string">"username"</span> &#123;exp_send <span class="string">"theshu\r"</span>; exp_continue&#125;</div><div class="line">	<span class="string">"*pass*"</span>   &#123;send <span class="string">"123456\r"</span>; exp_continue&#125;</div><div class="line">	<span class="string">"*mail*"</span>   &#123;exp_send <span class="string">"theshu@qq.com\r"</span>&#125;</div><div class="line">&#125;</div><div class="line">expect eof</div></pre></td></tr></table></figure></p>
+<p><code>send</code>命令有几个可用的参数，具体如下。</p>
+<ul>
+<li><code>-i</code>：指定spawn_id，用来向不通的spawn_id进程发送命令，是进行多程序控制的参数。</li>
+<li><code>-s</code>：s代表slowly，即控制发送的速度，使用的时候要与expect中的变量send_slow相关联。</li>
+</ul>
+<h2 id="4-4-exp-continue命令"><a href="#4-4-exp-continue命令" class="headerlink" title="4.4. exp_continue命令"></a>4.4. exp_continue命令</h2><p><code>exp_continue</code>命令，一般处于<code>expect</code>命令中，属于一种动作命令，一般用在匹配多次字符串的动作中，从命令的拼写就可以看出命令的作用，即让Expect程序继续匹配的意思，示例如下：<br><figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/expect</span></div><div class="line">spawn /bin/sh test.sh</div><div class="line">expect &#123;</div><div class="line">	<span class="string">"username"</span> &#123;exp_send <span class="string">"theshu\r"</span>; exp_continue&#125;</div><div class="line">	<span class="string">"*pass*"</span>   &#123;send <span class="string">"123456\r"</span>; exp_continue&#125;</div><div class="line">	<span class="string">"*mail*"</span>   &#123;exp_send <span class="string">"theshu@qq.com\r"</span>&#125;</div><div class="line">&#125;</div><div class="line">expect eof</div></pre></td></tr></table></figure></p>
+<p>说明：如果需要一次匹配多个字符串，那么不同的匹配之间就要加上<code>exp_continue</code>，否则expect将不会自动输入指定的字符串。最后一个的结尾就不需要加上<code>exp_continue</code>了，因为都匹配完成了。</p>
+<p>在这个例子中，匹配第一个字符串”username”之后，expect发送”theshu”字符串给系统，然后利用exp_continue继续匹配下一个字符串”*pass*“，并自动输入指定字符串”123456”，最后匹配”*mail*“，并输入指定字符串”theshu@qq.com”，由于结尾没有exp_continue，因此匹配结束。</p>
+<h2 id="4-5-send-user命令"><a href="#4-5-send-user命令" class="headerlink" title="4.5. send_user命令"></a>4.5. send_user命令</h2><p><code>send_user</code>命令可以用来打印Expect脚本信息，类似Shell里的echo命令，而默认的<code>send</code>、<code>exp_send</code>命令都是将字符串输出到Expect程序中去，有关<code>send_user</code>命令用法的示例如下:<br><figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root<span class="keyword">@theshu</span> ~]# cat send_user.exp</div><div class="line"><span class="meta">#!/bin/expect</span></div><div class="line">send_user <span class="string">"I am theshu.\n"</span></div><div class="line">send_user <span class="string">"I am a Linuxer.\t"</span></div><div class="line">send_user <span class="string">"My blog is http://www.theshu.top\n"</span></div><div class="line">[root<span class="keyword">@theshu</span> ~]# expect send_user.exp</div><div class="line">I am theshu.</div><div class="line">I am a Linuxer. My blog <span class="keyword">is</span> http:<span class="comment">//www.theshu.top</span></div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>通过上述例子可以看出，它很像Shell里的echo命令。而且有<code>echo -e</code>的功能。</p>
+</blockquote>
+<h2 id="4-6-exit命令"><a href="#4-6-exit命令" class="headerlink" title="4.6. exit命令"></a>4.6. exit命令</h2><p><code>exit</code>命令的功能类似于Shell中的<code>exit</code>，即直接退出Expect脚本，除了最基本的退出脚本功能之外，还可以利用这个命令对脚本做一些关闭前的清理和提示等工作，比如下面的示例：<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat exit_test.exp</span></div><div class="line"><span class="comment">#!/bin/expect</span></div><div class="line">send_user <span class="string">"I am theshu.\n"</span></div><div class="line">send_user <span class="string">"I am a Linuxer,\t"</span></div><div class="line">send_user <span class="string">"My blog is http://www.theshu.top.\n"</span></div><div class="line"><span class="keyword">exit</span> -onexit &#123;</div><div class="line">        send_user <span class="string">"Good bye.\n"</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">[root@theshu ~]<span class="comment"># expect exit_test.exp</span></div><div class="line">I am theshu.</div><div class="line">I am a Linuxer, My blog is http:<span class="regexp">//</span>www.theshu.top.</div><div class="line">Good bye.</div></pre></td></tr></table></figure></p>
+<h2 id="4-7-Expect常用命令总结"><a href="#4-7-Expect常用命令总结" class="headerlink" title="4.7. Expect常用命令总结"></a>4.7. Expect常用命令总结</h2><p>下面将上面所说的知识进行总结以方便记忆，整理结果如下标：</p>
+<table>
+<thead>
+<tr>
+<th>Expect命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>spawn</td>
+<td>spawn命令是一个在Expect自动交互程序的开始就需要使用的命令，通过spawn执行一个命令或程序，之后所有的Expect操作都在这个执行过的命令或程序进程中进行，包括自动交互功能</td>
+</tr>
+<tr>
+<td>expect</td>
+<td>在Expect自动交互程序的执行过程中，在使用spawn命令执行一个命令或程序之后，会提示某些交互式信息，expect命令的作用就是获取这些信息，查看是否和其事先指定的信息相匹配，一旦匹配上指定的内容，就执行expect后面的动作</td>
+</tr>
+<tr>
+<td>send</td>
+<td>Expect中的动作命令，当expect匹配了指定的字符串后，发送指定的字符串给系统，这些命令可以支持一些特殊的转义符号，例如\r表示回车，\n表示换行，\t表示制表符等，还有一个类似的<code>exp_send</code>命令</td>
+</tr>
+<tr>
+<td>exp_continue</td>
+<td>属于一种动作命令，在一个expect命令中，用于多次匹配字符串并执行不同的动作中。该命令的作用就是让expect程序继续匹配</td>
+</tr>
+<tr>
+<td>send_user</td>
+<td>send_user命令用来打印Expect脚本信息，类似Shell里的echo命令，并且带上-e选项的功能</td>
+</tr>
+<tr>
+<td>exit</td>
+<td>退出Expect脚本，以及在退出脚本前做一些关闭前的清理和提示等工作</td>
+</tr>
+</tbody>
+</table>
+<h1 id="5-Expect程序变量"><a href="#5-Expect程序变量" class="headerlink" title="5. Expect程序变量"></a>5. Expect程序变量</h1><h2 id="5-1-普通变量"><a href="#5-1-普通变量" class="headerlink" title="5.1. 普通变量"></a>5.1. 普通变量</h2><p>Expect中的变量定义、使用方法与TCL语言中的变量基本相同。</p>
+<p>定义变量的基本语法如下：<code>set 变量名 变量值</code>。例如：<code>set password &quot;123456&quot;</code></p>
+<p>打印变量的基本语法如下：<code>puts $变量名</code>或<code>send_user &quot;$变量名\n&quot;</code></p>
+<p>范例：定义及输出变量<br><figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[root<span class="keyword">@theshu</span> ~]# cat <span class="number">5.1</span>.exp</div><div class="line"><span class="meta">#!/usr/bin/expect</span></div><div class="line">set password <span class="string">"123456"</span></div><div class="line">puts $password</div><div class="line">send_user <span class="string">"$password\n"</span></div><div class="line">[root<span class="keyword">@theshu</span> ~]# expect <span class="number">5.1</span>.exp</div><div class="line"><span class="number">123456</span></div><div class="line"><span class="number">123456</span></div></pre></td></tr></table></figure></p>
+<h2 id="5-2-特殊参数变量"><a href="#5-2-特殊参数变量" class="headerlink" title="5.2. 特殊参数变量"></a>5.2. 特殊参数变量</h2><p>在Expect里也有与Shell脚本里的$0、$1、$#等类似的特殊参数变量，用于接收及控制Expect脚本传参。</p>
+<p>在Expect中<code>$argv</code>表示参数数组，可以使用<code>[lindex $argv n]</code>接收Expect脚本传参，n从0开始，分别表示第一个<code>[lindex $argv 0]</code>参数、第二个<code>[lindex $argv 1]</code>参数、第三个<code>[lindex $argv 2]</code>参数……</p>
+<p>范例1：定义及输出特殊参数变量：<br><figure class="highlight tcl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# cat <span class="number">1.</span>exp</div><div class="line"><span class="comment">#!/bin/expect</span></div><div class="line"><span class="comment">#define var</span></div><div class="line"><span class="keyword">set</span> <span class="keyword">file</span> [<span class="keyword">lindex</span> $argv <span class="number">0</span>]</div><div class="line"><span class="keyword">set</span> host [<span class="keyword">lindex</span> $argv <span class="number">1</span>]</div><div class="line"><span class="keyword">set</span> dir  [<span class="keyword">lindex</span> $argv <span class="number">2</span>]</div><div class="line">send_user <span class="string">"$file\t$host\t$dir\n"</span></div><div class="line">[root@theshu ~]# expect <span class="number">1.</span>exp theshu.log <span class="number">192.168</span><span class="number">.33</span><span class="number">.130</span> /tmp</div><div class="line">theshu.log      <span class="number">192.168</span><span class="number">.33</span><span class="number">.130</span>  /tmp</div></pre></td></tr></table></figure></p>
+<p>Expect接收参数的方式和bash脚本的方式有些区别，bash是通过$0…$n这种方式来接受的，而Expect是通过<code>set 变量名称 [lindex $argv &lt;param index&gt;]</code>来接收的，例如：<code>set file [lindex $argv 0]</code>。</p>
+<p>除了基本的位置参数外，Expect也支持其他的特殊参数，例如：<code>$argc</code>表示传参的个数，<code>$argv0</code>表示脚本的名字。</p>
+<p>范例2：针对Expect脚本传参的个数及脚本名参数的实践<br><figure class="highlight tcl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# cat <span class="number">18</span><span class="number">-7</span><span class="number">-2.</span>exp</div><div class="line"><span class="comment">#!/bin/expect</span></div><div class="line"><span class="comment">#define var</span></div><div class="line"><span class="keyword">set</span> <span class="keyword">file</span> [<span class="keyword">lindex</span> $argv <span class="number">0</span>]</div><div class="line"><span class="keyword">set</span> host [<span class="keyword">lindex</span> $argv <span class="number">1</span>]</div><div class="line"><span class="keyword">set</span> dir  [<span class="keyword">lindex</span> $argv <span class="number">2</span>]</div><div class="line"><span class="keyword">puts</span> <span class="string">"$file\t$host\t$dir"</span></div><div class="line"><span class="keyword">puts</span> $argc</div><div class="line">puts $argv0</div><div class="line">[root@theshu ~]# expect <span class="number">18</span><span class="number">-7</span><span class="number">-2.</span>exp theshu.txt <span class="number">10.0</span><span class="number">.0</span><span class="number">.3</span> /opt</div><div class="line">theshu.txt      <span class="number">10.0</span><span class="number">.0</span><span class="number">.3</span>        /opt</div><div class="line"><span class="number">3</span></div><div class="line"><span class="number">18</span><span class="number">-7</span><span class="number">-2.</span>exp</div></pre></td></tr></table></figure></p>
+<h1 id="6-Expect程序中的if条件语句"><a href="#6-Expect程序中的if条件语句" class="headerlink" title="6. Expect程序中的if条件语句"></a>6. Expect程序中的if条件语句</h1><p>Expect程序中if条件语句的基本语法为：<br><figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> &#123; 条件表达式 &#125; &#123;</div><div class="line">	指令</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>或<br><figure class="highlight xquery"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> &#123; 条件表达式 &#125; &#123;</div><div class="line">	指令</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">	指令</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>说明：<code>if</code>关键字后面要有空格，<code>else</code>关键字前后都要有空格，<code>{条件表达式}</code>大括号里面靠近大括号处可以没有空格，将指令括起来的起始大括号<code>{</code>前面要有空格。</p>
+</blockquote>
+<p>范例1：使用if语句判断脚本传参的个数，如果不符则给予提示<br><figure class="highlight tcl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]# cat test.exp</div><div class="line"><span class="comment">#!/bin/expect</span></div><div class="line"><span class="keyword">if</span> &#123; $argc != <span class="number">3</span> &#125; &#123;	#&lt;==$argv0为传参的个数，相当于Shell里的$#</div><div class="line">        send_user <span class="string">"usage: expect $argv0 file host dir\n"</span>	#&lt;==给予提示，$argv0代表脚本的名字</div><div class="line">        <span class="keyword">exit</span>	#&lt;==退出脚本</div><div class="line">&#125;</div><div class="line"><span class="comment">#define var</span></div><div class="line"><span class="keyword">set</span> <span class="keyword">file</span> [<span class="keyword">lindex</span> $argv <span class="number">0</span>]</div><div class="line"><span class="keyword">set</span> host [<span class="keyword">lindex</span> $argv <span class="number">1</span>]</div><div class="line"><span class="keyword">set</span> dir  [<span class="keyword">lindex</span> $argv <span class="number">2</span>]</div><div class="line"><span class="keyword">puts</span> <span class="string">"$file\t$host\t$dir"</span></div><div class="line">[root@theshu ~]# expect test.exp	#执行结果</div><div class="line">usage: expect <span class="number">18</span><span class="number">-9</span><span class="number">-1.</span>exp <span class="keyword">file</span> host dir</div><div class="line">[root@theshu ~]# expect test.exp theshu.log <span class="number">192.168</span><span class="number">.33</span><span class="number">.130</span> /home/theshu</div><div class="line">theshu.log      <span class="number">192.168</span><span class="number">.33</span><span class="number">.130</span>  /home/theshu</div></pre></td></tr></table></figure></p>
+<p>范例2：使用if语句判断脚本传参的个数，不管是否符合都给予提示。<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat 18-10.exp</span></div><div class="line"><span class="comment">#!/bin/expect</span></div><div class="line"><span class="keyword">if</span> &#123;$argc != <span class="number">26</span>&#125; &#123;</div><div class="line">        puts <span class="string">"bad."</span></div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">        puts <span class="string">"good."</span></div><div class="line">&#125;</div><div class="line">[root@theshu ~]<span class="comment"># expect 18-10.exp</span></div><div class="line">bad.</div><div class="line">[root@theshu ~]<span class="comment"># expect 18-10.exp &#123;a..z&#125;</span></div><div class="line">good.</div></pre></td></tr></table></figure></p>
+<p>这篇学习笔记的目的并不是用来彻底精通Expect语言，而是指导读者解决运维管理中的交互问题，实现自动化运维，因此，不要过多地纠结于Expect语言，而应该多关注自动化交互的知识。</p>
+<h1 id="7-Expect中的关键字"><a href="#7-Expect中的关键字" class="headerlink" title="7. Expect中的关键字"></a>7. Expect中的关键字</h1><p>Expect中的特殊关键字用于匹配过程，代表某些特殊的含义或状态，一般只用于Expect命令中而不能在Expect命令外面单独使用。</p>
+<h2 id="7-1-eof关键字"><a href="#7-1-eof关键字" class="headerlink" title="7.1. eof关键字"></a>7.1. eof关键字</h2><p><code>eof（end-of-file）</code>关键字用于匹配结束符。例如：<br><figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/expect</span></div><div class="line">spawn ssh root@<span class="number">192.168</span>.33.130 uptime</div><div class="line">expect <span class="string">"*password"</span> &#123;send <span class="string">"123456\n"</span>&#125;</div><div class="line">expect eof</div></pre></td></tr></table></figure></p>
+<p>再比如：<br><figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/expect</span></div><div class="line">spawn ssh root@<span class="number">192.168</span>.33.130 uptime</div><div class="line">expect &#123;</div><div class="line">	<span class="string">"yes/no"</span> &#123;exp_send <span class="string">"yes\r"</span>; exp_continue&#125;</div><div class="line">	<span class="string">"*password"</span> &#123;exp_send <span class="string">"123456\r"</span>&#125;</div><div class="line">&#125;</div><div class="line">expect eof</div></pre></td></tr></table></figure></p>
+<h2 id="7-2-timeout关键字"><a href="#7-2-timeout关键字" class="headerlink" title="7.2. timeout关键字"></a>7.2. timeout关键字</h2><p><code>timeout</code>是Expect中的一个控制时间的关键字变量，它是一个全局性的时间控制开关，可以通过为这个变量赋值来规定整个Expect操作的时间，注意这个变量是服务于Expect全局的，而不是某一条命令，即使命令没有任何错误，到了时间仍然会激活这个变量，此外，到时间后还会激活一个处理及提示信息开关，下面来看看它的实际使用方法。</p>
+<p>范例：timeout超时功能实践。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat test.exp</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">spawn ssh root@192.168.33.130 uptime</div><div class="line"><span class="built_in">set</span> timeout 30</div><div class="line">expect <span class="string">"yes/no"</span></div><div class="line">expect timeout</div><div class="line">[root@theshu ~]<span class="comment"># expect test.exp</span></div><div class="line">spawn ssh root@192.168.33.130 uptime</div><div class="line">root@192.168.33.130<span class="string">'s password: Request timeout by theshu.</span></div></pre></td></tr></table></figure></p>
+<p>上面的处理中，首先将timeout变量设置为30秒，此时Expect脚本的执行只要超过了30秒，就会直接执行结尾的timieout动作，打印一个信息，停止运行脚本。还可以做更多的其他事情。</p>
+<p>在expect{}的用法中，还可以使用下面的timeout语法：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">[root@theshu ~]<span class="comment"># cat test.exp</span></div><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line">spawn ssh root@192.168.33.130 uptime</div><div class="line">expect &#123;</div><div class="line">	-timeout 3</div><div class="line">	<span class="string">"yes/no"</span> &#123;exp_send <span class="string">"yes\r"</span>; exp_continue&#125;</div><div class="line">	timeout &#123;puts <span class="string">"Request timeout by theshu."</span>; <span class="built_in">return</span>&#125;</div><div class="line">&#125;</div><div class="line">[root@theshu ~]<span class="comment"># expect test.exp</span></div><div class="line">spawn ssh root@192.168.33.130 uptime</div><div class="line">root@192.168.33.130<span class="string">'s password: Request timeout by theshu.</span></div></pre></td></tr></table></figure></p>
+<p>timeout变量设置为0，表示立即超时，为-1则表示永不超时。</p>
+<h1 id="8-小结"><a href="#8-小结" class="headerlink" title="8. 小结"></a>8. 小结</h1><p>Expect程序的功能远不止文本介绍的这些，本篇笔记主要从运维工作实战的角度，来讲解自动化运维中用Shell脚本难以实现的交互式问题的解决方案。对于一般的企业运维人员，掌握以上的这些就已经够用了。类似的交互工具还有sshpass、ansible等。</p>
+<hr>
+<blockquote>
+<p>OK</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/19/Shell/019. Shell学习笔记17-Linux信号及trap命令的企业应用/" rel="next" title="Shell学习笔记17-Linux信号及trap命令的企业应用">
+                <i class="fa fa-chevron-left"></i> Shell学习笔记17-Linux信号及trap命令的企业应用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/19/Shell/021. Shell学习笔记19-字Shell及Shell嵌套模式/" rel="prev" title="Shell学习笔记19-字Shell及Shell嵌套模式知识应用">
+                Shell学习笔记19-字Shell及Shell嵌套模式知识应用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Expect介绍"><span class="nav-text">1. Expect介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-什么是Expect"><span class="nav-text">1.1. 什么是Expect</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-为什么要使用Expect"><span class="nav-text">1.2. 为什么要使用Expect</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-安装Expect软件"><span class="nav-text">2. 安装Expect软件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-小试牛刀：实现Expect自动交互功能"><span class="nav-text">3. 小试牛刀：实现Expect自动交互功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Expect程序自动交互的重要命令及实践"><span class="nav-text">4. Expect程序自动交互的重要命令及实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-spawn命令"><span class="nav-text">4.1. spawn命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-expect命令"><span class="nav-text">4.2. expect命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-1-expect命令语法"><span class="nav-text">4.2.1. expect命令语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-2-expect命令的实践"><span class="nav-text">4.2.2. expect命令的实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-send命令"><span class="nav-text">4.3. send命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-exp-continue命令"><span class="nav-text">4.4. exp_continue命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-send-user命令"><span class="nav-text">4.5. send_user命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-exit命令"><span class="nav-text">4.6. exit命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-Expect常用命令总结"><span class="nav-text">4.7. Expect常用命令总结</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-Expect程序变量"><span class="nav-text">5. Expect程序变量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-普通变量"><span class="nav-text">5.1. 普通变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-特殊参数变量"><span class="nav-text">5.2. 特殊参数变量</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Expect程序中的if条件语句"><span class="nav-text">6. Expect程序中的if条件语句</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-Expect中的关键字"><span class="nav-text">7. Expect中的关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-eof关键字"><span class="nav-text">7.1. eof关键字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2-timeout关键字"><span class="nav-text">7.2. timeout关键字</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-小结"><span class="nav-text">8. 小结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

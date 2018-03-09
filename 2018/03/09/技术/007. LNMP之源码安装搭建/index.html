@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="MySQL,PHP,LNMP,Nginx," />
+
+
+<meta name="description" content="1. LNMP介绍和LAMP唯一不同的是，LNMP中的N指的是Nginx（类似Apache的一种Web服务软件）。目前这种环境的应用也非常多。Nginx设计的初衷是提供一种快速、高效、多并发的Web服务软件。在静态页面的处理上，Nginx较Apache更胜一筹；但在动态页面的处理上，Nginx并不比Apache有优势。但是目前还是有很多爱好者对Nginx比较热衷。随着Nginx技术的逐渐成熟，它在">
+<meta name="keywords" content="MySQL,PHP,LNMP,Nginx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LNMP之源码安装搭建">
+<meta property="og:url" content="http://www.theshu.top/2018/03/09/技术/007. LNMP之源码安装搭建/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="1. LNMP介绍和LAMP唯一不同的是，LNMP中的N指的是Nginx（类似Apache的一种Web服务软件）。目前这种环境的应用也非常多。Nginx设计的初衷是提供一种快速、高效、多并发的Web服务软件。在静态页面的处理上，Nginx较Apache更胜一筹；但在动态页面的处理上，Nginx并不比Apache有优势。但是目前还是有很多爱好者对Nginx比较热衷。随着Nginx技术的逐渐成熟，它在">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-09T12:01:49.773Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LNMP之源码安装搭建">
+<meta name="twitter:description" content="1. LNMP介绍和LAMP唯一不同的是，LNMP中的N指的是Nginx（类似Apache的一种Web服务软件）。目前这种环境的应用也非常多。Nginx设计的初衷是提供一种快速、高效、多并发的Web服务软件。在静态页面的处理上，Nginx较Apache更胜一筹；但在动态页面的处理上，Nginx并不比Apache有优势。但是目前还是有很多爱好者对Nginx比较热衷。随着Nginx技术的逐渐成熟，它在">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/03/09/技术/007. LNMP之源码安装搭建/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>LNMP之源码安装搭建 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/09/技术/007. LNMP之源码安装搭建/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LNMP之源码安装搭建</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T11:29:40+08:00">2018-03-09</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-09T20:01:49+08:00">2018-03-09</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-LNMP介绍"><a href="#1-LNMP介绍" class="headerlink" title="1. LNMP介绍"></a>1. LNMP介绍</h1><p>和LAMP唯一不同的是，LNMP中的N指的是Nginx（类似Apache的一种Web服务软件）。目前这种环境的应用也非常多。Nginx设计的初衷是提供一种快速、高效、多并发的Web服务软件。在静态页面的处理上，Nginx较Apache更胜一筹；但在动态页面的处理上，Nginx并不比Apache有优势。但是目前还是有很多爱好者对Nginx比较热衷。随着Nginx技术的逐渐成熟，它在Web服务软件领域的地位也会越来越高。</p>
+<hr>
+<h1 id="2-安装MySQL"><a href="#2-安装MySQL" class="headerlink" title="2. 安装MySQL"></a>2. 安装MySQL</h1><p>LNMP中MySQL的安装步骤和LAMP一样，这里简单地叙述一下过程，在这里以MySQL5.6版本为例，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/src/	<span class="comment">#&lt;==建议把所有的软件包都放在这个目录下面，方便管理</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> wget http://mirrors.sohu.com/mysql/MySQL-5.6/mysql-5.6.35-linux-glibc2.5-x86_64.tar.gz  <span class="comment">#&lt;==下载MySQL安装包</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> tar zxf mysql-5.6.35-linux-glibc2.5-x86_64.tar.gz	 <span class="comment">#&lt;==解压</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> [ -d /usr/<span class="built_in">local</span>/mysql ] &amp;&amp; mv /usr/<span class="built_in">local</span>/mysql /usr/<span class="built_in">local</span>/mysql_old</span></div><div class="line"><span class="meta">#</span><span class="bash"> mv mysql-5.6.35-linux-glibc2.5-x86_64 /usr/<span class="built_in">local</span>/mysql	<span class="comment">#&lt;==挪动位置</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> useradd -s /sbin/nologin mysql	<span class="comment">#&lt;==建立mysql用户，因为启动MySQL需要该用户</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/mysql	<span class="comment">#&lt;==进入mysql目录</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> mkdir -p /data/mysql	<span class="comment">#&lt;==创建datadir，数据库文件会放到这里面</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> chown -R mysql:mysql /data/mysql	<span class="comment">#&lt;==更改文件属主和属组为mysql，不更改后续操作会出问题</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> ./scripts/mysql_install_db --user=mysql --datadir=/data/mysql</span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> $?</span></div><div class="line">0</div><div class="line"><span class="meta">#</span><span class="bash"> cp support-files/my-default.cnf /etc/my.cnf</span></div><div class="line">cp：是否覆盖"/etc/my.cnf"？ y</div><div class="line"><span class="meta">#</span><span class="bash"> cp support-files/mysql.server /etc/init.d/mysqld</span></div><div class="line"><span class="meta">#</span><span class="bash"> chmod 755 /etc/init.d/mysqld</span></div><div class="line"><span class="meta">#</span><span class="bash"> vim /etc/init.d/mysqld</span></div></pre></td></tr></table></figure></p>
+<p>需要修改的地方有<code>datadir=/data/mysql</code>（即前面步骤中初始化数据库时定义的目录）。把启动脚本加入到系统服务向，设定开机启动并启动MySQL，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> chkconfig --add mysqld	<span class="comment">#&lt;==把mysqld服务加入到系统服务列表中</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> chkconfig mysqld on		<span class="comment">#&lt;==使其开机启动</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> service mysqld start		<span class="comment">#&lt;==启动服务</span></span></div><div class="line">Starting MySQL.Logging to '/data/mysql/localhost.localdomain.err'.</div><div class="line">.. SUCCESS!</div></pre></td></tr></table></figure></p>
+<p>查看MySQL是否启动的命令如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> ps aux | grep mysql | grep -v grep</span></div><div class="line"><span class="meta">#</span><span class="bash">&lt;==显示结果应该大于2行</span></div><div class="line"><span class="meta">#</span><span class="bash"> netstat -lnp | grep 3306	<span class="comment">#&lt;==看看有没有监听3306端口</span></span></div><div class="line">tcp     0      0 :::3306     :::*      LISTEN      1904/mysqld</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="3-安装PHP"><a href="#3-安装PHP" class="headerlink" title="3. 安装PHP"></a>3. 安装PHP</h1><p>在安装PHP之前先要声明一下，针对Nginx的PHP安装和LAMP中PHP的安装是有区别的。因为Nginx中的PHP是以<code>fastcgi</code>的方式结合Nginx的，可以理解为Nginx代理了PHP的<code>fastcgi</code>，而httpd是把PHP作为自己的模块来调用的。</p>
+<p>PHP的官方下载地址为：(<a href="http://www.php.net/downloads.php)[http://www.php.net/downloads.php]。这在里建议使用PHP5.6版本。" target="_blank" rel="external">http://www.php.net/downloads.php)[http://www.php.net/downloads.php]。这在里建议使用PHP5.6版本。</a></p>
+<h2 id="3-1-下载PHP源码包"><a href="#3-1-下载PHP源码包" class="headerlink" title="3.1. 下载PHP源码包"></a>3.1. 下载PHP源码包</h2><p>下载PHP5.6版本的源码包，命令如下：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> mysql]<span class="meta"># cd /usr/local/src/</span></div><div class="line">[root<span class="symbol">@localhost</span> src]<span class="meta"># wget http://cn2.php.net/distributions/php-5.6.30.tar.gz</span></div></pre></td></tr></table></figure></p>
+<h2 id="3-2-解压源码包，创建账号"><a href="#3-2-解压源码包，创建账号" class="headerlink" title="3.2. 解压源码包，创建账号"></a>3.2. 解压源码包，创建账号</h2><p>解压下载的PHP5.6版本的源码包，并创建相应的用户，命令如下：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> src]<span class="meta"># tar zxf php-5.6.30.tar.gz</span></div><div class="line">[root<span class="symbol">@localhost</span> src]<span class="meta"># useradd -s /sbin/nologin php-fpm</span></div></pre></td></tr></table></figure></p>
+<p>创建的<code>php-fpm</code>账号是用来运行<code>php-fpm</code>服务的。在LNMP环境中，PHP以一个服务<code>php-fpm</code>的形式出现，独立存在于Linux系统中，方便管理。</p>
+<h2 id="3-3-配置编译选项"><a href="#3-3-配置编译选项" class="headerlink" title="3.3. 配置编译选项"></a>3.3. 配置编译选项</h2><p>配置编译选项，命令如下：<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">[root@localhost src]# cd php-5.6.30</div><div class="line">[root@localhost src]# ./configure \</div><div class="line">-<span class="ruby">-prefix=<span class="regexp">/usr/local</span><span class="regexp">/php-fpm \</span></span></div><div class="line"><span class="ruby">--with-config-file-path=<span class="regexp">/usr/local</span><span class="regexp">/php-fpm/etc</span> \</span></div><div class="line"><span class="ruby">--enable-fpm \</span></div><div class="line"><span class="ruby">--with-fpm-user=php-fpm \</span></div><div class="line"><span class="ruby">--with-fpm-group=php-fpm \</span></div><div class="line"><span class="ruby">--with-mysql=<span class="regexp">/usr/local</span><span class="regexp">/mysql \</span></span></div><div class="line"><span class="ruby">--with-mysql-sock=<span class="regexp">/tmp/mysql</span>.sock \</span></div><div class="line"><span class="ruby">--with-libxml-dir \</span></div><div class="line"><span class="ruby">--with-gd \</span></div><div class="line"><span class="ruby">--with-jpeg-dir \</span></div><div class="line"><span class="ruby">--with-png-dir \</span></div><div class="line"><span class="ruby">--with-freetype-dir \</span></div><div class="line"><span class="ruby">--with-iconv-dir \</span></div><div class="line"><span class="ruby">--with-zlib-dir \</span></div><div class="line"><span class="ruby">--with-bz2 \</span></div><div class="line"><span class="ruby">--with-mcrypt \</span></div><div class="line"><span class="ruby">--with-curl \</span></div><div class="line"><span class="ruby">--with-openssl \</span></div><div class="line"><span class="ruby">--with-pear \</span></div><div class="line"><span class="ruby">--enable-soap \</span></div><div class="line"><span class="ruby">--enable-gd-native-ttf \</span></div><div class="line"><span class="ruby">--enable-ftp \</span></div><div class="line"><span class="ruby">--enable-mbstring \</span></div><div class="line"><span class="ruby">--enable-exif \</span></div><div class="line"><span class="ruby">--disable-ipv6</span></div><div class="line"><span class="ruby"><span class="comment"># echo $?</span></span></div><div class="line"><span class="ruby"><span class="number">0</span></span></div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>编译参数和LAMP中的PHP编译参数不一样，多了<code>--enable-fpm</code>，如果不加该参数，则不会有php-fpm执行文件生成，更不能启动php-fpm服务。还多了一些和fpm相关的配置参数。</li>
+<li>在配置过程中，如果出现问题，参考LAMP学习笔记中所记录的问题和解决办法。但是对于一台最小化安装的新机器来说要安装这些：<code>yum install -y libxml2-devel openssl openssl-devel bzip2 bzip2-devel libpng libpng-devel freetype freetype-devel libmcrypt-devel libjpeg-devel libcurl-devel</code></li>
+<li>其实只是比在LAMP中PHP的安装中的问题多了下面的问题，参考下面的解决办法：<ul>
+<li>问题：<code>configure: error: Please reinstall the libcurl distribution - 
+easy.h should be in &lt;curl-dir&gt;/include/curl/</code></li>
+<li>解决办法：<code>yum install -y libcurl-devel</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="3-4-编译PHP"><a href="#3-4-编译PHP" class="headerlink" title="3.4. 编译PHP"></a>3.4. 编译PHP</h2><p>成功的配置编译参数后，就需要进行编译了，命令如下：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@localhost php<span class="number">-5.6</span><span class="number">.30</span>]# make</div><div class="line">...</div><div class="line">[root@localhost php<span class="number">-5.6</span><span class="number">.30</span>]# echo $?</div><div class="line"><span class="number">0</span></div></pre></td></tr></table></figure></p>
+<p>在这一步，可能也会遇到问题。比如下面的几个问题：</p>
+<ul>
+<li><p>问题1：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="regexp">/usr/</span>bin<span class="regexp">/ld: TSRM/</span>.libs/TSRM.<span class="string">o:</span> undefined reference to symbol <span class="string">'pthread_sigmask@@GLIBC_2.2.5'</span></div><div class="line"><span class="regexp">/usr/</span>lib64/libpthread.so<span class="number">.0</span>: error adding <span class="string">symbols:</span> DS0 missing from command line</div><div class="line"><span class="string">collect2:</span> <span class="string">error:</span> ld returned <span class="number">1</span> exit status</div><div class="line"><span class="string">make:</span> *** [sapi<span class="regexp">/cli/</span>php] 错误<span class="number">1</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>解决方法如下：</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> php<span class="number">-5.6</span><span class="number">.30</span>]<span class="meta"># vim Makefile</span></div><div class="line"><span class="meta">#&lt;==在大概102行，-lcrypt后面加 -lpthread</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>问题2：</p>
+<ul>
+<li>修复完上面的问题后继续make，又遇到错误：<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">clloect2: error: ld returned <span class="number">1</span> <span class="keyword">exit</span> status</div><div class="line">make: *** [sapi<span class="regexp">/cli/</span>php] 错误<span class="number">1</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>解决方法如下：</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> php<span class="number">-5.6</span><span class="number">.30</span>]<span class="meta"># make clean &amp;&amp; make</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="3-5-安装PHP"><a href="#3-5-安装PHP" class="headerlink" title="3.5. 安装PHP"></a>3.5. 安装PHP</h2><p>安装PHP，命令如下：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@localhost php<span class="number">-5.6</span><span class="number">.30</span>]# make install</div><div class="line">...</div><div class="line">[root@localhost php<span class="number">-5.6</span><span class="number">.30</span>]# echo $?</div><div class="line"><span class="number">0</span></div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>以上的每一个步骤，如果没有完全执行正确，其下一步是无法进行的。判断执行是否正确的方法为，<code>echo $?</code>的结果是否为<code>0</code>。</p>
+</blockquote>
+<h2 id="3-6-修改配置文件"><a href="#3-6-修改配置文件" class="headerlink" title="3.6. 修改配置文件"></a>3.6. 修改配置文件</h2><p>修改配置文件，命令如下：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> php<span class="number">-5.6</span><span class="number">.30</span>]<span class="meta"># cp php.ini-production /usr/local/php-fpm/etc/php.ini</span></div><div class="line">[root<span class="symbol">@localhost</span> php<span class="number">-5.6</span><span class="number">.30</span>]<span class="meta"># vim /usr/local/php-fpm/etc/php-fpm.conf</span></div></pre></td></tr></table></figure></p>
+<p>把以下内容写入到该文件中：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[global]</div><div class="line">pid = /usr/local/php-fpm/var/run/php-fpm.pid</div><div class="line">error_log = /usr/local/php-fpm/var/log/php-fpm.log</div><div class="line">[www]</div><div class="line">listen = /tmp/php-fcgi.sock</div><div class="line">listen.mode = 666</div><div class="line">user = php-fpm</div><div class="line">group = php-fpm</div><div class="line">pm = dynamic</div><div class="line">pm.max_children = 50</div><div class="line">pm.start_servers = 20</div><div class="line">pm.min_spare_servers = 5</div><div class="line">pm.max_spare_servers = 35</div><div class="line">pm.max_requests = 500</div><div class="line">rlimit_files = 1024</div></pre></td></tr></table></figure></p>
+<p>保存配置文件后，检验配置是否正确的方法如下：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost php-5.6.30]# /usr/<span class="keyword">local</span>/php-fpm/sbin/php-fpm -t</div><div class="line">[06-Mar-2018 20:54:34] NOTICE: configuration <span class="keyword">file</span> /usr/<span class="keyword">local</span>/php-fpm/etc/php-fpm.<span class="keyword">conf</span> <span class="keyword">test</span> is successful</div></pre></td></tr></table></figure></p>
+<p>如果显示<code>test is successful</code>，则说明配置没有问题，否则就要根据提示检查配置文件。</p>
+<hr>
+<h2 id="3-7-启动php-fpm"><a href="#3-7-启动php-fpm" class="headerlink" title="3.7. 启动php-fpm"></a>3.7. 启动php-fpm</h2><p>启动php-fpm，命令如下：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@localhost php-5.6.30]# cp /usr/local/src/php-5.6.30/sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm</div><div class="line">[root@localhost php-5.6.30]# chmod 755 /etc/init.d/php-fpm</div><div class="line">[root@localhost php-5.6.30]#<span class="built_in"> service </span>php-fpm start</div><div class="line">Starting php-fpm  done</div></pre></td></tr></table></figure></p>
+<p>设置php-fpm开机启动的命令：<code>chkconfig php-fpm on</code></p>
+<p>检测php-fpm是否启动的命令：<code>pa sux | grep php-fpm | grep -v grep</code>。执行这条命令后，可以看到启动了很多个进程。（大概二十多个）</p>
+<hr>
+<h1 id="4-安装Nginx"><a href="#4-安装Nginx" class="headerlink" title="4. 安装Nginx"></a>4. 安装Nginx</h1><p>从Nginx的官方网站（(<a href="http://nginx.org)[http://nginx.org]）可以看到Nginx的更新速度很快，这说明目前使用Nginx的用户越来越多了。但是不建议安装最新版本的Nginx，因为新版本难免会有一些bug或者漏洞。在本实验中使用stable版本1.10作为安装演示。" target="_blank" rel="external">http://nginx.org)[http://nginx.org]）可以看到Nginx的更新速度很快，这说明目前使用Nginx的用户越来越多了。但是不建议安装最新版本的Nginx，因为新版本难免会有一些bug或者漏洞。在本实验中使用stable版本1.10作为安装演示。</a></p>
+<h2 id="4-1-下载和解压Nginx"><a href="#4-1-下载和解压Nginx" class="headerlink" title="4.1. 下载和解压Nginx"></a>4.1. 下载和解压Nginx</h2><p>下载和解压Nginx，命令如下：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># cd /usr/local/src/</span></div><div class="line">[root<span class="symbol">@localhost</span> src]<span class="meta"># wget http://nginx.org/download/nginx-1.10.3.tar.gz</span></div><div class="line">[root<span class="symbol">@localhost</span> src]<span class="meta"># tar zxvf nginx-1.10.3.tar.gz</span></div></pre></td></tr></table></figure></p>
+<h2 id="4-2-配置编译选项"><a href="#4-2-配置编译选项" class="headerlink" title="4.2. 配置编译选项"></a>4.2. 配置编译选项</h2><p>配置编译选项，命令如下：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> src]<span class="meta"># cd nginx-1.10.3</span></div><div class="line">[root<span class="symbol">@localhost</span> nginx<span class="number">-1.10</span><span class="number">.3</span>]<span class="meta"># ./configure --prefix=/usr/local/nginx</span></div></pre></td></tr></table></figure></p>
+<p>遇到了一个错误：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">./configure: error: <span class="keyword">the</span> HTTP rewrite module requires <span class="keyword">the</span> PCRE library.</div><div class="line">You can either disable <span class="keyword">the</span> module <span class="keyword">by</span> <span class="keyword">using</span> <span class="comment">--without-http_rewrite_module</span></div><div class="line">option, <span class="keyword">or</span> install <span class="keyword">the</span> PCRE library <span class="keyword">into</span> <span class="keyword">the</span> <span class="keyword">system</span>, <span class="keyword">or</span> build <span class="keyword">the</span> PCRE library</div><div class="line">statically <span class="built_in">from</span> <span class="keyword">the</span> source <span class="keyword">with</span> nginx <span class="keyword">by</span> <span class="keyword">using</span> <span class="comment">--with-pcre=&lt;path&gt; option.</span></div></pre></td></tr></table></figure></p>
+<p>解决方法：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> nginx<span class="number">-1.10</span><span class="number">.3</span>]<span class="meta"># yum install -y pcre-devel</span></div></pre></td></tr></table></figure></p>
+<p>再重新配置编译选项<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@localhost nginx<span class="number">-1.10</span><span class="number">.3</span>]# yum install -y pcre-devel</div><div class="line">[root@localhost nginx<span class="number">-1.10</span><span class="number">.3</span>]# echo $?</div><div class="line"><span class="number">0</span></div></pre></td></tr></table></figure></p>
+<p>用<code>echo $?</code>检查上一步骤是否正确执行。若正确，继续，否则重新排查问题。</p>
+<h2 id="4-3-编译和安装Nginx"><a href="#4-3-编译和安装Nginx" class="headerlink" title="4.3. 编译和安装Nginx"></a>4.3. 编译和安装Nginx</h2><p>编译和安装Nginx，命令如下：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">[root@localhost nginx<span class="number">-1.10</span><span class="number">.3</span>]# make</div><div class="line">[root@localhost nginx<span class="number">-1.10</span><span class="number">.3</span>]# echo $?</div><div class="line"><span class="number">0</span></div><div class="line">[root@localhost nginx<span class="number">-1.10</span><span class="number">.3</span>]# make install</div><div class="line">[root@localhost nginx<span class="number">-1.10</span><span class="number">.3</span>]# echo $?</div><div class="line"><span class="number">0</span></div></pre></td></tr></table></figure></p>
+<p>因为Nginx的安装文件比较小，所以很快就会安装完，而且也不会出什么错误。</p>
+<h2 id="4-4-编写Nginx启动脚本，并加入到系统服务"><a href="#4-4-编写Nginx启动脚本，并加入到系统服务" class="headerlink" title="4.4. 编写Nginx启动脚本，并加入到系统服务"></a>4.4. 编写Nginx启动脚本，并加入到系统服务</h2><p>编写Nginx启动脚本：<code>vim /etc/init.d/nginx</code>，写入如下内容：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"><span class="comment"># chkconfig: - 30 21</span></div><div class="line"><span class="comment"># description: http service.</span></div><div class="line"><span class="comment"># Source Function Library</span></div><div class="line">. /etc/init.d/<span class="built_in">functions</span></div><div class="line"><span class="comment"># Nginx Settings</span></div><div class="line"></div><div class="line">NGINX_SBIN=<span class="string">"/usr/local/nginx/sbin/nginx"</span></div><div class="line">NGINX_CONF=<span class="string">"/usr/local/nginx/conf/nginx.conf"</span></div><div class="line">NGINX_PID=<span class="string">"/usr/local/nginx/logs/nginx.pid"</span></div><div class="line">RETVAL=0</div><div class="line">prog=<span class="string">"Nginx"</span></div><div class="line"></div><div class="line">start() </div><div class="line">&#123;</div><div class="line">    <span class="built_in">echo</span> -n $<span class="string">"Starting <span class="variable">$prog</span>: "</span></div><div class="line">    mkdir -p /dev/shm/nginx_temp</div><div class="line">    daemon <span class="variable">$NGINX_SBIN</span> -c <span class="variable">$NGINX_CONF</span></div><div class="line">    RETVAL=$?</div><div class="line">    <span class="built_in">echo</span></div><div class="line">    <span class="built_in">return</span> <span class="variable">$RETVAL</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">stop() </div><div class="line">&#123;</div><div class="line">    <span class="built_in">echo</span> -n $<span class="string">"Stopping <span class="variable">$prog</span>: "</span></div><div class="line">    killproc -p <span class="variable">$NGINX_PID</span> <span class="variable">$NGINX_SBIN</span> -TERM</div><div class="line">    rm -rf /dev/shm/nginx_temp</div><div class="line">    RETVAL=$?</div><div class="line">    <span class="built_in">echo</span></div><div class="line">    <span class="built_in">return</span> <span class="variable">$RETVAL</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">reload()</div><div class="line">&#123;</div><div class="line">    <span class="built_in">echo</span> -n $<span class="string">"Reloading <span class="variable">$prog</span>: "</span></div><div class="line">    killproc -p <span class="variable">$NGINX_PID</span> <span class="variable">$NGINX_SBIN</span> -HUP</div><div class="line">    RETVAL=$?</div><div class="line">    <span class="built_in">echo</span></div><div class="line">    <span class="built_in">return</span> <span class="variable">$RETVAL</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">restart()</div><div class="line">&#123;</div><div class="line">    stop</div><div class="line">    start</div><div class="line">&#125;</div><div class="line"></div><div class="line">configtest()</div><div class="line">&#123;</div><div class="line">    <span class="variable">$NGINX_SBIN</span> -c <span class="variable">$NGINX_CONF</span> -t</div><div class="line">    <span class="built_in">return</span> 0</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$1</span>"</span> <span class="keyword">in</span></div><div class="line">  start)</div><div class="line">        start</div><div class="line">        ;;</div><div class="line">  stop)</div><div class="line">        stop</div><div class="line">        ;;</div><div class="line">  reload)</div><div class="line">        reload</div><div class="line">        ;;</div><div class="line">  restart)</div><div class="line">        restart</div><div class="line">        ;;</div><div class="line">  configtest)</div><div class="line">        configtest</div><div class="line">        ;;</div><div class="line">  *)</div><div class="line">        <span class="built_in">echo</span> $<span class="string">"Usage: <span class="variable">$0</span> &#123;start|stop|reload|restart|configtest&#125;"</span></div><div class="line">        RETVAL=1</div><div class="line"><span class="keyword">esac</span></div><div class="line"></div><div class="line"><span class="built_in">exit</span> <span class="variable">$RETVAL</span></div></pre></td></tr></table></figure></p>
+<p>保存该脚本后更改权限，并加入到系统服务列表里面，设置成开机启动。命令如下：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@localhost nginx<span class="number">-1.10</span><span class="number">.3</span>]# chmod <span class="number">755</span> /etc/init.d/nginx</div><div class="line">[root@localhost nginx<span class="number">-1.10</span><span class="number">.3</span>]# chkconfig --add nginx</div><div class="line">[root@localhost nginx<span class="number">-1.10</span><span class="number">.3</span>]# chkconfig nginx on</div></pre></td></tr></table></figure></p>
+<h2 id="4-5-更改Nginx的配置文件"><a href="#4-5-更改Nginx的配置文件" class="headerlink" title="4.5. 更改Nginx的配置文件"></a>4.5. 更改Nginx的配置文件</h2><p>首先把原来的配置文件清空，命令如下：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@localhost nginx-1.10.3]# mv /usr/<span class="keyword">local</span>/nginx/<span class="keyword">conf</span>/nginx.<span class="keyword">conf</span> /usr/<span class="keyword">local</span>/nginx/<span class="keyword">conf</span>/nginx.conf_bak</div><div class="line">#&lt;==上面这一步就是把原来的默认的Nginx配置文件备份下来</div><div class="line">[root@localhost nginx-1.10.3]# vim /usr/<span class="keyword">local</span>/nginx/<span class="keyword">conf</span>/nginx.<span class="keyword">conf</span></div><div class="line">#&lt;==然后新建一个nginx.<span class="keyword">conf</span>，并写入如下内容</div></pre></td></tr></table></figure></p>
+<p>Nginx的配置内容如下：<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">user</span> nobody nobody;</div><div class="line"><span class="attribute">worker_processes</span> <span class="number">2</span>;</div><div class="line"><span class="attribute">error_log</span> /usr/local/nginx/logs/nginx_error.log <span class="literal">crit</span>;</div><div class="line"><span class="attribute">pid</span> /usr/local/nginx/logs/nginx.pid;</div><div class="line"><span class="attribute">worker_rlimit_nofile</span> <span class="number">51200</span>;</div><div class="line"></div><div class="line">events</div><div class="line">&#123;</div><div class="line">    <span class="attribute">use</span> <span class="literal">epoll</span>;</div><div class="line">    <span class="attribute">worker_connections</span> <span class="number">6000</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">http</div><div class="line">&#123;</div><div class="line">    <span class="attribute">include</span> mime.types;</div><div class="line">    <span class="attribute">default_type</span> application/octet-stream;</div><div class="line">    <span class="attribute">server_names_hash_bucket_size</span> <span class="number">3526</span>;</div><div class="line">    <span class="attribute">server_names_hash_max_size</span> <span class="number">4096</span>;</div><div class="line">    <span class="attribute">log_format</span> combined_realip <span class="string">'<span class="variable">$remote_addr</span> <span class="variable">$http_x_forwarded_for</span> [<span class="variable">$time_local</span>]'</span></div><div class="line">    <span class="string">' <span class="variable">$host</span> "<span class="variable">$request_uri</span>" <span class="variable">$status</span>'</span></div><div class="line">    <span class="string">' "<span class="variable">$http_referer</span>" "<span class="variable">$http_user_agent</span>"'</span>;</div><div class="line">    <span class="attribute">sendfile</span> <span class="literal">on</span>;</div><div class="line">    <span class="attribute">tcp_nopush</span> <span class="literal">on</span>;</div><div class="line">    <span class="attribute">keepalive_timeout</span> <span class="number">30</span>;</div><div class="line">    <span class="attribute">client_header_timeout</span> <span class="number">3m</span>;</div><div class="line">    <span class="attribute">client_body_timeout</span> <span class="number">3m</span>;</div><div class="line">    <span class="attribute">send_timeout</span> <span class="number">3m</span>;</div><div class="line">    <span class="attribute">connection_pool_size</span> <span class="number">256</span>;</div><div class="line">    <span class="attribute">client_header_buffer_size</span> <span class="number">1k</span>;</div><div class="line">    <span class="attribute">large_client_header_buffers</span> <span class="number">8</span> <span class="number">4k</span>;</div><div class="line">    <span class="attribute">request_pool_size</span> <span class="number">4k</span>;</div><div class="line">    <span class="attribute">output_buffers</span> <span class="number">4</span> <span class="number">32k</span>;</div><div class="line">    <span class="attribute">postpone_output</span> <span class="number">1460</span>;</div><div class="line">    <span class="attribute">client_max_body_size</span> <span class="number">10m</span>;</div><div class="line">    <span class="attribute">client_body_buffer_size</span> <span class="number">256k</span>;</div><div class="line">    <span class="attribute">client_body_temp_path</span> /usr/local/nginx/client_body_temp;</div><div class="line">    <span class="attribute">proxy_temp_path</span> /usr/local/nginx/proxy_temp;</div><div class="line">    <span class="attribute">fastcgi_temp_path</span> /usr/local/nginx/fastcgi_temp;</div><div class="line">    <span class="attribute">fastcgi_intercept_errors</span> <span class="literal">on</span>;</div><div class="line">    <span class="attribute">tcp_nodelay</span> <span class="literal">on</span>;</div><div class="line">    <span class="attribute">gzip</span> <span class="literal">on</span>;</div><div class="line">    <span class="attribute">gzip_min_length</span> <span class="number">1k</span>;</div><div class="line">    <span class="attribute">gzip_buffers</span> <span class="number">4</span> <span class="number">8k</span>;</div><div class="line">    <span class="attribute">gzip_comp_level</span> <span class="number">5</span>;</div><div class="line">    <span class="attribute">gzip_http_version</span> <span class="number">1</span>.<span class="number">1</span>;</div><div class="line">    <span class="attribute">gzip_types</span> text/plain application/x-javascript text/css text/htm </div><div class="line">    application/xml;</div><div class="line"></div><div class="line">    server</div><div class="line">    &#123;</div><div class="line">        <span class="attribute">listen</span> <span class="number">80</span>;</div><div class="line">        <span class="attribute">server_name</span> localhost;</div><div class="line">        <span class="attribute">index</span> index.html index.htm index.php;</div><div class="line">        <span class="attribute">root</span> /usr/local/nginx/html;</div><div class="line"></div><div class="line">        <span class="attribute">location</span> <span class="regexp">~ \.php$</span> </div><div class="line">        &#123;</div><div class="line">            <span class="attribute">include</span> fastcgi_params;</div><div class="line">            <span class="attribute">fastcgi_pass</span> unix:/tmp/php-fcgi.sock;</div><div class="line">            <span class="attribute">fastcgi_index</span> index.php;</div><div class="line">            <span class="attribute">fastcgi_param</span> SCRIPT_FILENAME /usr/local/nginx/html<span class="variable">$fastcgi_script_name</span>;</div><div class="line">        &#125;    </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>关于配置文件各个参数的含义，先不解释，其实很多配置都可以根据字面意思猜到含义。保存配置文件后，需要先检验一下是否有错误，命令如下：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root@localhost nginx-1.10.3]# /usr/<span class="keyword">local</span>/nginx/sbin/nginx -t</div><div class="line">nginx: the configuration <span class="keyword">file</span> /usr/<span class="keyword">local</span>/nginx/<span class="keyword">conf</span>/nginx.<span class="keyword">conf</span> <span class="keyword">syntax</span> is ok</div><div class="line">nginx: configuration <span class="keyword">file</span> /usr/<span class="keyword">local</span>/nginx/<span class="keyword">conf</span>/nginx.<span class="keyword">conf</span> <span class="keyword">test</span> is successful</div></pre></td></tr></table></figure></p>
+<p>显示如上两行便是配置正确，否则要根据错误提示修改配置文件。</p>
+<p>该配置文件可以作为一个模板，你也可以用在你的服务器上，以后工作中也可以作为参考。</p>
+<h2 id="4-6-启动Nginx"><a href="#4-6-启动Nginx" class="headerlink" title="4.6. 启动Nginx"></a>4.6. 启动Nginx</h2><p>启动Nginx，命令如下：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost nginx-1.10.3]#<span class="built_in"> service </span>nginx start</div><div class="line">正在启动 Nginx：                                      [确定]</div></pre></td></tr></table></figure></p>
+<p>如果不能启动，请查看<code>/etc/local/nginx/logs/error.log</code>文件。</p>
+<p>检查Nginx是否成功启动的命令：<code>ps aux | grep nginx | grep -v grep</code></p>
+<h2 id="4-7-测试是否正确解析PHP"><a href="#4-7-测试是否正确解析PHP" class="headerlink" title="4.7. 测试是否正确解析PHP"></a>4.7. 测试是否正确解析PHP</h2><p>首先创建测试文件，操作方法如下：<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root@localhost nginx-<span class="number">1.10</span>.<span class="number">3</span>]<span class="comment"># vim /usr/local/nginx/html/2.php</span></div><div class="line"><span class="comment">#&lt;==测试代码如下</span></div><div class="line">&lt;?php</div><div class="line">        echo <span class="string">"test php scripts.\n"</span>;</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure></p>
+<p>执行如下命令测试文件：<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost nginx<span class="string">-1</span>.10.3]# curl localhost/2.php</div><div class="line"><span class="keyword">test </span>php scripts.</div></pre></td></tr></table></figure></p>
+<p>上面显示的内容说明PHP解析正常。</p>
+<hr>
+<p>到此LNMP的环境就搭建安装完毕了。只是还没有做一些基础的设置和优化配置。</p>
+<hr>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/MySQL/" rel="tag"><i class="fa fa-tag"></i> MySQL</a>
+          
+            <a href="/tags/PHP/" rel="tag"><i class="fa fa-tag"></i> PHP</a>
+          
+            <a href="/tags/LNMP/" rel="tag"><i class="fa fa-tag"></i> LNMP</a>
+          
+            <a href="/tags/Nginx/" rel="tag"><i class="fa fa-tag"></i> Nginx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/07/技术/006. LAMP之PHP的初始配置/" rel="next" title="LAMP之PHP的初始配置">
+                <i class="fa fa-chevron-left"></i> LAMP之PHP的初始配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/09/技术/008. LNMP之Yum方式安装/" rel="prev" title="LNMP之Yum方式安装">
+                LNMP之Yum方式安装 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-LNMP介绍"><span class="nav-text">1. LNMP介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-安装MySQL"><span class="nav-text">2. 安装MySQL</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-安装PHP"><span class="nav-text">3. 安装PHP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-下载PHP源码包"><span class="nav-text">3.1. 下载PHP源码包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-解压源码包，创建账号"><span class="nav-text">3.2. 解压源码包，创建账号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-配置编译选项"><span class="nav-text">3.3. 配置编译选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-编译PHP"><span class="nav-text">3.4. 编译PHP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-安装PHP"><span class="nav-text">3.5. 安装PHP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-修改配置文件"><span class="nav-text">3.6. 修改配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-启动php-fpm"><span class="nav-text">3.7. 启动php-fpm</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-安装Nginx"><span class="nav-text">4. 安装Nginx</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-下载和解压Nginx"><span class="nav-text">4.1. 下载和解压Nginx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-配置编译选项"><span class="nav-text">4.2. 配置编译选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-编译和安装Nginx"><span class="nav-text">4.3. 编译和安装Nginx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-编写Nginx启动脚本，并加入到系统服务"><span class="nav-text">4.4. 编写Nginx启动脚本，并加入到系统服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-更改Nginx的配置文件"><span class="nav-text">4.5. 更改Nginx的配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-启动Nginx"><span class="nav-text">4.6. 启动Nginx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-测试是否正确解析PHP"><span class="nav-text">4.7. 测试是否正确解析PHP</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
