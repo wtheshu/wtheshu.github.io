@@ -312,7 +312,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/09/技术/010. LNMP之php-fpm初始配置/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/13/技术/013. MySQL之配置讲解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -331,7 +331,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/03/09/技术/010. LNMP之php-fpm初始配置/" itemprop="url">LNMP之php-fpm初始配置</a></h1>
+                <a class="post-title-link" href="/2018/03/13/技术/013. MySQL之配置讲解/" itemprop="url">MySQL之配置讲解</a></h1>
         
 
         <div class="post-meta">
@@ -343,7 +343,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T19:54:00+08:00">2018-03-09</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-13T11:17:30+08:00">2018-03-13</time>
             
 
             
@@ -364,7 +364,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-09T20:01:57+08:00">2018-03-09</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-12T18:24:33+08:00">2018-03-12</time>
             
           </span>
 
@@ -416,11 +416,14 @@
       
         
           
-          这篇的学习笔记主要讲的是LNMP环境中PHP的配置。和LAMP不同的是，在LNMP架构中，php-fpm作为独立的一个服务存在。既然是独立服务，那么它必然有自己的配置文件。php-fpm的配置文件为/usr/local/php-fpm/etc/php-fpm.conf，它同样也支持include语句
+          MySQL安装后，我们是从安装包的support-files里面复制过来的一个模板配置文件，默认MySQL配置文件是/etc/my.cnf，其实这个路径或者是文件名字我们是可以修改的，在启动脚本中修改。
+下面简单地说一些常用的MySQL配置。
+
+socket = /tmp/mysql.sock 这一
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/09/技术/010. LNMP之php-fpm初始配置/#more" rel="contents">
+            <a class="btn" href="/2018/03/13/技术/013. MySQL之配置讲解/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -476,7 +479,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/09/技术/009. LNMP之Nginx初始配置/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/13/技术/012. MySQL之基本操作/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -495,7 +498,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/03/09/技术/009. LNMP之Nginx初始配置/" itemprop="url">LNMP之Nginx初始配置</a></h1>
+                <a class="post-title-link" href="/2018/03/13/技术/012. MySQL之基本操作/" itemprop="url">MySQL之基本操作</a></h1>
         
 
         <div class="post-meta">
@@ -507,7 +510,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T19:48:57+08:00">2018-03-09</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-13T11:16:41+08:00">2018-03-13</time>
             
 
             
@@ -528,7 +531,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-09T21:11:33+08:00">2018-03-09</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-12T11:38:40+08:00">2018-03-12</time>
             
           </span>
 
@@ -580,12 +583,13 @@
       
         
           
-          这一篇学习笔记主要讲述的是在LNMP刚刚搭建完后需要做的一些常用的配置和优化。
-1. 默认虚拟主机和httpd类似，在Nginx中也有默认虚拟主机，第一个被Nginx加载的虚拟主机就是默认虚拟主机。但是和httpd不同的是，它还有一个配置用来标记默认虚拟主机。也就是说，如果没有这个标记，第一个虚拟主
+          作为一个Linux运维工程师，还必须掌握一些MySQL等数据库的基本操作，以满足日常管理工作所需。至于更深层次的内容，那是DBA（专门管理数据库的技术人员）所必须掌握的。也就是说，目前只需要掌握一下内容即可，等到工作以后，再继续研究MySQL的技术。
+
+1. MySQL密码1.1. 更改MySQL数
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/09/技术/009. LNMP之Nginx初始配置/#more" rel="contents">
+            <a class="btn" href="/2018/03/13/技术/012. MySQL之基本操作/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -641,7 +645,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/09/技术/008. LNMP之Yum方式安装/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/12/技术/011. LNMP之常见的问题处理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -660,7 +664,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/03/09/技术/008. LNMP之Yum方式安装/" itemprop="url">LNMP之Yum方式安装</a></h1>
+                <a class="post-title-link" href="/2018/03/12/技术/011. LNMP之常见的问题处理/" itemprop="url">LNMP之常见的问题处理</a></h1>
         
 
         <div class="post-meta">
@@ -672,7 +676,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T11:30:03+08:00">2018-03-09</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-12T11:39:13+08:00">2018-03-12</time>
             
 
             
@@ -693,7 +697,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-09T19:47:41+08:00">2018-03-09</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-12T12:02:37+08:00">2018-03-12</time>
             
           </span>
 
@@ -745,13 +749,12 @@
       
         
           
-          1. 实验环境本实验是在CentOS7版本上面进行的，所以实验环境是CentOS7的64位机器。
-2. 配置YUM源根据YUM的特性，我们可以通过yum命令来非常方便的安装LNMP环境。
-2.1. 更新系统的YUM源CentOS7的默认YUM源里的软件包版本可能不是最新的，如果要安装最新的软件包就得
+          1. 常见的502问题解决对于LNMP来说，最常见的问题就是502问题了。配置完环境后，一访问网站直接提示502 Bad Gateway。出现502的原因大致分为这么两种。
+1.1. 配置错误我们在Nginx的配置中有这么一段：123456location ~ \.php$ &#123;	inclu
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/09/技术/008. LNMP之Yum方式安装/#more" rel="contents">
+            <a class="btn" href="/2018/03/12/技术/011. LNMP之常见的问题处理/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -796,7 +799,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -845,7 +848,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-count">78</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="奇怪先生的博客">
 <meta property="og:description" content="1. LNMP介绍和LAMP唯一不同的是，LNMP中的N指的是Nginx（类似Apache的一种Web服务软件）。目前这种环境的应用也非常多。Nginx设计的初衷是提供一种快速、高效、多并发的Web服务软件。在静态页面的处理上，Nginx较Apache更胜一筹；但在动态页面的处理上，Nginx并不比Apache有优势。但是目前还是有很多爱好者对Nginx比较热衷。随着Nginx技术的逐渐成熟，它在">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-09T12:01:49.773Z">
+<meta property="og:updated_time" content="2018-03-12T02:56:27.546Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LNMP之源码安装搭建">
 <meta name="twitter:description" content="1. LNMP介绍和LAMP唯一不同的是，LNMP中的N指的是Nginx（类似Apache的一种Web服务软件）。目前这种环境的应用也非常多。Nginx设计的初衷是提供一种快速、高效、多并发的Web服务软件。在静态页面的处理上，Nginx较Apache更胜一筹；但在动态页面的处理上，Nginx并不比Apache有优势。但是目前还是有很多爱好者对Nginx比较热衷。随着Nginx技术的逐渐成熟，它在">
@@ -363,7 +363,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-09T20:01:49+08:00">2018-03-09</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-12T10:56:27+08:00">2018-03-12</time>
             
           </span>
 
@@ -468,7 +468,7 @@ easy.h should be in &lt;curl-dir&gt;/include/curl/</code></li>
 <p>设置php-fpm开机启动的命令：<code>chkconfig php-fpm on</code></p>
 <p>检测php-fpm是否启动的命令：<code>pa sux | grep php-fpm | grep -v grep</code>。执行这条命令后，可以看到启动了很多个进程。（大概二十多个）</p>
 <hr>
-<h1 id="4-安装Nginx"><a href="#4-安装Nginx" class="headerlink" title="4. 安装Nginx"></a>4. 安装Nginx</h1><p>从Nginx的官方网站（(<a href="http://nginx.org)[http://nginx.org]）可以看到Nginx的更新速度很快，这说明目前使用Nginx的用户越来越多了。但是不建议安装最新版本的Nginx，因为新版本难免会有一些bug或者漏洞。在本实验中使用stable版本1.10作为安装演示。" target="_blank" rel="external">http://nginx.org)[http://nginx.org]）可以看到Nginx的更新速度很快，这说明目前使用Nginx的用户越来越多了。但是不建议安装最新版本的Nginx，因为新版本难免会有一些bug或者漏洞。在本实验中使用stable版本1.10作为安装演示。</a></p>
+<h1 id="4-安装Nginx"><a href="#4-安装Nginx" class="headerlink" title="4. 安装Nginx"></a>4. 安装Nginx</h1><p>从Nginx的官方网站（<a href="http://nginx.org" target="_blank" rel="external">http://nginx.org</a>）可以看到Nginx的更新速度很快，这说明目前使用Nginx的用户越来越多了。但是不建议安装最新版本的Nginx，因为新版本难免会有一些bug或者漏洞。在本实验中使用stable版本1.10作为安装演示。</p>
 <h2 id="4-1-下载和解压Nginx"><a href="#4-1-下载和解压Nginx" class="headerlink" title="4.1. 下载和解压Nginx"></a>4.1. 下载和解压Nginx</h2><p>下载和解压Nginx，命令如下：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># cd /usr/local/src/</span></div><div class="line">[root<span class="symbol">@localhost</span> src]<span class="meta"># wget http://nginx.org/download/nginx-1.10.3.tar.gz</span></div><div class="line">[root<span class="symbol">@localhost</span> src]<span class="meta"># tar zxvf nginx-1.10.3.tar.gz</span></div></pre></td></tr></table></figure></p>
 <h2 id="4-2-配置编译选项"><a href="#4-2-配置编译选项" class="headerlink" title="4.2. 配置编译选项"></a>4.2. 配置编译选项</h2><p>配置编译选项，命令如下：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> src]<span class="meta"># cd nginx-1.10.3</span></div><div class="line">[root<span class="symbol">@localhost</span> nginx<span class="number">-1.10</span><span class="number">.3</span>]<span class="meta"># ./configure --prefix=/usr/local/nginx</span></div></pre></td></tr></table></figure></p>
 <p>遇到了一个错误：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">./configure: error: <span class="keyword">the</span> HTTP rewrite module requires <span class="keyword">the</span> PCRE library.</div><div class="line">You can either disable <span class="keyword">the</span> module <span class="keyword">by</span> <span class="keyword">using</span> <span class="comment">--without-http_rewrite_module</span></div><div class="line">option, <span class="keyword">or</span> install <span class="keyword">the</span> PCRE library <span class="keyword">into</span> <span class="keyword">the</span> <span class="keyword">system</span>, <span class="keyword">or</span> build <span class="keyword">the</span> PCRE library</div><div class="line">statically <span class="built_in">from</span> <span class="keyword">the</span> source <span class="keyword">with</span> nginx <span class="keyword">by</span> <span class="keyword">using</span> <span class="comment">--with-pcre=&lt;path&gt; option.</span></div></pre></td></tr></table></figure></p>
@@ -624,7 +624,7 @@ easy.h should be in &lt;curl-dir&gt;/include/curl/</code></li>
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-count">78</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

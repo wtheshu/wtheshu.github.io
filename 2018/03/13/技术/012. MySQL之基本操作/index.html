@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="技术,MySQL," />
+
+
+<meta name="description" content="作为一个Linux运维工程师，还必须掌握一些MySQL等数据库的基本操作，以满足日常管理工作所需。至于更深层次的内容，那是DBA（专门管理数据库的技术人员）所必须掌握的。也就是说，目前只需要掌握一下内容即可，等到工作以后，再继续研究MySQL的技术。  1. MySQL密码1.1. 更改MySQL数据库root的密码首次进入数据库是不用密码的，如下所示：1234567891011121314[ro">
+<meta name="keywords" content="技术,MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL之基本操作">
+<meta property="og:url" content="http://www.theshu.top/2018/03/13/技术/012. MySQL之基本操作/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="作为一个Linux运维工程师，还必须掌握一些MySQL等数据库的基本操作，以满足日常管理工作所需。至于更深层次的内容，那是DBA（专门管理数据库的技术人员）所必须掌握的。也就是说，目前只需要掌握一下内容即可，等到工作以后，再继续研究MySQL的技术。  1. MySQL密码1.1. 更改MySQL数据库root的密码首次进入数据库是不用密码的，如下所示：1234567891011121314[ro">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-12T03:38:40.272Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL之基本操作">
+<meta name="twitter:description" content="作为一个Linux运维工程师，还必须掌握一些MySQL等数据库的基本操作，以满足日常管理工作所需。至于更深层次的内容，那是DBA（专门管理数据库的技术人员）所必须掌握的。也就是说，目前只需要掌握一下内容即可，等到工作以后，再继续研究MySQL的技术。  1. MySQL密码1.1. 更改MySQL数据库root的密码首次进入数据库是不用密码的，如下所示：1234567891011121314[ro">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/03/13/技术/012. MySQL之基本操作/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>MySQL之基本操作 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/13/技术/012. MySQL之基本操作/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL之基本操作</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-13T11:16:41+08:00">2018-03-13</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-12T11:38:40+08:00">2018-03-12</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>作为一个Linux运维工程师，还必须掌握一些MySQL等数据库的基本操作，以满足日常管理工作所需。至于更深层次的内容，那是DBA（专门管理数据库的技术人员）所必须掌握的。也就是说，目前只需要掌握一下内容即可，等到工作以后，再继续研究MySQL的技术。</p>
+<hr>
+<h1 id="1-MySQL密码"><a href="#1-MySQL密码" class="headerlink" title="1. MySQL密码"></a>1. MySQL密码</h1><h2 id="1-1-更改MySQL数据库root的密码"><a href="#1-1-更改MySQL数据库root的密码" class="headerlink" title="1.1. 更改MySQL数据库root的密码"></a>1.1. 更改MySQL数据库root的密码</h2><p>首次进入数据库是不用密码的，如下所示：<br><figure class="highlight smali"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># /usr/local/mysql/bin/mysql -uroot</span></div><div class="line">Welcome to the MySQ<span class="class">L monitor.  Commands end with ;</span><span class="built_in"> or </span>\g.</div><div class="line">Your MySQL connection id is 1</div><div class="line">Server version: 5.6.35 MySQL Community Server (GPL)</div><div class="line"></div><div class="line">Copyright (c) 2000, 2016, Oracle<span class="built_in"> and/or </span>its affiliates. All rights reserved.</div><div class="line"></div><div class="line">Oracle is a registered trademark of Oracle Corporation<span class="built_in"> and/or </span>its</div><div class="line">affiliates. Other names may be trademarks of their respective</div><div class="line">owners.</div><div class="line"></div><div class="line">Type 'help;'<span class="built_in"> or </span>'\h' for help. Type '\c' to clear the current input statement.</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure></p>
+<p>退出时直接输入<code>quit</code>、<code>exit</code>或者<code>\q</code>即可。</p>
+<p>一般我们源码安装完MySQL后，对MySQL数据库的操作必须使用绝对路径，那如何把MySQL的执行程序所在的路径加入到PATH环境变量以满足我们直接用命令而不是绝对路径的方式进行管理呢？方法如下：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# <span class="attribute">PATH</span>=<span class="variable">$PATH</span>:/usr/local/mysql/bin</div></pre></td></tr></table></figure></p>
+<p>当然，这样设置的话，在我们重启Linux后还会失效，所以需要让它开机加载，如下：<br><figure class="highlight livescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># echo "PATH=$PATH:/usr/local/mysql/bin" &gt;&gt; /etc/profile</span></div><div class="line">[root@localhost ~]<span class="comment"># source /etc/profile</span></div><div class="line">[root@localhost ~]<span class="comment"># mysql -uroot</span></div><div class="line">Welcome <span class="keyword">to</span> the MySQL monitor.  Commands end <span class="keyword">with</span> ; <span class="keyword">or</span> <span class="string">\g.</span></div><div class="line">Your MySQL connection id <span class="keyword">is</span> <span class="number">4</span></div><div class="line">Server version: <span class="number">5.6</span>.<span class="number">35</span> MySQL Community Server (GPL)</div><div class="line"></div><div class="line">Copyright (c) <span class="number">2000</span>, <span class="number">2016</span>, Oracle <span class="keyword">and</span>/<span class="keyword">or</span> its affiliates. All rights reserved.</div><div class="line"></div><div class="line">Oracle <span class="keyword">is</span> a registered trademark <span class="keyword">of</span> Oracle Corporation <span class="keyword">and</span>/<span class="keyword">or</span> its</div><div class="line">affiliates. Other names may be trademarks <span class="keyword">of</span> their respective</div><div class="line">owners.</div><div class="line"></div><div class="line">Type <span class="string">'help;'</span> <span class="keyword">or</span> <span class="string">'\h'</span> <span class="keyword">for</span> help. Type <span class="string">'\c'</span> <span class="keyword">to</span> clear the current input statement.</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li><code>-u</code>参数的含义是，用来指定要登陆的用户，后面有无空格均可。</li>
+<li><code>root</code>用户是MySQL自带的管理员账户，默认是没有密码的。</li>
+</ul>
+<p>那如何给MySQL的root用户设定密码呢？操作方法如下：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# mysqladmin -uroot password <span class="string">'123456'</span></div><div class="line">Warnin<span class="variable">g:</span> Using <span class="keyword">a</span> password <span class="keyword">on</span> the <span class="keyword">command</span> <span class="built_in">line</span> interface can <span class="keyword">be</span> insecure.</div></pre></td></tr></table></figure></p>
+<p>这样就给MySQL的root账户设置了密码，密码为123456，注意在生产环境中千万不要设置这么简单的密码。在执行过程中它会返回一条警告信息，意思是在命令行下面暴露了密码，这样不安全。</p>
+<p>再执行一次上面的登陆命令，如下所示：<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# mysql -uroot</div><div class="line"><span class="keyword">ERROR </span>1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)</div></pre></td></tr></table></figure></p>
+<p>这里报错了，它提示我们root账号是需要密码登陆的。</p>
+<p>接下来重新输入密码登陆，如下所示：<br><figure class="highlight oxygene"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# mysql -uroot -p<span class="string">'123456'</span></div><div class="line">Warning: <span class="keyword">Using</span> a password <span class="keyword">on</span> the command line <span class="keyword">interface</span> can be insecure.</div><div class="line">Welcome <span class="keyword">to</span> the MySQL monitor.  Commands <span class="keyword">end</span> <span class="keyword">with</span> ; <span class="keyword">or</span> \g.</div><div class="line">Your MySQL connection id <span class="keyword">is</span> <span class="number">9</span></div><div class="line">Server version: <span class="number">5.6</span>.<span class="number">35</span> MySQL Community Server (GPL)</div><div class="line"></div><div class="line">Copyright (c) <span class="number">2000</span>, <span class="number">2016</span>, Oracle <span class="keyword">and</span>/<span class="keyword">or</span> its affiliates. All rights reserved.</div><div class="line"></div><div class="line">Oracle <span class="keyword">is</span> a registered trademark <span class="keyword">of</span> Oracle Corporation <span class="keyword">and</span>/<span class="keyword">or</span> its</div><div class="line">affiliates. Other names may be trademarks <span class="keyword">of</span> their respective</div><div class="line">owners.</div><div class="line"></div><div class="line"><span class="keyword">Type</span> <span class="string">'help;'</span> <span class="keyword">or</span> <span class="string">'\h'</span> <span class="keyword">for</span> help. <span class="keyword">Type</span> <span class="string">'\c'</span> <span class="keyword">to</span> clear the current input statement.</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure></p>
+<p>输入密码时需要加<code>-p</code>选项，后面可以直接跟密码。<code>-p</code>选项后面不可以有空格，密码可以不加单引号（但是密码中有特殊字符时就会出现问题，所以最好还是加上单引号）。</p>
+<p>当然，<code>-p</code>选项后面也可以不加密码，以和用户交互的方式输入密码，如下所示：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># mysql -uroot -p</span></div><div class="line">Enter password:</div></pre></td></tr></table></figure></p>
+<h2 id="1-2-MySQL的root密码重置"><a href="#1-2-MySQL的root密码重置" class="headerlink" title="1.2. MySQL的root密码重置"></a>1.2. MySQL的root密码重置</h2><p>当在工作中遇到MySQL的root密码忘记的时候，我们应该利用下面的方法将MySQL的root密码重置。步骤如下：</p>
+<p>第一步：编辑MySQL的主配置文件my.cnf<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> vim /etc/my.cnf</span></div><div class="line"><span class="meta">#</span><span class="bash">&lt;==在[mysqld]字段下添加参数</span></div><div class="line"></div><div class="line">skip-grant</div></pre></td></tr></table></figure></p>
+<p>第二步：重启数据库服务<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> service mysqld restart</span></div></pre></td></tr></table></figure></p>
+<p>第三步：这样就可以进入数据库而不用通过授权了<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> /usr/<span class="built_in">local</span>/mysql/bin/mysql -uroot</span></div></pre></td></tr></table></figure></p>
+<p>第四步：修改相应用户密码<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;</span><span class="bash">use mysql;</span></div><div class="line"><span class="meta">&gt;</span><span class="bash">update user <span class="built_in">set</span> password=password(<span class="string">'your password'</span>) <span class="built_in">where</span> user=<span class="string">'root'</span>;</span></div><div class="line"><span class="meta">&gt;</span><span class="bash">flush privileges;</span></div><div class="line"><span class="meta">&gt;</span><span class="bash">quit;</span></div></pre></td></tr></table></figure></p>
+<p>第五步：还原my.cnf</p>
+<p>修改my.cnf主配置文件，去掉skip-grant，重启mysqld服务。</p>
+<hr>
+<h1 id="2-连接数据库"><a href="#2-连接数据库" class="headerlink" title="2. 连接数据库"></a>2. 连接数据库</h1><h2 id="2-1-TCP-IP方式"><a href="#2-1-TCP-IP方式" class="headerlink" title="2.1. TCP/IP方式"></a>2.1. TCP/IP方式</h2><p>可以使用这个命令来连接数据库：<code>mysql -uroot -p</code>。但连接的只是本地的数据库localhost。</p>
+<p>很多时候我们都需要去连接网络中的某一个主机上的MySQL，如下所示：<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># mysql -uroot -p -h192<span class="meta">.168</span><span class="meta">.1</span><span class="meta">.111</span> -P3306</div><div class="line"><span class="keyword">Enter</span> password:</div></pre></td></tr></table></figure></p>
+<p>其中，后面的<code>-P（大写）</code>用来指定远程主机MySQL的绑定端口，默认都是<code>3306</code>，<code>-h</code>用来指定远程主机的IP。</p>
+<h2 id="2-2-socket方式"><a href="#2-2-socket方式" class="headerlink" title="2.2. socket方式"></a>2.2. socket方式</h2><p>这种只适合连接本机的MySQL，命令为：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> mysql -uroot -S /tmp/mysql.cosk -p</span></div></pre></td></tr></table></figure></p>
+<p>这里的<code>-S</code>可以省略掉。</p>
+<hr>
+<h1 id="3-MySQL基本操作的常用命令"><a href="#3-MySQL基本操作的常用命令" class="headerlink" title="3. MySQL基本操作的常用命令"></a>3. MySQL基本操作的常用命令</h1><p>在日常工作中，难免会遇到一些与MySQL相关的操作，比如建库、建表、查询MySQL状态等。尽管我们不是专业的数据库管理员，但是最基本的操作还是要掌握的。</p>
+<h2 id="3-1-查询当前库"><a href="#3-1-查询当前库" class="headerlink" title="3.1. 查询当前库"></a>3.1. 查询当前库</h2><p>查询当前库的命令如下：<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show databases;</div><div class="line"><span class="code">+--------------------+</span></div><div class="line">| Database           |</div><div class="line"><span class="code">+--------------------+</span></div><div class="line">| information<span class="emphasis">_schema |</span></div><div class="line"><span class="emphasis">| mysql              |</span></div><div class="line"><span class="emphasis">| performance_</span>schema |</div><div class="line">| test               |</div><div class="line"><span class="code">+--------------------+</span></div><div class="line">4 rows in set (0.00 sec)</div></pre></td></tr></table></figure></p>
+<p>注意，MySQL命令的结尾处需要加一个分号。</p>
+<h2 id="3-2-查询某个库的表"><a href="#3-2-查询某个库的表" class="headerlink" title="3.2. 查询某个库的表"></a>3.2. 查询某个库的表</h2><p>首先需要切换到某个库里，如下所示：<br><figure class="highlight livescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">mysql&gt; use mysql;</div><div class="line">Reading table information <span class="keyword">for</span> completion <span class="keyword">of</span> table <span class="keyword">and</span> column names</div><div class="line">You can turn <span class="literal">off</span> <span class="keyword">this</span> feature <span class="keyword">to</span> get a quicker startup <span class="keyword">with</span> -A</div><div class="line"></div><div class="line">Database changed</div></pre></td></tr></table></figure></p>
+<p>在切换库的时候，它提示这个操作会把当前库里的所有表的字段全部读一遍，你可以在启动MySQL的时候加上<code>-A</code>选项关闭这个特性（即使有这个特性倒也不影响什么，你可以忽略它）。</p>
+<p>然后再把表列出来，如下所示：<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show tables;</div><div class="line">+---------------------------+</div><div class="line">|<span class="string"> Tables_in_mysql           </span>|</div><div class="line">+---------------------------+</div><div class="line">|<span class="string"> columns_priv              </span>|</div><div class="line">|<span class="string"> db                        </span>|</div><div class="line">|<span class="string"> event                     </span>|</div><div class="line">|<span class="string"> func                      </span>|</div><div class="line">|<span class="string"> general_log               </span>|</div><div class="line">|<span class="string"> help_category             </span>|</div><div class="line">|<span class="string"> help_keyword              </span>|</div><div class="line">|<span class="string"> help_relation             </span>|</div><div class="line">|<span class="string"> help_topic                </span>|</div><div class="line">|<span class="string"> innodb_index_stats        </span>|</div><div class="line">|<span class="string"> innodb_table_stats        </span>|</div><div class="line">|<span class="string"> ndb_binlog_index          </span>|</div><div class="line">|<span class="string"> plugin                    </span>|</div><div class="line">|<span class="string"> proc                      </span>|</div><div class="line">|<span class="string"> procs_priv                </span>|</div><div class="line">|<span class="string"> proxies_priv              </span>|</div><div class="line">|<span class="string"> servers                   </span>|</div><div class="line">|<span class="string"> slave_master_info         </span>|</div><div class="line">|<span class="string"> slave_relay_log_info      </span>|</div><div class="line">|<span class="string"> slave_worker_info         </span>|</div><div class="line">|<span class="string"> slow_log                  </span>|</div><div class="line">|<span class="string"> tables_priv               </span>|</div><div class="line">|<span class="string"> time_zone                 </span>|</div><div class="line">|<span class="string"> time_zone_leap_second     </span>|</div><div class="line">|<span class="string"> time_zone_name            </span>|</div><div class="line">|<span class="string"> time_zone_transition      </span>|</div><div class="line">|<span class="string"> time_zone_transition_type </span>|</div><div class="line">|<span class="string"> user                      </span>|</div><div class="line">+---------------------------+</div><div class="line">28 rows in set (0.00 sec)</div></pre></td></tr></table></figure></p>
+<h2 id="3-3-查看某个表的全部字段"><a href="#3-3-查看某个表的全部字段" class="headerlink" title="3.3. 查看某个表的全部字段"></a>3.3. 查看某个表的全部字段</h2><p>查看表的全部字段的命令如下：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">mysql&gt; desc db;</div><div class="line">+-----------------------+---------------+------+-----+---------+-------+</div><div class="line">| Field                 | Type          | Null | Key | Default | Extra |</div><div class="line">+-----------------------+---------------+------+-----+---------+-------+</div><div class="line">| Host                  | char(<span class="number">60</span>)      | NO   | PRI |         |       |</div><div class="line">| Db                    | char(<span class="number">64</span>)      | NO   | PRI |         |       |</div><div class="line">| User                  | char(<span class="number">16</span>)      | NO   | PRI |         |       |</div><div class="line">| Select_priv           | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| Insert_priv           | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| Update_priv           | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| Delete_priv           | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| Create_priv           | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| Drop_priv             | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| Grant_priv            | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| References_priv       | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| Index_priv            | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| Alter_priv            | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| Create_tmp_table_priv | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| Lock_tables_priv      | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| Create_view_priv      | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| Show_view_priv        | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| Create_routine_priv   | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| Alter_routine_priv    | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| Execute_priv          | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| Event_priv            | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">| Trigger_priv          | <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') | <span class="title">NO</span>   |     | <span class="title">N</span>       |       |</span></div><div class="line">+-----------------------+---------------+------+-----+---------+-------+</div><div class="line"><span class="number">22</span> rows in set (<span class="number">0.01</span> sec)</div></pre></td></tr></table></figure></p>
+<p>另外，也可以使用下面这条命令，显示的信息更详细，而且还可以把建表语句全部列出来，如下所示：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show create table db\G;</div><div class="line">*************************** <span class="number">1</span>. row ***************************</div><div class="line">       <span class="symbol">Table:</span> db</div><div class="line">Create <span class="symbol">Table:</span> CREATE TABLE <span class="string">`db`</span> (</div><div class="line">  <span class="string">`Host`</span> char(<span class="number">60</span>) COLLATE utf8_bin NOT NULL DEFAULT <span class="string">''</span>,</div><div class="line">  <span class="string">`Db`</span> char(<span class="number">64</span>) COLLATE utf8_bin NOT NULL DEFAULT <span class="string">''</span>,</div><div class="line">  <span class="string">`User`</span> char(<span class="number">16</span>) COLLATE utf8_bin NOT NULL DEFAULT <span class="string">''</span>,</div><div class="line">  <span class="string">`Select_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`Insert_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`Update_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`Delete_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`Create_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`Drop_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`Grant_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`References_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`Index_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`Alter_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`Create_tmp_table_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`Lock_tables_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`Create_view_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`Show_view_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`Create_routine_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`Alter_routine_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`Execute_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`Event_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  <span class="string">`Trigger_priv`</span> <span class="class"><span class="keyword">enum</span>('<span class="title">N</span>','<span class="title">Y</span>') <span class="title">CHARACTER</span> <span class="title">SET</span> <span class="title">utf8</span> <span class="title">NOT</span> <span class="title">NULL</span> <span class="title">DEFAULT</span> '<span class="title">N</span>',</span></div><div class="line">  PRIMARY KEY (<span class="string">`Host`</span>,<span class="string">`Db`</span>,<span class="string">`User`</span>),</div><div class="line">  KEY <span class="string">`User`</span> (<span class="string">`User`</span>)</div><div class="line">) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT=<span class="string">'Database privileges'</span></div><div class="line"><span class="number">1</span> row in set (<span class="number">0.00</span> sec)</div><div class="line"></div><div class="line"><span class="symbol">ERROR:</span></div><div class="line">No query specified</div></pre></td></tr></table></figure></p>
+<p>这条命令后面加了一个<code>\G</code>，目的是让列出来的结果竖排显示，这样看起来更清晰；如果不加，会有点乱。</p>
+<h2 id="3-4-查看当前是哪个用户"><a href="#3-4-查看当前是哪个用户" class="headerlink" title="3.4. 查看当前是哪个用户"></a>3.4. 查看当前是哪个用户</h2><p>查看当前用户的命令如下：<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select user();</div><div class="line"><span class="code">+----------------+</span></div><div class="line">| user()         |</div><div class="line"><span class="code">+----------------+</span></div><div class="line">| root@localhost |</div><div class="line"><span class="code">+----------------+</span></div><div class="line">1 row in set (0.00 sec)</div></pre></td></tr></table></figure></p>
+<h2 id="3-5-查看当前所使用的数据库"><a href="#3-5-查看当前所使用的数据库" class="headerlink" title="3.5. 查看当前所使用的数据库"></a>3.5. 查看当前所使用的数据库</h2><p>查看当前数据库的命令如下：<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select database();</div><div class="line"><span class="code">+------------+</span></div><div class="line">| database() |</div><div class="line"><span class="code">+------------+</span></div><div class="line">| mysql      |</div><div class="line"><span class="code">+------------+</span></div><div class="line">1 row in set (0.00 sec)</div></pre></td></tr></table></figure></p>
+<h2 id="3-6-创建一个新库"><a href="#3-6-创建一个新库" class="headerlink" title="3.6. 创建一个新库"></a>3.6. 创建一个新库</h2><p>新建一个库的命令如下：<br><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql&gt; <span class="keyword">create</span> <span class="keyword">database</span> db1;</div><div class="line">Query OK, 1 row affected (0.06 sec)</div></pre></td></tr></table></figure></p>
+<h2 id="3-7-创建一个新表"><a href="#3-7-创建一个新表" class="headerlink" title="3.7. 创建一个新表"></a>3.7. 创建一个新表</h2><p>新建一个表的命令如下：<br><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mysql&gt; use db1;</div><div class="line">Database changed</div><div class="line">mysql&gt; <span class="keyword">create</span> table t1 (<span class="symbol">`id`</span> int(<span class="number">4</span>), <span class="symbol">`name`</span> char(<span class="number">40</span>));</div><div class="line">Query OK, 0 rows affected (0.34 sec)</div></pre></td></tr></table></figure></p>
+<p>注意，这里的字段名<code>id</code>和<code>name</code>都需要用反引号括起来。</p>
+<h2 id="3-8-查看当前数据库的版本"><a href="#3-8-查看当前数据库的版本" class="headerlink" title="3.8. 查看当前数据库的版本"></a>3.8. 查看当前数据库的版本</h2><p>查看MySQL版本的命令如下：<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select version();</div><div class="line"><span class="code">+------------+</span></div><div class="line">| version()  |</div><div class="line"><span class="code">+------------+</span></div><div class="line">| 5.6.35-log |</div><div class="line"><span class="code">+------------+</span></div><div class="line">1 row in set (0.00 sec)</div></pre></td></tr></table></figure></p>
+<h2 id="3-9-查看MySQL的当前状态"><a href="#3-9-查看MySQL的当前状态" class="headerlink" title="3.9. 查看MySQL的当前状态"></a>3.9. 查看MySQL的当前状态</h2><p>查看MySQL当前状态的命令如下：<br><figure class="highlight gherkin"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show status;</div><div class="line">+-----------------------------------------------+-------------+</div><div class="line">|<span class="string"> Variable_name                                 </span>|<span class="string"> Value       </span>|</div><div class="line">+-----------------------------------------------+-------------+</div><div class="line">|<span class="string"> Aborted_clients                               </span>|<span class="string"> 0           </span>|</div><div class="line">|<span class="string"> Aborted_connects                              </span>|<span class="string"> 1           </span>|</div><div class="line">|<span class="string"> Binlog_cache_disk_use                         </span>|<span class="string"> 0           </span>|</div><div class="line">|<span class="string"> Binlog_cache_use                              </span>|<span class="string"> 0           </span>|</div><div class="line">|<span class="string"> Binlog_stmt_cache_disk_use                    </span>|<span class="string"> 1           </span>|</div><div class="line">|<span class="string"> Binlog_stmt_cache_use                         </span>|<span class="string"> 115         </span>|</div><div class="line">|<span class="string"> Bytes_received                                </span>|<span class="string"> 1095        </span>|</div><div class="line">|<span class="string"> Bytes_sent                                    </span>|<span class="string"> 25439       </span>|</div><div class="line">|<span class="string"> Com_admin_commands                            </span>|<span class="string"> 0           </span>|</div><div class="line">|<span class="string"> Com_assign_to_keycache                        </span>|<span class="string"> 0           </span>|</div><div class="line">|<span class="string"> Com_alter_db                                  </span>|<span class="string"> 0           </span>|</div><div class="line">.....</div></pre></td></tr></table></figure></p>
+<p>由于内容太长，并没有在上面示例中列出全部信息。</p>
+<h2 id="3-10-查看MySQL的参数"><a href="#3-10-查看MySQL的参数" class="headerlink" title="3.10. 查看MySQL的参数"></a>3.10. 查看MySQL的参数</h2><p>查看MySQL各参数的命令如下：<br><figure class="highlight markdown"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show variables\G;</div><div class="line"><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">** 1. row **</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span></div><div class="line">Variable<span class="emphasis">_name: auto_</span>increment_increment</div><div class="line"><span class="code">        Value: 1</span></div><div class="line"><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">** 2. row **</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span></div><div class="line">Variable<span class="emphasis">_name: auto_</span>increment_offset</div><div class="line"><span class="code">        Value: 1</span></div><div class="line"><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">** 3. row **</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span></div><div class="line">Variable_name: autocommit</div><div class="line"><span class="code">        Value: ON</span></div><div class="line"><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">** 4. row **</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span></div><div class="line">Variable<span class="emphasis">_name: automatic_</span>sp_privileges</div><div class="line"><span class="code">        Value: ON</span></div><div class="line"><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">** 5. row **</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span></div><div class="line">Variable<span class="emphasis">_name: avoid_</span>temporal_upgrade</div><div class="line"><span class="code">        Value: OFF</span></div><div class="line"><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">** 6. row **</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span></div><div class="line">Variable<span class="emphasis">_name: back_</span>log</div><div class="line"><span class="code">        Value: 80</span></div><div class="line"><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">** 7. row **</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span></div><div class="line">Variable_name: basedir</div><div class="line"><span class="code">        Value: /usr/local/mysql/</span></div><div class="line"><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">** 8. row **</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span></div><div class="line">Variable<span class="emphasis">_name: big_</span>tables</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>也是列出的信息非常多，在上面的示例中并没有列出全部参数。其中有很多参数都是可以在<code>/etc/my.cnf</code>中定义的，并且有部分参数是可以在线编辑的。</p>
+<h2 id="3-11-修改MySQL的参数"><a href="#3-11-修改MySQL的参数" class="headerlink" title="3.11. 修改MySQL的参数"></a>3.11. 修改MySQL的参数</h2><p>举例来说，修改参数<code>max_connect_errors</code>的操作方法如下：<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show variables like <span class="emphasis">'max_connect%'</span>;</div><div class="line"><span class="code">+--------------------+</span>-------+</div><div class="line">| Variable<span class="emphasis">_name      | Value |</span></div><div class="line"><span class="emphasis">+--------------------+-------+</span></div><div class="line"><span class="emphasis">| max_</span>connect<span class="emphasis">_errors | 100   |</span></div><div class="line"><span class="emphasis">| max_</span>connections    | 151   |</div><div class="line"><span class="code">+--------------------+</span>-------+</div><div class="line">2 rows in set (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; set global max<span class="emphasis">_connect_</span>errors = 1000;</div><div class="line">Query OK, 0 rows affected (0.01 sec)</div><div class="line"></div><div class="line">mysql&gt; show variables like <span class="emphasis">'max_connect%'</span>;</div><div class="line"><span class="code">+--------------------+</span>-------+</div><div class="line">| Variable<span class="emphasis">_name      | Value |</span></div><div class="line"><span class="emphasis">+--------------------+-------+</span></div><div class="line"><span class="emphasis">| max_</span>connect<span class="emphasis">_errors | 1000  |</span></div><div class="line"><span class="emphasis">| max_</span>connections    | 151   |</div><div class="line"><span class="code">+--------------------+</span>-------+</div><div class="line">2 rows in set (0.00 sec)</div></pre></td></tr></table></figure></p>
+<p>在MySQL命令行，符号<code>%</code>类似于Shell下的<code>*</code>，表示通配。使用命令<code>set global</code>可以临时修改某些参数，但是重启MySQL服务后这些修改会失效。所以，如果你想让这些修改永久生效，就要在配置文件my.cnf中定义。</p>
+<h2 id="3-12-查看当前MySQL服务器的队列"><a href="#3-12-查看当前MySQL服务器的队列" class="headerlink" title="3.12. 查看当前MySQL服务器的队列"></a>3.12. 查看当前MySQL服务器的队列</h2><p>查看服务器队列在日常的管理工作中最为频繁。因为使用它可以查看当前MySQL在干什么，也可以发现是否有锁表，如下所示：<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show processlist;</div><div class="line"><span class="code">+----+</span>------<span class="code">+-----------+</span>------<span class="code">+---------+</span>------<span class="code">+-------+</span>------------------+</div><div class="line">| Id | User | Host      | db   | Command | Time | State | Info             |</div><div class="line"><span class="code">+----+</span>------<span class="code">+-----------+</span>------<span class="code">+---------+</span>------<span class="code">+-------+</span>------------------+</div><div class="line">|  5 | root | localhost | db1  | Query   |    0 | init  | show processlist |</div><div class="line"><span class="code">+----+</span>------<span class="code">+-----------+</span>------<span class="code">+---------+</span>------<span class="code">+-------+</span>------------------+</div><div class="line">1 row in set (0.00 sec)</div></pre></td></tr></table></figure></p>
+<h2 id="3-13-修改一个普通用户并授权"><a href="#3-13-修改一个普通用户并授权" class="headerlink" title="3.13. 修改一个普通用户并授权"></a>3.13. 修改一个普通用户并授权</h2><p>授权命令如下：<br><figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql&gt; grant <span class="literal">all</span> <span class="keyword">on</span> *.* <span class="keyword">to</span> user1 identified <span class="keyword">by</span> <span class="string">'123456'</span>;</div><div class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.00</span> sec)</div></pre></td></tr></table></figure></p>
+<p>其中，<code>all</code>表示所有的权限（如读、写、查询、删除等操作）；<code>.</code>周围有两个星号，前面的表示所有的数据库，后面的表示所有的表；<code>indentified by</code>后面跟密码，用单引号括起来。这里的<code>user1</code>特指localhost上的user1。</p>
+<p>如果是网络给其它机器上的某个用户授权，则要执行如下命令：<br><figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql&gt; grant <span class="literal">all</span> <span class="keyword">on</span> db1.* <span class="keyword">to</span> <span class="string">'user2'</span>@<span class="string">'192.168.1.111'</span> identified <span class="keyword">by</span> <span class="string">'123456'</span>;</div><div class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.00</span> sec)</div></pre></td></tr></table></figure></p>
+<p>其中，用户和主机的IP之间有一个符号<code>@</code>。另外，命令中主机IP可以用<code>%</code>代替，表示所有主机，如下所示：<br><figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql&gt; grant <span class="literal">all</span> <span class="keyword">on</span> db1.* <span class="keyword">to</span> <span class="string">'user3'</span>@<span class="string">'%'</span> identified <span class="keyword">by</span> <span class="string">'123456'</span>;</div><div class="line">Query OK, <span class="number">0</span> <span class="keyword">rows</span> affected (<span class="number">0.00</span> sec)</div></pre></td></tr></table></figure></p>
+<h1 id="4-常用的SQL语句"><a href="#4-常用的SQL语句" class="headerlink" title="4. 常用的SQL语句"></a>4. 常用的SQL语句</h1><p>关系型数据库的SQL语句都是一样的。假如你之前学过SQL Server或者Oracle，便会觉得这部分内容非常熟悉。</p>
+<h2 id="4-1-查询语句"><a href="#4-1-查询语句" class="headerlink" title="4.1. 查询语句"></a>4.1. 查询语句</h2><p>最常见的查询语句就是下面这两种形式。</p>
+<ul>
+<li>第一种形式<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select count(<span class="strong">*) from mysql.user;</span></div><div class="line"><span class="strong">+----------+</span></div><div class="line"><span class="strong">| count(*</span>) |</div><div class="line"><span class="code">+----------+</span></div><div class="line">|        9 |</div><div class="line"><span class="code">+----------+</span></div><div class="line">1 row in set (0.00 sec)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>其中，<code>mysql.user</code>表示MySQL库的user表，<code>count(*)</code>表示表中共有多少行。</p>
+<ul>
+<li>第二种形式<figure class="highlight n1ql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> mysql.db;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>它表示查询MySQL库的db表中的所有数据。当然也可以查询单个字段或者多个字段，如下所示：<br><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql&gt; <span class="keyword">select</span> db <span class="keyword">from</span> mysql.db;</div><div class="line">mysql&gt; <span class="keyword">select</span> db,<span class="keyword">user</span> <span class="keyword">from</span> mysql.db;</div></pre></td></tr></table></figure></p>
+<p>同样，在查询语句中也可以是哟个万能匹配符%，如下所示：<br><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql&gt; <span class="keyword">select</span> * <span class="keyword">from</span> mysql.db <span class="keyword">where</span> host <span class="keyword">like</span> <span class="string">'192.168. %'</span>;</div></pre></td></tr></table></figure></p>
+<h2 id="4-2-插入一行"><a href="#4-2-插入一行" class="headerlink" title="4.2. 插入一行"></a>4.2. 插入一行</h2><p>插入操作在MySQL中也很普遍，如下所示：<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">mysql&gt; insert into db1.t1 values (1, <span class="emphasis">'abc'</span>);</div><div class="line">Query OK, 1 row affected (0.31 sec)</div><div class="line"></div><div class="line">mysql&gt; select * from db1.t1;</div><div class="line"><span class="code">+------+</span>------+</div><div class="line">| id   | name |</div><div class="line"><span class="code">+------+</span>------+</div><div class="line">|    1 | abc  |</div><div class="line"><span class="code">+------+</span>------+</div><div class="line">1 row in set (0.00 sec)</div></pre></td></tr></table></figure></p>
+<h2 id="4-3-更改表的某一行"><a href="#4-3-更改表的某一行" class="headerlink" title="4.3. 更改表的某一行"></a>4.3. 更改表的某一行</h2><p>MySQL表里存放的数据支持更改某个字段，如下所示：<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">mysql&gt; update db1.t1 set name=<span class="emphasis">'aaa'</span> where id=1;</div><div class="line">Query OK, 1 row affected (0.01 sec)</div><div class="line">Rows matched: 1  Changed: 1  Warnings: 0</div><div class="line"></div><div class="line">mysql&gt; select * from db1.t1;</div><div class="line"><span class="code">+------+</span>------+</div><div class="line">| id   | name |</div><div class="line"><span class="code">+------+</span>------+</div><div class="line">|    1 | aaa  |</div><div class="line"><span class="code">+------+</span>------+</div><div class="line">1 row in set (0.00 sec)</div></pre></td></tr></table></figure></p>
+<h2 id="4-4-清空某个表的数据"><a href="#4-4-清空某个表的数据" class="headerlink" title="4.4. 清空某个表的数据"></a>4.4. 清空某个表的数据</h2><p>有时我们不希望删除表，而只是想清空某个表的数据，如下所示：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="selector-tag">mysql</span>&gt; <span class="selector-tag">truncate</span> <span class="selector-tag">table</span> <span class="selector-tag">db1</span><span class="selector-class">.t1</span>;</div><div class="line"><span class="selector-tag">Query</span> <span class="selector-tag">OK</span>, 0 <span class="selector-tag">rows</span> <span class="selector-tag">affected</span> (0<span class="selector-class">.01</span> <span class="selector-tag">sec</span>)</div><div class="line"></div><div class="line"><span class="selector-tag">mysql</span>&gt; <span class="selector-tag">select</span> * <span class="selector-tag">from</span> <span class="selector-tag">db1</span><span class="selector-class">.t1</span>;</div><div class="line"><span class="selector-tag">Empty</span> <span class="selector-tag">set</span> (0<span class="selector-class">.00</span> <span class="selector-tag">sec</span>)</div></pre></td></tr></table></figure></p>
+<h2 id="4-5-删除表"><a href="#4-5-删除表" class="headerlink" title="4.5. 删除表"></a>4.5. 删除表</h2><p>如果某个表不需要了，可以直接删除，如下所示：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql&gt; <span class="keyword">drop</span> <span class="keyword">table</span> db1.t1;</div><div class="line"><span class="keyword">Query</span> OK, 0 rows affected (0.01 sec)</div></pre></td></tr></table></figure></p>
+<h2 id="4-6-删除数据库"><a href="#4-6-删除数据库" class="headerlink" title="4.6. 删除数据库"></a>4.6. 删除数据库</h2><p>表可以删除，当然数据库也可以删除，如下所示：<br><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql&gt; <span class="keyword">drop</span> <span class="keyword">database</span> db1;</div><div class="line">Query OK, 0 rows affected (0.00 sec)</div></pre></td></tr></table></figure></p>
+<h2 id="4-7-修复表"><a href="#4-7-修复表" class="headerlink" title="4.7. 修复表"></a>4.7. 修复表</h2><figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql&gt; repair <span class="keyword">table</span> tb1 <span class="comment">[use frm]</span>;</div></pre></td></tr></table></figure>
+<hr>
+<h1 id="5-在Shell的命令行下执行mysql操作"><a href="#5-在Shell的命令行下执行mysql操作" class="headerlink" title="5. 在Shell的命令行下执行mysql操作"></a>5. 在Shell的命令行下执行mysql操作</h1><p>还有一个很重要的知识点，那就是在Shell的命令行下面直接执行mysql的操作。如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> mysql -uroot -p123456 mysql -e <span class="string">"show tables"</span></span></div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li><code>-e</code>前面的mysql指的是库的名字</li>
+<li><code>-e</code>后面双括号所括起来的就是mysql的命令</li>
+</ul>
+<hr>
+<h1 id="6-MySQL数据库的备份与恢复"><a href="#6-MySQL数据库的备份与恢复" class="headerlink" title="6. MySQL数据库的备份与恢复"></a>6. MySQL数据库的备份与恢复</h1><p>备份和恢复MySQL数据库这部分内容非常重要，请牢固掌握。</p>
+<h2 id="6-1-MySQL备份"><a href="#6-1-MySQL备份" class="headerlink" title="6.1. MySQL备份"></a>6.1. MySQL备份</h2><p>本分MySQL要使用<code>mysqldump</code>命令，具体用法如下：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# mysqldump -uroot -<span class="keyword">p</span><span class="string">'theshu..'</span> mysql &gt; /tmp/mysql.sql</div><div class="line">Warnin<span class="variable">g:</span> Using <span class="keyword">a</span> password <span class="keyword">on</span> the <span class="keyword">command</span> <span class="built_in">line</span> interface can <span class="keyword">be</span> insecure.</div><div class="line">[root@localhost ~]# <span class="keyword">ll</span> /tmp/mysql.sql</div><div class="line">-rw-r--r-- <span class="number">1</span> root root <span class="number">652186</span> <span class="number">3</span>月   <span class="number">7</span> <span class="number">19</span>:<span class="number">30</span> /tmp/mysql.sql</div></pre></td></tr></table></figure></p>
+<p>其中，<code>-u</code>和<code>-p</code>两个选项的使用方法和前面介绍的一样；后面的<code>mysql</code>指的是库名，然后重定向到一个文本文档里。备份做完后，你可以查看/tmp/mysql.sql这个文件里的内容。</p>
+<h2 id="6-2-MySQL恢复"><a href="#6-2-MySQL恢复" class="headerlink" title="6.2. MySQL恢复"></a>6.2. MySQL恢复</h2><p>MySQL的恢复和备份正好相反，如下所示：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# mysql -uroot -<span class="keyword">p</span><span class="string">'theshu..'</span> mysql &lt; /tmp/mysql.sql</div><div class="line">Warnin<span class="variable">g:</span> Using <span class="keyword">a</span> password <span class="keyword">on</span> the <span class="keyword">command</span> <span class="built_in">line</span> interface can <span class="keyword">be</span> insecure.</div></pre></td></tr></table></figure></p>
+<h2 id="6-3-只备份一个表"><a href="#6-3-只备份一个表" class="headerlink" title="6.3. 只备份一个表"></a>6.3. 只备份一个表</h2><p>有时候我们会有只备份一个表的情况：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> mysqldump -uroot -p db tb1 &gt; /tmp/tb1.sql</span></div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li><code>db</code>为数据库名字</li>
+<li><code>tb1</code>为表的名字</li>
+<li>恢复时不用加表明，只需要加数据库名字即可<ul>
+<li><code>mysql -uroot -p db &lt; /tmp/tb1.sql</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="6-4-备份时指定字符集"><a href="#6-4-备份时指定字符集" class="headerlink" title="6.4. 备份时指定字符集"></a>6.4. 备份时指定字符集</h2><p>备份时指定字符集：<br><figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># mysqldump -uroot --default-character-<span class="keyword">set</span>=utf8 <span class="comment">db &gt;</span> /tmp/<span class="comment">1.sql</span></div></pre></td></tr></table></figure></p>
+<p>恢复时也指定字符集：<br><figure class="highlight gams"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># mysql -uroot -p --default-character-<span class="keyword">set</span>=utf8 <span class="comment">db &lt;</span> /tmp/<span class="comment">1.sql</span></div></pre></td></tr></table></figure></p>
+<p>说明：指定字符集的目的是为了避免有的建表sql中并没有指定字符集，而直接使用MySQL默认字符集的情况，这样会造成乱码。</p>
+<hr>
+<p>关于MySQL的基本操作就先介绍这么多。当然学会了这些还远远不够，希望在工作中能够学到更多的知识。如果你对MySQL很感兴趣，不妨深入研究一下。</p>
+<hr>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术/" rel="tag"><i class="fa fa-tag"></i> 技术</a>
+          
+            <a href="/tags/MySQL/" rel="tag"><i class="fa fa-tag"></i> MySQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/12/技术/011. LNMP之常见的问题处理/" rel="next" title="LNMP之常见的问题处理">
+                <i class="fa fa-chevron-left"></i> LNMP之常见的问题处理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/13/技术/013. MySQL之配置讲解/" rel="prev" title="MySQL之配置讲解">
+                MySQL之配置讲解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">78</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-MySQL密码"><span class="nav-text">1. MySQL密码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-更改MySQL数据库root的密码"><span class="nav-text">1.1. 更改MySQL数据库root的密码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-MySQL的root密码重置"><span class="nav-text">1.2. MySQL的root密码重置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-连接数据库"><span class="nav-text">2. 连接数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-TCP-IP方式"><span class="nav-text">2.1. TCP/IP方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-socket方式"><span class="nav-text">2.2. socket方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-MySQL基本操作的常用命令"><span class="nav-text">3. MySQL基本操作的常用命令</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-查询当前库"><span class="nav-text">3.1. 查询当前库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-查询某个库的表"><span class="nav-text">3.2. 查询某个库的表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-查看某个表的全部字段"><span class="nav-text">3.3. 查看某个表的全部字段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-查看当前是哪个用户"><span class="nav-text">3.4. 查看当前是哪个用户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-查看当前所使用的数据库"><span class="nav-text">3.5. 查看当前所使用的数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-创建一个新库"><span class="nav-text">3.6. 创建一个新库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-创建一个新表"><span class="nav-text">3.7. 创建一个新表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-8-查看当前数据库的版本"><span class="nav-text">3.8. 查看当前数据库的版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-9-查看MySQL的当前状态"><span class="nav-text">3.9. 查看MySQL的当前状态</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-10-查看MySQL的参数"><span class="nav-text">3.10. 查看MySQL的参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-11-修改MySQL的参数"><span class="nav-text">3.11. 修改MySQL的参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-12-查看当前MySQL服务器的队列"><span class="nav-text">3.12. 查看当前MySQL服务器的队列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-13-修改一个普通用户并授权"><span class="nav-text">3.13. 修改一个普通用户并授权</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-常用的SQL语句"><span class="nav-text">4. 常用的SQL语句</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-查询语句"><span class="nav-text">4.1. 查询语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-插入一行"><span class="nav-text">4.2. 插入一行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-更改表的某一行"><span class="nav-text">4.3. 更改表的某一行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-清空某个表的数据"><span class="nav-text">4.4. 清空某个表的数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-删除表"><span class="nav-text">4.5. 删除表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-删除数据库"><span class="nav-text">4.6. 删除数据库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-7-修复表"><span class="nav-text">4.7. 修复表</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-在Shell的命令行下执行mysql操作"><span class="nav-text">5. 在Shell的命令行下执行mysql操作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-MySQL数据库的备份与恢复"><span class="nav-text">6. MySQL数据库的备份与恢复</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-MySQL备份"><span class="nav-text">6.1. MySQL备份</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-MySQL恢复"><span class="nav-text">6.2. MySQL恢复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-只备份一个表"><span class="nav-text">6.3. 只备份一个表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-备份时指定字符集"><span class="nav-text">6.4. 备份时指定字符集</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

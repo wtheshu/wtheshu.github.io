@@ -108,18 +108,18 @@
   <meta name="keywords" content="技术,LNMP,php-fpm," />
 
 
-<meta name="description" content="这篇的学习笔记主要讲的是LNMP环境中PHP的配置。和LAMP不同的是，在LNMP架构中，php-fpm作为独立的一个服务存在。既然是独立服务，那么它必然有自己的配置文件。php-fpm的配置文件为/usr/local/php-fpm/etc/php-fpm.conf，它同样也支持include语句，类似于nginx.conf里面的include。 1. php-fpm的pool2. php-fp">
+<meta name="description" content="这篇的学习笔记主要讲的是LNMP环境中PHP的配置。和LAMP不同的是，在LNMP架构中，php-fpm作为独立的一个服务存在。既然是独立服务，那么它必然有自己的配置文件。php-fpm的配置文件为/usr/local/php-fpm/etc/php-fpm.conf，它同样也支持include语句，类似于nginx.conf里面的include。  1. php-fpm配置文件php-fpm的配">
 <meta name="keywords" content="技术,LNMP,php-fpm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="LNMP之php-fpm初始配置">
 <meta property="og:url" content="http://www.theshu.top/2018/03/09/技术/010. LNMP之php-fpm初始配置/index.html">
 <meta property="og:site_name" content="奇怪先生的博客">
-<meta property="og:description" content="这篇的学习笔记主要讲的是LNMP环境中PHP的配置。和LAMP不同的是，在LNMP架构中，php-fpm作为独立的一个服务存在。既然是独立服务，那么它必然有自己的配置文件。php-fpm的配置文件为/usr/local/php-fpm/etc/php-fpm.conf，它同样也支持include语句，类似于nginx.conf里面的include。 1. php-fpm的pool2. php-fp">
+<meta property="og:description" content="这篇的学习笔记主要讲的是LNMP环境中PHP的配置。和LAMP不同的是，在LNMP架构中，php-fpm作为独立的一个服务存在。既然是独立服务，那么它必然有自己的配置文件。php-fpm的配置文件为/usr/local/php-fpm/etc/php-fpm.conf，它同样也支持include语句，类似于nginx.conf里面的include。  1. php-fpm配置文件php-fpm的配">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-09T12:01:57.499Z">
+<meta property="og:updated_time" content="2018-03-12T03:37:57.789Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LNMP之php-fpm初始配置">
-<meta name="twitter:description" content="这篇的学习笔记主要讲的是LNMP环境中PHP的配置。和LAMP不同的是，在LNMP架构中，php-fpm作为独立的一个服务存在。既然是独立服务，那么它必然有自己的配置文件。php-fpm的配置文件为/usr/local/php-fpm/etc/php-fpm.conf，它同样也支持include语句，类似于nginx.conf里面的include。 1. php-fpm的pool2. php-fp">
+<meta name="twitter:description" content="这篇的学习笔记主要讲的是LNMP环境中PHP的配置。和LAMP不同的是，在LNMP架构中，php-fpm作为独立的一个服务存在。既然是独立服务，那么它必然有自己的配置文件。php-fpm的配置文件为/usr/local/php-fpm/etc/php-fpm.conf，它同样也支持include语句，类似于nginx.conf里面的include。  1. php-fpm配置文件php-fpm的配">
 
 
 
@@ -363,7 +363,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-09T20:01:57+08:00">2018-03-09</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-12T11:37:57+08:00">2018-03-12</time>
             
           </span>
 
@@ -414,7 +414,57 @@
 
       
         <p>这篇的学习笔记主要讲的是LNMP环境中PHP的配置。和LAMP不同的是，在LNMP架构中，php-fpm作为独立的一个服务存在。既然是独立服务，那么它必然有自己的配置文件。php-fpm的配置文件为/usr/local/php-fpm/etc/php-fpm.conf，它同样也支持include语句，类似于nginx.conf里面的include。</p>
-<h1 id="1-php-fpm的pool"><a href="#1-php-fpm的pool" class="headerlink" title="1. php-fpm的pool"></a>1. php-fpm的pool</h1><h1 id="2-php-fpm的满执行日志"><a href="#2-php-fpm的满执行日志" class="headerlink" title="2. php-fpm的满执行日志"></a>2. php-fpm的满执行日志</h1><h1 id="3-php-fpm定义open-basedir"><a href="#3-php-fpm定义open-basedir" class="headerlink" title="3. php-fpm定义open_basedir"></a>3. php-fpm定义open_basedir</h1><h1 id="4-php-fpm进程管理"><a href="#4-php-fpm进程管理" class="headerlink" title="4. php-fpm进程管理"></a>4. php-fpm进程管理</h1>
+<hr>
+<h1 id="1-php-fpm配置文件"><a href="#1-php-fpm配置文件" class="headerlink" title="1. php-fpm配置文件"></a>1. php-fpm配置文件</h1><p>php-fpm的配置文件是php-fpm.conf，其内容如下（只是一个例子，用来说明功能的）：<br><figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># vim /usr/local/php-fpm/etc/php-fpm.conf</span></div><div class="line"></div><div class="line">[global]</div><div class="line"><span class="attr">pid</span> = /usr/local/php-fpm/var/run/php-fpm.pid</div><div class="line"><span class="attr">error_log</span> = /usr/local/php-fpm/var/log/php-fpm.log</div><div class="line"></div><div class="line">[www]</div><div class="line"><span class="attr">listen</span> = /tmp/www.sock</div><div class="line">listen.<span class="attr">mode=666</span></div><div class="line"><span class="attr">user</span> = php-fpm</div><div class="line"><span class="attr">group</span> = php-fpm</div><div class="line">listen.<span class="attr">owner</span> = nobody //和后面的Nginx的一致</div><div class="line">listen.<span class="attr">group</span> = nobody //同上</div><div class="line"><span class="attr">pm</span> = dynamic</div><div class="line">pm.<span class="attr">max_children</span> = <span class="number">50</span></div><div class="line">pm.<span class="attr">start_servers</span> = <span class="number">20</span></div><div class="line">pm.<span class="attr">min_spare_servers</span> = <span class="number">5</span></div><div class="line">pm.<span class="attr">max_spare_servers</span> = <span class="number">35</span></div><div class="line">pm.<span class="attr">max_requests</span> = <span class="number">500</span></div><div class="line"><span class="attr">rlimit_files</span> = <span class="number">1024</span></div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li><code>[global]</code>部分是全局配置，指定PID文件路径以及error_log路径</li>
+<li><code>[www]</code>是一个pool，其实还可以写第二个pool，第二个pool和第一个不一样的地方，首先pool的name，比如叫做<code>[www2]</code>。然后listen肯定就不能一样，比如可以<code>listen=/tmp/www2.sock</code>。而<code>user</code>、<code>group</code>也可以和<code>[www]</code>中定义的不一样。</li>
+<li><code>listen.owner</code>这个是定义<code>/tmp/www.sock</code>这个文件的所有者是谁，在php5.4版本之后监听的socket文件权限默认成了<code>rw-------</code>，如果不定义<code>listen.owner</code>，那么Nginx调用这个socket的时候就没有权限了，故在这里我们定义<code>listen.owner</code>为nginx的子进程监听用户。</li>
+<li><code>pm = dynamic</code>表示以动态的形式启动，在php5.3版本以后它可以支持动态和静态了，如果是静态，即<code>pm = static</code>，下面的配置只有<code>pm.max_children</code>管用。</li>
+<li><code>pm.max_children</code>表示启动几个php-fpm的子进程。如果是dynamic，下面的配置会生效，<code>pm.max_children</code>表示最大可以启动几个子进程。</li>
+<li><code>pm.start_servers</code>表示一开始启动几个子进程。</li>
+<li><code>pm.min_spare_servers</code>表示当php-fpm空闲时最少要有几个子进程，即如果空闲进程小于此值，则创建新的子进程。<code>pm.max_spare_servers</code>表示当php-fpm空闲时最多有几个子进程，即如果空闲进程大于此值，则会进行清理。</li>
+<li><code>pm.max_requests</code>表示一个子进程最多可以接受多少个请求，比如设置为<code>500</code>那么一个子进程受理500个请求后自动销毁。</li>
+<li><code>rlimit_files</code>表示每个子进程打开的多少个文件句柄。</li>
+</ul>
+<hr>
+<h1 id="2-php-fpm的pool"><a href="#2-php-fpm的pool" class="headerlink" title="2. php-fpm的pool"></a>2. php-fpm的pool</h1><p>Nginx可以配置多个虚拟主机，php-fpm同样也支持配置多个pool，每一个pool可以监听一个端口，也可以监听一个socket。现在把php-fpm.conf做一个更改，内容如下：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[<span class="keyword">global</span>]</div><div class="line">pid = /usr/<span class="keyword">local</span>/php-fpm/<span class="keyword">var</span>/<span class="keyword">run</span>/php-fpm.pid</div><div class="line">error_log = /usr/<span class="keyword">local</span>/php-fpm/<span class="keyword">var</span>/<span class="keyword">log</span>/php-fpm.<span class="built_in">log</span></div><div class="line"><span class="keyword">include</span> = etc/php-fpm.<span class="keyword">d</span><span class="comment">/*.conf</span></div></pre></td></tr></table></figure></p>
+<p>include这一行比较特殊，请注意等号后面的路径，必须写上etc目录。然后需要创建配置文件目录和子配置文件：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# mkdir /usr/local/php-fpm/etc/php-fpm.d</div><div class="line">[root@localhost ~]# cd /usr/local/php-fpm/etc/php-fpm.d/</div><div class="line">[root@localhost php-fpm.d]# vim www.conf</div><div class="line"><span class="comment">#&lt;==添加内容如下：</span></div><div class="line"></div><div class="line">[www]</div><div class="line">listen = /tmp/www.sock</div><div class="line">listen.<span class="attribute">mode</span>=666</div><div class="line">user = php-fpm</div><div class="line">group = php-fpm</div><div class="line">pm = dynamic</div><div class="line">pm.max_children = 50</div><div class="line">pm.start_servers = 20</div><div class="line">pm.min_spare_servers = 5</div><div class="line">pm.max_spare_servers = 35</div><div class="line">pm.max_requests = 500</div><div class="line">rlimit_files = 1024</div></pre></td></tr></table></figure></p>
+<p>保存后，再编辑另外的配置文件：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[root@localhost php-fpm.d]# vim aming.conf</div><div class="line"><span class="comment">#&lt;==写入如下内容：</span></div><div class="line"></div><div class="line">[aming]</div><div class="line">listen = /tmp/aming.sock</div><div class="line">listen.<span class="attribute">mode</span>=666</div><div class="line">user = php-fpm</div><div class="line">group = php-fpm</div><div class="line">pm = dynamic</div><div class="line">pm.max_children = 50</div><div class="line">pm.start_servers = 20</div><div class="line">pm.min_spare_servers = 5</div><div class="line">pm.max_spare_servers = 35</div><div class="line">pm.max_requests = 500</div><div class="line">rlimit_files = 1024</div></pre></td></tr></table></figure></p>
+<p>这样就有两个子配置文件，也就是说有两个pool了，第一个pool监听了/tmp/www.sock，第二个pool监听了/tmp/aming.sock。这样，就可以在Nginx不同的虚拟主机调用不同的pool，从而达到相互隔离的目的，两个pool互不影响。</p>
+<p>下面来验证一下配置是否有问题：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost php-fpm.<span class="keyword">d</span>]# /usr/<span class="keyword">local</span>/php-fpm/sbin/php-fpm -t</div><div class="line">[07-Mar-2018 17:12:51] NOTICE: configuration <span class="keyword">file</span> /usr/<span class="keyword">local</span>/php-fpm/etc/php-fpm.<span class="keyword">conf</span> <span class="keyword">test</span> is successful</div></pre></td></tr></table></figure></p>
+<p>然后重启一下php-fpm服务：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> php-fpm.d]<span class="meta"># /etc/init</span></div><div class="line">init/   init.d/</div><div class="line">[root<span class="symbol">@localhost</span> php-fpm.d]<span class="meta"># /etc/init.d/php-fpm restart</span></div><div class="line">Gracefully shutting down php-fpm . done</div><div class="line">Starting php-fpm  done</div></pre></td></tr></table></figure></p>
+<p>再来查看/tmp/目录下面的sock文件：<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost php-fpm.d]<span class="comment"># ls /tmp/*.sock</span></div><div class="line"><span class="regexp">/tmp/</span>aming.sock  <span class="regexp">/tmp/my</span>sql.sock  <span class="regexp">/tmp/</span>www.sock</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="3-php-fpm的慢执行日志"><a href="#3-php-fpm的慢执行日志" class="headerlink" title="3. php-fpm的慢执行日志"></a>3. php-fpm的慢执行日志</h1><p>这一节非常重要，务必全部理解并熟练应用。</p>
+<p>php-fpm的慢执行日志在工作中用的非常多，它可以帮助你快速地追踪到问题点。通过php-fpm的慢执行日志，我们可以非常清晰地了解到PHP的脚本哪里执行时间长，它可以定位到具体的行。</p>
+<p>如何开启和查看php-fpm的慢执行日志呢？操作步骤如下：<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="section">[root@localhost ~]</span><span class="comment"># vim /usr/local/php-fpm/etc/php-fpm.d/www.conf</span></div><div class="line"><span class="comment">#&lt;==在后面添加如下内容</span></div><div class="line"></div><div class="line"><span class="attr">request_slowlog_timeout</span> = <span class="number">1</span></div><div class="line"><span class="attr">slowlog</span> = /usr/local/php-fpm/var/log/www-slow.log</div></pre></td></tr></table></figure></p>
+<p>上述配置说明：</p>
+<ul>
+<li>第一行定义超时时间，即PHP的脚本执行时间只要超过1秒就会记录日志</li>
+<li>第二行定义慢执行日志的路径和名字。</li>
+</ul>
+<p>在以后，只要遇到PHP网站访问卡顿的问题时，要记得去查看这个慢执行日志，一定会帮助到你。</p>
+<hr>
+<h1 id="4-php-fpm定义open-basedir"><a href="#4-php-fpm定义open-basedir" class="headerlink" title="4. php-fpm定义open_basedir"></a>4. php-fpm定义open_basedir</h1><p>在httpd的学习笔记中，已经记录了open_basedir的作用，它的目的就是为了安全。httpd可以针对每个虚拟主机设置一个open_basedir，php-fpm同样也可以针对不同的pool设置不同的open_basedir。</p>
+<p>操作步骤如下：<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]<span class="comment"># vim /usr/local/php-fpm/etc/php-fpm.d/aming.conf</span></div><div class="line"><span class="comment">#&lt;==在最后面加入下面的内容</span></div><div class="line"></div><div class="line">php_admin_value[open_basedir]=<span class="regexp">/data/www/</span>:<span class="regexp">/tmp/</span></div></pre></td></tr></table></figure></p>
+<p>只要在对应的Nginx虚拟主机配置文件中调用对应的pool，就可以使用open_basedir来物理隔离多个站点了，从而达到安全目的。</p>
+<hr>
+<h1 id="5-php-fpm进程管理"><a href="#5-php-fpm进程管理" class="headerlink" title="5. php-fpm进程管理"></a>5. php-fpm进程管理</h1><p>来看这一段的配置：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">pm = dynamic</div><div class="line">pm<span class="selector-class">.max_children</span> = <span class="number">50</span></div><div class="line">pm<span class="selector-class">.start_servers</span> = <span class="number">20</span></div><div class="line">pm<span class="selector-class">.min_spare_servers</span> = <span class="number">5</span></div><div class="line">pm<span class="selector-class">.max_spare_servers</span> = <span class="number">35</span></div><div class="line">pm<span class="selector-class">.max_requests</span> = <span class="number">500</span></div></pre></td></tr></table></figure></p>
+<p>上述配置说明：</p>
+<ul>
+<li>第一行，定义php-fpm的子进程启动模式。<ul>
+<li><code>danamic</code>为动态模式；一开始只启动少量的子进程，根据实际需求，动态地增加或者减少子进程，最多不会超过<code>pm.max_children</code>定义的数值。</li>
+<li>另一种模式为<code>static</code>，这种模式下子进程数量由<code>pm.max_children</code>决定，一次性启动这么多，不会减少也不会增加。</li>
+</ul>
+</li>
+<li><code>pm.start_servers</code>针对<code>dynamic</code>模式，它定义php-fpm服务在启动服务时产生的子进程数量。</li>
+<li><code>pm.min_spare_servers</code>针对<code>dynamic</code>模式，它定义在空闲时段子进程数的最少数量，如果达到这个数值时，php-fpm服务会自动派生新的子进程。</li>
+<li><code>pm.max_spare_servers</code>也是针对<code>dynamic</code>模式的，它定义在空闲时段子进程数的最大值，如果高于这个数值就开始清理空闲的子进程。</li>
+<li><code>pm.max_requests</code>针对<code>dynamic</code>模式，它定义一个子进程最多处理的请求数，也就是说在一个php-fpm的子进程中最多可以处理这么多请求，当达到这个数值时，它会自动退出。</li>
+</ul>
+
       
     </div>
 
@@ -460,6 +510,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/12/技术/011. LNMP之常见的问题处理/" rel="prev" title="LNMP之常见的问题处理">
+                LNMP之常见的问题处理 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -539,7 +593,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">75</span>
+                    <span class="site-state-item-count">78</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -662,7 +716,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-php-fpm的pool"><span class="nav-text">1. php-fpm的pool</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-php-fpm的满执行日志"><span class="nav-text">2. php-fpm的满执行日志</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-php-fpm定义open-basedir"><span class="nav-text">3. php-fpm定义open_basedir</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-php-fpm进程管理"><span class="nav-text">4. php-fpm进程管理</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-php-fpm配置文件"><span class="nav-text">1. php-fpm配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-php-fpm的pool"><span class="nav-text">2. php-fpm的pool</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-php-fpm的慢执行日志"><span class="nav-text">3. php-fpm的慢执行日志</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-php-fpm定义open-basedir"><span class="nav-text">4. php-fpm定义open_basedir</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-php-fpm进程管理"><span class="nav-text">5. php-fpm进程管理</span></a></li></ol></div>
             
 
           </div>

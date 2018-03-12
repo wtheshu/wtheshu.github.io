@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="技术,FTP," />
+
+
+<meta name="description" content="GO  1. FTP介绍FTP是File Transfer Protocol（文件传输协议，简称”文传协议”）的英文简写形式，用于在互联网上控制文件的双向传输。它同时也是一个应用程序，用户可以通过它把自己的PC机与世界各地所有运行FTP协议的服务器相连，以访问服务器上的大量程序和信息。FTP的主要作用就是让用户连接一个远程计算机（这些计算机上运行着FTP服务器程序），并查看远程计算机中的文件，然">
+<meta name="keywords" content="技术,FTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FTP服务配置">
+<meta property="og:url" content="http://www.theshu.top/2017/09/21/技术/002. FTP服务配置/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="GO  1. FTP介绍FTP是File Transfer Protocol（文件传输协议，简称”文传协议”）的英文简写形式，用于在互联网上控制文件的双向传输。它同时也是一个应用程序，用户可以通过它把自己的PC机与世界各地所有运行FTP协议的服务器相连，以访问服务器上的大量程序和信息。FTP的主要作用就是让用户连接一个远程计算机（这些计算机上运行着FTP服务器程序），并查看远程计算机中的文件，然">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-12T13:55:57.923Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FTP服务配置">
+<meta name="twitter:description" content="GO  1. FTP介绍FTP是File Transfer Protocol（文件传输协议，简称”文传协议”）的英文简写形式，用于在互联网上控制文件的双向传输。它同时也是一个应用程序，用户可以通过它把自己的PC机与世界各地所有运行FTP协议的服务器相连，以访问服务器上的大量程序和信息。FTP的主要作用就是让用户连接一个远程计算机（这些计算机上运行着FTP服务器程序），并查看远程计算机中的文件，然">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2017/09/21/技术/002. FTP服务配置/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>FTP服务配置 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/09/21/技术/002. FTP服务配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">FTP服务配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-21T22:01:40+08:00">2017-09-21</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-12T21:55:57+08:00">2018-03-12</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>GO</p>
+</blockquote>
+<h1 id="1-FTP介绍"><a href="#1-FTP介绍" class="headerlink" title="1. FTP介绍"></a>1. FTP介绍</h1><p>FTP是File Transfer Protocol（文件传输协议，简称”文传协议”）的英文简写形式，用于在互联网上控制文件的双向传输。它同时也是一个应用程序，用户可以通过它把自己的PC机与世界各地所有运行FTP协议的服务器相连，以访问服务器上的大量程序和信息。FTP的主要作用就是让用户连接一个远程计算机（这些计算机上运行着FTP服务器程序），并查看远程计算机中的文件，然后把文件从远程计算机复制到本地计算机，或把本地计算机的文件传送到远程计算机。FTP方便传输数据，所以个人用户很多，但在企业里用得越来越少，因为FTP是有一定安全隐患的。在本章会介绍两种FTP软件。</p>
+<h1 id="2-使用vsftpd搭建FTP服务"><a href="#2-使用vsftpd搭建FTP服务" class="headerlink" title="2. 使用vsftpd搭建FTP服务"></a>2. 使用vsftpd搭建FTP服务</h1><p>CentOS或RHEL上有自带的FTP软件vsftpd，默认并没有安装，需要用yum安装，安装后不用配置，启动后便可以使用。但本节介绍的是它的高级用法。</p>
+<h2 id="2-1-安装-vsftpd"><a href="#2-1-安装-vsftpd" class="headerlink" title="2.1. 安装 vsftpd"></a>2.1. 安装 vsftpd</h2><p><code>yum install -y vsftpd db4-utils</code> </p>
+<p>这里安装了两个软件包，同时也会把依赖的包安装上。其中db4-utils包用来生成密码库文件。</p>
+<h2 id="2-2-建立账号"><a href="#2-2-建立账号" class="headerlink" title="2.2. 建立账号"></a>2.2. 建立账号</h2><p>vsftpd默认可以支持使用系统账号体系登陆，但是那样不太安全，所以建议使用虚拟账号体系登陆。</p>
+<ol>
+<li>首先建立与虚拟账号相关联的系统账号：<code>useradd virftp -s /sbin/nologin</code></li>
+<li><p>接着建立与虚拟账户相关的文件：<code>vim /etc/vsftpd/vsftpd_login</code>，其内容如下：</p>
+ <figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">test1</div><div class="line"><span class="number">123456</span></div><div class="line">test2</div><div class="line">abcdfe</div></pre></td></tr></table></figure>
+<ul>
+<li>需要说明的是，该文件的奇数行为用户名，偶数行为上一行的用户密码。</li>
+</ul>
+</li>
+<li>更改文件的权限，提升安全级别：<code>chmod 600 /etc/vsftpd/vsftpd_login</code></li>
+<li>vsftpd使用的密码不是明文的，需要生成对应的库文件：<code>db_load -T -t hash -f /etc/vsftpd/vsftpd_login /etc/vsftpd/vsftpd_login.db</code></li>
+<li>最后建立与虚拟账号相关的目录以及配置文件：<ul>
+<li><code>mkdir /etc/vsftpd/vsftpd_user_conf</code></li>
+<li><code>cd /etc/vsftpd/vsftpd_user_conf</code></li>
+</ul>
+</li>
+</ol>
+<h2 id="2-3-创建和用户对应的配置文件"><a href="#2-3-创建和用户对应的配置文件" class="headerlink" title="2.3. 创建和用户对应的配置文件"></a>2.3. 创建和用户对应的配置文件</h2><p>用户的配置文件是单独存在的，每一个用户都有一个自己的配置文件，文件名和用户名一致。如下所示：<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># vim test1	  //内容如下</span></div><div class="line"><span class="attr">local_root</span>=/home/virftp/test1</div><div class="line"><span class="attr">anonymous_enable</span>=<span class="literal">NO</span></div><div class="line"><span class="attr">write_enable</span>=<span class="literal">YES</span></div><div class="line"><span class="attr">local_umask</span>=<span class="number">022</span></div><div class="line"><span class="attr">anon_upload_enable</span>=<span class="literal">NO</span></div><div class="line"><span class="attr">anon_mkdir_write_enable</span>=<span class="literal">NO</span></div><div class="line"><span class="attr">idle_session_timeout</span>=<span class="number">600</span></div><div class="line"><span class="attr">data_connection_timeout</span>=<span class="number">120</span></div><div class="line"><span class="attr">max_clients</span>=<span class="number">10</span></div><div class="line"><span class="attr">max_per_ip</span>=<span class="number">5</span></div><div class="line"><span class="attr">local_max_rate</span>=<span class="number">50000</span></div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>local_root为test1账号的家目录</li>
+<li>anonymous_enable用来限制是否允许匿名账号登陆（若为NO，表示不允许匿名账号登陆）</li>
+<li>write_enable=YES表示可写</li>
+<li>local_umask指定umask值</li>
+<li>anon_upload_enable表示是否允许匿名账号上传文件</li>
+<li>anon_mkdir_write_enable表示是否允许匿名账号可写</li>
+<li>以上为关键配置参数，其他参数暂时不用关心</li>
+</ul>
+<p>创建test2账号的步骤和test1一样。接下来的步骤如下所示：<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># mkdir /home/virftp/test1</span></div><div class="line"><span class="comment"># touch /home/virftp/test1/aminglinux.txt</span></div><div class="line"><span class="comment"># chown -R virftp:virftp /home/virftp</span></div><div class="line"><span class="comment"># vim /etc/pam.d/vsftpd    //在最开头添加两行</span></div><div class="line">auth sufficient <span class="regexp">/lib64/</span>security<span class="regexp">/pam_userdb.so db=/</span>etc<span class="regexp">/vsftpd/</span>vsftpd_login</div><div class="line">account sufficient <span class="regexp">/lib64/</span>security<span class="regexp">/pam_userdb.so db=/</span>etc<span class="regexp">/vsftpd/</span>vsftpd_login</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>CentOS7为64位系统，所以库文件路径为/lib64/security/pam_userdb.so（32位系统的库文件路径为/lib/security/pam_userdb.so）</li>
+</ul>
+<h2 id="2-4-修改全局配置文件-etc-vsftpd-vsftpd-conf"><a href="#2-4-修改全局配置文件-etc-vsftpd-vsftpd-conf" class="headerlink" title="2.4. 修改全局配置文件/etc/vsftpd/vsftpd.conf"></a>2.4. 修改全局配置文件/etc/vsftpd/vsftpd.conf</h2><p>修改用户的配置文件后还不可用，还需要修改vsftpd的一些全局配置文件。</p>
+<p>首先编辑vsftpd.conf文件，如下所示：<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># vim /etc/vsftpd/vsftpd.conf   //修改如下内容</span></div><div class="line">- 将anonymous_enable=YES 改为 anonymous_enable=NO</div><div class="line">- 将<span class="comment">#anon_upload_enable=YES 改为 anon_upload_enable=NO</span></div><div class="line">- 将<span class="comment">#anon_mkdir_write_enable=YES 改为 anon_mkdir_write_enable=NO</span></div><div class="line"></div><div class="line">// 再增加如下内容</div><div class="line"></div><div class="line">chroot_local_user=YES</div><div class="line">guest_enable=YES</div><div class="line">guest_username=virftp</div><div class="line">virtual_use_local_privs=YES</div><div class="line">user_config_dir=/etc/vsftpd/vsftpd_user_conf</div><div class="line">allow_writeable_chroot=YES</div></pre></td></tr></table></figure></p>
+<p>然后启动vsftpd服务，执行如下命令：<code>systemctl start vsftpd</code></p>
+<h2 id="2-5-测试安装是否成功"><a href="#2-5-测试安装是否成功" class="headerlink" title="2.5 测试安装是否成功"></a>2.5 测试安装是否成功</h2><p>以上所示的整个配置过程有点繁琐，但是并不复杂。接下来我们做一下测试：</p>
+<ul>
+<li><code>ps aux | grep vsftp</code>  查看进程是否存在</li>
+<li><code>yum install -y lftp</code>  安装lftp客户端软件</li>
+<li><code>lftp test1@127.0.0.1</code>   输入口令后即可登陆到vsftpd，然后利用<code>ls</code>命令查看test1家目录下面的aminglinux.txt。文件的所属主和所属组以virftp用户的UID和GID的方式显示。</li>
+</ul>
+<p>如果在这一步遇到问题，请检查/var/log/secure日志，通常会记录一些错误信息。</p>
+<h1 id="3-使用pure-ftpd搭建FTP服务（YUM安装方式）"><a href="#3-使用pure-ftpd搭建FTP服务（YUM安装方式）" class="headerlink" title="3. 使用pure-ftpd搭建FTP服务（YUM安装方式）"></a>3. 使用pure-ftpd搭建FTP服务（YUM安装方式）</h1><p>pure-ftpd为另一款比较小巧实用的FTP软件，平时用的比较多。</p>
+<h2 id="3-1-安装-pure-ftpd"><a href="#3-1-安装-pure-ftpd" class="headerlink" title="3.1. 安装 pure-ftpd"></a>3.1. 安装 pure-ftpd</h2><p>默认的CentOS的yum源并不包含pure-ftpd，需要安装epel扩展源，具体过程如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> yum install -y epel-release</span></div><div class="line"><span class="meta">#</span><span class="bash"> yum install -y pure-ftpd</span></div></pre></td></tr></table></figure></p>
+<h2 id="3-2-配置-pure-ftpd"><a href="#3-2-配置-pure-ftpd" class="headerlink" title="3.2. 配置 pure-ftpd"></a>3.2. 配置 pure-ftpd</h2><p>在启动pure-ftpd之前，需要先修改配置文件/etc/pure-ftpd/pure-ftpd.conf。该配置文件里面的内容很多，其中需要修改的是：把<code>PureDB /etc/pure-ftpd/pureftpd.pdb</code>前面的#删除，然后启动pure-ftpd，启动之前需要关闭vsftpd，因为有端口冲突，过程如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> systemctl stop vsftpd</span></div><div class="line"><span class="meta">#</span><span class="bash"> systemctl start pure-ftpd</span></div><div class="line"><span class="meta">#</span><span class="bash"> ps aux | grep pure-ftp</span></div></pre></td></tr></table></figure></p>
+<p>启动成功的话，<code>ps aux</code>可以看到相关的进程。如果乜有正常启动，需要通过/var/log/messages日志查看原因。</p>
+<h2 id="3-3-建立账号"><a href="#3-3-建立账号" class="headerlink" title="3.3. 建立账号"></a>3.3. 建立账号</h2><p>为了安全，pure-ftp使用的账号并非Linux的系统账号，而是虚拟账号。</p>
+<p>首先，创建一个虚拟账号，如下所示：<br><figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># mkdir /<span class="keyword">data</span>/ftp/</div><div class="line"># useradd -u <span class="number">1010</span> <span class="keyword">pure</span>-ftp</div><div class="line"># chown -R <span class="keyword">pure</span>-ftp:<span class="keyword">pure</span>-ftp /<span class="keyword">data</span>/ftp/</div><div class="line"># <span class="keyword">pure</span>-pw useradd ftp_user1 -u <span class="keyword">pure</span>-ftp -d /<span class="keyword">data</span>/ftp/</div><div class="line">Password:</div><div class="line">Enter it again:</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>-u选项将虚拟用户ftp_user1与系统用户pure-ftp关联再一起，也就是说，使用ftp-user1账号登陆FTP后，会以pure-ftp的身份来读取和下载文件</li>
+<li>-d选项后面的目录为ftp_user1账户的家目录，这样可以使ftp_user1只能访问其家目录/data/ftp/</li>
+</ul>
+<p>然后创建用户信息数据库文件，这一步很关键。执行如下命令：<br><code>pure-pw mkdb</code></p>
+<p>其中，pure-pw还可以列出当前FTP账号以及删除某个账号。例如，我们再创建一个账号，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> pure-pw useradd ftp_user2 -u pure-ftp -d /tmp</span></div><div class="line"><span class="meta">#</span><span class="bash"> pure-pw mkdb</span></div></pre></td></tr></table></figure></p>
+<p>列出当前账号，执行如下命令：<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># pure-pw list</span></div><div class="line">ftp_user1		<span class="regexp">/data/</span>ftp<span class="regexp">/./</span></div><div class="line">ftp_user2		<span class="regexp">/tmp/</span>.<span class="regexp">/</span></div></pre></td></tr></table></figure></p>
+<p>如果想删除账号，执行如下命令：<br><figure class="highlight d"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">pure</span>-pw userdel ftp_user2</div></pre></td></tr></table></figure></p>
+<h2 id="3-4-测试pure-ftpd"><a href="#3-4-测试pure-ftpd" class="headerlink" title="3.4. 测试pure-ftpd"></a>3.4. 测试pure-ftpd</h2><p>测试过程如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> lftp ftp_user1@172.0.0.1</span></div><div class="line">口令：</div><div class="line"><span class="meta">#</span><span class="bash"> ls</span></div><div class="line"><span class="meta">#</span><span class="bash"> put /etc/fstab</span></div><div class="line"><span class="meta">#</span><span class="bash"> ls</span></div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>登陆后，使用ls可以查看当前目录都有什么文件</li>
+<li>使用put命令可以把系统的文件上传到FTP服务器上</li>
+<li>你还可以再Windows机器里安装一个FTP客户端软件（推荐开源的FileZilla），然后远程链接测试。</li>
+</ul>
+<hr>
+<h1 id="4-使用pure-ftpd搭建FTP服务（源码安装方式）"><a href="#4-使用pure-ftpd搭建FTP服务（源码安装方式）" class="headerlink" title="4. 使用pure-ftpd搭建FTP服务（源码安装方式）"></a>4. 使用pure-ftpd搭建FTP服务（源码安装方式）</h1><h2 id="4-1-下载软件"><a href="#4-1-下载软件" class="headerlink" title="4.1. 下载软件"></a>4.1. 下载软件</h2><p>Pure-ftpd的官网是<a href="http://www.pureftpd.org/project/pure-ftpd" target="_blank" rel="external">http://www.pureftpd.org/project/pure-ftpd</a>。</p>
+<figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># cd /usr/local/src/</span></div><div class="line">[root<span class="symbol">@localhost</span> src]<span class="meta"># wget --no-check-certificate https://download.pureftpd.org/pub/pure-ftpd/releases/pure-ftpd-1.0.44.tar.bz2</span></div><div class="line"><span class="meta">#&lt;==因为该链接的https所用的SSL证书未生效，所以无法正常连接，加上上面的选项后可以连接。</span></div></pre></td></tr></table></figure>
+<h2 id="4-2-安装pure-ftpd"><a href="#4-2-安装pure-ftpd" class="headerlink" title="4.2. 安装pure-ftpd"></a>4.2. 安装pure-ftpd</h2><figure class="highlight livescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">[root@localhost src]<span class="comment"># tar jxf pure-ftpd-1.0.44.tar.bz2</span></div><div class="line">[root@localhost src]<span class="comment"># cd pure-ftpd-1.0.44</span></div><div class="line">[root@localhost pure-ftpd-<span class="number">1.0</span>.<span class="number">44</span>]<span class="comment"># ./configure \</span></div><div class="line">--prefix=/usr/local/pureftpd <span class="string">\</span></div><div class="line">--without-inetd <span class="string">\</span></div><div class="line">--<span class="keyword">with</span>-altlog <span class="string">\</span></div><div class="line">--<span class="keyword">with</span>-puredb <span class="string">\</span></div><div class="line">--<span class="keyword">with</span>-throttling <span class="string">\</span></div><div class="line">--<span class="keyword">with</span>-peruserlimits <span class="string">\</span></div><div class="line">--<span class="keyword">with</span>-tls</div><div class="line">[root@localhost pure-ftpd-<span class="number">1.0</span>.<span class="number">44</span>]<span class="comment"># echo $?</span></div><div class="line"><span class="number">0</span></div><div class="line">[root@localhost pure-ftpd-<span class="number">1.0</span>.<span class="number">44</span>]<span class="comment"># make &amp;&amp; make install</span></div><div class="line">[root@localhost pure-ftpd-<span class="number">1.0</span>.<span class="number">44</span>]<span class="comment"># echo $?</span></div><div class="line"><span class="number">0</span></div></pre></td></tr></table></figure>
+<h2 id="4-3-配置pure-ftpd和启动"><a href="#4-3-配置pure-ftpd和启动" class="headerlink" title="4.3. 配置pure-ftpd和启动"></a>4.3. 配置pure-ftpd和启动</h2><p>Pure-ftpd编译和安装完成后，下面就该配置它了，但是最新版本默认的配置就已经很好，如果有特殊需求可以更改它的配置文件/usr/local/pureftd/etc/pure-ftpd.conf，该文件的主要配置内容如下：<br><figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">[root@localhost pure-ftpd<span class="number">-1.0</span><span class="number">.44</span>]<span class="comment"># cat /usr/local/pureftpd/etc/pure-ftpd.conf | grep -v ^# | grep -v ^$</span></div><div class="line">ChrootEveryone               <span class="literal">yes</span></div><div class="line">BrokenClientsCompatibility   <span class="literal">no</span></div><div class="line">MaxClientsNumber             <span class="number">50</span></div><div class="line">Daemonize                    <span class="literal">yes</span></div><div class="line">MaxClientsPerIP              <span class="number">8</span></div><div class="line">VerboseLog                   <span class="literal">no</span></div><div class="line">DisplayDotFiles              <span class="literal">yes</span></div><div class="line">AnonymousOnly                <span class="literal">no</span></div><div class="line">NoAnonymous                  <span class="literal">no</span></div><div class="line">SyslogFacility               ftp</div><div class="line">DontResolve                  <span class="literal">yes</span></div><div class="line">MaxIdleTime                  <span class="number">15</span></div><div class="line"><span class="comment"># PureDB                       /etc/pureftpd.pdb</span></div><div class="line">LimitRecursion               <span class="number">10000</span> <span class="number">8</span></div><div class="line">AnonymousCanCreateDirs       <span class="literal">no</span></div><div class="line">MaxLoad                      <span class="number">4</span></div><div class="line">AntiWarez                    <span class="literal">yes</span></div><div class="line">Umask                        <span class="number">133</span>:<span class="number">022</span></div><div class="line">MinUID                       <span class="number">100</span></div><div class="line">AllowUserFXP                 <span class="literal">no</span></div><div class="line">AllowAnonymousFXP            <span class="literal">no</span></div><div class="line">ProhibitDotFilesWrite        <span class="literal">no</span></div><div class="line">ProhibitDotFilesRead         <span class="literal">no</span></div><div class="line">AutoRename                   <span class="literal">no</span></div><div class="line">AnonymousCantUpload          <span class="literal">no</span></div><div class="line"><span class="comment"># PIDFile                      /var/run/pure-ftpd.pid</span></div><div class="line">MaxDiskUsage                   <span class="number">99</span></div><div class="line">CustomerProof                <span class="literal">yes</span></div></pre></td></tr></table></figure></p>
+<p>启动pure-ftpd服务<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# <span class="regexp">/usr/</span>local<span class="regexp">/pureftpd/</span>sbin<span class="regexp">/pure-ftpd /u</span>sr<span class="regexp">/local/</span>pureftpd<span class="regexp">/etc/</span>pure-ftpd.conf</div></pre></td></tr></table></figure></p>
+<p>启动后检查是否成功启动：<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# ps aux | <span class="keyword">grep</span> ftp | <span class="keyword">grep</span> -v <span class="keyword">grep</span></div><div class="line">root       <span class="number">9590</span>  <span class="number">0.0</span>  <span class="number">0.0</span> <span class="number">139412</span>   <span class="number">824</span> ?        Ss   <span class="number">16</span>:<span class="number">33</span>   <span class="number">0</span>:<span class="number">00</span> <span class="regexp">/usr/</span>local<span class="regexp">/pureftpd/</span>sbin<span class="regexp">/pure-ftpd /u</span>sr<span class="regexp">/local/</span>pureftpd<span class="regexp">/etc/</span>pure-ftpd.conf</div></pre></td></tr></table></figure></p>
+<p>由于没有启动脚本，所以只能通过上面的方式启动，如果是重启的话，只能先把该服务杀掉，然后再启动，如下：<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root@localhost ~]# killall pure-ftpd</div><div class="line">[root@localhost ~]# ps aux | <span class="keyword">grep</span> ftp | <span class="keyword">grep</span> -v <span class="keyword">grep</span></div><div class="line">[root@localhost ~]# <span class="regexp">/usr/</span>local<span class="regexp">/pureftpd/</span>sbin<span class="regexp">/pure-ftpd /u</span>sr<span class="regexp">/local/</span>pureftpd<span class="regexp">/etc/</span>pure-ftpd.conf</div><div class="line">[root@localhost ~]# ps aux | <span class="keyword">grep</span> ftp | <span class="keyword">grep</span> -v <span class="keyword">grep</span>   root       <span class="number">9599</span>  <span class="number">0.0</span>  <span class="number">0.0</span> <span class="number">139412</span>   <span class="number">816</span> ?        Ss   <span class="number">16</span>:<span class="number">36</span>   <span class="number">0</span>:<span class="number">00</span> <span class="regexp">/usr/</span>local<span class="regexp">/pureftpd/</span>sbin<span class="regexp">/pure-ftpd /u</span>sr<span class="regexp">/local/</span>pureftpd<span class="regexp">/etc/</span>pure-ftpd.conf</div></pre></td></tr></table></figure></p>
+<h2 id="4-4-建立虚拟账号"><a href="#4-4-建立虚拟账号" class="headerlink" title="4.4. 建立虚拟账号"></a>4.4. 建立虚拟账号</h2><p>这部分内容和上一章节《YUM方式安装pure-ftpd》的内容相同。在这里不再重复记录。</p>
+<hr>
+<blockquote>
+<p>OK</p>
+</blockquote>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术/" rel="tag"><i class="fa fa-tag"></i> 技术</a>
+          
+            <a href="/tags/FTP/" rel="tag"><i class="fa fa-tag"></i> FTP</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/21/Shell/002. Shell脚本常用基础语法/" rel="next" title="Shell脚本常用基础语法">
+                <i class="fa fa-chevron-left"></i> Shell脚本常用基础语法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/19/Tool/002. 常用便携软件/" rel="prev" title="常用便携软件">
+                常用便携软件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">78</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-FTP介绍"><span class="nav-text">1. FTP介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-使用vsftpd搭建FTP服务"><span class="nav-text">2. 使用vsftpd搭建FTP服务</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-安装-vsftpd"><span class="nav-text">2.1. 安装 vsftpd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-建立账号"><span class="nav-text">2.2. 建立账号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-创建和用户对应的配置文件"><span class="nav-text">2.3. 创建和用户对应的配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-修改全局配置文件-etc-vsftpd-vsftpd-conf"><span class="nav-text">2.4. 修改全局配置文件/etc/vsftpd/vsftpd.conf</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-测试安装是否成功"><span class="nav-text">2.5 测试安装是否成功</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-使用pure-ftpd搭建FTP服务（YUM安装方式）"><span class="nav-text">3. 使用pure-ftpd搭建FTP服务（YUM安装方式）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-安装-pure-ftpd"><span class="nav-text">3.1. 安装 pure-ftpd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-配置-pure-ftpd"><span class="nav-text">3.2. 配置 pure-ftpd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-建立账号"><span class="nav-text">3.3. 建立账号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-测试pure-ftpd"><span class="nav-text">3.4. 测试pure-ftpd</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-使用pure-ftpd搭建FTP服务（源码安装方式）"><span class="nav-text">4. 使用pure-ftpd搭建FTP服务（源码安装方式）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-下载软件"><span class="nav-text">4.1. 下载软件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-安装pure-ftpd"><span class="nav-text">4.2. 安装pure-ftpd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-配置pure-ftpd和启动"><span class="nav-text">4.3. 配置pure-ftpd和启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-建立虚拟账号"><span class="nav-text">4.4. 建立虚拟账号</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
