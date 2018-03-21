@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="奇怪先生的博客">
 <meta property="og:description" content="这篇学习笔记，是工作中经常用到的Apache的基本配置，一定要熟练掌握。  1. 默认虚拟主机1.1. 虚拟主机和默认虚拟主机首先我们要了解一下虚拟主机的概念。早期的Linux服务器上，一个服务器只能运行一个网站。但随着技术的发展，一个服务器上可以跑多个网站了，这样可以帮助我们节省成本。其实，这里的服务器就叫做主机，早期一个主机对应一个站点。而现在，一个主机可以跑多个站点，所以就有了虚拟主机的概念">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-08T11:36:42.232Z">
+<meta property="og:updated_time" content="2018-03-18T09:46:29.939Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LAMP之Apache的初始配置">
 <meta name="twitter:description" content="这篇学习笔记，是工作中经常用到的Apache的基本配置，一定要熟练掌握。  1. 默认虚拟主机1.1. 虚拟主机和默认虚拟主机首先我们要了解一下虚拟主机的概念。早期的Linux服务器上，一个服务器只能运行一个网站。但随着技术的发展，一个服务器上可以跑多个网站了，这样可以帮助我们节省成本。其实，这里的服务器就叫做主机，早期一个主机对应一个站点。而现在，一个主机可以跑多个站点，所以就有了虚拟主机的概念">
@@ -363,7 +363,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-08T19:36:42+08:00">2018-03-08</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-18T17:46:29+08:00">2018-03-18</time>
             
           </span>
 
@@ -520,7 +520,10 @@
 <p>说明：</p>
 <ul>
 <li>日志切割的是两行，注意不要写成多于两行。</li>
-<li>ErrorLog是访问日志，CustomLog是访问日志。</li>
+<li>ErrorLog是错误日志，CustomLog是访问日志。</li>
+<li>其实错误日志所记录的东西并不会太多，所以没有必要对错误日志进行分割。</li>
+<li>在Apache的log目录中，错误日志有两个，其中一个是apache总的错误日志，另外一个是针对虚拟主机的错误日志。</li>
+<li>可以把清除过期日志用计划任务的方式来实现，比如清除一个月前的日志，在每天某点某分执行这个操作。</li>
 </ul>
 <hr>
 <h1 id="5-配置静态元素过期时间"><a href="#5-配置静态元素过期时间" class="headerlink" title="5. 配置静态元素过期时间"></a>5. 配置静态元素过期时间</h1><p>有时，会在日志里发现有这样的状态码304，这个状态码表示该文件已经缓存在用户的电脑里了，再次请求它的时候就不用从服务器上下载，而是直接访问用户电脑里面的缓存。这样做的目的是降低服务器的资源消耗，还可以提升用户访问网站的速度。平时我们访问一个网站时，很多元素为静态的小图片，那这些小图片完全可以缓存在咱们的电脑里，这样再次访问该站点时，速度就会很快。</p>
@@ -705,7 +708,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">78</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -783,7 +786,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">20</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

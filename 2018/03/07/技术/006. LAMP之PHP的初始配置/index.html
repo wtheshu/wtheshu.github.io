@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="奇怪先生的博客">
 <meta property="og:description" content="1. PHP的配置文件虽然PHP是以httpd的一个模块的形式存在的，但是PHP本身也有自己的配置文件，那就是php.ini。在前面安装时，我们已经拷贝了一个php.ini文件到/usr/local/php/etc/目录下面，这是我们已经知道了php.ini所在的路径在哪里。但有时候我们并不知道php.ini所在路路径，这时候就需要通过命令来查一查在哪里：123[root@localhost ~]">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-09T03:01:29.788Z">
+<meta property="og:updated_time" content="2018-03-19T10:37:36.668Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LAMP之PHP的初始配置">
 <meta name="twitter:description" content="1. PHP的配置文件虽然PHP是以httpd的一个模块的形式存在的，但是PHP本身也有自己的配置文件，那就是php.ini。在前面安装时，我们已经拷贝了一个php.ini文件到/usr/local/php/etc/目录下面，这是我们已经知道了php.ini所在的路径在哪里。但有时候我们并不知道php.ini所在路路径，这时候就需要通过命令来查一查在哪里：123[root@localhost ~]">
@@ -363,7 +363,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-09T11:01:29+08:00">2018-03-09</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-19T18:37:36+08:00">2018-03-19</time>
             
           </span>
 
@@ -425,7 +425,9 @@
 <ul>
 <li><code>log_errors</code>可以设置为<code>On</code>或<code>Off</code>，如果想让PHP记录错误日志，需要设置为<code>On</code>。</li>
 <li><code>error_log</code>设定错误日志路径。</li>
-<li><code>error_reporting</code>设定错误日志的级别，<code>E_ALL</code>为所有类型的日志，不管是提醒还是警告都会记录。在开发环境下面设置为<code>E_ALL</code>，可以方便程序员排查问题，但也会造成日志记录很多无意义的内容。<code>&amp;</code>符号表示并且，<code>~</code>表示排除，所以两个组合在一起<code>E_ALL &amp; ~E_NOTICE</code>就是在E_ALL的基础上排除掉notice相关的日志。</li>
+<li><code>error_reporting</code>设定错误日志的级别，<code>E_ALL</code>为所有类型的日志，不管是提醒还是警告都会记录。在开发环境下面设置为<code>E_ALL</code>，可以方便程序员排查问题，但也会造成日志记录很多无意义的内容。<code>&amp;</code>符号表示并且，<code>|</code>表示或者，<code>~</code>表示排除，所以<code>&amp; ~</code>两个组合在一起<code>E_ALL &amp; ~E_NOTICE</code>就是在E_ALL的基础上排除掉notice相关的日志。</li>
+<li><code>正常情况下在业务正常时只有上面的日志级别即可，如果是在开发时检测错误，需要设置为</code>E_ALL | E_NOTICE`会显示更多的错误信息。</li>
+<li>注意，不同版本中这个日志级别可能会不一样，所以要根据提示来设置正确合适的日志级别。</li>
 <li><code>display_errors</code>设置为<code>On</code>，则会把错误日志直接显示在浏览器里，这样对于用户访问来说体验不好，而且还会暴露网站的一些文件路径等重要信息，所以要设置为<code>Off</code>。</li>
 </ul>
 <p>设置完php.ini后，还需要做一些额外的操作：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># mkdir /var/log/php</span></div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># chmod 777 /var/log/php/</span></div><div class="line"><span class="meta">#&lt;==需要保证PHP的错误日志所在目录存在，并且权限为可写。</span></div><div class="line">[root<span class="symbol">@localhost</span> ~]<span class="meta"># /usr/local/apache2.4/bin/apachectl graceful</span></div></pre></td></tr></table></figure></p>
@@ -447,6 +449,7 @@
 <p>上述配置内容的说明：</p>
 <ul>
 <li>起作用的就是这一句：<code>php_admin_value</code>，它可以定义php.ini里面的参数，除此之外像error_log之类的也可以定义。</li>
+<li>在所要限制的目录后面一定要加斜杠来表示精确的匹配。</li>
 </ul>
 <p>这样就可以实现，一个虚拟主机定义一个open_basedir。</p>
 <hr>
@@ -603,7 +606,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">78</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -681,7 +684,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">20</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

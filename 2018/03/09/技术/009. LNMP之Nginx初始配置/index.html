@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="奇怪先生的博客">
 <meta property="og:description" content="这一篇学习笔记主要讲述的是在LNMP刚刚搭建完后需要做的一些常用的配置和优化。 1. 默认虚拟主机和httpd类似，在Nginx中也有默认虚拟主机，第一个被Nginx加载的虚拟主机就是默认虚拟主机。但是和httpd不同的是，它还有一个配置用来标记默认虚拟主机。也就是说，如果没有这个标记，第一个虚拟主机为默认虚拟主机。 修改配置文件nginx.conf，在结束符号}上面加入一行配置，改写如下：12">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-12T06:42:42.968Z">
+<meta property="og:updated_time" content="2018-03-20T13:10:54.369Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LNMP之Nginx初始配置">
 <meta name="twitter:description" content="这一篇学习笔记主要讲述的是在LNMP刚刚搭建完后需要做的一些常用的配置和优化。 1. 默认虚拟主机和httpd类似，在Nginx中也有默认虚拟主机，第一个被Nginx加载的虚拟主机就是默认虚拟主机。但是和httpd不同的是，它还有一个配置用来标记默认虚拟主机。也就是说，如果没有这个标记，第一个虚拟主机为默认虚拟主机。 修改配置文件nginx.conf，在结束符号}上面加入一行配置，改写如下：12">
@@ -363,7 +363,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-12T14:42:42+08:00">2018-03-12</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-20T21:10:54+08:00">2018-03-20</time>
             
           </span>
 
@@ -431,6 +431,7 @@
 <li>第一次生成要用<code>-c</code>选项，第二次就不需要用了。</li>
 </ul>
 </li>
+<li>可以增加一句<code>root 绝对路径</code>来限制具体的路径。</li>
 </ul>
 <p>下面使用curl工具来验证：<br><figure class="highlight julia"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">[root<span class="meta">@localhost</span> vhost]<span class="comment"># mkdir /data/nginx/test.com</span></div><div class="line">[root<span class="meta">@localhost</span> vhost]<span class="comment"># echo "test.com" &gt; /data/nginx/test.com/index.html</span></div><div class="line">[root<span class="meta">@localhost</span> vhost]<span class="comment"># curl -I -x127.0.0.1:80 test.com</span></div><div class="line">HTTP/<span class="number">1.1</span> <span class="number">401</span> Unauthorized</div><div class="line">Server: nginx/<span class="number">1.10</span><span class="number">.3</span></div><div class="line"><span class="built_in">Date</span>: Tue, <span class="number">06</span> Mar <span class="number">2018</span> <span class="number">19</span>:<span class="number">49</span>:<span class="number">38</span> GMT</div><div class="line">Content-<span class="built_in">Type</span>: text/html</div><div class="line">Content-Length: <span class="number">195</span></div><div class="line">Connection: keep-alive</div><div class="line">WWW-Authenticate: Basic realm=<span class="string">"Auth"</span></div><div class="line"></div><div class="line"><span class="comment">#&lt;==状态码为401，说明该网站需要用户验证。</span></div></pre></td></tr></table></figure></p>
 <p>如果是用浏览器打开该网站，则会有提示框，输入用户名和密码，正确输入后才可以成功访问到网站的内容。</p>
@@ -730,7 +731,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">78</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -808,7 +809,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">20</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

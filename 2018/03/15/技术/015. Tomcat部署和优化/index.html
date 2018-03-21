@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="技术,Tomcat," />
+
+
+<meta name="description" content="目前有很多网站是用Java编写的，所以解析Java程序就必须有相关的软件来完成，Tomcat就是去其中之一。Tomcat是Apache软件基金会（Apache Software Foundation）的Jackarta项目中的一个核心项目，由Apache、Sun和其它一些公司及个人共同开发而成。Tomcat技术先进、性能稳定而且免费，因为深受Java爱好者的喜爱，并得到了部分软件开发商的认可，成为">
+<meta name="keywords" content="技术,Tomcat">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Tomcat部署和优化">
+<meta property="og:url" content="http://www.theshu.top/2018/03/15/技术/015. Tomcat部署和优化/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="目前有很多网站是用Java编写的，所以解析Java程序就必须有相关的软件来完成，Tomcat就是去其中之一。Tomcat是Apache软件基金会（Apache Software Foundation）的Jackarta项目中的一个核心项目，由Apache、Sun和其它一些公司及个人共同开发而成。Tomcat技术先进、性能稳定而且免费，因为深受Java爱好者的喜爱，并得到了部分软件开发商的认可，成为">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-16T06:07:21.868Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Tomcat部署和优化">
+<meta name="twitter:description" content="目前有很多网站是用Java编写的，所以解析Java程序就必须有相关的软件来完成，Tomcat就是去其中之一。Tomcat是Apache软件基金会（Apache Software Foundation）的Jackarta项目中的一个核心项目，由Apache、Sun和其它一些公司及个人共同开发而成。Tomcat技术先进、性能稳定而且免费，因为深受Java爱好者的喜爱，并得到了部分软件开发商的认可，成为">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/03/15/技术/015. Tomcat部署和优化/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Tomcat部署和优化 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/15/技术/015. Tomcat部署和优化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Tomcat部署和优化</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-15T08:56:16+08:00">2018-03-15</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-16T14:07:21+08:00">2018-03-16</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>目前有很多网站是用Java编写的，所以解析Java程序就必须有相关的软件来完成，Tomcat就是去其中之一。Tomcat是Apache软件基金会（Apache Software Foundation）的Jackarta项目中的一个核心项目，由Apache、Sun和其它一些公司及个人共同开发而成。Tomcat技术先进、性能稳定而且免费，因为深受Java爱好者的喜爱，并得到了部分软件开发商的认可，成为目前比较流行的Web应用服务器。</p>
+<p>Tomcat是一个轻量级应用服务器，在中小型系统和并发访问用户不是很多的场合下被普遍使用，是开发和调试Java程序的首选。对于初学者，在一台机器上配置好Apache服务器之后，可利用它相应对HTML页面的访问请求。实际上，Tomcat部分是Apache服务器的扩展，但它是独立运行的，所以当你运行Tomcat时，它是作为一个福利的进程运行的。</p>
+<hr>
+<h1 id="1-安装Tomcat"><a href="#1-安装Tomcat" class="headerlink" title="1. 安装Tomcat"></a>1. 安装Tomcat</h1><p>Tomcat的安装分为安装JDK和安装Tomcat两个步骤。JDK（Java Development Kit）是Sunday Microsystems针对Java开发的产品。自从Java推出依赖，JDK已经称为使用最广泛的Java JDK。JDK是整个Java的核心，它包括了Java运行环境、Java工具和Java基础的类库。所以想要运行Java程序必须要有JDK的支持，而安装Tomcat的前提也是安装好JDK。</p>
+<h2 id="1-1-安装JDK"><a href="#1-1-安装JDK" class="headerlink" title="1.1. 安装JDK"></a>1.1. 安装JDK</h2><p>可以去JDK的<a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank" rel="external">官网</a>去下载，但是这个下载地址不能通过wget命令来进行下载，只能先通过浏览器，然后再上传到Linux中。根据平台来下载相应的版本。在这里实验环境是CentOS7系统，软件包下载的是64位的。</p>
+<p>下载完JDK的包之后，把它上传到/usr/local/src/目录下，然后解压，命令如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/src/</span></div><div class="line"><span class="meta">#</span><span class="bash"> tar zxvf jdk-9.0.4_linux-x64_bin.tar.gz</span></div><div class="line"><span class="meta">#</span><span class="bash"> mv jdk-9.0.4 /usr/<span class="built_in">local</span>/jdk9.0.4</span></div></pre></td></tr></table></figure></p>
+<p>然后设置环境变量，操作方法如下：<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># vim /etc/profile</span></div><div class="line"><span class="comment">#&lt;==在末尾添加如下内容</span></div><div class="line"></div><div class="line">JAVA_HOME=<span class="regexp">/usr/local</span><span class="regexp">/jdk9.0.4/</span></div><div class="line">JAVA_BIN=<span class="regexp">/usr/local</span><span class="regexp">/jdk9.0.4/bin</span></div><div class="line">JRE_HOME=<span class="regexp">/usr/local</span><span class="regexp">/jdk9.0.4/jre</span></div><div class="line">PATH=$<span class="symbol">PATH:</span>/usr/local/jdk9.<span class="number">0.4</span>/<span class="symbol">bin:</span>/usr/local/jdk9.<span class="number">0.4</span>/</div><div class="line">jre/bin</div><div class="line">CLASSPATH=<span class="regexp">/usr/local</span><span class="regexp">/jdk9.0.4/jre</span><span class="regexp">/lib:/usr</span><span class="regexp">/local/jdk</span>9.<span class="number">0.4</span>/<span class="class"><span class="keyword">lib</span>:/<span class="title">usr</span>/<span class="title">local</span>/<span class="title">jdk9</span>.0.4/<span class="title">jre</span>/<span class="title">lib</span>/<span class="title">charsets</span>.<span class="title">jar</span></span></div></pre></td></tr></table></figure></p>
+<p>接下来：</p>
+<ul>
+<li>保存文件后，执行这个命令使其生效：<code>source /etc/profile</code></li>
+<li>检测设置是否正确，使用这个命令：<code>java -version</code>，如果显示如下内容，则说明配置正确：<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">java version <span class="string">"9.0.4"</span></div><div class="line">Java(TM) SE Runtime Environment (build 9.0.4+11)</div><div class="line">Java HotSpot(TM) 64-Bit<span class="built_in"> Server </span>VM (build 9.0.4+11, mixed mode)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>也许这一步的显示和上面的不一样，这可能是因为系统中调用了rpm的openjdk，请按照下面的方法检测：</p>
+<ul>
+<li>输入命令<code>which java</code></li>
+<li>如果结果为<code>/usr/bin/java</code>则说明这个rpm的JDK，而且执行<code>java -version</code>时会有<code>openjdk</code>字样。</li>
+<li><p>其实我们也可以直接使用<code>openjdk</code>来配合Tomcat，但是在这个实验里，我们还是使用JDK吧。这时如果系统中已经存在了openjdk，则我们需要做一个临时处理：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># mv <span class="regexp">/usr/</span>bin<span class="regexp">/java /u</span>sr<span class="regexp">/bin/</span>java_bak</div><div class="line"># <span class="keyword">source</span> <span class="regexp">/etc/</span>profile</div></pre></td></tr></table></figure>
+</li>
+<li><p>再次执行<code>java -version</code>，显示的结果就和上面的一样了。</p>
+</li>
+</ul>
+<h2 id="1-2-安装Tomcat"><a href="#1-2-安装Tomcat" class="headerlink" title="1.2. 安装Tomcat"></a>1.2. 安装Tomcat</h2><p>安装JDK只不过是为安装Tomcat做准备工作，现在才是正式安装Tomcat。</p>
+<p>首先下载软件包，可以到Tomcat的<a href="http://tomcat.apache.org/" target="_blank" rel="external">官网</a>去下载，在工作中可以根据需求来选择合适的版本。这里以Tomcat8版本作为演示。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/src/</span></div><div class="line"><span class="meta">#</span><span class="bash"> wget https://mirrors.tuna.tsinghua.edu.cn/apache/tomcat/tomcat-8/v8.5.29/bin/apache-tomcat-8.5.29.tar.gz</span></div></pre></td></tr></table></figure></p>
+<p>安装过程如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> tar zxvf apache-tomcat-8.5.29.tar.gz</span></div><div class="line"><span class="meta">#</span><span class="bash"> mv apache-tomcat-8.5.29 /usr/<span class="built_in">local</span>/tomcat</span></div></pre></td></tr></table></figure></p>
+<p>因为是二进制包，所以免去了编译的过程，启动Tomcat，命如下：<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># /usr/local/tomcat/bin/startup.sh</span></div><div class="line">Using CATALINA_BASE:   <span class="meta-keyword">/usr/</span>local/tomcat</div><div class="line">Using CATALINA_HOME:   <span class="meta-keyword">/usr/</span>local/tomcat</div><div class="line">Using CATALINA_TMPDIR: <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/tomcat/</span>temp</div><div class="line">Using JRE_HOME:        <span class="meta-keyword">/usr/</span>local/jdk9<span class="number">.0</span><span class="number">.4</span></div><div class="line">Using CLASSPATH:       <span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/tomcat/</span>bin/bootstrap.jar:<span class="meta-keyword">/usr/</span>local<span class="meta-keyword">/tomcat/</span>bin/tomcat-juli.jar</div><div class="line">Tomcat started.</div></pre></td></tr></table></figure></p>
+<p>查看是否启动成功，命令如下：<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"># ps aux | grep tomcat | grep -v grep  #&lt;==查看是否有Java相关进程</div><div class="line">]# netstat -lnp | grep java		#&lt;==也可以查看监听端口</div><div class="line">tcp6       <span class="number">0</span>      <span class="number">0</span> :::<span class="number">8080</span>            :::*        LISTEN      <span class="number">1112</span>/java</div><div class="line">tcp6       <span class="number">0</span>      <span class="number">0</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">8005</span>     :::*        LISTEN      <span class="number">1112</span>/java</div><div class="line">tcp6       <span class="number">0</span>      <span class="number">0</span> :::<span class="number">8009</span>            :::*        LISTEN      <span class="number">1112</span>/java</div><div class="line">#&lt;==正常情况应该会有三个端口：<span class="number">8009</span>、<span class="number">8005</span>和<span class="number">8080</span></div><div class="line">#&lt;==其中<span class="number">8080</span>为提供Web服务的端口，<span class="number">8005</span>为管理端口，<span class="number">8009</span>为第三方服务调用的端口（比如httpd和Tomcat结合时会用到</div></pre></td></tr></table></figure></p>
+<p>若想开机启动，需要把命令放到<code>/etc/rc.d/rc.local</code>文件里。如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"/usr/local/tomcat/bin/startup.sh"</span> &gt;&gt; /etc/rc.d/rc.local</span></div><div class="line"><span class="meta">#</span><span class="bash"> chmod a+x /etc/rc.d/rc.local</span></div><div class="line"><span class="meta">#</span><span class="bash">&lt;==默认rc.local文件没有x权限，所以需要加一下</span></div></pre></td></tr></table></figure></p>
+<p>然后在浏览器中输入<code>http://IP:8080</code>就可以看到Tomcat的默认页面了。</p>
+<hr>
+<h1 id="2-配置Tomcat"><a href="#2-配置Tomcat" class="headerlink" title="2. 配置Tomcat"></a>2. 配置Tomcat</h1><p>Tomcat的安装过程非常简单，但是我们还需要学会如何配置Tomcat。在生产环境中关于Tomcat的配置其实并不多，下面是几个常用的配置。</p>
+<h2 id="2-1-配置Tomcat服务的访问端口"><a href="#2-1-配置Tomcat服务的访问端口" class="headerlink" title="2.1. 配置Tomcat服务的访问端口"></a>2.1. 配置Tomcat服务的访问端口</h2><p>Tomcat的默认启动端口是8080，如果你想改为80，则需要修改<code>server.xml</code>文件。操作如下：</p>
+<ul>
+<li>打开server.xml文件：<code>vim /usr/local/tomcat/conf/server.xml</code></li>
+<li>找到<code>&lt;Connector port=&quot;8080&quot; protocol=&quot;HTTP/1.1&quot;</code>修改为<code>&lt;Connector port=&quot;80&quot; protocol=&quot;HTTP/1.1&quot;</code></li>
+<li>保存文件后重启Tomcat，命令如下：<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> /usr/<span class="built_in">local</span>/tomcat/bin/shutdown.sh</span></div><div class="line"><span class="meta">#</span><span class="bash"> /usr/<span class="built_in">local</span>/tomcat/bin/startup.sh</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>Tomcat的关闭和启动优点特殊，需要使用它自带的脚本实现。其实在生产环境中，Tomcat会使用8080端口，而80端口是留给Nginx的。也就是说要想访问Tomcat，需要使用Nginx代理。</p>
+<h2 id="2-2-Tomcat的虚拟主机"><a href="#2-2-Tomcat的虚拟主机" class="headerlink" title="2.2. Tomcat的虚拟主机"></a>2.2. Tomcat的虚拟主机</h2><p>关于虚拟主机，在Tomcat中也有这么一说。</p>
+<p>先来看一下配置文件server.xml中的结构，其中<code>&lt;!--</code>和<code>--&gt;</code>之间的内容为注释，所以把它们过滤掉，剩下的内容如下：<br><figure class="highlight django"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="php"><span class="meta">&lt;?</span>xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span><span class="meta">?&gt;</span></span></span></div><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">Server</span> <span class="attr">port</span>=<span class="string">"8005"</span> <span class="attr">shutdown</span>=<span class="string">"SHUTDOWN"</span>&gt;</span></span></div><div class="line"><span class="xml">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.startup.VersionLoggerListener"</span> /&gt;</span></span></div><div class="line"><span class="xml">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.core.AprLifecycleListener"</span> <span class="attr">SSLEngine</span>=<span class="string">"on"</span> /&gt;</span></span></div><div class="line"><span class="xml">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.core.JreMemoryLeakPreventionListener"</span> /&gt;</span></span></div><div class="line"><span class="xml">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"</span> /&gt;</span></span></div><div class="line"><span class="xml">  <span class="tag">&lt;<span class="name">Listener</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.core.ThreadLocalLeakPreventionListener"</span> /&gt;</span></span></div><div class="line"><span class="xml">  <span class="tag">&lt;<span class="name">GlobalNamingResources</span>&gt;</span></span></div><div class="line"><span class="xml">    <span class="tag">&lt;<span class="name">Resource</span> <span class="attr">name</span>=<span class="string">"UserDatabase"</span> <span class="attr">auth</span>=<span class="string">"Container"</span></span></span></div><div class="line"><span class="xml">              type="org.apache.catalina.UserDatabase"</span></div><div class="line"><span class="xml">              description="User database that can be updated and saved"</span></div><div class="line"><span class="xml">              factory="org.apache.catalina.users.MemoryUserDatabaseFactory"</span></div><div class="line"><span class="xml">              pathname="conf/tomcat-users.xml" /&gt;</span></div><div class="line"><span class="xml">  <span class="tag">&lt;/<span class="name">GlobalNamingResources</span>&gt;</span></span></div><div class="line"><span class="xml">  <span class="tag">&lt;<span class="name">Service</span> <span class="attr">name</span>=<span class="string">"Catalina"</span>&gt;</span></span></div><div class="line"><span class="xml">    <span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">"80"</span> <span class="attr">protocol</span>=<span class="string">"HTTP/1.1"</span></span></span></div><div class="line"><span class="xml">               connectionTimeout="20000"</span></div><div class="line"><span class="xml">               redirectPort="8443" /&gt;</span></div><div class="line"><span class="xml">    <span class="tag">&lt;<span class="name">Connector</span> <span class="attr">port</span>=<span class="string">"8009"</span> <span class="attr">protocol</span>=<span class="string">"AJP/1.3"</span> <span class="attr">redirectPort</span>=<span class="string">"8443"</span> /&gt;</span></span></div><div class="line"><span class="xml">    <span class="tag">&lt;<span class="name">Engine</span> <span class="attr">name</span>=<span class="string">"Catalina"</span> <span class="attr">defaultHost</span>=<span class="string">"localhost"</span>&gt;</span></span></div><div class="line"><span class="xml">      <span class="tag">&lt;<span class="name">Realm</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.realm.LockOutRealm"</span>&gt;</span></span></div><div class="line"><span class="xml">        <span class="tag">&lt;<span class="name">Realm</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.realm.UserDatabaseRealm"</span></span></span></div><div class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">Realm</span>&gt;</span></span></div><div class="line"><span class="xml">      <span class="tag">&lt;<span class="name">Host</span> <span class="attr">name</span>=<span class="string">"localhost"</span>  <span class="attr">appBase</span>=<span class="string">"webapps"</span></span></span></div><div class="line"><span class="xml">            unpackWARs="true" autoDeploy="true"&gt;</span></div><div class="line"><span class="xml">        <span class="tag">&lt;<span class="name">Valve</span> <span class="attr">className</span>=<span class="string">"org.apache.catalina.valves.AccessLogValve"</span> <span class="attr">directory</span>=<span class="string">"logs"</span></span></span></div><div class="line"><span class="xml">               prefix="localhost_access_log" suffix=".txt"</span></div><div class="line"><span class="xml">               pattern="%h %l %u %t &amp;quot;%r&amp;quot; %s %b" /&gt;</span></div><div class="line"><span class="xml">      <span class="tag">&lt;/<span class="name">Host</span>&gt;</span></span></div><div class="line"><span class="xml">    <span class="tag">&lt;/<span class="name">Engine</span>&gt;</span></span></div><div class="line"><span class="xml">  <span class="tag">&lt;/<span class="name">Service</span>&gt;</span></span></div><div class="line"><span class="xml"><span class="tag">&lt;/<span class="name">Server</span>&gt;</span></span></div></pre></td></tr></table></figure></p>
+<p>其中<code>&lt;Host&gt;</code>和<code>&lt;/Host&gt;</code>之间的配置就是虚拟主机配置部分，<code>name</code>定义域名，<code>appBase</code>定义应用的目录。Java的应用通常是一个jar的压缩包，将jar的压缩包放到<code>appBase</code>目录下面即可。</p>
+<p>刚才安装完所访问的Tomcat的页面其实就是在<code>appBase</code>目录下面，不过是在它子目录ROOT里：<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># ls /usr/local/tomcat/webapps/ROOT/</span></div><div class="line">asf-logo-wide.svg  <span class="keyword">bg-upper.png </span>      tomcat.gif</div><div class="line"><span class="keyword">bg-button.png </span>     favicon.ico        tomcat.png</div><div class="line"><span class="keyword">bg-middle.png </span>     index.<span class="keyword">jsp </span>         tomcat-power.gif</div><div class="line"><span class="keyword">bg-nav-item.png </span>   RELEASE-NOTES.txt  tomcat.svg</div><div class="line"><span class="keyword">bg-nav.png </span>        tomcat.css         WEB-INF</div></pre></td></tr></table></figure></p>
+<p>其中<code>index.jsp</code>就是Tomcat的默认页面。也可以用<code>curl</code>命令来访问一下Tomcat.gif图片：<br><figure class="highlight ldif"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># curl localhost:80/tomcat.gif -I</span></div><div class="line"><span class="attribute">HTTP/1.1 200</span></div><div class="line"><span class="attribute">Accept-Ranges</span>: bytes</div><div class="line"><span class="attribute">ETag</span>: W/"2066-1520255503000"</div><div class="line"><span class="attribute">Last-Modified</span>: Mon, 05 Mar 2018 13:11:43 GMT</div><div class="line"><span class="attribute">Content-Type</span>: image/gif</div><div class="line"><span class="attribute">Content-Length</span>: 2066</div><div class="line"><span class="attribute">Date</span>: Thu, 15 Mar 2018 04:48:55 GMT</div></pre></td></tr></table></figure></p>
+<p>在appBase（即/usr/local/tomcat/webapps）目录下面有很多子目录，每一个子目录都可以被访问，你可以把自定义的应用放到<code>webapps</code>目录里（假设应用名字为theshu，theshu为一个目录），然后可以通过<code>http://IP/theshu/</code>来访问这个应用。如果直接访问IP，后面不加二级目录，则默认会访问ROOT目录下面的文件，加上二级目录会访问二级目录下面的文件。</p>
+<p>下面再来增加一个虚拟主机，并定义域名，编辑server.xml，在<code>&lt;/Host&gt;</code>下一行插入新的<code>&lt;Host&gt;</code>，内容如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;Host name=<span class="string">"www.123.cn"</span> appBase=<span class="string">"/data/tomcatweb/"</span>&gt;</div><div class="line">	unpackWARs=<span class="string">"false"</span> sutoDeploy=<span class="string">"true"</span></div><div class="line">	xmlValidation=<span class="string">"false"</span> xmlNamespaceAware=<span class="string">"false"</span>&gt;</div><div class="line">	&lt;Context path=<span class="string">""</span> docBase=<span class="string">"/data/tomcatweb/"</span> debug=<span class="string">"O"</span> reloadable=<span class="string">"true"</span> crossContext=<span class="string">"true"</span>/&gt;</div><div class="line">&lt;<span class="regexp">/Host&gt;</span></div></pre></td></tr></table></figure></p>
+<p>上述配置的说明：</p>
+<ul>
+<li>其中多了一个<code>docBase</code>，这个参数用来定义网站的文件存放路径，如果不定义，默认是在<code>appBase/ROOT</code>下面的。定义了<code>docBase</code>就以该目录为主了</li>
+<li>其中<code>appBase</code>和<code>docBase</code>可以一样。</li>
+</ul>
+<p>创建目录和测试文件并测试，过程如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash">&lt;==创建目录和测试文件</span></div><div class="line"><span class="meta">#</span><span class="bash"> mkdir -p /data/tomcatweb</span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> <span class="string">"Tomcat test page."</span> &gt; /dta/tomcatweb/1.html</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash">&lt;==修改完配置文件后重启Tomcat</span></div><div class="line"><span class="meta">#</span><span class="bash"> /usr/<span class="built_in">local</span>/tomcat/bin/shutdown.sh</span></div><div class="line"><span class="meta">#</span><span class="bash"> /usr/<span class="built_in">local</span>/tomcat/bin/startup.sh</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash">&lt;==用curl访问一下刚才创建的1.html</span></div><div class="line"><span class="meta">#</span><span class="bash"> curl -x127.0.0.1:80 www.123.cn/1.html</span></div><div class="line">Tomcat test page.</div></pre></td></tr></table></figure></p>
+<h2 id="2-3-测试Tomcat解析JSP"><a href="#2-3-测试Tomcat解析JSP" class="headerlink" title="2.3. 测试Tomcat解析JSP"></a>2.3. 测试Tomcat解析JSP</h2><p>上面的演示仅仅是把Tomcat作为一个普通的Web Server，其实Tomcat主要用来解析JSP页面。下面将创建一个JSP的测试页面，如下所示：<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># vim /data/tomcatweb/111.jsp</span></div><div class="line"><span class="meta">#&lt;==编写如下内容</span></div><div class="line"></div><div class="line"><span class="params">&lt;html&gt;</span></div><div class="line">	<span class="params">&lt;body&gt;</span></div><div class="line">		<span class="params">&lt;center&gt;</span></div><div class="line">			Now time is: <span class="params">&lt;%=new java.util.Date()%&gt;</span></div><div class="line">		<span class="params">&lt;/center&gt;</span></div><div class="line">	<span class="params">&lt;/body&gt;</span></div><div class="line"><span class="params">&lt;/html&gt;</span></div></pre></td></tr></table></figure></p>
+<p>保存文件后使用curl进行测试，如下所示：<br><figure class="highlight apache"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># curl -x127.0.0.1:80 www.123.cn/111.jsp</span></div><div class="line"><span class="section">&lt;html&gt;</span></div><div class="line">        <span class="section">&lt;body&gt;</span></div><div class="line">                <span class="section">&lt;center&gt;</span></div><div class="line">                        <span class="attribute">Now</span> time is: Thu Mar 15 13:35:30 CST 2018</div><div class="line">                <span class="section">&lt;/center&gt;</span></div><div class="line">        <span class="section">&lt;/body&gt;</span></div><div class="line"><span class="section">&lt;/html&gt;</span></div></pre></td></tr></table></figure></p>
+<p>可以看到，中间的那行代码被解析成当前系统的时间了。</p>
+<h2 id="2-4-Tomcat日志"><a href="#2-4-Tomcat日志" class="headerlink" title="2.4. Tomcat日志"></a>2.4. Tomcat日志</h2><p>Tomcat的日志目录为<code>/usr/local/tomcat/logs</code>，主要有四大类日志：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"># cd /usr/local/tomcat/logs &amp;&amp; ls</div><div class="line">catalina<span class="number">.2018</span><span class="number">-03</span><span class="number">-15.</span>log</div><div class="line">catalina.out</div><div class="line">host-manager<span class="number">.2018</span><span class="number">-03</span><span class="number">-15.</span>log</div><div class="line">localhost<span class="number">.2018</span><span class="number">-03</span><span class="number">-15.</span>log</div><div class="line">localhost_access_log<span class="number">.2018</span><span class="number">-03</span><span class="number">-15.</span>txt</div><div class="line">manager<span class="number">.2018</span><span class="number">-03</span><span class="number">-15.</span>log</div></pre></td></tr></table></figure></p>
+<p>其中：</p>
+<ul>
+<li><code>catalina</code>开头的日志为Tomcat的综合日志，它记录Tomcat服务相关信息，也会记录错误日志。</li>
+<li><code>catalina.2018-03-15.log</code>和<code>catalina.out</code>内容相同，前者会每天生成一个新的日志。</li>
+<li><code>host-manager</code>和<code>manager</code>为管理相关的日志，其中<code>host-manager</code>为虚拟主机的管理日志。</li>
+<li><code>localhost</code>和<code>localhost_access</code>为虚拟主机相关日志，其中带<code>access</code>字样的日志为访问日志，不带<code>access</code>字样的为默认虚拟主机的错误日志。</li>
+</ul>
+<p>访问日志默认不会生成，需要在server.xml中配置一下。具体方法是在对应虚拟主机的<code>&lt;Host&gt;&lt;/Host&gt;</code>里面加入下面的配置（加入域名为123.cn）：<br><figure class="highlight perl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;Valve className=<span class="string">"org.apache.catalina.valves.AccessLogValve"</span> directory=<span class="string">"logs"</span></div><div class="line">	prefix=<span class="string">"123.cn_access_log"</span> suffix=<span class="string">".txt"</span></div><div class="line">	pattern=<span class="string">"%h %l %u %t &amp;quot;%r&amp;quot; %s %b"</span> /&gt;</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li><code>prefix</code>定义访问日志的前缀</li>
+<li><code>suffix</code>定义日志的后缀</li>
+<li><code>pattern</code>定义日志格式</li>
+<li>新增加的虚拟主机默认并不会生成类似默认虚拟主机的那个<code>localhost.日期.log</code>日志，错误日志会统一记录到<code>catalina.out</code>中。</li>
+</ul>
+<p>关于Tomcat日志，最需要关注<code>catalina.out</code>，出现问题时应该首先想到去查看它。</p>
+<h2 id="2-5-Tomcat连接MySQL"><a href="#2-5-Tomcat连接MySQL" class="headerlink" title="2.5. Tomcat连接MySQL"></a>2.5. Tomcat连接MySQL</h2><p>Tomcat连接MySQL是通过自带的JDBC驱动实现的，网上有很多资料说需要下载mysql-connector-java-xxx.jar（其中xxx为版本号），并放到Tomcat的lib目录下才可以。但是有人做实验得出结论：无需做此步操作。</p>
+<p>如果需要mysql-connector-java-xxx.tar驱动，则按照如下方式操作：</p>
+<ul>
+<li>官网下载地址：<a href="http://dev.mysql.com/downloads/connector/j/" target="_blank" rel="external">http://dev.mysql.com/downloads/connector/j/</a></li>
+<li>以<code>mysql-connector-java-5.1.25.tar.gz</code>为例来进行操作</li>
+<li>将mysql-connector-java-5.1.25.tar.gz解压放在/usr/local/下</li>
+<li><code>cd mysql-connector-java-5.1.25</code></li>
+<li><code>cp mysql-connector-java-5.1.25-bin.jar /usr/local/tomcat/lib</code></li>
+<li>重启Tomcat：<code>/usr/local/tomcat/bin/shutdown.sh &amp;&amp; /usr/local/tomcat/bin/startup.sh</code></li>
+</ul>
+<hr>
+<p>接下来让我们进行Tomcat连接MySQL的实验！</p>
+<p>首先，配置MySQL，创建实验用的库、表以及用户：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> mysql -uroot -p<span class="string">'123456'</span></span></div><div class="line"><span class="meta">mysql&gt;</span><span class="bash"> create database java_test;</span></div><div class="line"><span class="meta">mysql&gt;</span><span class="bash"> use java_test;</span></div><div class="line"><span class="meta">mysql&gt;</span><span class="bash"> grant all on java_test.* to <span class="string">'java'</span>@<span class="string">'127.0.0.1'</span> identified by <span class="string">'aminglinux'</span>;</span></div><div class="line"><span class="meta">mysql&gt;</span><span class="bash"> create table aminglinux (`id` int(4), `name` char(40));</span></div><div class="line"><span class="meta">mysql&gt;</span><span class="bash"> insert into aminglinux values (1, <span class="string">'abc'</span>);</span></div><div class="line"><span class="meta">mysql&gt;</span><span class="bash"> insert into aminglinux values (2, <span class="string">'aaa'</span>);</span></div><div class="line"><span class="meta">mysql&gt;</span><span class="bash"> insert into aminglinux values (3, <span class="string">'bbb'</span>);</span></div></pre></td></tr></table></figure></p>
+<p>创建完表以用户后， 退出MySQL，并验证用户是否可用：<br><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># mysql -ujava -paminglinux -h127.0.0.1</span></div><div class="line">Warning: Using <span class="keyword">a</span> password <span class="keyword">on</span> <span class="title">the</span> <span class="title">command</span> <span class="title">line</span> <span class="title">interface</span> <span class="title">can</span> <span class="title">be</span> <span class="title">insecure</span>.</div><div class="line">Welcome <span class="built_in">to</span> <span class="keyword">the</span> MySQL monitor.  Commands <span class="function"><span class="keyword">end</span> <span class="title">with</span> ; <span class="title">or</span> \<span class="title">g</span>.</span></div><div class="line">Your MySQL connection id is <span class="number">4</span></div><div class="line">Server <span class="built_in">version</span>: <span class="number">5.6</span><span class="number">.35</span> MySQL Community Server (GPL)</div><div class="line"></div><div class="line">Copyright (c) <span class="number">2000</span>, <span class="number">2016</span>, Oracle <span class="keyword">and</span>/<span class="keyword">or</span> its affiliates. All rights reserved.</div><div class="line"></div><div class="line">Oracle is <span class="keyword">a</span> registered trademark <span class="keyword">of</span> Oracle Corporation <span class="keyword">and</span>/<span class="keyword">or</span> its</div><div class="line">affiliates. Other names may be trademarks <span class="keyword">of</span> their respective</div><div class="line">owners.</div><div class="line"></div><div class="line">Type <span class="string">'help;'</span> <span class="keyword">or</span> <span class="string">'\h'</span> <span class="keyword">for</span> help. Type <span class="string">'\c'</span> <span class="built_in">to</span> <span class="built_in">clear</span> <span class="keyword">the</span> current input statement.</div><div class="line"></div><div class="line">mysql&gt;</div></pre></td></tr></table></figure></p>
+<p>正常进入MySQL，说明刚刚创建的java用户没有问题。接着去配置Tomcat相关的配置文件：<br><figure class="highlight vala"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># vim /usr/local/tomcat/conf/context.xml</span></div><div class="line"><span class="meta">#&lt;==在&lt;Context&gt;上面增加一下内容</span></div><div class="line"></div><div class="line">    &lt;Resource name=<span class="string">"jdbc/mytest"</span></div><div class="line">        auth=<span class="string">"Container"</span></div><div class="line">        type=<span class="string">"javax.sql.DataSource"</span></div><div class="line">        maxActive=<span class="string">"100"</span> maxIdle=<span class="string">"30"</span> maxWait=<span class="string">"10000"</span></div><div class="line">        username=<span class="string">"java"</span> password=<span class="string">"aminglinux"</span></div><div class="line">        driverClassName=<span class="string">"com.mysql.jdbc.Driver"</span></div><div class="line">        url=<span class="string">"jdbc:mysql://127.0.0.1:3306/java_test"</span>&gt;</div><div class="line">    &lt;/Resource&gt;</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>上面配置中有个地方需要注意一下，<code>name</code>定义为<code>jdbc/mytest</code>，这里的<code>mytest</code>可以自定义，后面还会用到它。</li>
+<li><code>username</code>为MySQL的用户名，<code>password</code>为密码，<code>usl</code>定义MySQL的IP、端口以及库名。</li>
+</ul>
+<p>保存该文件后，还需要更改另一个配置文件：<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># vim /usr/local/tomcat/webapps/ROOT/WEB-INF/web.xml</span></div><div class="line"><span class="meta">#&lt;==在&lt;/web-app&gt;上面增加</span></div><div class="line"></div><div class="line"><span class="params">&lt;resource-ref&gt;</span></div><div class="line">	<span class="params">&lt;description&gt;</span>DB Connection<span class="params">&lt;/description&gt;</span></div><div class="line">	<span class="params">&lt;res-ref-name&gt;</span>jdbc/mytest<span class="params">&lt;/res-ref-name&gt;</span></div><div class="line">	<span class="params">&lt;res-type&gt;</span>javax.sql.DataSource<span class="params">&lt;/res-type&gt;</span></div><div class="line">	<span class="params">&lt;res-auth&gt;</span>Container<span class="params">&lt;/res-auth&gt;</span></div><div class="line"><span class="params">&lt;/resource-ref&gt;</span></div></pre></td></tr></table></figure></p>
+<p>其实每一个应用（即webapps/ROOT、webapps/aming等）目录下都应该有一个WEB-INF目录，它里面会有对应的配置文件，比如web.xml就是用来定义JDBC相关资源的，其中<code>res-ref-name</code>和前面定义的<code>Rource name</code>保持一致。</p>
+<p>既然选择了<code>webapps/ROOT</code>作为实验应用对象，就需要在ROOT目录下面创建测试JSP文件（用浏览器访问的文件）：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># vim /usr/local/tomcat/webapps/ROOT/t.jsp</span></div><div class="line"><span class="comment">#&lt;==加入如下内容</span></div><div class="line"></div><div class="line">&lt;%@page <span class="attribute">import</span>=<span class="string">"java.sql.*"</span>%&gt;</div><div class="line">&lt;%@page <span class="attribute">import</span>=<span class="string">"javax.sql.DataSource"</span>%&gt;</div><div class="line">&lt;%@page <span class="attribute">import</span>=<span class="string">"javax.naming.*"</span>%&gt;</div><div class="line"></div><div class="line">&lt;%</div><div class="line">Context ctx = new InitialContext();</div><div class="line">DataSource ds = (DataSource) ctx</div><div class="line">.lookup(<span class="string">"java:comp/env/jdbc/mytest"</span>);</div><div class="line">Connection conn = ds.getConnection();</div><div class="line">Statement state = conn.createStatement();</div><div class="line">String sql = <span class="string">"select * from aminglinux"</span>;</div><div class="line">ResultSet rs = state.executeQuery(sql);</div><div class="line"></div><div class="line"><span class="keyword">while</span> (rs.next()) &#123;</div><div class="line">out.println(rs.getString(<span class="string">"id"</span>) +<span class="string">"&lt;tr&gt;"</span>);</div><div class="line">out.println(rs.getString(<span class="string">"name"</span>) +<span class="string">"&lt;tr&gt;&lt;br&gt;"</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line">rs.close();</div><div class="line">state.close();</div><div class="line">conn.close();</div><div class="line">%&gt;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>说明：这个JSP脚本可能你会看不懂，因为这是Java语言写的程序代码，细节我们不用太过在意，只需要知道这个脚本会去连接MySQL，并查询一个库、表的数据即可。只是用来测试环境的。</p>
+</blockquote>
+<p>保存后，重启一下Tomcat：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> /usr/<span class="built_in">local</span>/tomcat/bin/shutdown.sh</span></div><div class="line"><span class="meta">#</span><span class="bash"> /usr/<span class="built_in">local</span>/tomcat/bin/startup.sh</span></div></pre></td></tr></table></figure></p>
+<p>然后再浏览器里面访问<code>http://IP/t.jsp</code>，它会查询java_test库的aminglinux表，并列出具体的数据来。并且它和直接用MySQL命令行查询得到的结果是一致的：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">]# mysql -ujava -paminglinux -h127.0.0.1 java_test -e <span class="string">"select * from aminglinux"</span></div><div class="line">Warning: Using a password on the command line<span class="built_in"> interface </span>can be insecure.</div><div class="line">+------+------+</div><div class="line">| id   | name |</div><div class="line">+------+------+</div><div class="line">|    1 | abc  |</div><div class="line">|    2 |<span class="built_in"> aaa </span> |</div><div class="line">|    3 | bbb  |</div><div class="line">+------+------+</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术/" rel="tag"><i class="fa fa-tag"></i> 技术</a>
+          
+            <a href="/tags/Tomcat/" rel="tag"><i class="fa fa-tag"></i> Tomcat</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/14/技术/014. Samba部署和优化/" rel="next" title="Samba部署和优化">
+                <i class="fa fa-chevron-left"></i> Samba部署和优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/16/技术/016. MySQL主从复制的配置/" rel="prev" title="MySQL主从复制的配置">
+                MySQL主从复制的配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">90</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-安装Tomcat"><span class="nav-text">1. 安装Tomcat</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-安装JDK"><span class="nav-text">1.1. 安装JDK</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-安装Tomcat"><span class="nav-text">1.2. 安装Tomcat</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-配置Tomcat"><span class="nav-text">2. 配置Tomcat</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-配置Tomcat服务的访问端口"><span class="nav-text">2.1. 配置Tomcat服务的访问端口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-Tomcat的虚拟主机"><span class="nav-text">2.2. Tomcat的虚拟主机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-测试Tomcat解析JSP"><span class="nav-text">2.3. 测试Tomcat解析JSP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-Tomcat日志"><span class="nav-text">2.4. Tomcat日志</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-Tomcat连接MySQL"><span class="nav-text">2.5. Tomcat连接MySQL</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

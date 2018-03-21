@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="技术,MySQL," />
+
+
+<meta name="description" content="MySQL Replication又称AB复制或者主从复制，它主要用于MySQL的实时备份或者读写分离。在配置之前先做一下准备工作：配置两台MySQL服务器，或者在一台服务器上配置两个端口。在下面的实验中，就是在一台服务器上运行了两个MySQL。 1. 在一台服务器上配置两个MySQL服务配置MySQL服务的详细步骤请参考LAMP源码方式安装的那篇学习笔记。在这里，假设已经搭建好了一个MySQL服">
+<meta name="keywords" content="技术,MySQL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL主从复制的配置">
+<meta property="og:url" content="http://www.theshu.top/2018/03/16/技术/016. MySQL主从复制的配置/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="MySQL Replication又称AB复制或者主从复制，它主要用于MySQL的实时备份或者读写分离。在配置之前先做一下准备工作：配置两台MySQL服务器，或者在一台服务器上配置两个端口。在下面的实验中，就是在一台服务器上运行了两个MySQL。 1. 在一台服务器上配置两个MySQL服务配置MySQL服务的详细步骤请参考LAMP源码方式安装的那篇学习笔记。在这里，假设已经搭建好了一个MySQL服">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-16T10:55:39.817Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL主从复制的配置">
+<meta name="twitter:description" content="MySQL Replication又称AB复制或者主从复制，它主要用于MySQL的实时备份或者读写分离。在配置之前先做一下准备工作：配置两台MySQL服务器，或者在一台服务器上配置两个端口。在下面的实验中，就是在一台服务器上运行了两个MySQL。 1. 在一台服务器上配置两个MySQL服务配置MySQL服务的详细步骤请参考LAMP源码方式安装的那篇学习笔记。在这里，假设已经搭建好了一个MySQL服">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/03/16/技术/016. MySQL主从复制的配置/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>MySQL主从复制的配置 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/16/技术/016. MySQL主从复制的配置/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">MySQL主从复制的配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T14:19:40+08:00">2018-03-16</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-16T18:55:39+08:00">2018-03-16</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>MySQL Replication</strong>又称<strong>AB复制</strong>或者<strong>主从复制</strong>，它主要用于MySQL的实时备份或者读写分离。在配置之前先做一下准备工作：配置两台MySQL服务器，或者在一台服务器上配置两个端口。在下面的实验中，就是在一台服务器上运行了两个MySQL。</p>
+<h1 id="1-在一台服务器上配置两个MySQL服务"><a href="#1-在一台服务器上配置两个MySQL服务" class="headerlink" title="1. 在一台服务器上配置两个MySQL服务"></a>1. 在一台服务器上配置两个MySQL服务</h1><p>配置MySQL服务的详细步骤请参考LAMP源码方式安装的那篇学习笔记。在这里，假设已经搭建好了一个MySQL服务，使用的是3306端口，那么下面再搭建一个3307端口的MySQL，方法如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> /usr/<span class="built_in">local</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> cp -r mysql mysql_2</span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> mysql_2</span></div><div class="line"><span class="meta">#</span><span class="bash"> ./scripts/mysql_install_db --user=mysql --datadir=/data/mysql2</span></div></pre></td></tr></table></figure></p>
+<p>初始化数据库目录，显示两个OK并且生成/data/mysql2目录才正确；否则请仔细查看错误信息。</p>
+<p>复制配置文件到mysql_2目录下，并修改相关项目，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> cp /etc/my.cnf /usr/<span class="built_in">local</span>/mysql_2/</span></div><div class="line"><span class="meta">#</span><span class="bash"> vim /usr/<span class="built_in">local</span>/mysql_2/my.cnf</span></div></pre></td></tr></table></figure></p>
+<p>需要修改一些参数，更改的参数如下：<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="attr">log_bin</span> = aminglinux2</div><div class="line"><span class="attr">basedir</span> = /usr/local/mysql_2</div><div class="line"><span class="attr">datadir</span> = /data/mysql2</div><div class="line"><span class="attr">port</span> = <span class="number">3307</span></div><div class="line"><span class="attr">server_id</span> = <span class="number">129</span></div><div class="line"><span class="attr">socket</span> = /tmp/mysql2.sock</div></pre></td></tr></table></figure></p>
+<p>保存配置文件后，复制启动脚本并编辑，操作过程如下：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># cp support-files/mysql.server /etc/init.d/mysqld2</span></div><div class="line"><span class="comment"># vim /etc/init.d/mysqld2</span></div><div class="line"></div><div class="line"><span class="comment">#&lt;==需要更改的地方有</span></div><div class="line"></div><div class="line"><span class="attribute">basedir</span>=/usr/local/mysql2</div><div class="line"><span class="attribute">datadir</span>=/data/mysql2</div><div class="line"><span class="variable">$bindir</span>/mysqld_safe <span class="attribute">--defaults-file</span>=<span class="variable">$basedir</span>/my.cnf <span class="attribute">--datadir</span>=<span class="string">"<span class="variable">$datadir</span>"</span> <span class="attribute">--pid-file</span>=<span class="string">"<span class="variable">$mysqld_pid_file_path</span>"</span> <span class="variable">$other_args</span> &gt; /dev/<span class="literal">null</span> &amp;</div></pre></td></tr></table></figure></p>
+<p>上面最后的特别长的为启动命令，增加<code>-defaults-file</code>参数，若不增加则不能正确找到mysq_2的配置文件。</p>
+<p>然后启动两个MySQL：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> /etc/init.d/mysqld start	<span class="comment">#&lt;==若之前的MySQL已经启动，则不用执行这一步</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> /etc/init.d/mysqld2 start</span></div></pre></td></tr></table></figure></p>
+<p>到此，已经成功在一台Linux服务器上面启动了两个MySQL，检查命令如下：<br><figure class="highlight tap"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># netstat -lnp | grep mysql</span></div><div class="line">tcp6 <span class="number"> 0 </span>    <span class="number"> 0 </span>:::3306   :::*       LISTEN       12910/mysqld</div><div class="line">tcp6 <span class="number"> 0 </span>    <span class="number"> 0 </span>:::3307   :::*       LISTEN       13122/mysqld</div><div class="line">unix <span class="number"> 2 </span>     [ ACC ]     STREAM     LISTENING    <span class="number"> 37251 </span>   12910/mysqld         /tmp/mysql.sock</div><div class="line">unix <span class="number"> 2 </span>     [ ACC ]     STREAM     LISTENING    <span class="number"> 37331 </span>   13122/mysqld         /tmp/mysql2.sock</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="2-配置Replication"><a href="#2-配置Replication" class="headerlink" title="2. 配置Replication"></a>2. 配置Replication</h1><p>现在要把3307端口的MySQL作为主（master），而把3306的MySQL作为从（slave）。为了让实验更加接近生产环境，先在master上创建一个库aming，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> mysql -uroot -S /tmp/mysql2.sock</span></div><div class="line"><span class="meta">mysql&gt;</span><span class="bash"> create database aming;</span></div><div class="line">Query OK, 1 row affected (0.00 sec)</div><div class="line"></div><div class="line"><span class="meta">mysql&gt;</span><span class="bash"> quit</span></div><div class="line">Bye</div></pre></td></tr></table></figure></p>
+<p>其中，<code>-S</code>（大写字母S）后面指定MySQL的socket文件路径，这也是登陆MySQL的一种方法。因为在这台服务器上面运行了两个MySQL端口，所以用<code>-S</code>这样的方法来进行区分。</p>
+<p>然后把mysql库的数据复制给aming库，如下所示：<br><figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># mysqldump -uroot -S <span class="regexp">/tmp/my</span>sql2.sock mysql &gt; <span class="regexp">/tmp/</span>aming.sql</div><div class="line"># mysql -uroot -S <span class="regexp">/tmp/my</span>sql2.sock aming &lt; <span class="regexp">/tmp/</span>aming.sql</div></pre></td></tr></table></figure></p>
+<h2 id="2-1-设置主（master）"><a href="#2-1-设置主（master）" class="headerlink" title="2.1. 设置主（master）"></a>2.1. 设置主（master）</h2><p>在上面的操作中，已经将mysql_2的配置文件设置过相关的参数，如果你没有设置，请添加：<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">server_id</span>=<span class="number">129</span></div><div class="line"><span class="attr">log_bin</span>=aminglinux2</div></pre></td></tr></table></figure></p>
+<p>另外还有两个参数你可以选择性地使用，如下所示：<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">binlog-do-db</span>=databasename1,databasename2</div><div class="line"><span class="attr">binlog-ignore-db</span>=databasename1,databasename2</div></pre></td></tr></table></figure></p>
+<p>其中：</p>
+<ul>
+<li><code>binlog-do-dv=</code>定义需要复制的数据库，多个数据库用英文的逗号分隔</li>
+<li><code>binlog-ignore-db=</code>定义不需要复制的数据库</li>
+<li>这两个参数用其中一个即可</li>
+</ul>
+<p>如果修改过配置文件，需要重启MySQL服务。重启服务的方法如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> /etc/init.d/mysqld2 restart</span></div></pre></td></tr></table></figure></p>
+<p>刚安装的mysql_2的root密码为空，所以需要设置一下root用户的访问密码，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> mysqladmin -uroot -S /tmp/mysql2.sock password <span class="string">'aminglinux.com'</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> mysql -uroot -S /tmp/mysql2.sock -p</span></div><div class="line">Enter password:	#&lt;==输入正确的密码后可登陆</div><div class="line"><span class="meta">mysql&gt;</span><span class="bash"> grant replication slave on *.* to <span class="string">'repl'</span>@<span class="string">'127.0.0.1'</span> identified by <span class="string">'123lalala'</span>;</span></div></pre></td></tr></table></figure></p>
+<p>说明：这里的<code>repl</code>是为从（slave）端设置的访问主（master）端的用户，也就是要完成主从复制的用户，密码为<code>123lalala</code>，这里的<code>127.0.0.1</code>为slave的IP。（在本实验中，所配置的master和slave都在本机，所以用127.0.0.1）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">mysql&gt;</span><span class="bash"> flush tables with <span class="built_in">read</span> lock;</span></div></pre></td></tr></table></figure>
+<p>说明：上面这一步的操作是锁定数据库的写操作。</p>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">mysql&gt; show master status;</div><div class="line"><span class="code">+--------------------+</span>----------<span class="code">+--------------+</span>------------------<span class="code">+-------------------+</span></div><div class="line">| File               | Position | Binlog<span class="emphasis">_Do_</span>DB | Binlog<span class="emphasis">_Ignore_</span>DB | Executed<span class="emphasis">_Gtid_</span>Set |</div><div class="line"><span class="code">+--------------------+</span>----------<span class="code">+--------------+</span>------------------<span class="code">+-------------------+</span></div><div class="line">| aminglinux2.000001 |   652888 |              |                  |                   |</div><div class="line"><span class="code">+--------------------+</span>----------<span class="code">+--------------+</span>------------------<span class="code">+-------------------+</span></div><div class="line">1 row in set (0.00 sec)</div></pre></td></tr></table></figure>
+<p>说明：上面的操作是擦好看master的状态，这些数据都是要记录的，一会要在slave端用到。</p>
+<h2 id="2-2-设置从（slave）"><a href="#2-2-设置从（slave）" class="headerlink" title="2.2. 设置从（slave）"></a>2.2. 设置从（slave）</h2><p>首先修改slave的配置文件my.cnf，执行如下命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> vim /etc/my.cnf</span></div></pre></td></tr></table></figure></p>
+<p>找到<code>server_id=</code>，设置成和master不一样的数字，若一样会导致后面的操作不成功。另外，在slave上，你也可以选择性地增加如下两行，对应master上增加的两行：<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">replicate-do-db</span>=databasename1,databasename2</div><div class="line"><span class="attr">replicate-ignore-db</span>=databasename1,databasename2</div></pre></td></tr></table></figure></p>
+<p>保存修改后重启MySQL，执行如下命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> /etc/init.d/mysqld restart</span></div></pre></td></tr></table></figure></p>
+<p>然后复制master上aming库的数据到slave上。因为master和slave都在一台服务器上，所以操作起来很简单。如果是在不同的机器上，就需要远程复制了（使用scp或rsync）。<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> mysqldump -uroot -S /tmp/mysql2.sock -p<span class="string">'aminglinux.com'</span> aming &gt; /tmp/aming1.sql</span></div><div class="line"><span class="meta">#</span><span class="bash"> mysql -uroot -S /tmp/mysql.sock -p123456 -e <span class="string">"create database aming"</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> mysql -uroot -S /tmp/mysql.sock -p123456 aming &lt; /tmp/aming1.sql</span></div></pre></td></tr></table></figure></p>
+<p>上面的第二行，使用了<code>-e</code>选项，它用来把MySQL的命令写到shell命令行下，其格式为：<code>-e &quot;command&quot;</code>。这个选项很实用，在工作中会经常用到，请熟记。</p>
+<p>复制完数据后，就需要在slave上配置了，如下所示：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># mysql -uroot -S /tmp/mysql.sock -p123456</span></div><div class="line">mysql&gt; stop slave;</div><div class="line">mysql&gt; change master <span class="keyword">to</span> <span class="attribute">master_host</span>=<span class="string">'127.0.0.1'</span>,</div><div class="line"><span class="attribute">master_port</span>=3307, <span class="attribute">master_user</span>=<span class="string">'repl'</span>,</div><div class="line"><span class="attribute">master_password</span>=<span class="string">'123lalala'</span>,</div><div class="line"><span class="attribute">master_log_file</span>=<span class="string">'aminglinux2.000001'</span>,</div><div class="line"><span class="attribute">master_log_pos</span>=652888;</div><div class="line">mysql&gt; start slave;</div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>change master这个命令是一条，打完逗号后可以按回车，直到你打分号才算结束。</li>
+<li>其中<code>master_log_file</code>和<code>master_log_pos</code>是在前面使用<code>show master status</code>命令查到的数据。</li>
+<li><p>执行完这一步后，需要在master上执行下面一步（建议打开两个终端，分别连两个MySQL）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> mysql -uroot -S /tmp/mysql2.sock -p<span class="string">'aminglinux.com'</span> -e <span class="string">"unlock tables"</span></span></div></pre></td></tr></table></figure>
+</li>
+<li><p>然后在slave端查看slave的状态，执行如下命令：</p>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql&gt; <span class="built_in">show</span> slave <span class="built_in">status</span>\G;</div></pre></td></tr></table></figure>
+</li>
+<li><p>确认以下两项参数都为Yes，如下所示：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">Slave_IO_Running:</span> <span class="literal">Yes</span></div><div class="line"><span class="attr">Slave_SQL_Running:</span> <span class="literal">Yes</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>还需要关注的地方有：</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="symbol">Seconds_Behind_Master:</span> <span class="number">0</span>	<span class="meta">#&lt;==为主从复制延迟的时间</span></div><div class="line"><span class="symbol">Last_IO_Errno:</span> <span class="number">0</span></div><div class="line"><span class="symbol">Last_IO_Error:</span></div><div class="line"><span class="symbol">Last_SQL_Errno:</span> <span class="number">0</span></div><div class="line"><span class="symbol">Last_SQL_Error:</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>如果主从不正常了，需要看这里的error信息。</p>
+</li>
+</ul>
+<h2 id="2-3-测试主从"><a href="#2-3-测试主从" class="headerlink" title="2.3. 测试主从"></a>2.3. 测试主从</h2><p>在master上执行如下命令：<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"># mysql -uroot -S /tmp/mysql2.sock -p'aminglinux.com' aming</div><div class="line">mysql&gt; select count(<span class="strong">*) from db;</span></div><div class="line"><span class="strong">+----------+</span></div><div class="line"><span class="strong">| count(*</span>) |</div><div class="line"><span class="code">+----------+</span></div><div class="line">|        2 |</div><div class="line"><span class="code">+----------+</span></div><div class="line">1 row in set (0.00 sec)</div><div class="line"></div><div class="line">mysql&gt; truncate table db;</div><div class="line">Query OK, 0 rows affected (0.01 sec)</div><div class="line"></div><div class="line">mysql&gt; select count(<span class="strong">*) from db;</span></div><div class="line"><span class="strong">+----------+</span></div><div class="line"><span class="strong">| count(*</span>) |</div><div class="line"><span class="code">+----------+</span></div><div class="line">|        0 |</div><div class="line"><span class="code">+----------+</span></div><div class="line">1 row in set (0.00 sec)</div></pre></td></tr></table></figure></p>
+<p>这样就清空了aming.db表的数据。下面查看slave上该表的数据，执行如下命令：<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"># mysql -uroot -S /tmp/mysql.sock -p123456 aming</div><div class="line">mysql&gt; select count(<span class="strong">*) from db;</span></div><div class="line"><span class="strong">+----------+</span></div><div class="line"><span class="strong">| count(*</span>) |</div><div class="line"><span class="code">+----------+</span></div><div class="line">|        0 |</div><div class="line"><span class="code">+----------+</span></div><div class="line">1 row in set (0.00 sec)</div></pre></td></tr></table></figure></p>
+<p>可以看到slave上改表的数据也被清空了，但好像不太明显，我们不妨在master上继续删除db表，如下所示：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql&gt; <span class="keyword">drop</span> <span class="keyword">table</span> <span class="keyword">db</span>;</div><div class="line"><span class="keyword">Query</span> OK, 0 rows affected (0.00 sec)</div></pre></td></tr></table></figure></p>
+<p>再从slave上看：<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select * from db;</div><div class="line"><span class="keyword">ERROR </span>1146 (42S02): Table 'aming.db' doesn't exist</div></pre></td></tr></table></figure></p>
+<p>这次就很明显了，db表已经不存在了。</p>
+<p>主从配置起来虽然很简单，但这种机制非常脆弱，一旦我们不小心在slave上写了数据，那么主从复制也就被破坏了。另外，如果重新master，务必要先关闭slave，即在slave上执行<code>slave stop</code>命令，然后再去重启master的MySQL服务，否则主从复制很有可能就会中断。当然重启master后，我们还需要执行<code>start slave</code>命令开启主从复制的服务。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术/" rel="tag"><i class="fa fa-tag"></i> 技术</a>
+          
+            <a href="/tags/MySQL/" rel="tag"><i class="fa fa-tag"></i> MySQL</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/15/技术/015. Tomcat部署和优化/" rel="next" title="Tomcat部署和优化">
+                <i class="fa fa-chevron-left"></i> Tomcat部署和优化
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/20/技术/017. MySQL存储引擎MyISAM与InnoDB的优劣/" rel="prev" title="MySQL存储引擎MyISAM与InnoDB的优劣">
+                MySQL存储引擎MyISAM与InnoDB的优劣 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">90</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-在一台服务器上配置两个MySQL服务"><span class="nav-text">1. 在一台服务器上配置两个MySQL服务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-配置Replication"><span class="nav-text">2. 配置Replication</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-设置主（master）"><span class="nav-text">2.1. 设置主（master）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-设置从（slave）"><span class="nav-text">2.2. 设置从（slave）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-测试主从"><span class="nav-text">2.3. 测试主从</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

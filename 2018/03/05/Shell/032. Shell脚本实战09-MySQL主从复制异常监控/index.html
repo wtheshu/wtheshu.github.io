@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Shell," />
+
+
+<meta name="description" content="1. 需求开发一个守护进程脚本，每30秒监控一次MySQL主从复制是否异常（包括不同步及延迟），如果有异常，则发送短信报警，并发送邮件给管理员存档。 2. 实验准备2.1. 测试数据模拟如果没有主从复制的环境，可以把下面的命令执行的结果部分的文本放到文件里读取来模拟主从复制的状态。12345678910111213141516171819202122232425262728293031323334">
+<meta name="keywords" content="Shell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shell脚本实战09-MySQL主从复制异常监控">
+<meta property="og:url" content="http://www.theshu.top/2018/03/05/Shell/032. Shell脚本实战09-MySQL主从复制异常监控/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="1. 需求开发一个守护进程脚本，每30秒监控一次MySQL主从复制是否异常（包括不同步及延迟），如果有异常，则发送短信报警，并发送邮件给管理员存档。 2. 实验准备2.1. 测试数据模拟如果没有主从复制的环境，可以把下面的命令执行的结果部分的文本放到文件里读取来模拟主从复制的状态。12345678910111213141516171819202122232425262728293031323334">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-21T05:12:16.133Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Shell脚本实战09-MySQL主从复制异常监控">
+<meta name="twitter:description" content="1. 需求开发一个守护进程脚本，每30秒监控一次MySQL主从复制是否异常（包括不同步及延迟），如果有异常，则发送短信报警，并发送邮件给管理员存档。 2. 实验准备2.1. 测试数据模拟如果没有主从复制的环境，可以把下面的命令执行的结果部分的文本放到文件里读取来模拟主从复制的状态。12345678910111213141516171819202122232425262728293031323334">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/03/05/Shell/032. Shell脚本实战09-MySQL主从复制异常监控/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Shell脚本实战09-MySQL主从复制异常监控 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/032. Shell脚本实战09-MySQL主从复制异常监控/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Shell脚本实战09-MySQL主从复制异常监控</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:10:35+08:00">2018-03-05</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-21T13:12:16+08:00">2018-03-21</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Shell/" itemprop="url" rel="index"><span itemprop="name">Shell</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-需求"><a href="#1-需求" class="headerlink" title="1. 需求"></a>1. 需求</h1><p>开发一个守护进程脚本，每30秒监控一次MySQL主从复制是否异常（包括不同步及延迟），如果有异常，则发送短信报警，并发送邮件给管理员存档。</p>
+<h1 id="2-实验准备"><a href="#2-实验准备" class="headerlink" title="2. 实验准备"></a>2. 实验准备</h1><h2 id="2-1-测试数据模拟"><a href="#2-1-测试数据模拟" class="headerlink" title="2.1. 测试数据模拟"></a>2.1. 测试数据模拟</h2><p>如果没有主从复制的环境，可以把下面的命令执行的结果部分的文本放到文件里读取来模拟主从复制的状态。<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="string">mysql&gt;</span> <span class="string">show</span> <span class="string">slave</span> <span class="string">status\G;</span> <span class="comment">#&lt;==在主从复制的环境里可通过这个命令来查看状态</span></div><div class="line"><span class="string">***************************</span> <span class="number">1.</span> <span class="string">row</span> <span class="string">***************************</span></div><div class="line"><span class="attr">               Slave_IO_State:</span> <span class="string">Connecting</span> <span class="string">to</span> <span class="string">master</span></div><div class="line"><span class="attr">                  Master_Host:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></div><div class="line"><span class="attr">                  Master_User:</span> <span class="string">repl</span></div><div class="line"><span class="attr">                  Master_Port:</span> <span class="number">3307</span></div><div class="line"><span class="attr">                Connect_Retry:</span> <span class="number">60</span></div><div class="line"><span class="attr">              Master_Log_File:</span> <span class="string">aminglinux2.000002</span></div><div class="line"><span class="attr">          Read_Master_Log_Pos:</span> <span class="number">4</span></div><div class="line"><span class="attr">               Relay_Log_File:</span> <span class="string">localhost-relay-bin.000006</span></div><div class="line"><span class="attr">                Relay_Log_Pos:</span> <span class="number">4</span></div><div class="line"><span class="attr">        Relay_Master_Log_File:</span> <span class="string">aminglinux2.000002</span></div><div class="line"><span class="attr">             Slave_IO_Running:</span> <span class="literal">Yes</span></div><div class="line"><span class="attr">            Slave_SQL_Running:</span> <span class="literal">Yes</span></div><div class="line"><span class="attr">              Replicate_Do_DB:</span></div><div class="line"><span class="attr">          Replicate_Ignore_DB:</span> <span class="string">mysql</span></div><div class="line"><span class="attr">           Replicate_Do_Table:</span></div><div class="line"><span class="attr">       Replicate_Ignore_Table:</span></div><div class="line"><span class="attr">      Replicate_Wild_Do_Table:</span></div><div class="line"><span class="attr">  Replicate_Wild_Ignore_Table:</span></div><div class="line"><span class="attr">                   Last_Errno:</span> <span class="number">0</span></div><div class="line"><span class="attr">                   Last_Error:</span></div><div class="line"><span class="attr">                 Skip_Counter:</span> <span class="number">0</span></div><div class="line"><span class="attr">          Exec_Master_Log_Pos:</span> <span class="number">4</span></div><div class="line"><span class="attr">              Relay_Log_Space:</span> <span class="number">120</span></div><div class="line"><span class="attr">              Until_Condition:</span> <span class="string">None</span></div><div class="line"><span class="attr">               Until_Log_File:</span></div><div class="line"><span class="attr">                Until_Log_Pos:</span> <span class="number">0</span></div><div class="line"><span class="attr">           Master_SSL_Allowed:</span> <span class="literal">No</span></div><div class="line"><span class="attr">           Master_SSL_CA_File:</span></div><div class="line"><span class="attr">           Master_SSL_CA_Path:</span></div><div class="line"><span class="attr">              Master_SSL_Cert:</span></div><div class="line"><span class="attr">            Master_SSL_Cipher:</span></div><div class="line"><span class="attr">               Master_SSL_Key:</span></div><div class="line"><span class="attr">        Seconds_Behind_Master:</span> <span class="number">0</span></div><div class="line"><span class="attr">Master_SSL_Verify_Server_Cert:</span> <span class="literal">No</span></div><div class="line"><span class="attr">                Last_IO_Errno:</span> <span class="number">0</span></div><div class="line"><span class="attr">                Last_IO_Error:</span> </div><div class="line"><span class="attr">               Last_SQL_Errno:</span> <span class="number">0</span></div><div class="line"><span class="attr">               Last_SQL_Error:</span></div></pre></td></tr></table></figure></p>
+<h2 id="2-2-解题思路"><a href="#2-2-解题思路" class="headerlink" title="2.2. 解题思路"></a>2.2. 解题思路</h2><ol>
+<li><p>判断主从复制是否异常，主要是检测如下参数对应的值：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attr">     Slave_IO_Running:</span> <span class="literal">Yes</span> <span class="comment">#&lt;==IO线程状态必须为Yes</span></div><div class="line"><span class="attr">    Slave_SQL_Running:</span> <span class="literal">Yes</span> <span class="comment">#&lt;==SQL线程状态必须为Yes</span></div><div class="line"><span class="attr">Seconds_Behind_Master:</span> <span class="number">0</span>   <span class="comment">#&lt;==和主库比较同步延迟的描述，这个参数很重要</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>读取状态数据或状态文件，然后取出对应的值，和正确的值进行比对，如果不符合，则表示存在故障，即调用报警脚本报警。</p>
+</li>
+<li>如果想要更专业，还可以在主从不同步时，查看相应的错误号，判断对应的错误号以自动修复主从复制故障（也可以用过在配置文件里的配置参数来实现自动忽略故障）。</li>
+</ol>
+<h1 id="3-实现脚本"><a href="#3-实现脚本" class="headerlink" title="3. 实现脚本"></a>3. 实现脚本</h1><p>这个脚本是在企业生产中正式使用的脚本：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/bash</span></div><div class="line"></div><div class="line">path=/server/scripts				   <span class="comment">#&lt;==定义脚本存放路径，请注意这个规范</span></div><div class="line">MAIL_GROUP=<span class="string">"test1@qq.com test2@qq.com"</span> <span class="comment">#&lt;==邮件列表，以空格隔开</span></div><div class="line">PAGER_GROUP=<span class="string">"13400000001 13400000002"</span>  <span class="comment">#&lt;==手机列表，以空格隔开</span></div><div class="line">LOG_FILE=<span class="string">"/tmp/web_check.log"</span>		   <span class="comment">#&lt;==日志路径</span></div><div class="line">USER=root							   <span class="comment">#&lt;==数据库用户</span></div><div class="line">PASSWORD=123456						   <span class="comment">#&lt;==用户密码</span></div><div class="line">PORT=3307							   <span class="comment">#&lt;==端口</span></div><div class="line">MYSQLCMD=<span class="string">"mysql -u<span class="variable">$USER</span> -p<span class="variable">$PASSWORD</span> -S /data/<span class="variable">$PORT</span>/mysql.sock"</span></div><div class="line">									   <span class="comment">#&lt;==登陆数据库命令</span></div><div class="line">error=(1008 1007 1062)				   <span class="comment">#&lt;==可以忽略的主从复制错误号</span></div><div class="line">RETVAL=0</div><div class="line">[ ! -d <span class="string">"<span class="variable">$path</span>"</span> ] &amp;&amp; mkdir -p <span class="variable">$path</span></div><div class="line"></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">JudgeError</span></span>()&#123;					<span class="comment">#&lt;==定义判断主从复制错误的函数</span></div><div class="line">	<span class="keyword">for</span>((i=0;i&lt;<span class="variable">$&#123;#error[*]&#125;</span>;i++))</div><div class="line">	<span class="keyword">do</span></div><div class="line">		<span class="keyword">if</span> [ <span class="string">"<span class="variable">$1</span>"</span> == <span class="string">"<span class="variable">$&#123;error[$i]&#125;</span>"</span> ]	<span class="comment">#&lt;==如果传入的错误号和数组里的元素相匹配，则执行then后面的命令</span></div><div class="line">		<span class="keyword">then</span></div><div class="line">			<span class="built_in">echo</span> <span class="string">"MySQL slave errorno is <span class="variable">$1</span>, auto repairing it."</span></div><div class="line">			<span class="variable">$MYSQLCMD</span> -e <span class="string">"stop slave;set global sql_slave_skip_counter=1;start slave;"</span>	<span class="comment">#&lt;==自动修复</span></div><div class="line">		<span class="keyword">fi</span></div><div class="line">	<span class="keyword">done</span></div><div class="line">	<span class="built_in">return</span> <span class="variable">$1</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">CheckDb</span></span>()&#123;		<span class="comment">#&lt;==定义检查数据库主从复制状态的函数</span></div><div class="line">	status=($(awk -F <span class="string">':'</span> <span class="string">'/_Running|Last_Errno|_Behend/&#123;print $NF&#125;'</span> slave.log))</div><div class="line">	expr <span class="variable">$&#123;status[3]&#125;</span> + 1 &amp;&gt;/dev/null <span class="comment">#&lt;==这个是延迟状态值，用于进行是否为数字的判断</span></div><div class="line">	<span class="keyword">if</span> [ $? -ne 0 ];<span class="keyword">then</span></div><div class="line">		status[3]=300	<span class="comment">#&lt;==如果不为数字，赋值300，延迟这个状态值可能是NULL，即非数字</span></div><div class="line">	<span class="keyword">fi</span></div><div class="line">	<span class="keyword">if</span> [ <span class="string">"<span class="variable">$&#123;status[0]&#125;</span>"</span> == <span class="string">"Yes"</span> -a <span class="string">"<span class="variable">$&#123;status[1]&#125;</span>"</span> == <span class="string">"Yes"</span> -a <span class="variable">$&#123;status[3]&#125;</span> -lt 120 ]</div><div class="line">	<span class="comment">#&lt;==两个线程都为Yes，并且延迟小于120秒，即认为复制状态是正常的。</span></div><div class="line">	<span class="keyword">then</span></div><div class="line">		<span class="built_in">echo</span> <span class="string">"MySQL slave status is ok."</span></div><div class="line">		<span class="built_in">return</span> 0</div><div class="line">	<span class="keyword">else</span></div><div class="line">		<span class="built_in">echo</span> <span class="string">"MySQL replcation is failed."</span></div><div class="line">		JudgeError <span class="variable">$&#123;status[2]&#125;</span></div><div class="line">		<span class="comment">#&lt;==否则，将错误号$&#123;status[2&#125;传入JudgeError函数，判断错误号是否可以自动修复</span></div><div class="line">	<span class="keyword">fi</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">MAIL</span></span>()&#123;	<span class="comment">#&lt;==定义邮件函数</span></div><div class="line">	<span class="built_in">local</span> SUBJECT_CONTENT=<span class="variable">$1</span>	<span class="comment">#&lt;==将函数的第一个传参赋给主题变量</span></div><div class="line">	<span class="keyword">for</span> MAIL_USER <span class="keyword">in</span> `<span class="built_in">echo</span> <span class="variable">$MAIL_GROUP</span>`	<span class="comment">#&lt;==遍历邮件列表</span></div><div class="line">	<span class="keyword">do</span></div><div class="line">		mail -s <span class="string">"<span class="variable">$SUBJECT_CONTENT</span> "</span> <span class="variable">$MAIL_USER</span> &lt; <span class="variable">$LOG_FILE</span>  <span class="comment">#&lt;==发邮件</span></div><div class="line">	<span class="keyword">done</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">function</span> PAGER（）&#123;		<span class="comment">#&lt;==定义手机函数</span></div><div class="line">	<span class="keyword">for</span> PAGER_USER <span class="keyword">in</span> `<span class="built_in">echo</span> <span class="variable">$PAGER_GROUP</span>` <span class="comment">#&lt;==遍历手机列表</span></div><div class="line">	<span class="keyword">do</span></div><div class="line">		TITLE=<span class="variable">$1</span>	<span class="comment">#&lt;==将函数的第一个传参赋值给主题变量</span></div><div class="line">		CONTACT=<span class="variable">$PAGER_USER</span>		<span class="comment">#&lt;==将手机号复制给CONTACT变量</span></div><div class="line">		HTTPGW=http://发送短信的地址</div><div class="line">		<span class="comment">#&lt;==发送短信地址，这个地址需要用户购买，如果想要免费的，就得用微信替代了</span></div><div class="line">		<span class="comment">#send_message method1</span></div><div class="line">		curl -d cdkey=5ADF-EFA -d password=PLDBOY -d phone=<span class="variable">$CONTACT</span> -d message=<span class="string">"<span class="variable">$TITLE</span>[<span class="variable">$2</span>]"</span> <span class="variable">$HTTPGW</span></div><div class="line">		<span class="comment">#&lt;==发送短信报警的命令。cdkey是购买短信网关时，由售卖者提供的，password是密码，也是由售卖者提供的</span></div><div class="line">	<span class="keyword">done</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">SendMsg</span></span>()&#123;</div><div class="line">	<span class="keyword">if</span> [ <span class="variable">$1</span> -ne 0 ] <span class="comment">#&lt;==传入$1，如果不为0，则表示复制有问题，这里的$1即为CheckDB里的返回值（用检测失败的次数作为返回值，在后文执行主函数main时是通过调用SendMsg传参传进来的值）</span></div><div class="line">	<span class="keyword">then</span></div><div class="line">		RETVAL=1</div><div class="line">		NOW_TIME=`date +<span class="string">"%Y-%m-%d %H:%M:%S"</span>`	<span class="comment">#&lt;==报警时间</span></div><div class="line">		SUBJECT_CONTENT=<span class="string">"mysql slave is error,errorno is <span class="variable">$2</span>,<span class="variable">$&#123;NOW_TIME&#125;</span>."</span>	<span class="comment">#&lt;==报警主题</span></div><div class="line">		<span class="built_in">echo</span> -e <span class="string">"<span class="variable">$SUBJECT_CONTENT</span>"</span> | tee <span class="variable">$LOG_FILE</span>	<span class="comment">#&lt;==输出信息，并记录到日志</span></div><div class="line">		MAIL <span class="variable">$SUBJECT_CONTENT</span> <span class="comment">#&lt;==法邮件报警，$SUBJECT_CONTENT作为函数参数传给MAIL函数体的$1，$NOW_TIME作为函数体传给$2</span></div><div class="line">	<span class="keyword">else</span></div><div class="line">		<span class="built_in">echo</span> <span class="string">"MySQL slave status is ok."</span></div><div class="line">		RETVAL=0	<span class="comment">#&lt;==以0作为返回值</span></div><div class="line">	<span class="keyword">fi</span></div><div class="line">	<span class="built_in">return</span> <span class="variable">$RETVAL</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">main</span></span>()&#123;</div><div class="line">	<span class="keyword">while</span> <span class="literal">true</span></div><div class="line">	<span class="keyword">do</span></div><div class="line">		CheckDb</div><div class="line">		SendMsg $?	<span class="comment">#&lt;==传入第一个参数$?，即CheckDb里的返回值（用检测失败的次数作为返回值）</span></div><div class="line">		sleep 30</div><div class="line">	<span class="keyword">done</span></div><div class="line">&#125;</div><div class="line"></div><div class="line">main</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Shell/" rel="tag"><i class="fa fa-tag"></i> Shell</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/05/Shell/031. Shell脚本实战08-筛选符合长度的单词/" rel="next" title="Shell脚本实战08-筛选符合长度的单词">
+                <i class="fa fa-chevron-left"></i> Shell脚本实战08-筛选符合长度的单词
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/05/Shell/033. Shell脚本实战10-比较整数大小/" rel="prev" title="Shell脚本实战10-比较整数大小">
+                Shell脚本实战10-比较整数大小 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">90</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-需求"><span class="nav-text">1. 需求</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-实验准备"><span class="nav-text">2. 实验准备</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-测试数据模拟"><span class="nav-text">2.1. 测试数据模拟</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-解题思路"><span class="nav-text">2.2. 解题思路</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-实现脚本"><span class="nav-text">3. 实现脚本</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

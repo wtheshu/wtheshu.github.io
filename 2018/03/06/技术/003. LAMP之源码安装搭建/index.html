@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="奇怪先生的博客">
 <meta property="og:description" content="1. 介绍LAMP是Linux + Apache + MySQL + PHP的简写，其实就是把Apache、MySQL以及PHP安装在Linux系统上，组成一个环境来运行PHP的脚本语言，通常是网站。 我们可以把Apache+PHP安装在一台机器上，再把MySQL安装在另外一台机器上，也可以把它们三个安装在同一台机器上。但Apache和PHP需要在同一台机器上，这是因为PHP是作为Apache的一">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-09T04:37:51.179Z">
+<meta property="og:updated_time" content="2018-03-18T04:54:36.326Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LAMP之源码安装搭建">
 <meta name="twitter:description" content="1. 介绍LAMP是Linux + Apache + MySQL + PHP的简写，其实就是把Apache、MySQL以及PHP安装在Linux系统上，组成一个环境来运行PHP的脚本语言，通常是网站。 我们可以把Apache+PHP安装在一台机器上，再把MySQL安装在另外一台机器上，也可以把它们三个安装在同一台机器上。但Apache和PHP需要在同一台机器上，这是因为PHP是作为Apache的一">
@@ -363,7 +363,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-09T12:37:51+08:00">2018-03-09</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-18T12:54:36+08:00">2018-03-18</time>
             
           </span>
 
@@ -421,12 +421,18 @@
 <p>下载源码包，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/src/	<span class="comment">#&lt;==建议把所有的软件包都放在这个目录下面，方便管理</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> wget http://mirrors.sohu.com/mysql/MySQL-5.6/mysql-5.6.35-linux-glibc2.5-x86_64.tar.gz  <span class="comment">#&lt;==下载MySQL安装包</span></span></div></pre></td></tr></table></figure></p>
 <h3 id="2-1-3-初始化"><a href="#2-1-3-初始化" class="headerlink" title="2.1.3. 初始化"></a>2.1.3. 初始化</h3><p>接下来的初始化过程如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> tar zxf mysql-5.6.35-linux-glibc2.5-x86_64.tar.gz	 <span class="comment">#&lt;==解压</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> [ -d /usr/<span class="built_in">local</span>/mysql ] &amp;&amp; mv /usr/<span class="built_in">local</span>/mysql /usr/<span class="built_in">local</span>/mysql_old</span></div><div class="line"><span class="meta">#</span><span class="bash"> mv mysql-5.6.35-linux-glibc2.5-x86_64 /usr/<span class="built_in">local</span>/mysql	<span class="comment">#&lt;==挪动位置</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> useradd -s /sbin/nologin mysql	<span class="comment">#&lt;==建立mysql用户，因为启动MySQL需要该用户</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> /usr/<span class="built_in">local</span>/mysql	<span class="comment">#&lt;==进入mysql目录</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> mkdir -p /data/mysql	<span class="comment">#&lt;==创建datadir，数据库文件会放到这里面</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> chown -R mysql:mysql /data/mysql	<span class="comment">#&lt;==更改文件属主和属组为mysql，不更改后续操作会出问题</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> ./scripts/mysql_install_db --user=mysql --datadir=/data/mysql</span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> $?</span></div><div class="line">0</div></pre></td></tr></table></figure></p>
 <p>上面的最后一个命令中，<code>--user</code>表示定义数据库以哪个用户的身份在运行，<code>--datadir</code>表示定义数据库的安装目录（建议放到大空间的分区上）。这个目录需要自行创建。这一步很关键，如果看到两个OK说明执行正确，否则请仔细查看错误信息。</p>
-<p>在执行完最后上面的最后一条命令后，有时会有错误而执行失败。（即<code>echo $?</code>不为0）。错误信息是这样的：<code>FATAL ERROR: please install the following Perl modules before executing ./scripts/mysql_install_db: Data::Dumper</code>，这是因为缺少包<code>perl-Module-Install</code>，使用命令<code>yum install -y perl-Module-Install</code>安装它。如果还有其它错误，仔细查看错误信息，利用网络资源来解决。</p>
+<p>在执行完最后上面的最后一条命令后，有时会有错误而执行失败。（即<code>echo $?</code>不为0）。</p>
+<p>错误信息是这样的：</p>
+<ul>
+<li><code>FATAL ERROR: please install the following Perl modules before executing ./scripts/mysql_install_db: Data::Dumper</code>，这是因为缺少包<code>perl-Module-Install</code>，使用命令<code>yum install -y perl-Module-Install</code>安装它。</li>
+<li><code>Installing MySQL system tables..../bin/mysqld: error while loading shared libraries: libaio.so.1: cannot open shared object file: No such file or directory</code>，解决方法：<code>yum install -y libaio</code></li>
+<li>如果还有其它错误，仔细查看错误信息，利用网络资源来解决。</li>
+</ul>
 <h3 id="2-1-4-配置MySQL"><a href="#2-1-4-配置MySQL" class="headerlink" title="2.1.4. 配置MySQL"></a>2.1.4. 配置MySQL</h3><p>首先复制配置文件，如下所示：<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># <span class="keyword">cp</span> support-<span class="keyword">files</span>/my-default.<span class="keyword">cnf</span> /etc/my.<span class="keyword">cnf</span></div><div class="line"><span class="keyword">cp</span>：是否覆盖<span class="string">"/etc/my.cnf"</span>？ <span class="keyword">y</span></div></pre></td></tr></table></figure></p>
 <p>因为系统默认就有/etc/my.cnf，所以会提示是否覆盖，直接按y即可。然后打开配置文件，做一些简单的配置，把配置文件改成如下内容：<br><figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># vim /etc/my.cnf</span></div><div class="line"></div><div class="line"><span class="comment"># For advice on how to change settings please see</span></div><div class="line"><span class="comment"># http://dev.mysql.com/doc/refman/5.6/en/server-configuration-defaults.html</span></div><div class="line"><span class="comment"># *** DO NOT EDIT THIS FILE. It's a template which will be copied to the</span></div><div class="line"><span class="comment"># *** default location during install, and will be replaced if you</span></div><div class="line"><span class="comment"># *** upgrade to a newer version of MySQL.</span></div><div class="line"></div><div class="line"><span class="section">[mysqld]</span></div><div class="line"></div><div class="line"><span class="comment"># Remove leading # and set to the amount of RAM for the most important data</span></div><div class="line"><span class="comment"># cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.</span></div><div class="line"><span class="attr">innodb_buffer_pool_size</span> = <span class="number">128</span>M</div><div class="line"></div><div class="line"><span class="comment"># Remove leading # to turn on a very important data integrity option: logging</span></div><div class="line"><span class="comment"># changes to the binary log between backups.</span></div><div class="line"><span class="attr">log_bin</span> = localhost</div><div class="line"></div><div class="line"><span class="comment"># These are commonly set, remove the # and set as required.</span></div><div class="line"><span class="attr">basedir</span> = /usr/local/mysql</div><div class="line"><span class="attr">datadir</span> = /data/mysql</div><div class="line"><span class="attr">port</span> = <span class="number">3306</span></div><div class="line"><span class="attr">server_id</span> = <span class="number">128</span></div><div class="line"><span class="attr">socket</span> = /tmp/mysql.sock</div><div class="line"></div><div class="line"><span class="comment"># Remove leading # to set options mainly useful for reporting servers.</span></div><div class="line"><span class="comment"># The server defaults are faster for transactions and fast SELECTs.</span></div><div class="line"><span class="comment"># Adjust sizes as needed, experiment to find the optimal values.</span></div><div class="line"><span class="attr">join_buffer_size</span> = <span class="number">128</span>M</div><div class="line"><span class="attr">sort_buffer_size</span> = <span class="number">2</span>M</div><div class="line"><span class="attr">read_rnd_buffer_size</span> = <span class="number">2</span>M</div><div class="line"></div><div class="line"><span class="attr">sql_mode</span>=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES</div></pre></td></tr></table></figure></p>
 <p>其中，basedir是MySQL包所在的路径，datadir是定义的存放数据的地方，默认情况下，错误日志也会记录在这个目录下面。port定义MySQL服务监听的端口，如果不定义默认就是3306。server_id定义该MySQL服务的ID号，这个参数用在做主从配置的时候。socket定义MySQL服务监听的套接字地址，在Linux系统下面，很多服务不仅可以监听一个端口（通过TCP/IP的方式通信），也可以监听socket，两个进程就可以通过这个socket文件通信。下面几个buffer是关于内存的配置参数，保持默认即可。</p>
 <p>然后复制启动脚本文件并修改其属性，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> cp support-files/mysql.server /etc/init.d/mysqld</span></div><div class="line"><span class="meta">#</span><span class="bash"> chmod 755 /etc/init.d/mysqld</span></div></pre></td></tr></table></figure></p>
-<p>然后修改启动脚本（<code>vim /etc/init.d/mysqld</code>）。需要修改的地方有<code>datadir=/data/mysql</code>（前面初始化数据库时定义的目录）。把启动脚本加入系统服务项，设定开机启动并启动MySQL，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> chkconfig --add mysqld	<span class="comment">#&lt;==把mysqld服务加入到系统服务列表中</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> chkconfig mysqld on		<span class="comment">#&lt;==使其开机启动</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> service mysqld start		<span class="comment">#&lt;==启动服务</span></span></div><div class="line">Starting MySQL.Logging to '/data/mysql/localhost.localdomain.err'.</div><div class="line">.. SUCCESS!</div></pre></td></tr></table></figure></p>
+<p>然后修改启动脚本（<code>vim /etc/init.d/mysqld</code>）。需要修改的地方有<code>basedir=/usr/local/mysql</code>、<code>datadir=/data/mysql</code>（前面初始化数据库时定义的目录）。把启动脚本加入系统服务项，设定开机启动并启动MySQL，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> chkconfig --add mysqld	<span class="comment">#&lt;==把mysqld服务加入到系统服务列表中</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> chkconfig mysqld on		<span class="comment">#&lt;==使其开机启动</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> service mysqld start		<span class="comment">#&lt;==启动服务</span></span></div><div class="line">Starting MySQL.Logging to '/data/mysql/localhost.localdomain.err'.</div><div class="line">.. SUCCESS!</div></pre></td></tr></table></figure></p>
 <p>如果启动不了，请到/data/mysql/目录下查看错误日志，这个日志名通常是<code>主机名.err</code>。检查MySQL是否启动的命令为：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> ps aux | grep mysql | grep -v grep</span></div><div class="line"><span class="meta">#</span><span class="bash">&lt;==显示结果应该大于2行</span></div><div class="line"><span class="meta">#</span><span class="bash"> netstat -lnp | grep 3306	<span class="comment">#&lt;==看看有没有监听3306端口</span></span></div><div class="line">tcp     0      0 :::3306     :::*      LISTEN      1904/mysqld</div></pre></td></tr></table></figure></p>
 <h2 id="2-2-安装Apache"><a href="#2-2-安装Apache" class="headerlink" title="2.2. 安装Apache"></a>2.2. 安装Apache</h2><h3 id="2-2-1-实验版本"><a href="#2-2-1-实验版本" class="headerlink" title="2.2.1. 实验版本"></a>2.2.1. 实验版本</h3><p>Apache其实是一个软件基金会组织的名字，早期他们开发的Web Server软件非常流行，当时名字就焦作Apache，不过后来改名字叫作httpd了。所以，大家所说的Apache其实就是在说httpd。Apache基金会下面有很多开源的软件，其中就包含了Tomcat。</p>
 <p>可以到httpd的官网去下载合适的版本，目前使用较多的版本为2.2或者2.4。在这里选用2.4版本来进行演示。不过2.4版本有一个比较麻烦的事情，还需要手动编译安装apr以及apr-util包。其中apr（包含apr和apr-util）可以理解成一个通用的函数库，主要为上层应用提供支持。在这里，httpd是依赖apr和apr-util的，如果不安装这两个东西，httpd就无法工作。</p>
@@ -474,6 +480,16 @@
 <li>关闭开机自启动：<code>chkconfig apache off</code></li>
 </ul>
 </li>
+</ul>
+<h3 id="2-2-6-关于apache的几个用法"><a href="#2-2-6-关于apache的几个用法" class="headerlink" title="2.2.6. 关于apache的几个用法"></a>2.2.6. 关于apache的几个用法</h3><ul>
+<li><code>/usr/local/apache2.4/bin/apachectl -t</code> 检查配置文件是否有错误</li>
+<li><code>/usr/local/apache2.4/bin/apachectl -l</code> 查看有哪些静态模块</li>
+<li><code>/usr/local/apache2.4/bin/apachectl -M</code> 查看有哪些动态模块</li>
+<li><code>cat /usr/local/apache2.4/build/config -nice</code> 查看现在正在使用的apache编译时的参数</li>
+<li><code>/usr/local/apache2.4/bin/apachectl start</code> 启动apache服务</li>
+<li><code>/usr/local/apache2.4/bin/apachectl stop</code>  关闭apache服务</li>
+<li><code>/usr/local/apache2.4/bin/apachectl restart</code> 重启apache服务</li>
+<li><code>/usr/local/apache2.4/bin/apachectl graceful</code> 不停止服务重新加载配置文件 </li>
 </ul>
 <h2 id="2-3-安装PHP"><a href="#2-3-安装PHP" class="headerlink" title="2.3. 安装PHP"></a>2.3. 安装PHP</h2><h3 id="2-3-1-实验版本"><a href="#2-3-1-实验版本" class="headerlink" title="2.3.1. 实验版本"></a>2.3.1. 实验版本</h3><p>为什么要把PHP放在最后来安装，是有原因的，因为我们在编译PHP的时候，有指定MySQL以及Apache的路径，如果不事先安装好MySQL和Apache就没有办法安装PHP。而Apache和MySQL的安装顺序就无所谓了。</p>
 <p>关于PHP的版本，目前大多数企业都会使用5.4版本及更高版本，甚至越来越多的企业使用PHP7版本。7和5两个版本还是有很大差异的，据说7版本有很大的性能提升，但是毕竟7版本还是太新了，和很多企业的网站不一定能兼容。所以，在本实验中还是以5版本为主，用的是5.6的版本。可以去PHP的官网去下载。</p>
@@ -525,6 +541,15 @@
 <p>关于PHP的编译参数比较多，暂时不需要钻牛角尖，但是大体意思是：编译PHP可以指定我们需要的功能额模块，跟Apache的类似。至于需要哪些，这取决于你所在的公司需要什么功能。上面提供的这些比较常用，如果没有特殊需求，直接使用这些参数即可。有一个地方需要注意一下，apxs为httpd的一个工具，因为有它才会自动把PHP模块安装到httpd的modules目录下，也就是说PHP将会以一个模块的形式和httpd结合在一起工作。</p>
 <p>然后是编译和安装，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> make		<span class="comment">#&lt;==编译的时间可能有些长，得大概五分钟以上，耐心等待即可</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> $?</span></div><div class="line">0</div><div class="line"><span class="meta">#</span><span class="bash"> make <span class="built_in">test</span>		<span class="comment">#&lt;==编译完后建议执行这一步，也可以省略这一步，因为这一步很花时间</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> make install	<span class="comment">#&lt;==安装</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">echo</span> $?</span></div><div class="line">0</div></pre></td></tr></table></figure></p>
 <p>然后复制配置文件：<code>cp php.ini-production /usr/local/php/etc/php.ini</code></p>
+<ul>
+<li>补充<ul>
+<li>PHP的配置模板有两个，<code>php.ini-production</code>和<code>php.ini-development</code>，前者是生产环境中使用的，后者是开发环境中使用的</li>
+<li><code>/usr/local/php/bin/php</code>不能用来启动PHP服务，但是它可以用来解析PHP脚本。（注意，在LAMP中PHP不是独立的服务，所以不用启动PHP相关的服务）</li>
+<li><code>/usr/loca/php/bin/php -m</code> 查看加载了哪些模块</li>
+<li><code>/usr/local/php/bin/php -i</code> 查看PHP的一些信息（比如编译PHP的时候的详细参数、配置文件路径、phpinfo()等）</li>
+</ul>
+</li>
+</ul>
 <h2 id="2-4-配置httpd支持PHP"><a href="#2-4-配置httpd支持PHP" class="headerlink" title="2.4. 配置httpd支持PHP"></a>2.4. 配置httpd支持PHP</h2><p>httpd的主配置文件为/usr/local/apache2.4/conf/httpd.conf，编辑这个文件：<code>vim /usr/local/apache2.4/conf/httpd.conf</code>：</p>
 <ul>
 <li>搜索<code>ServerName</code>，把<code>#ServerName www.example.com:80</code>前面的井号删除，并修改成<code>ServerName localhost:80</code>。</li>
@@ -543,6 +568,12 @@
 <li><p>修改成：</p>
 <figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;IfModule dir_module&gt;</div><div class="line">    DirectoryIndex index<span class="selector-class">.html</span> index.php</div><div class="line">&lt;/IfModule&gt;</div></pre></td></tr></table></figure>
 </li>
+<li><p>找到</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#ServerName</span> www<span class="selector-class">.example</span><span class="selector-class">.com</span>:<span class="number">80</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>修改成：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attribute"><span class="nomarkup">ServerName</span></span> localhost:80</div></pre></td></tr></table></figure>
+</li>
 </ul>
 <h2 id="2-5-测试LAMP是否成功"><a href="#2-5-测试LAMP是否成功" class="headerlink" title="2.5. 测试LAMP是否成功"></a>2.5. 测试LAMP是否成功</h2><p>httpd、MySQL和PHP安装之后，需要先检验httpd的配置文件是否正确，只有配置正确才可以正确解析PHP文件。</p>
 <h3 id="2-5-1-测试配置文件是否正确"><a href="#2-5-1-测试配置文件是否正确" class="headerlink" title="2.5.1. 测试配置文件是否正确"></a>2.5.1. 测试配置文件是否正确</h3><p>启动httpd之前需要先检验配置文件是否正确，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> /usr/<span class="built_in">local</span>/apache2.4/bin/apachectl -t</span></div><div class="line">Syntax OK</div></pre></td></tr></table></figure></p>
@@ -552,7 +583,8 @@
 <p>如果显示这一行则说明已经启动了httpd。</p>
 <p>另外，我们也可以使用<code>curl</code>命令进行简单的测试，如下所示：<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># curl localhost</span></div><div class="line"><span class="params">&lt;html&gt;</span><span class="params">&lt;body&gt;</span><span class="params">&lt;h1&gt;</span>It works!<span class="params">&lt;/h1&gt;</span><span class="params">&lt;/body&gt;</span><span class="params">&lt;/html&gt;</span></div></pre></td></tr></table></figure></p>
 <p>如果显示了这一行则说明测试成功。</p>
-<h3 id="2-5-2-测试是否正确解析PHP"><a href="#2-5-2-测试是否正确解析PHP" class="headerlink" title="2.5.2. 测试是否正确解析PHP"></a>2.5.2. 测试是否正确解析PHP</h3><p>首先编写一个测试脚本，如下所示：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># vim /usr/local/apache2.4/htdocs/1.php</div><div class="line"><span class="php"><span class="meta">&lt;?php</span></span></div><div class="line"><span class="php">        <span class="keyword">echo</span> <span class="string">"PHP解析正常！\n"</span></span></div><div class="line"><span class="php"><span class="meta">?&gt;</span></span></div></pre></td></tr></table></figure></p>
+<h3 id="2-5-2-测试是否正确解析PHP"><a href="#2-5-2-测试是否正确解析PHP" class="headerlink" title="2.5.2. 测试是否正确解析PHP"></a>2.5.2. 测试是否正确解析PHP</h3><p>Apache是把PHP作为一个模块来调用的，所以可以通过查看apache是否加载了PHP相关的模块：<code>ls /usr/local/apache/modules/libphp5.so</code>。</p>
+<p>首先编写一个测试脚本，如下所示：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"># vim /usr/local/apache2.4/htdocs/1.php</div><div class="line"><span class="php"><span class="meta">&lt;?php</span></span></div><div class="line"><span class="php">        <span class="keyword">echo</span> <span class="string">"PHP解析正常！\n"</span></span></div><div class="line"><span class="php"><span class="meta">?&gt;</span></span></div></pre></td></tr></table></figure></p>
 <p>保存脚本后继续测试，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> curl localhost/1.php</span></div><div class="line">PHP解析正常！</div></pre></td></tr></table></figure></p>
 <p>如果显示以上信息则说明PHP解析正确。</p>
 <h3 id="2-5-3-用浏览器通过IP访问"><a href="#2-5-3-用浏览器通过IP访问" class="headerlink" title="2.5.3. 用浏览器通过IP访问"></a>2.5.3. 用浏览器通过IP访问</h3><p>可以用浏览器来访问该Linux主机的IP，比如，IP为192.168.1.111，那么在浏览器输入：<code>http://192.168.1.111/1.php</code>，看是否能够访问到。</p>
@@ -565,6 +597,12 @@
 <hr>
 <p>到此为止，我们把LAMP环境搭建好了。其实仅仅是安装上了软件，我们还有很多具体的配置工作要做，所以需要多多练习配置httpd和PHP。下面的内容，便是具体的用法。应该熟悉httpd的配置。</p>
 <hr>
+<h2 id="3-补充内容：Apache解析不了PHP的解决步骤"><a href="#3-补充内容：Apache解析不了PHP的解决步骤" class="headerlink" title="3. 补充内容：Apache解析不了PHP的解决步骤"></a>3. 补充内容：Apache解析不了PHP的解决步骤</h2><ul>
+<li>第一步：检查Apache是否加载了PHP的模块</li>
+<li>第二步：若上一步没有问题，则检查Apache中是否正确配置与PHP相关的配置语句</li>
+<li>第三步：若上面的步骤都没有问题，则检测是否重启Apache服务</li>
+<li>第四步：若还没有解决，则查看相关日志记录，查看防火墙和SELinu等配置是否正确</li>
+</ul>
 
       
     </div>
@@ -606,8 +644,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/05/Shell/Shell脚本实战05-解决DOS攻击/" rel="next" title="Shell脚本实战05-解决DOS攻击">
-                <i class="fa fa-chevron-left"></i> Shell脚本实战05-解决DOS攻击
+              <a href="/2018/03/05/Shell/033. Shell脚本实战10-比较整数大小/" rel="next" title="Shell脚本实战10-比较整数大小">
+                <i class="fa fa-chevron-left"></i> Shell脚本实战10-比较整数大小
               </a>
             
           </div>
@@ -698,7 +736,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">78</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -776,7 +814,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">20</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -821,7 +867,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-介绍"><span class="nav-text">1. 介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-安装"><span class="nav-text">2. 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-安装MySQL"><span class="nav-text">2.1. 安装MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1-实验版本"><span class="nav-text">2.1.1. 实验版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-2-下载软件包"><span class="nav-text">2.1.2. 下载软件包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-3-初始化"><span class="nav-text">2.1.3. 初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-4-配置MySQL"><span class="nav-text">2.1.4. 配置MySQL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-安装Apache"><span class="nav-text">2.2. 安装Apache</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-实验版本"><span class="nav-text">2.2.1. 实验版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-下载软件包"><span class="nav-text">2.2.2. 下载软件包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-3-准备工作"><span class="nav-text">2.2.3. 准备工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-4-正式安装"><span class="nav-text">2.2.4. 正式安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-5-apache安装完后的服务启动设置"><span class="nav-text">2.2.5. apache安装完后的服务启动设置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-安装PHP"><span class="nav-text">2.3. 安装PHP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-1-实验版本"><span class="nav-text">2.3.1. 实验版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-2-下载软件包"><span class="nav-text">2.3.2. 下载软件包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-3-编译安装时错误的总结"><span class="nav-text">2.3.3. 编译安装时错误的总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-4-最后的编译安装"><span class="nav-text">2.3.4. 最后的编译安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-配置httpd支持PHP"><span class="nav-text">2.4. 配置httpd支持PHP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-测试LAMP是否成功"><span class="nav-text">2.5. 测试LAMP是否成功</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-1-测试配置文件是否正确"><span class="nav-text">2.5.1. 测试配置文件是否正确</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-2-测试是否正确解析PHP"><span class="nav-text">2.5.2. 测试是否正确解析PHP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-3-用浏览器通过IP访问"><span class="nav-text">2.5.3. 用浏览器通过IP访问</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-介绍"><span class="nav-text">1. 介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-安装"><span class="nav-text">2. 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-安装MySQL"><span class="nav-text">2.1. 安装MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1-实验版本"><span class="nav-text">2.1.1. 实验版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-2-下载软件包"><span class="nav-text">2.1.2. 下载软件包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-3-初始化"><span class="nav-text">2.1.3. 初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-4-配置MySQL"><span class="nav-text">2.1.4. 配置MySQL</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-安装Apache"><span class="nav-text">2.2. 安装Apache</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-实验版本"><span class="nav-text">2.2.1. 实验版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-下载软件包"><span class="nav-text">2.2.2. 下载软件包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-3-准备工作"><span class="nav-text">2.2.3. 准备工作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-4-正式安装"><span class="nav-text">2.2.4. 正式安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-5-apache安装完后的服务启动设置"><span class="nav-text">2.2.5. apache安装完后的服务启动设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-6-关于apache的几个用法"><span class="nav-text">2.2.6. 关于apache的几个用法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-安装PHP"><span class="nav-text">2.3. 安装PHP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-1-实验版本"><span class="nav-text">2.3.1. 实验版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-2-下载软件包"><span class="nav-text">2.3.2. 下载软件包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-3-编译安装时错误的总结"><span class="nav-text">2.3.3. 编译安装时错误的总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-4-最后的编译安装"><span class="nav-text">2.3.4. 最后的编译安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-配置httpd支持PHP"><span class="nav-text">2.4. 配置httpd支持PHP</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-测试LAMP是否成功"><span class="nav-text">2.5. 测试LAMP是否成功</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-1-测试配置文件是否正确"><span class="nav-text">2.5.1. 测试配置文件是否正确</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-2-测试是否正确解析PHP"><span class="nav-text">2.5.2. 测试是否正确解析PHP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-3-用浏览器通过IP访问"><span class="nav-text">2.5.3. 用浏览器通过IP访问</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-补充内容：Apache解析不了PHP的解决步骤"><span class="nav-text">3. 补充内容：Apache解析不了PHP的解决步骤</span></a></li></ol></li></ol></div>
             
 
           </div>

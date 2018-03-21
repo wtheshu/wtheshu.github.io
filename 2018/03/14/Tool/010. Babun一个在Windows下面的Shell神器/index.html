@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Tool,zsh," />
+
+
+<meta name="description" content="1. 简介1.1. Babun是什么Babun是Windows上的一个第三方Shell，在这个Shell上面你可以使用几乎所有Linux、Unix的命令，它几乎可以取代Windows上的Shell。用官方的题目说就是A Windows shell you will love! Babun是近年来最好的在Windows下使用Linux Shell的一站式解决方案。Babun虽然没有多少技术创新，但是">
+<meta name="keywords" content="Tool,zsh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Babun一个在Windows下面的Shell神器">
+<meta property="og:url" content="http://www.theshu.top/2018/03/14/Tool/010. Babun一个在Windows下面的Shell神器/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="1. 简介1.1. Babun是什么Babun是Windows上的一个第三方Shell，在这个Shell上面你可以使用几乎所有Linux、Unix的命令，它几乎可以取代Windows上的Shell。用官方的题目说就是A Windows shell you will love! Babun是近年来最好的在Windows下使用Linux Shell的一站式解决方案。Babun虽然没有多少技术创新，但是">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-15T06:54:10.279Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Babun一个在Windows下面的Shell神器">
+<meta name="twitter:description" content="1. 简介1.1. Babun是什么Babun是Windows上的一个第三方Shell，在这个Shell上面你可以使用几乎所有Linux、Unix的命令，它几乎可以取代Windows上的Shell。用官方的题目说就是A Windows shell you will love! Babun是近年来最好的在Windows下使用Linux Shell的一站式解决方案。Babun虽然没有多少技术创新，但是">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/03/14/Tool/010. Babun一个在Windows下面的Shell神器/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Babun一个在Windows下面的Shell神器 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/14/Tool/010. Babun一个在Windows下面的Shell神器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Babun一个在Windows下面的Shell神器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-14T10:50:48+08:00">2018-03-14</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-15T14:54:10+08:00">2018-03-15</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Tool/" itemprop="url" rel="index"><span itemprop="name">Tool</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1. 简介"></a>1. 简介</h1><h2 id="1-1-Babun是什么"><a href="#1-1-Babun是什么" class="headerlink" title="1.1. Babun是什么"></a>1.1. Babun是什么</h2><p>Babun是Windows上的一个第三方Shell，在这个Shell上面你可以使用几乎所有Linux、Unix的命令，它几乎可以取代Windows上的Shell。用官方的题目说就是<code>A Windows shell you will love!</code></p>
+<p>Babun是近年来最好的在Windows下使用Linux Shell的一站式解决方案。Babun虽然没有多少技术创新，但是它博采众长，追求极致的体验，把其它同类软件狠狠地甩在了后面。无论是被迫使用Windows的Linuxer，还是离不开Windows却又羡慕Linux下强大的命令行工具的PC用户，Babun都是一个不容错过的好东西，相信你会爱上它。</p>
+<p>在之前，前辈们为我们留下了一个叫做<code>Cygwin</code>的软件集，让我们在需要的时候可以从Windows上启动bash，安装常见的自由软件。虽然Cygwin号称<strong>Get that Linux felling on Windows</strong>，给人的感觉却一点都不Linux。幸运的是，我们现在有了<code>Babun</code>这个在Windows上的开销即用的工具，它基于Cygwin，却胜过Cygwin。</p>
+<h2 id="1-2-Babun的特性"><a href="#1-2-Babun的特性" class="headerlink" title="1.2. Babun的特性"></a>1.2. Babun的特性</h2><p>Babun的特性：</p>
+<ul>
+<li>预先配置好的Cygwin以及一系列插件</li>
+<li><code>pact</code>：一个类似于<code>apt-get</code>或<code>yum</code>的包管理器</li>
+<li>预先配置好的<code>git</code>和<code>shell</code>（zsh+bash）</li>
+<li>集成<code>oh-my-zsh</code></li>
+<li>一键安装，不需要任何admin权限</li>
+<li>带有xTerm-256兼容的终端（console）</li>
+<li>支持HTTP(s)代理</li>
+<li>组件化的架构</li>
+<li>自动更新</li>
+<li>在右键菜单（context menu）中集成了”Open Babun Here”的入口</li>
+</ul>
+<hr>
+<h1 id="2-安装体验"><a href="#2-安装体验" class="headerlink" title="2. 安装体验"></a>2. 安装体验</h1><h2 id="2-1-安装"><a href="#2-1-安装" class="headerlink" title="2.1. 安装"></a>2.1. 安装</h2><p>先从官网下载最新的 <a href="http://projects.reficio.org/babun/download" target="_blank" rel="external">Babun</a> 发行包。</p>
+<p>安装Babun十分简单，解压发行包之后，执行里面的<code>install.bat</code>批处理脚本，然后静静等待执行结束即可，安装结束后Babun会自动运行。Babun默认安装在<code>%USER_HOME%\.babun</code>目录，似乎可以通过cmd命令行执行<code>install.bat</code>脚本时传递<code>/target</code>或<code>/t</code>参数来指定安装目录，比如<code>install.bat /t c:\babun</code>（注意，安装目录最好不要有空格，这是cygwin要求的）</p>
+<p>安装后：</p>
+<ul>
+<li>默认的终端模拟器是Mintty</li>
+<li>Babun默认集成了Vim，如果想要安装Emacs，则执行<code>pact install emacs</code>（不过安装的是一个纯命令行版本的Emacs，emacs-nox）</li>
+</ul>
+<h2 id="2-2-体验"><a href="#2-2-体验" class="headerlink" title="2.2. 体验"></a>2.2. 体验</h2><p>安装完后，首先要测试一下是否安装成功，一般需要以下两个命令检查：<br><figure class="highlight smali"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">babun<span class="built_in"> check	</span>	<span class="comment">#&lt;==用于判断环境是否正确</span></div><div class="line">babun update	<span class="comment">#&lt;==用于判断是否有新的更新包</span></div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="3-自带的工具"><a href="#3-自带的工具" class="headerlink" title="3. 自带的工具"></a>3. 自带的工具</h1><h2 id="3-1-三个高效率命令"><a href="#3-1-三个高效率命令" class="headerlink" title="3.1. 三个高效率命令"></a>3.1. 三个高效率命令</h2><p>假如你是一个OS X用户，应该知道下面这三个命令的使用吧。用<code>open</code>调用默认程序去打开一个文件，或者在终端中使用<code>open .</code>在Finder打开当前目录。更常用的是把命令的输出重定向到<code>pbcopy</code>，实现复制到剪贴板，或者用<code>pbpaste</code>把剪贴板中的文本输出。</p>
+<p>而Babun默认就提供了这三个可以让人效率大增的命令，这不得不让人对作者的细致入微更加钦佩。</p>
+<h2 id="3-2-脚本解释器"><a href="#3-2-脚本解释器" class="headerlink" title="3.2. 脚本解释器"></a>3.2. 脚本解释器</h2><p>Babun内置了bash、Python、Perl等解释器。比如，如果你擅长Python，那在Babun中默认是没有给Python带上pip的，所以需要在Babun中为Python加上包管理，直接执行下面这个命令即可：<br><figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="string">wget </span><span class="string">https:</span>//<span class="string">bootstrap.</span><span class="string">pypa.</span><span class="string">io/</span><span class="built_in">get-pip.py</span> -O - | <span class="string">python</span></div></pre></td></tr></table></figure></p>
+<p>有了<code>pip</code>，Python开发者就可以自由的安装诸如<code>ipython</code>之类的东西，还有包罗万象的类库。</p>
+<h2 id="3-3-oh-my-zsh"><a href="#3-3-oh-my-zsh" class="headerlink" title="3.3. oh-my-zsh"></a>3.3. oh-my-zsh</h2><p>Babun默认是安装了oh-my-zshd的。在这里可以使用oh-my-zsh的各种插件，根据需求自己配置。</p>
+<hr>
+<h1 id="4-常用配置"><a href="#4-常用配置" class="headerlink" title="4. 常用配置"></a>4. 常用配置</h1><h2 id="4-1-适应网络环境的配置"><a href="#4-1-适应网络环境的配置" class="headerlink" title="4.1. 适应网络环境的配置"></a>4.1. 适应网络环境的配置</h2><p>Babun的配置文件是<code>~/.babunrc</code>。为了适应工作场景中的网络环境，需要对配置文件进行如下修改。</p>
+<p>关掉Babun每次启动时的自动检测：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"># Uncomment <span class="keyword">this</span> to disable daily <span class="keyword">auto</span>-<span class="function">update &amp; proxy checks on <span class="title">startup</span> <span class="params">(<span class="keyword">not</span> recommended!)</span></span></div><div class="line"><span class="function"><span class="keyword">export</span> DISABLE_CHECK_ON_STARTUP</span>=<span class="string">"true"</span></div></pre></td></tr></table></figure></p>
+<p>这么做可以加快Babun的启动速度。如果有需要，可以通过<code>babun check</code>来进行手动检查。</p>
+<h2 id="4-2-代理配置"><a href="#4-2-代理配置" class="headerlink" title="4.2. 代理配置"></a>4.2. 代理配置</h2><p>代理设置（根据个人情况设置）：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Uncomment this lines to set up your proxy</span></div><div class="line"><span class="builtin-name">export</span> <span class="attribute">http_proxy</span>=<span class="string">'xxx'</span></div><div class="line"><span class="builtin-name">export</span> <span class="attribute">https_proxy</span>=<span class="variable">$http_proxy</span></div><div class="line"><span class="builtin-name">export</span> <span class="attribute">ftp_proxy</span>=<span class="variable">$http_proxy</span></div><div class="line"><span class="builtin-name">export</span> <span class="attribute">no_proxy</span>=localhost;xxx</div></pre></td></tr></table></figure></p>
+<h2 id="4-3-字符编码设置"><a href="#4-3-字符编码设置" class="headerlink" title="4.3. 字符编码设置"></a>4.3. 字符编码设置</h2><p>Babun默认编码是UTF-8，而Windows的cmd命令输出是GBK编码的，所以在Babun里面运行ipconfig等Windows命令时，中文的显示会是一大堆乱码。</p>
+<p>虽然也可以把Babun的字符编码改成GBK，但是在bash等环境中的中文名又会出现乱码了。最好是在Babun环境中使用UTF-8编码，ipconfig等Windows指令用cmder或默认cmd执行就行了。</p>
+<h2 id="4-4-默认使用zsh"><a href="#4-4-默认使用zsh" class="headerlink" title="4.4. 默认使用zsh"></a>4.4. 默认使用zsh</h2><figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="variable">%userprofile%</span><span class="symbol">\.</span>babun<span class="symbol">\c</span>ygwin<span class="symbol">\b</span>in<span class="symbol">\m</span>intty.exe /bin/env CHERE_INVOKING=1 /bin/zsh.exe</div></pre></td></tr></table></figure>
+<h2 id="4-5-使用自定义mintty配置"><a href="#4-5-使用自定义mintty配置" class="headerlink" title="4.5. 使用自定义mintty配置"></a>4.5. 使用自定义mintty配置</h2><figure class="highlight taggerscript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="variable">%userprofile%</span>.babun<span class="symbol">\c</span>ygwin<span class="symbol">\b</span>in<span class="symbol">\m</span>intty.exe -t "<span class="variable">%userprofile%</span>.babun<span class="symbol">\c</span>ygwin<span class="symbol">\e</span>tc<span class="symbol">\m</span>inttyrc"</div></pre></td></tr></table></figure>
+<p>保存后，建立一个新终端时选Babun就可以了。</p>
+<p>配置个性化的mintty：<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">vim ~/.minttyrc</div><div class="line"></div><div class="line">CursorType=block</div><div class="line">Term=xterm-256color</div><div class="line">Font=Source Code Pro Semibold</div><div class="line">FontHeight=10</div></pre></td></tr></table></figure></p>
+<hr>
+<h1 id="5-包管理器使用"><a href="#5-包管理器使用" class="headerlink" title="5. 包管理器使用"></a>5. 包管理器使用</h1><p>Babun提供了一个叫做<code>pact</code>的包管理工具，类似于Linux上面的<code>apt-get</code>或<code>yum</code>的包管理工具。</p>
+<h2 id="5-1-pact使用语法"><a href="#5-1-pact使用语法" class="headerlink" title="5.1. pact使用语法"></a>5.1. pact使用语法</h2><p>使用语法如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="attribute">pact</span>: Installs and removes Cygwin packages.</div><div class="line"></div><div class="line"><span class="attribute">Usage:</span></div><div class="line">  "pact install " to install given packages</div><div class="line">  "pact remove " to remove given packages</div><div class="line">  "pact update " to update given packages</div><div class="line">  "pact show" to show installed packages</div><div class="line">  "pact find " to find packages matching patterns</div><div class="line">  "pact describe " to describe packages matching patterns</div><div class="line">  "pact packageof " to locate parent packages</div><div class="line">  "pact invalidate" to invalidate pact caches (setup.ini, etc.)</div><div class="line"><span class="attribute">Options:</span></div><div class="line">  --mirror, -m  : set mirror</div><div class="line">  --invalidate, -i       : invalidates pact caches (setup.ini, etc.)</div><div class="line">  --force, -f : force the execution</div><div class="line">  --help</div><div class="line">  --version</div></pre></td></tr></table></figure></p>
+<h2 id="5-2-常用软件的安装"><a href="#5-2-常用软件的安装" class="headerlink" title="5.2. 常用软件的安装"></a>5.2. 常用软件的安装</h2><ul>
+<li>安装tmux ： <code>pact install tmux</code></li>
+<li>安装screen ： <code>pact install screen</code></li>
+<li>安装zip ： <code>pact install zip</code></li>
+<li>安装svn ： <code>pact install subversion</code></li>
+<li>安装lftp ： <code>pact install lftp</code></li>
+<li>安装p7zip ： <code>pact install p7zip</code></li>
+<li>基于openssl的socks https代理 ： <code>pact install connect-proxy</code></li>
+<li>安装Linux基础命令行工具more/col/whereis等命令 ： <code>pact install util-linux</code></li>
+<li>安装dig ：<code>pact install bind-utils</code></li>
+<li>安装Telnet等常用网络命令 ： <code>pact install inetutils</code></li>
+<li>安装Python环境 ： <code>pact install python</code>、<code>pact install python-crypto</code></li>
+</ul>
+<p>可见，这个包管理很方便，用法也简单，按照自己的需求来安装软件吧！</p>
+<hr>
+<p>关于Babun就介绍这么多，希望这个工具能为你的工作提供帮助。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Tool/" rel="tag"><i class="fa fa-tag"></i> Tool</a>
+          
+            <a href="/tags/zsh/" rel="tag"><i class="fa fa-tag"></i> zsh</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/14/Tool/009. Oh-My-Zsh一个bash的强大替代工具/" rel="next" title="Oh-My-Zsh一个bash的强大替代工具">
+                <i class="fa fa-chevron-left"></i> Oh-My-Zsh一个bash的强大替代工具
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/14/Tool/011. Linux软件清单/" rel="prev" title="Linux软件清单">
+                Linux软件清单 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">90</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-简介"><span class="nav-text">1. 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-Babun是什么"><span class="nav-text">1.1. Babun是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Babun的特性"><span class="nav-text">1.2. Babun的特性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-安装体验"><span class="nav-text">2. 安装体验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-安装"><span class="nav-text">2.1. 安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-体验"><span class="nav-text">2.2. 体验</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-自带的工具"><span class="nav-text">3. 自带的工具</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-三个高效率命令"><span class="nav-text">3.1. 三个高效率命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-脚本解释器"><span class="nav-text">3.2. 脚本解释器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-oh-my-zsh"><span class="nav-text">3.3. oh-my-zsh</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-常用配置"><span class="nav-text">4. 常用配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-适应网络环境的配置"><span class="nav-text">4.1. 适应网络环境的配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-代理配置"><span class="nav-text">4.2. 代理配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-字符编码设置"><span class="nav-text">4.3. 字符编码设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-默认使用zsh"><span class="nav-text">4.4. 默认使用zsh</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-使用自定义mintty配置"><span class="nav-text">4.5. 使用自定义mintty配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-包管理器使用"><span class="nav-text">5. 包管理器使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-pact使用语法"><span class="nav-text">5.1. pact使用语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-常用软件的安装"><span class="nav-text">5.2. 常用软件的安装</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

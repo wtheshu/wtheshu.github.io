@@ -312,7 +312,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/017. Shell学习笔记15-Shell脚本的调试/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/028. Shell脚本实战05-解决DOS攻击/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -331,7 +331,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/19/Shell/017. Shell学习笔记15-Shell脚本的调试/" itemprop="url">Shell学习笔记15-Shell脚本的调试</a></h1>
+                <a class="post-title-link" href="/2018/03/05/Shell/028. Shell脚本实战05-解决DOS攻击/" itemprop="url">Shell脚本实战05-解决DOS攻击</a></h1>
         
 
         <div class="post-meta">
@@ -343,7 +343,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:42:21+08:00">2018-02-19</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:09:21+08:00">2018-03-05</time>
             
 
             
@@ -364,7 +364,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-01T16:53:49+08:00">2018-03-01</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-12T21:59:44+08:00">2018-03-12</time>
             
           </span>
 
@@ -416,15 +416,12 @@
       
         
           
-          
-GO
-
-
-这篇笔记是关于Shell脚本的调试知识，掌握了Shell脚本的调试技巧，可以让我们在开发大型脚本时做到事半功倍。虽然掌握了Shell脚本的调试技巧很重要，但是如果能够掌握并养成良好的Shell脚本开发的规范和习惯，就可以从源头上降低开发脚本的错误率，从而降低脚本调试的难度和时间，达到未雨
+          1. 解决DOS攻击写一个Shell脚本解决类DDoS攻击的生产案例。请根据Web日志或系统网络连接数，监控某个IP的并发连接数，若短时间内PV达到100，即调用防火墙命令封掉对应的IP。防火墙命令为：iptables -I INPUT -s IP地址 -j DROP
+2. 参考答案1先分析Web日
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/02/19/Shell/017. Shell学习笔记15-Shell脚本的调试/#more" rel="contents">
+            <a class="btn" href="/2018/03/05/Shell/028. Shell脚本实战05-解决DOS攻击/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -480,7 +477,7 @@ GO
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/016. Shell学习笔记14-Shell脚本开发规范/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/027. Shell脚本实战04-扫描网络内存活主机/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -499,7 +496,7 @@ GO
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/19/Shell/016. Shell学习笔记14-Shell脚本开发规范/" itemprop="url">Shell学习笔记14-Shell脚本开发规范</a></h1>
+                <a class="post-title-link" href="/2018/03/05/Shell/027. Shell脚本实战04-扫描网络内存活主机/" itemprop="url">Shell脚本实战04-扫描网络内存活主机</a></h1>
         
 
         <div class="post-meta">
@@ -511,7 +508,7 @@ GO
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:42:03+08:00">2018-02-19</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:09:06+08:00">2018-03-05</time>
             
 
             
@@ -532,7 +529,7 @@ GO
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-01T14:40:49+08:00">2018-03-01</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-12T21:59:27+08:00">2018-03-12</time>
             
           </span>
 
@@ -584,15 +581,13 @@ GO
       
         
           
-          
-GO
-
-
-Shell脚本开发规范及习惯非常重要，有了好的规范和习惯，才能大大提升开发效率，降低后期的脚本维护成本，特别是在多人协作开发时，有一个互相遵守的规范显得特别重要。即使是自己一个人独自开发，也要采取一套科学的、固定的规范，这样脚本才更易读，易于后期维护。总之，就是要让自己养成一个一出手就是
+          1. 扫描网络内存活主机写一个Shell脚本，判断10.0.0.0/24网络里，当前在线的IP有哪些？
+2. 问题分析判断IP在线最常见的方法就是使用ping命令，其实还有一个不错的命令就是nmap，这个nmap命令有可能需要执行这个命令安装yum install nmap -y
+3. 参考解答3.
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/02/19/Shell/016. Shell学习笔记14-Shell脚本开发规范/#more" rel="contents">
+            <a class="btn" href="/2018/03/05/Shell/027. Shell脚本实战04-扫描网络内存活主机/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -648,7 +643,7 @@ Shell脚本开发规范及习惯非常重要，有了好的规范和习惯，才
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/015. Shell学习笔记13-Shell数组/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/026. Shell脚本实战03-批量创建特殊要求用户/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -667,7 +662,7 @@ Shell脚本开发规范及习惯非常重要，有了好的规范和习惯，才
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/19/Shell/015. Shell学习笔记13-Shell数组/" itemprop="url">Shell学习笔记13-Shell数组</a></h1>
+                <a class="post-title-link" href="/2018/03/05/Shell/026. Shell脚本实战03-批量创建特殊要求用户/" itemprop="url">Shell脚本实战03-批量创建特殊要求用户</a></h1>
         
 
         <div class="post-meta">
@@ -679,7 +674,7 @@ Shell脚本开发规范及习惯非常重要，有了好的规范和习惯，才
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:41:39+08:00">2018-02-19</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:08:33+08:00">2018-03-05</time>
             
 
             
@@ -700,7 +695,7 @@ Shell脚本开发规范及习惯非常重要，有了好的规范和习惯，才
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-01T12:57:33+08:00">2018-03-01</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-12T21:59:18+08:00">2018-03-12</time>
             
           </span>
 
@@ -752,15 +747,16 @@ Shell脚本开发规范及习惯非常重要，有了好的规范和习惯，才
       
         
           
-          
-GO
+          1. 批量创建特殊要求用户批量创建10个系统账号theshu01-tehshu10并设置密码（密码为随机数，要求是字符和数字等的混合）
+2. 参考答案1开发思路如下：
+1、创建10个系统账号，即theshu01-theshu10
+对于给一个数字加0有多种实现方法，这里给出两种：
 
-
-1. Shell数组介绍1.1. 为什么会产生Shell数组通常在开发Shell脚本时，定义变量采用的形式为a=1;b=2;c=3，可如果有多个变量呢？这时再逐个地定义就会很费劲，并且要是有多个不确定的变量内容，也会难以进行变量定义，此外，快速读取不同变量的值也是一件很痛苦的事情，于是数
+seq -w 10
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/02/19/Shell/015. Shell学习笔记13-Shell数组/#more" rel="contents">
+            <a class="btn" href="/2018/03/05/Shell/026. Shell脚本实战03-批量创建特殊要求用户/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -805,7 +801,7 @@ GO
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/10/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -854,7 +850,7 @@ GO
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">78</span>
+                    <span class="site-state-item-count">90</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -932,7 +928,15 @@ GO
                     
                       
                     
-                    <span class="site-state-item-count">20</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">24</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
