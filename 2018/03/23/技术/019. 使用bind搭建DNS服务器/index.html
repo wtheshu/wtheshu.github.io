@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="技术,DNS," />
+
+
+<meta name="description" content="1. DNS介绍DNS为Domain Name System（域名系统）的缩写，它是一种将IP地址转换成对应的主机名或将主机名转换成与之对应的IP地址的服务机制。其中通过域名解析出IP地址的叫做正向解析，通过IP地址解析出域名的叫做反向解析。DNS使用TCP和UDP，端口号都是53，但它主要使用UDP，服务器中间备份使用TCP。全世界只有13台“根”服务器，1个主根服务器放在美国，其它12太为辅根">
+<meta name="keywords" content="技术,DNS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用bind搭建DNS服务器">
+<meta property="og:url" content="http://www.theshu.top/2018/03/23/技术/019. 使用bind搭建DNS服务器/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="1. DNS介绍DNS为Domain Name System（域名系统）的缩写，它是一种将IP地址转换成对应的主机名或将主机名转换成与之对应的IP地址的服务机制。其中通过域名解析出IP地址的叫做正向解析，通过IP地址解析出域名的叫做反向解析。DNS使用TCP和UDP，端口号都是53，但它主要使用UDP，服务器中间备份使用TCP。全世界只有13台“根”服务器，1个主根服务器放在美国，其它12太为辅根">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-23T07:29:22.962Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用bind搭建DNS服务器">
+<meta name="twitter:description" content="1. DNS介绍DNS为Domain Name System（域名系统）的缩写，它是一种将IP地址转换成对应的主机名或将主机名转换成与之对应的IP地址的服务机制。其中通过域名解析出IP地址的叫做正向解析，通过IP地址解析出域名的叫做反向解析。DNS使用TCP和UDP，端口号都是53，但它主要使用UDP，服务器中间备份使用TCP。全世界只有13台“根”服务器，1个主根服务器放在美国，其它12太为辅根">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/03/23/技术/019. 使用bind搭建DNS服务器/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>使用bind搭建DNS服务器 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/23/技术/019. 使用bind搭建DNS服务器/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用bind搭建DNS服务器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-23T09:51:11+08:00">2018-03-23</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-23T15:29:22+08:00">2018-03-23</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-DNS介绍"><a href="#1-DNS介绍" class="headerlink" title="1. DNS介绍"></a>1. DNS介绍</h1><p>DNS为Domain Name System（域名系统）的缩写，它是一种将IP地址转换成对应的主机名或将主机名转换成与之对应的IP地址的服务机制。其中通过域名解析出IP地址的叫做正向解析，通过IP地址解析出域名的叫做反向解析。DNS使用TCP和UDP，端口号都是53，但它主要使用UDP，服务器中间备份使用TCP。全世界只有13台“根”服务器，1个主根服务器放在美国，其它12太为辅根服务器。</p>
+<p>DNS服务器根据角色可以分为：</p>
+<ul>
+<li>主DNS</li>
+<li>从DNS</li>
+<li>DNS缓存服务器</li>
+<li>DNS转发服务器</li>
+</ul>
+<p>当有了网站域名，那是如何解析到IP的呢？下面为域名解析的过程：</p>
+<ul>
+<li>在浏览器中输入www.lishiming.com域名，操作系统会先检查自己本地的hosts文件是否有这个网址的映射关系，如果有，就先调用这个IP地址映射，完成域名解析。</li>
+<li>如果hosts文件里没有这个域名的映射，则查找本地DNS解析器缓存，是否有这个网址映射关系，如果有，直接返回，完成域名解析。</li>
+<li>如果hosts与本地DNS解析器缓存都没有相应的网址映射关系，首先会找本机设置的首选DNS服务器，在此我们叫它本地DNS服务器，此服务器收到查询时，如果要查询的域名，包含在本地配置区域资源中，则反回解析结果给客户机，完成域名解析，词解析具有权威性。</li>
+<li>如果要查询的域名，不由本地DNS服务器区域解析，但该服务器已经缓存了此网址的映射关系，则调用这个IP地址映射，完成域名解析，此解析不具有权威性。</li>
+<li>如果本地DNS服务器本地区域文件与缓存解析都失效，则根据本地DNS服务器的设置（是否设置转发）进行查询，如果未用转发模式，本地DNS就把请求发送至13台根DNS，根DNS服务器收到请求后会判断这个域名（.net）是谁来授权管理，并会返回一个负责该顶级域名服务器的一个IP。本地DNS服务器收到IP信息后，将会练习负责.net域的这台服务器。这台负责.net域的服务器收到请求后，如果自己无法解析，它就会找一个管理.net域的下一级DNS服务器（lishiming.net）给本地DNS服务器。当本地DNS服务器收到这个地址后，就会找lishiming.net域服务器，重复上面的动作，进行查询，直至找到www.lishiming.net主机。</li>
+<li>如果用的是转发模式，此DNS服务器就会把请求转发至上一级DNS服务器，由上一级服务器进行解析，上一级服务器如果不能解析，或找根DNS或把请求专职上上级DNS服务器，以此循环。不管是本地DNS服务器用的是转发，还是根提示，最后都是把结果返回给本地DNS服务器，由此DNS服务器再返回给客户机。</li>
+</ul>
+<hr>
+<h1 id="2-bind安装配置"><a href="#2-bind安装配置" class="headerlink" title="2. bind安装配置"></a>2. bind安装配置</h1><h2 id="2-1-安装"><a href="#2-1-安装" class="headerlink" title="2.1. 安装"></a>2.1. 安装</h2><p>我们使用bind来搭建DNS服务。首先安装bind<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> yum install -y <span class="built_in">bind</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> cp /etc/named.conf /etc/named.conf.bak</span></div></pre></td></tr></table></figure></p>
+<h2 id="2-2-配置本地的域"><a href="#2-2-配置本地的域" class="headerlink" title="2.2. 配置本地的域"></a>2.2. 配置本地的域</h2><ul>
+<li>把默认的配置文件清空（改文件是主配置文件），然后我们自定义配置：<ul>
+<li><code>&gt; /etc/named.conf</code></li>
+<li><code>vim /etc/named.conf</code></li>
+</ul>
+</li>
+<li><p>加入如下配置：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">options &#123;</div><div class="line">	directory <span class="string">"/var/named"</span>;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">zone <span class="string">"."</span> <span class="keyword">IN</span> &#123;</div><div class="line"><span class="built_in">	type </span>hint;</div><div class="line">	file <span class="string">"named.ca"</span>;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">zone <span class="string">"localhost"</span> <span class="keyword">IN</span> &#123;</div><div class="line"><span class="built_in">	type </span>master;</div><div class="line">	file <span class="string">"localhost.zone"</span>;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">zone <span class="string">"0.0.127.in-addr.arpa"</span> <span class="keyword">IN</span> &#123;</div><div class="line"><span class="built_in">	type </span>master;</div><div class="line">	file <span class="string">"named.local"</span>;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+<li><p>保存配置后，修改其属主：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> chown named /etc/named.conf</span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> /var/named/</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>接下来：</p>
+<ul>
+<li><p>定义根域配置文件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> dig -t NS . &gt; named.ca</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>然后定义本地域配置：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"># vim localhost.zone</div><div class="line">#&lt;==加入如下内容</div><div class="line"></div><div class="line">@ <span class="keyword">IN</span> <span class="keyword">SOA</span> localhost. admin.localhost. (</div><div class="line">	<span class="number">2013081601</span></div><div class="line">	<span class="number">1</span>H</div><div class="line">	<span class="number">10</span>M</div><div class="line">	<span class="number">7</span>D</div><div class="line">	<span class="number">1</span>D</div><div class="line">	)</div><div class="line">@ <span class="keyword">IN</span> <span class="keyword">NS</span> localhost.</div><div class="line">localhost. <span class="keyword">IN</span> <span class="keyword">A</span> <span class="number">127.0.0.1</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>再配置反解析配置：</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"># vim named.local</div><div class="line">#&lt;==加入如下配置</div><div class="line"></div><div class="line"><span class="meta">$TTL</span> <span class="number">86400</span></div><div class="line">@ <span class="keyword">IN</span> <span class="keyword">SOA</span> localhost. admin.localhost. (</div><div class="line">	<span class="number">2013081601</span></div><div class="line">	iH</div><div class="line">	<span class="number">10</span>M</div><div class="line">	<span class="number">7</span>D</div><div class="line">	<span class="number">1</span>D</div><div class="line">	)</div><div class="line">@ <span class="keyword">IN</span> <span class="keyword">NS</span> localhost.</div><div class="line"><span class="number">1</span> <span class="keyword">IN</span> <span class="keyword">PTR</span> localhost</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>进行检测：</p>
+<ul>
+<li><p>检测配置是否有问题：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> named-checkconf</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>检测正解析</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> named-checkzone <span class="string">"localhost"</span> /var/named/localhost.zone</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>检测反解析</p>
+<figure class="highlight fortran"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># <span class="keyword">named</span>-checkzone <span class="string">"0.0.127.in-addr.arpa"</span> /var/<span class="keyword">named</span>/<span class="keyword">named</span>.conf</div></pre></td></tr></table></figure>
+</li>
+<li><p>生成rndc.key，如果没有这个key，named是启动不了的。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> rndc-confgen -r /dev/urandom -a</span></div><div class="line"><span class="meta">#</span><span class="bash"> chown named:named /etc/rndc.key</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>启动named服务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> /etc/init.d/named start</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>查看是否有53端口</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> netstat -lnp | grep named</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>首先测试正向解析：</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># <span class="selector-tag">dig</span> @<span class="keyword">127</span>.<span class="keyword">0</span>.<span class="keyword">0</span>.<span class="keyword">1</span> localhost.</div></pre></td></tr></table></figure>
+</li>
+<li><p>接着测试反解析：</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># dig @<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> -x <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="2-3-增加一个域名（zone）"><a href="#2-3-增加一个域名（zone）" class="headerlink" title="2.3. 增加一个域名（zone）"></a>2.3. 增加一个域名（zone）</h2><p>上面的操作仅仅是建立了一个本地的域localhost，还不是我们想要的，下面再增加一个域名（zone）：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># vim /etc/named.conf</span></div><div class="line"><span class="comment">#&lt;==写入如下内容</span></div><div class="line"></div><div class="line">zone <span class="string">"abc.com"</span> <span class="keyword">IN</span> &#123;</div><div class="line"><span class="built_in">	type </span>master;</div><div class="line">	file <span class="string">"abc.com.zone"</span>;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">zone <span class="string">"137.168.192.in-addr.arpa"</span> <span class="keyword">IN</span> &#123;</div><div class="line"><span class="built_in">	type </span>master;</div><div class="line">	file <span class="string">"192.168.zone"</span>;</div><div class="line">&#125;;</div></pre></td></tr></table></figure></p>
+<p>编辑zone文件<br><figure class="highlight dns"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"># vim /var/named/abc.com.zone</div><div class="line">#&lt;==写入如下内容</div><div class="line"></div><div class="line"><span class="meta">$TTL</span> <span class="number">600</span></div><div class="line">@ <span class="keyword">IN</span> <span class="keyword">SOA</span> abc.com. root.abc.com. (</div><div class="line">	<span class="number">2013081601</span></div><div class="line">	<span class="number">1</span>H</div><div class="line">	<span class="number">10</span>M</div><div class="line">	<span class="number">7</span>D</div><div class="line">	<span class="number">1</span>D</div><div class="line">	)</div><div class="line"><span class="keyword">IN</span> <span class="keyword">NS</span> ns.abc.com		#&lt;==应该指定本地服务器的IP</div><div class="line"><span class="keyword">IN</span> <span class="keyword">MX</span> <span class="number">10</span> mail.abc.com</div><div class="line">ns <span class="keyword">IN</span> <span class="keyword">A</span> <span class="number">192.168.0.11</span>	#&lt;==本地服务器的IP</div><div class="line">www <span class="keyword">IN</span> <span class="keyword">A</span> <span class="number">192.168.137.73</span></div><div class="line">mail <span class="keyword">IN</span> <span class="keyword">A</span> <span class="number">192.168.137.10</span></div><div class="line">bbs <span class="keyword">IN</span> <span class="keyword">CNAME</span> www.abc.com.</div></pre></td></tr></table></figure></p>
+<p>编辑反解析文件：<br><figure class="highlight dns"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"># vim /var/named/<span class="number">192.168</span>.zone</div><div class="line">#&lt;==写入如下内容</div><div class="line"></div><div class="line"><span class="meta">$TTL</span> <span class="number">600</span></div><div class="line">@ <span class="keyword">IN</span> <span class="keyword">SOA</span> ns.abc.com. root.abc.com. (</div><div class="line">	<span class="number">2013081611</span>H</div><div class="line">	<span class="number">10</span>M</div><div class="line">	<span class="number">7</span>D</div><div class="line">	<span class="number">1</span>D</div><div class="line">	)</div><div class="line">@ <span class="keyword">IN</span> <span class="keyword">NS</span> ns.abc.com.</div><div class="line"><span class="number">10</span> <span class="keyword">IN</span> <span class="keyword">PTR</span> ns.abc.com.</div><div class="line"><span class="number">11</span> <span class="keyword">IN</span> <span class="keyword">PTR</span> mail.abc.com.</div><div class="line"><span class="number">73</span> <span class="keyword">IN</span> <span class="keyword">PTR</span> www.abc.com.</div></pre></td></tr></table></figure></p>
+<p>分别检测两个配置文件是否有问题：</p>
+<ul>
+<li><code>named-checkzone &quot;abc.com&quot; abc.com.zone</code></li>
+<li><code>named-checkzone &quot;137.168.192.in-addr.arpa&quot; 192.168.zone</code></li>
+</ul>
+<p>重启named服务，测试：</p>
+<ul>
+<li><code>dig @127.0.0.1 www.abc.com</code></li>
+<li><code>dig @127.0.0.1 -x 192.168.127.11</code></li>
+</ul>
+<p>abc.com的域配置好后，要想使用它必须把系统里面的DNS服务器IP设定为这台机器的IP，但是这样也会带来一个问题，那就是它只能解析abc.com的域名，其它域名不能解析，比如www.lishiming.net它没有办法解析，这时候需要给它配置DNS转发。</p>
+<h2 id="2-4-DNS转发配置"><a href="#2-4-DNS转发配置" class="headerlink" title="2.4. DNS转发配置"></a>2.4. DNS转发配置</h2><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># vim /etc/named.conf</span></div><div class="line"><span class="comment">#&lt;==在options&#123;&#125;里面增加</span></div><div class="line"></div><div class="line">forward first<span class="comment">;</span></div><div class="line">forwarders &#123; <span class="number">8</span>.<span class="number">8</span>.<span class="number">8</span>.<span class="number">8</span><span class="comment">; &#125;;</span></div></pre></td></tr></table></figure>
+<p>这两行就是用来配置转发的，该DNS服务器不能解析的域名会转发到8.8.8.8这个DNS服务器上去解析。</p>
+<h2 id="2-5-DNS主从配置"><a href="#2-5-DNS主从配置" class="headerlink" title="2.5. DNS主从配置"></a>2.5. DNS主从配置</h2><p>任何服务都有可能因为某些原因导致不能正常提供服务，所以我们有必要为DNS服务器配置一个备用的，但是这两台服务器需要保证数据的一致性。比如我们更改主上配置把www.abc.com解析IP更改了，那么备用服务器上也得跟着自动变。下面的步骤就是配置主从的。</p>
+<ul>
+<li><p>首先，在从服务器上安装bind：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> yum install -y <span class="built_in">bind</span></span></div></pre></td></tr></table></figure>
+</li>
+<li><p>然后拷贝主上的配置文件到从上，在这里主服务器的IP为192.168.0.11，从服务器IP为192.168.0.12（注意，下面的操作是在主服务器上）</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># scp <span class="regexp">/etc/</span>named.conf <span class="number">192.168</span>.<span class="number">0.12</span>:<span class="regexp">/etc/</span></div><div class="line"># scp <span class="regexp">/var/</span>named<span class="regexp">/localhost.zone 192.168.0.12:/</span>var<span class="regexp">/named/</span></div><div class="line"># scp <span class="regexp">/var/</span>named<span class="regexp">/named.local 192.168.0.12:/</span>var<span class="regexp">/named/</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>从服务器上，拷贝过来后，修改一下<code>/etc/named.conf</code>，内容如下：</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">options &#123;</div><div class="line">	directory <span class="string">"/var/named"</span>;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">zone <span class="string">"."</span> <span class="keyword">IN</span> &#123;</div><div class="line"><span class="built_in">	type </span>hint;</div><div class="line">	file <span class="string">"named.ca"</span>;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">zone <span class="string">"localhost"</span> <span class="keyword">IN</span> &#123;</div><div class="line"><span class="built_in">	type </span>master;</div><div class="line">	file <span class="string">"localhost.zone"</span>;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">zone <span class="string">"0.0.127.in-addr.arpa"</span> <span class="keyword">IN</span> &#123;</div><div class="line"><span class="built_in">	type </span>master;</div><div class="line">	file <span class="string">"named.local"</span>;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">zone <span class="string">"abc.com"</span> <span class="keyword">IN</span> &#123;</div><div class="line"><span class="built_in">	type </span>slave;</div><div class="line">	file <span class="string">"slaves/abc.com.zone"</span>;</div><div class="line">	masters &#123; 192.168.0.11; &#125;;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">zone <span class="string">"137.168.192.in-addr.arpa"</span> <span class="keyword">IN</span> &#123;</div><div class="line"><span class="built_in">	type </span>slave;</div><div class="line">	file <span class="string">"slaves/192.168.zone"</span>;</div><div class="line">	masters &#123; 192.168.0.11; &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+</li>
+<li><p>从上生成rndc.key：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> rndc-confgen -r /dev/urandom -a</span></div><div class="line"><span class="meta">#</span><span class="bash"> chown named:named /etc/rndc.key</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>从上启动named：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> /etc/init.d/named start</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>启动成功后会在/var/named/下生成一个slave目录，这个目录下会有192.168.zone和abc.com.cone这两个文件，内容是和主上的一样。</p>
+</li>
+<li>然后在从上测试是否可以解析：<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># <span class="selector-tag">dig</span> @<span class="keyword">127</span>.<span class="keyword">0</span>.<span class="keyword">0</span>.<span class="keyword">1</span> www.abc.com</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>下面我们测试主从同步：</p>
+<ul>
+<li><p>在主DNS上更改文件/var/named/abc.com.zone</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">#&lt;==在最后增加一行</div><div class="line"></div><div class="line"><span class="number">123</span> IN A <span class="number">1.1</span><span class="number">.1</span><span class="number">.1</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>另外需要修改一下第三行的那个数字串，这个是用来做标记的，只有这个数字变化了，才可以让从自动跟着便，数字只能变大，不能减小，把2013081601改成2013081602</p>
+</li>
+<li><p>重启主named服务：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> /etc/init.d/named restart</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>经测试我们发现一个问题，就是从经常hi同步特别慢，这是很要命的。所以需要我们做一个特殊操作</p>
+<ul>
+<li>在主上的/etc/named.conf中，abc.com的zone中增加两行：<figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">notify yes;</div><div class="line">also-notify &#123; <span class="number">192.168</span><span class="number">.0</span><span class="number">.12</span>; &#125;;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术/" rel="tag"><i class="fa fa-tag"></i> 技术</a>
+          
+            <a href="/tags/DNS/" rel="tag"><i class="fa fa-tag"></i> DNS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/21/技术/018. Squid代理和缓存服务的部署/" rel="next" title="Squid代理和缓存服务的部署">
+                <i class="fa fa-chevron-left"></i> Squid代理和缓存服务的部署
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/23/技术/020. 邮件服务器的解决方案/" rel="prev" title="邮件服务器的解决方案">
+                邮件服务器的解决方案 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">93</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-DNS介绍"><span class="nav-text">1. DNS介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-bind安装配置"><span class="nav-text">2. bind安装配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-安装"><span class="nav-text">2.1. 安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-配置本地的域"><span class="nav-text">2.2. 配置本地的域</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-增加一个域名（zone）"><span class="nav-text">2.3. 增加一个域名（zone）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-DNS转发配置"><span class="nav-text">2.4. DNS转发配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-DNS主从配置"><span class="nav-text">2.5. DNS主从配置</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

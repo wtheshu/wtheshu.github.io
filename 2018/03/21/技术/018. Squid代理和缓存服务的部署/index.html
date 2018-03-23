@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="技术,Squid," />
+
+
+<meta name="description" content="1. Squid服务介绍Squid是比较知名的代理软件，它不仅可以跑在Linux上，还可以跑在Windows以及Unix上，它的技术已经非常成熟。目前使用Squid的用户也是十分广泛的。Squid与Linux下其它的代理软件如Apache、Socks、TIS FWTK相比，下载安装简单，配置简单灵活，支持缓存和多种协议。 Squid之所以用的很多，是因为它的缓存功能。Squid缓存不仅可以节省宝贵">
+<meta name="keywords" content="技术,Squid">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Squid代理和缓存服务的部署">
+<meta property="og:url" content="http://www.theshu.top/2018/03/21/技术/018. Squid代理和缓存服务的部署/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="1. Squid服务介绍Squid是比较知名的代理软件，它不仅可以跑在Linux上，还可以跑在Windows以及Unix上，它的技术已经非常成熟。目前使用Squid的用户也是十分广泛的。Squid与Linux下其它的代理软件如Apache、Socks、TIS FWTK相比，下载安装简单，配置简单灵活，支持缓存和多种协议。 Squid之所以用的很多，是因为它的缓存功能。Squid缓存不仅可以节省宝贵">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-22T06:43:05.232Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Squid代理和缓存服务的部署">
+<meta name="twitter:description" content="1. Squid服务介绍Squid是比较知名的代理软件，它不仅可以跑在Linux上，还可以跑在Windows以及Unix上，它的技术已经非常成熟。目前使用Squid的用户也是十分广泛的。Squid与Linux下其它的代理软件如Apache、Socks、TIS FWTK相比，下载安装简单，配置简单灵活，支持缓存和多种协议。 Squid之所以用的很多，是因为它的缓存功能。Squid缓存不仅可以节省宝贵">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/03/21/技术/018. Squid代理和缓存服务的部署/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Squid代理和缓存服务的部署 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/21/技术/018. Squid代理和缓存服务的部署/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Squid代理和缓存服务的部署</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-21T13:31:48+08:00">2018-03-21</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-22T14:43:05+08:00">2018-03-22</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-Squid服务介绍"><a href="#1-Squid服务介绍" class="headerlink" title="1. Squid服务介绍"></a>1. Squid服务介绍</h1><p>Squid是比较知名的代理软件，它不仅可以跑在Linux上，还可以跑在Windows以及Unix上，它的技术已经非常成熟。目前使用Squid的用户也是十分广泛的。Squid与Linux下其它的代理软件如Apache、Socks、TIS FWTK相比，下载安装简单，配置简单灵活，支持缓存和多种协议。</p>
+<p>Squid之所以用的很多，是因为它的缓存功能。Squid缓存不仅可以节省宝贵的带宽资源，也可以大大降低服务器的IO。从经济角度考虑，它是很多网站架构中不可或缺的角色。</p>
+<p>Squid不仅可以做正向代理，也可以做反向代理。</p>
+<p>当作为正向代理时，Squid后面是客户端，客户端想上网需经过Squid。当一个用户（客户端）想要请求一个主页时，它向Squid发出一个申请，要Squid替它请求，然后Squid连接用户要请求的网站并请求该主页，接着把该主页传给用户同时保留一个备份，当别的用户请求同样的页面时，Squid把保存的备份立即传给用户，使用户觉得速度非常块。使用正向代理时，客户端需要做一些设置，才能实现，也就是平时我们在IE选项中设置的那个代理。</p>
+<p>而反向代理是，Squid后面为某个站点的服务器，客户端请求该站点时，会先把请求发送到Squid上，然后Squid去处理用户的请求动作。</p>
+<p>总之，简单来说，正向代理，Squid后面是客户端，客户端上网要通过Squid去上。反向代理，Squid后面是服务器，服务器返回给用户数据需要走Squid。</p>
+<p>那什么时候需要配置正向代理，又什么时候配置反向代理呢？有这样一个观点就是：正向代理用在企业的办公环境中，员工上网需要通过Squid代理来上网，这样可以节省网络带宽资源。而反向代理用来搭建网站静态项（图片、html、流媒体、js、css等）的缓存服务器，它用于网站架构中。</p>
+<hr>
+<h1 id="2-Squid正向代理"><a href="#2-Squid正向代理" class="headerlink" title="2. Squid正向代理"></a>2. Squid正向代理</h1><p>CentOS系统自带Squid包，安装命令是：<code>yum install -y squid</code></p>
+<p>当然你也可以源码包编译安装，Squid的官网是<a href="http://www.squid-cache.org/" target="_blank" rel="external">http://www/squid-cache.org</a>，下载需要的版本。如果想要编译安装Squid，参考下面的编译参数：<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">./configure --prefix=/usr/local/squid \</div><div class="line">-<span class="ruby">-disable-dependency-tracking \</span></div><div class="line"><span class="ruby">--enable-dlmalloc \</span></div><div class="line"><span class="ruby">--enable-gnuregex \</span></div><div class="line"><span class="ruby">--disable-carp \</span></div><div class="line"><span class="ruby">--enable-async-io=<span class="number">240</span> \</span></div><div class="line"><span class="ruby">--with-pthreads \</span></div><div class="line"><span class="ruby">--enable-storeio=ufs,aufs,diskd,null \</span></div><div class="line"><span class="ruby">--disable-wccp \</span></div><div class="line"><span class="ruby">--disable-wccpv2 \</span></div><div class="line"><span class="ruby">--enable-kill-parent-hack \</span></div><div class="line"><span class="ruby">--enable-cachemgr-hostname=localhost \</span></div><div class="line"><span class="ruby">--enable-default-err-language=Simplify_Chinese \</span></div><div class="line"><span class="ruby">--with-build-environment=POSIX_V6_ILP32_OFFBIG \</span></div><div class="line"><span class="ruby">--with-maxfd=<span class="number">65535</span> \</span></div><div class="line"><span class="ruby">--with-aio \</span></div><div class="line"><span class="ruby">--disable-poll \</span></div><div class="line"><span class="ruby">--enable-epoll \</span></div><div class="line"><span class="ruby">--enable-linux-netfilter \</span></div><div class="line"><span class="ruby">--enable-large-cache-files \</span></div><div class="line"><span class="ruby">--disable-ident-lookups \</span></div><div class="line"><span class="ruby">--enable-default-hostsfile=<span class="regexp">/etc/hosts</span> \</span></div><div class="line"><span class="ruby">--with-dl \</span></div><div class="line"><span class="ruby">--with-large-files \</span></div><div class="line"><span class="ruby">--enable-removal-policies=heap,lru \</span></div><div class="line"><span class="ruby">--enable-delay-pools \</span></div><div class="line"><span class="ruby">--enable-snmp \</span></div><div class="line"><span class="ruby">--disable-internal-dns</span></div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意：这些参数不见得符合你的需求，这里只是提供一个参考。其实，CentOS中自带的Squid足以满足需求，所以没有必要去编译安装。</p>
+</blockquote>
+<p>安装完后，可以查看Squid版本（同时还可以看到Squid的编译参数）：<br><figure class="highlight clean"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">]# squid -v</div><div class="line">Squid Cache: Version <span class="number">3.5</span><span class="number">.20</span></div><div class="line">Service Name: squid</div><div class="line">configure options:  <span class="string">'--build=x86_64-redhat-linux-gnu'</span> <span class="string">'--host=x86_64-redhat-linux-gnu'</span></div><div class="line">......</div></pre></td></tr></table></figure></p>
+<p>下面需要配置一下Squid，来实现正向代理：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> rm -f /etc/squid/squid.conf</span></div><div class="line"><span class="meta">#</span><span class="bash"> vim /etc/squid/squid.conf</span></div></pre></td></tr></table></figure></p>
+<p>我们不使用默认的配置文件，删除它，重新写入如下配置：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">http_port 3128</div><div class="line">acl manager proto cache_object</div><div class="line">acl localhost src 127.0.0.1/32 ::1</div><div class="line">acl to_localhost dst 127.0.0.0/8 0.0.0.0/32 ::1</div><div class="line">acl localnet src 10.0.0.0/8		#RFC1918 possible internal network</div><div class="line">acl localnet src 172.16.0.0/12	#RFC1918 possible internal network</div><div class="line">acl localnet src 192.168.0.0/16	#RFC1918 possible internal network</div><div class="line">acl SSL_ports<span class="built_in"> port </span>443</div><div class="line">acl Safe_ports<span class="built_in"> port </span>80 8080		#http</div><div class="line">acl Safe_ports<span class="built_in"> port </span>21			#ftp</div><div class="line">acl Safe_ports<span class="built_in"> port </span>443			#https</div><div class="line">acl CONNECT method CONNECT</div><div class="line">http_access allow manager localhost</div><div class="line">http_access deny manager</div><div class="line">http_access deny !Safe_ports</div><div class="line">http_access allow localnet</div><div class="line">http_access allow localhost</div><div class="line">http_access allow all</div><div class="line">cache_dir aufs /data/cache 1024 16 256</div><div class="line">cache_mem 256M</div><div class="line">hierarchy_stoplist cgi-bin ?</div><div class="line">coredump_dir /var/spool/squid</div><div class="line">refresh_pattern ^ftp:					 1440	20%	 10080</div><div class="line">refresh_pattern ^gopher:				 1440	0%	 1440</div><div class="line">refresh_pattern -i (/cgi-bin/|\?)		 0		0%	 0</div><div class="line">refresh_pattern \.(jpeg|png|gif|mp3|xml) 1440	50%	 2880	ignore-reload</div><div class="line">refresh_pattern .						 0		20%	 4320</div></pre></td></tr></table></figure></p>
+<p>在配置文件中有几处需要简单描述一下：</p>
+<ul>
+<li>第一行的<code>http_port 3128</code>这个指的是，Squid服务启动后将要监听的端口，也可以是80.</li>
+<li><code>cache_dir</code>这个用来指定本地磁盘上的缓存目录（需要手动创建，否则启动不了），后边的1024为大小，单位是M，具体根据你的磁盘大小决定。</li>
+<li><code>cache_mem</code>它用来规定缓存占用内存的大小，即把缓存的东西存到内存里，具体也需要根据你机器的内存定，如果你的机器只是跑Squid服务，那么留给系统512内存外，其他可以都分给Squid。</li>
+</ul>
+<p>配置文件保存后，可以先检测一下是否有语法错误：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> squid -kcheck</span></div></pre></td></tr></table></figure></p>
+<p>如果提示信息为：<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attr">squid:</span> <span class="attr">ERROR:</span> <span class="literal">No</span> <span class="string">running</span> <span class="string">copy</span></div></pre></td></tr></table></figure></p>
+<p>这是说squid还未启动，没有关系，显示成这样说明配置文件没有问题。在启动前还得做一件事，就是初始化缓存目录：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> mkdir -p /data/cache</span></div><div class="line"><span class="meta">#</span><span class="bash"> chown -R squid:squid /data/cache/</span></div><div class="line"><span class="meta">#</span><span class="bash"> squid -z <span class="comment">#&lt;==初始化缓存目录，可以省略</span></span></div></pre></td></tr></table></figure></p>
+<p>在上述的初始化完成后，就可以启动squid了：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> /etc/init.d/squid start</span></div></pre></td></tr></table></figure></p>
+<p>查看squid是否启动：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> ps aux | grep squid</span></div></pre></td></tr></table></figure></p>
+<p>还有1个关于squid的命令需要掌握：</p>
+<ul>
+<li><code>squid -k rec</code>可以重新加载配置</li>
+<li><code>service squid start</code>启动服务</li>
+<li><code>service squid restart</code>重启服务</li>
+</ul>
+<p>到这一步，就已经可以在真机上测测看squid的正向代理了。可以在IE浏览器里面进行设置。</p>
+<p>或者直接使用curl命令测试即可：<br><figure class="highlight 1c"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta"># curl -xlocalhost:3128 http:<span class="comment">//www.baidu.com/</span></span></div></pre></td></tr></table></figure></p>
+<p>如果你看到了一大串，说明squid正向代理设置成功了。另外我们也可以观察squid对图片的缓存：<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># curl -xlocalhost:3128 -I http://www.apelearn.com/bbs/static/image/common/logo.png</span></div><div class="line"><span class="string">HTTP/1.0</span> <span class="number">200</span> <span class="string">OK</span></div><div class="line"><span class="attr">Server:</span> <span class="string">nginx</span></div><div class="line"><span class="attr">Date:</span> <span class="string">Thu,</span> <span class="number">22</span> <span class="string">Mar</span> <span class="number">2018</span> <span class="number">04</span><span class="string">:29:45</span> <span class="string">GMT</span></div><div class="line"><span class="attr">Content-Type:</span> <span class="string">image/png</span></div><div class="line"><span class="attr">Content-Length:</span> <span class="number">4350</span></div><div class="line"><span class="attr">Last-Modified:</span> <span class="string">Fri,</span> <span class="number">27</span> <span class="string">Mar</span> <span class="number">2015</span> <span class="number">06</span><span class="string">:03:50</span> <span class="string">GMT</span></div><div class="line"><span class="attr">ETag:</span> <span class="string">"5514f2c6-10fe"</span></div><div class="line"><span class="attr">Expires:</span> <span class="string">Sat,</span> <span class="number">21</span> <span class="string">Apr</span> <span class="number">2018</span> <span class="number">04</span><span class="string">:29:45</span> <span class="string">GMT</span></div><div class="line"><span class="attr">Cache-Control:</span> <span class="string">max-age=2592000</span></div><div class="line"><span class="attr">Accept-Ranges:</span> <span class="string">bytes</span></div><div class="line"><span class="attr">X-Cache:</span> <span class="string">MISS</span> <span class="string">from</span> <span class="string">localhost.localdomain</span></div><div class="line"><span class="attr">X-Cache-Lookup:</span> <span class="string">MISS</span> <span class="string">from</span> <span class="string">localhost.localdomain:3128</span></div><div class="line"><span class="attr">Via:</span> <span class="number">1.0</span> <span class="string">localhost.localdomain</span> <span class="string">(squid/3.1.23)</span></div><div class="line"><span class="attr">Connection:</span> <span class="string">keep-alive</span></div><div class="line"></div><div class="line"><span class="comment"># curl -xlocalhost:3128 -I http://www.apelearn.com/bbs/static/image/common/logo.png</span></div><div class="line"><span class="string">HTTP/1.0</span> <span class="number">200</span> <span class="string">OK</span></div><div class="line"><span class="attr">Server:</span> <span class="string">nginx</span></div><div class="line"><span class="attr">Date:</span> <span class="string">Thu,</span> <span class="number">22</span> <span class="string">Mar</span> <span class="number">2018</span> <span class="number">04</span><span class="string">:29:45</span> <span class="string">GMT</span></div><div class="line"><span class="attr">Content-Type:</span> <span class="string">image/png</span></div><div class="line"><span class="attr">Content-Length:</span> <span class="number">4350</span></div><div class="line"><span class="attr">Last-Modified:</span> <span class="string">Fri,</span> <span class="number">27</span> <span class="string">Mar</span> <span class="number">2015</span> <span class="number">06</span><span class="string">:03:50</span> <span class="string">GMT</span></div><div class="line"><span class="attr">ETag:</span> <span class="string">"5514f2c6-10fe"</span></div><div class="line"><span class="attr">Expires:</span> <span class="string">Sat,</span> <span class="number">21</span> <span class="string">Apr</span> <span class="number">2018</span> <span class="number">04</span><span class="string">:29:45</span> <span class="string">GMT</span></div><div class="line"><span class="attr">Cache-Control:</span> <span class="string">max-age=2592000</span></div><div class="line"><span class="attr">Accept-Ranges:</span> <span class="string">bytes</span></div><div class="line"><span class="attr">Age:</span> <span class="number">34</span></div><div class="line"><span class="attr">X-Cache:</span> <span class="string">HIT</span> <span class="string">from</span> <span class="string">localhost.localdomain</span></div><div class="line"><span class="attr">X-Cache-Lookup:</span> <span class="string">HIT</span> <span class="string">from</span> <span class="string">localhost.localdomain:3128</span>	<span class="comment">#&lt;==注意这里的不同</span></div><div class="line"><span class="attr">Via:</span> <span class="number">1.0</span> <span class="string">localhost.localdomain</span> <span class="string">(squid/3.1.23)</span></div><div class="line"><span class="attr">Connection:</span> <span class="string">keep-alive</span></div></pre></td></tr></table></figure></p>
+<p>上面连续访问了两次同样的图片资源，可以发现前后两次的不同，其中<code>X-Cache-Lookup: HIT from localhost.localdomain:3128</code>显示，该请求已经HIT，它直接从本地的3128端口获取了数据。</p>
+<p>有时我们会有这样的需求，就是想要限制某些域名不能通过代理访问，或者说只想代理某几个域名，这该如何做呢？在squid.conf中找到<br><figure class="highlight oxygene"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">acl CONNETC <span class="function"><span class="keyword">method</span> <span class="title">CONNECT</span></span></div></pre></td></tr></table></figure></p>
+<p>在其下面添加四行：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">acl http proto HTTP</div><div class="line">acl good_domain dstdomain <span class="selector-class">.apelearn</span><span class="selector-class">.com</span> <span class="selector-class">.aminglinux</span><span class="selector-class">.com</span></div><div class="line">http_access allow http good_domain</div><div class="line">http_access deny http !good_domain</div></pre></td></tr></table></figure></p>
+<p>其中，我的白名单域名为：<code>.apelearn.com .aminglinux.com</code>，这里的<code>.</code>表示万能匹配。前面可以是任意字符，你只需要填写你的白名单即可。</p>
+<p>重启squid再来测测看：<br><figure class="highlight ldif"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># /etc/init.d/squid restart</span></div><div class="line"><span class="comment"># curl -xlocalhost:3128 -I http://www.baidu.com/</span></div><div class="line"><span class="attribute">HTTP/1.0 403 Forbidden</span></div><div class="line"><span class="attribute">Server</span>: squid/3.1.23</div><div class="line"><span class="attribute">Mime-Version</span>: 1.0</div><div class="line"><span class="attribute">Date</span>: Thu, 15 Mar 2018 12:08:47 GMT</div><div class="line"><span class="attribute">Content-Type</span>: text/html</div><div class="line"><span class="attribute">Content-Length</span>: 3286</div><div class="line"><span class="attribute">X-Squid-Error</span>: ERR_ACCESS_DENIED 0</div><div class="line"><span class="attribute">Vary</span>: Accept-Language</div><div class="line"><span class="attribute">Content-Language</span>: en</div><div class="line"><span class="attribute">X-Cache</span>: MISS from localhost.localdomain</div><div class="line"><span class="attribute">X-Cache-Lookup</span>: NONE from localhost.localdomain:3128</div><div class="line"><span class="attribute">Via</span>: 1.0 localhost.localdomain (squid/3.1.23)</div><div class="line"><span class="attribute">Connection</span>: keep-alive</div></pre></td></tr></table></figure></p>
+<p>访问百度已经变成了403了。如果要设置黑名单呢？道理是一样的：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">acl http proto HTTP</div><div class="line">acl bad_domain dstdomain <span class="selector-class">.sina</span><span class="selector-class">.com</span> <span class="selector-class">.souhu</span><span class="selector-class">.com</span></div><div class="line">http_access allow http !bad_domain</div><div class="line">http_access deny http bad_domain</div></pre></td></tr></table></figure></p>
+<p>重启squid后，测试：<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># /etc/init.d/squid restart</span></div><div class="line"><span class="comment"># curl -xlocalhost:3128 http://www.sina.com/ -I</span></div><div class="line"><span class="string">HTTP/1.0</span> <span class="number">403</span> <span class="string">Forbidden</span></div><div class="line"><span class="attr">Server:</span> <span class="string">squid/3.1.23</span></div><div class="line"><span class="attr">Mime-Version:</span> <span class="number">1.0</span></div><div class="line"><span class="attr">Date:</span> <span class="string">Thu,</span> <span class="number">15</span> <span class="string">Mar</span> <span class="number">2018</span> <span class="number">12</span><span class="string">:12:44</span> <span class="string">GMT</span></div><div class="line"><span class="attr">Content-Type:</span> <span class="string">text/html</span></div><div class="line"><span class="attr">Content-Length:</span> <span class="number">3283</span></div><div class="line"><span class="attr">X-Squid-Error:</span> <span class="string">ERR_ACCESS_DENIED</span> <span class="number">0</span></div><div class="line"><span class="attr">Vary:</span> <span class="string">Accept-Language</span></div><div class="line"><span class="attr">Content-Language:</span> <span class="string">en</span></div><div class="line"><span class="attr">X-Cache:</span> <span class="string">MISS</span> <span class="string">from</span> <span class="string">localhost.localdomain</span></div><div class="line"><span class="attr">X-Cache-Lookup:</span> <span class="string">NONE</span> <span class="string">from</span> <span class="string">localhost.localdomain:3128</span></div><div class="line"><span class="attr">Via:</span> <span class="number">1.0</span> <span class="string">localhost.localdomain</span> <span class="string">(squid/3.1.23)</span></div><div class="line"><span class="attr">Connection:</span> <span class="string">keep-alive</span></div><div class="line"></div><div class="line"><span class="comment"># curl -xlocalhost:3128 http://www.baidu.com/ -I</span></div><div class="line"><span class="string">HTTP/1.0</span> <span class="number">200</span> <span class="string">OK</span></div><div class="line"><span class="attr">Server:</span> <span class="string">bfe/1.0.8.18</span></div><div class="line"><span class="attr">Date:</span> <span class="string">Thu,</span> <span class="number">22</span> <span class="string">Mar</span> <span class="number">2018</span> <span class="number">05</span><span class="string">:21:12</span> <span class="string">GMT</span></div><div class="line"><span class="attr">Content-Type:</span> <span class="string">text/html</span></div><div class="line"><span class="attr">Content-Length:</span> <span class="number">277</span></div><div class="line"><span class="attr">Last-Modified:</span> <span class="string">Mon,</span> <span class="number">13</span> <span class="string">Jun</span> <span class="number">2016</span> <span class="number">02</span><span class="string">:50:04</span> <span class="string">GMT</span></div><div class="line"><span class="attr">ETag:</span> <span class="string">"575e1f5c-115"</span></div><div class="line"><span class="attr">Cache-Control:</span> <span class="string">private,</span> <span class="literal">no</span><span class="bullet">-cache,</span> <span class="literal">no</span><span class="bullet">-store,</span> <span class="string">proxy-revalidate,</span> <span class="literal">no</span><span class="bullet">-transform</span></div><div class="line"><span class="attr">Pragma:</span> <span class="literal">no</span><span class="bullet">-cache</span></div><div class="line"><span class="attr">Accept-Ranges:</span> <span class="string">bytes</span></div><div class="line"><span class="attr">X-Cache:</span> <span class="string">MISS</span> <span class="string">from</span> <span class="string">localhost.localdomain</span></div><div class="line"><span class="attr">X-Cache-Lookup:</span> <span class="string">MISS</span> <span class="string">from</span> <span class="string">localhost.localdomain:3128</span></div><div class="line"><span class="attr">Via:</span> <span class="number">1.0</span> <span class="string">localhost.localdomain</span> <span class="string">(squid/3.1.23)</span></div><div class="line"><span class="attr">Connection:</span> <span class="string">keep-alive</span></div></pre></td></tr></table></figure></p>
+<p>可以看到baidu.com可以访问，而sina.com不可以访问了。</p>
+<hr>
+<h1 id="3-Squid反向代理"><a href="#3-Squid反向代理" class="headerlink" title="3. Squid反向代理"></a>3. Squid反向代理</h1><p>反向代理配置过程其实和前面的正向代理没有什么太大的区别，唯一的区别是配置文件中一个地方需要修改一下。需要把：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">http_port <span class="number">3128</span></div></pre></td></tr></table></figure></p>
+<p>改为：<br><figure class="highlight elm"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="title">http_port</span> <span class="number">80</span> accel vhost v<span class="keyword">port</span></div></pre></td></tr></table></figure></p>
+<p>然后再增加你要代理的后端真实服务器信息：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">cache_peer <span class="number">180.97</span>.<span class="number">33.108</span> parent <span class="number">80</span> <span class="number">0</span> originserver name=a</div><div class="line">cache_peer <span class="number">101.226</span>.<span class="number">103.106</span> parent <span class="number">80</span> <span class="number">0</span> originserver name=b</div><div class="line">cache_peer_domain <span class="selector-tag">a</span> www<span class="selector-class">.qq</span><span class="selector-class">.com</span></div><div class="line">cache_peer_domain <span class="selector-tag">b</span> www<span class="selector-class">.baidu</span><span class="selector-class">.com</span></div></pre></td></tr></table></figure></p>
+<p>说明：</p>
+<ul>
+<li>因为咱们之前没有配置网站信息，所以就拿QQ和Baidu来做个例子。</li>
+<li>其中，<code>chache_peer</code>为配置后端的服务器IP及端口。</li>
+<li><code>name</code> 后边为要配置的域名，这里和后面的<code>cache_peer_domain</code>相对应。</li>
+</ul>
+<p>实际的应用中，IP大多为内外IP，而域名也许会有多个，如果是squid要代理一台Web上的所有域名，那么就写成这样：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cache_peer <span class="number">192.168</span><span class="number">.10</span><span class="number">.111</span> parent <span class="number">80</span> <span class="number">0</span> originserver</div></pre></td></tr></table></figure></p>
+<p>后面连<code>cache_peer_domain</code>也省了。</p>
+<p>反向代理主要用于缓存静态项，因为诸多静态项目尤其是图片、流媒体等比较耗费带宽，在中国，联通网访问电信的资源本来就慢，如果再去访问大流量的图片、流媒体那更会满了，所以如果在联通网配置一个Squid反向代理，让联通客户端直接访问这个联通Squid，而这些静态项已经被缓存在了Squid上，这样就大大加快了访问速度。也许你听说过CDN，其实它的设计原理就是这样的思路。</p>
+<p>接下来，测试一下反向代理。因为修改了配置文件，所以需要重新加载squid配置文件或者重启squid服务：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> /etc/init.d/squid restart</span></div><div class="line"><span class="meta">#</span><span class="bash"> curl -xlocalhost:80 http://www.baidu.com/</span></div><div class="line"><span class="meta">#</span><span class="bash"> curl -xlocalhost:80 http://www.qq.com/</span></div><div class="line"><span class="meta">#</span><span class="bash"> curl -xlocalhost:80 http://www.sina.com</span></div></pre></td></tr></table></figure></p>
+<p>你会发现，baidu.com和qq.com都能正常访问，然而sina.com访问503了，这是因为我们并没有加sina.com的相关设置。</p>
+<hr>
+<h1 id="4-关于Squid的操作"><a href="#4-关于Squid的操作" class="headerlink" title="4. 关于Squid的操作"></a>4. 关于Squid的操作</h1><p>关于Squid还有一些知识点，需要掌握：<br><figure class="highlight haml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"># squid -h</div><div class="line">Usage: squid [-cdhvzCFNRVYX] [-s | -l facility] [-f config-file] [-[au] port] [-k signal]</div><div class="line">       -<span class="ruby">a port   Specify HTTP port number (<span class="symbol">default:</span> <span class="number">3128</span>).</span></div><div class="line"><span class="ruby">       -d level  Write debugging to stderr also.</span></div><div class="line"><span class="ruby">       -f file   Use given config-file instead of</span></div><div class="line"><span class="ruby">                 /etc/squid/squid.conf</span></div><div class="line"><span class="ruby">       -h        Print help message.</span></div><div class="line"><span class="ruby">       -k reconfigure<span class="params">|rotate|</span>shutdown<span class="params">|interrupt|</span>kill<span class="params">|debug|</span>check<span class="params">|parse</span></span></div><div class="line"><span class="ruby">                 Parse configuration file, <span class="keyword">then</span> send signal to</span></div><div class="line"><span class="ruby">                 running copy (except -k parse) <span class="keyword">and</span> exit.</span></div><div class="line"><span class="ruby">       -s <span class="params">| -l facility</span></span></div><div class="line"><span class="ruby">                 Enable logging to syslog.</span></div><div class="line"><span class="ruby">       -u port   Specify ICP port number (<span class="symbol">default:</span> <span class="number">3130</span>), disable with <span class="number">0</span>.</span></div><div class="line"><span class="ruby">       -v        Print version.</span></div><div class="line"><span class="ruby">       -z        Create swap directories</span></div><div class="line"><span class="ruby">       -C        Do <span class="keyword">not</span> catch fatal signals.</span></div><div class="line"><span class="ruby">       -D        OBSOLETE. Scheduled <span class="keyword">for</span> removal.</span></div><div class="line"><span class="ruby">       -F        Don<span class="string">'t serve any requests until store is rebuilt.</span></span></div><div class="line"><span class="ruby">       -N        No daemon mode.</span></div><div class="line"><span class="ruby">       -R        Do <span class="keyword">not</span> set REUSEADDR on port.</span></div><div class="line"><span class="ruby">       -S        Double-check swap during rebuild.</span></div><div class="line"><span class="ruby">       -X        Force full debugging.</span></div><div class="line"><span class="ruby">       -Y        Only <span class="keyword">return</span> UDP_HIT <span class="keyword">or</span> UDP_MISS_NOFETCH during fast reload.</span></div></pre></td></tr></table></figure></p>
+<p>上面把squid命令所用到的选项全部打印出来了。但是最常用的除了<code>squid -k check</code>外，还有一个那就是<code>squid -k reconfigure</code>。它们俩都可以简写为：</p>
+<ul>
+<li><code>squid -kche</code></li>
+<li><code>squid -krec</code></li>
+<li>且其中第二条命令表示重新加载配置文件，如果我们更改了配置文件后，不需要重启squid服务，直接使用这个命令重新加载配置即可。</li>
+</ul>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/技术/" rel="tag"><i class="fa fa-tag"></i> 技术</a>
+          
+            <a href="/tags/Squid/" rel="tag"><i class="fa fa-tag"></i> Squid</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/20/技术/017. MySQL存储引擎MyISAM与InnoDB的优劣/" rel="next" title="MySQL存储引擎MyISAM与InnoDB的优劣">
+                <i class="fa fa-chevron-left"></i> MySQL存储引擎MyISAM与InnoDB的优劣
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/23/技术/019. 使用bind搭建DNS服务器/" rel="prev" title="使用bind搭建DNS服务器">
+                使用bind搭建DNS服务器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">93</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">28</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Squid服务介绍"><span class="nav-text">1. Squid服务介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Squid正向代理"><span class="nav-text">2. Squid正向代理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Squid反向代理"><span class="nav-text">3. Squid反向代理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-关于Squid的操作"><span class="nav-text">4. 关于Squid的操作</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>

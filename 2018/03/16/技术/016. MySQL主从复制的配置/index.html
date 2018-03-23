@@ -108,18 +108,18 @@
   <meta name="keywords" content="技术,MySQL," />
 
 
-<meta name="description" content="MySQL Replication又称AB复制或者主从复制，它主要用于MySQL的实时备份或者读写分离。在配置之前先做一下准备工作：配置两台MySQL服务器，或者在一台服务器上配置两个端口。在下面的实验中，就是在一台服务器上运行了两个MySQL。 1. 在一台服务器上配置两个MySQL服务配置MySQL服务的详细步骤请参考LAMP源码方式安装的那篇学习笔记。在这里，假设已经搭建好了一个MySQL服">
+<meta name="description" content="MySQL Replication又称AB复制或者主从复制，它主要用于MySQL的实时备份或者读写分离。在配置之前先做一下准备工作：配置两台MySQL服务器，或者在一台服务器上配置两个端口。在下面的实验中，就是在一台服务器上运行了两个MySQL。 MySQL主从原理非常简单，总结如下：  每个从仅可以设置一个主 主在中SQL之后，记录二进制log文件（bin-log） 从连接主，并从主获取binl">
 <meta name="keywords" content="技术,MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="MySQL主从复制的配置">
 <meta property="og:url" content="http://www.theshu.top/2018/03/16/技术/016. MySQL主从复制的配置/index.html">
 <meta property="og:site_name" content="奇怪先生的博客">
-<meta property="og:description" content="MySQL Replication又称AB复制或者主从复制，它主要用于MySQL的实时备份或者读写分离。在配置之前先做一下准备工作：配置两台MySQL服务器，或者在一台服务器上配置两个端口。在下面的实验中，就是在一台服务器上运行了两个MySQL。 1. 在一台服务器上配置两个MySQL服务配置MySQL服务的详细步骤请参考LAMP源码方式安装的那篇学习笔记。在这里，假设已经搭建好了一个MySQL服">
+<meta property="og:description" content="MySQL Replication又称AB复制或者主从复制，它主要用于MySQL的实时备份或者读写分离。在配置之前先做一下准备工作：配置两台MySQL服务器，或者在一台服务器上配置两个端口。在下面的实验中，就是在一台服务器上运行了两个MySQL。 MySQL主从原理非常简单，总结如下：  每个从仅可以设置一个主 主在中SQL之后，记录二进制log文件（bin-log） 从连接主，并从主获取binl">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-16T10:55:39.817Z">
+<meta property="og:updated_time" content="2018-03-23T01:13:03.728Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="MySQL主从复制的配置">
-<meta name="twitter:description" content="MySQL Replication又称AB复制或者主从复制，它主要用于MySQL的实时备份或者读写分离。在配置之前先做一下准备工作：配置两台MySQL服务器，或者在一台服务器上配置两个端口。在下面的实验中，就是在一台服务器上运行了两个MySQL。 1. 在一台服务器上配置两个MySQL服务配置MySQL服务的详细步骤请参考LAMP源码方式安装的那篇学习笔记。在这里，假设已经搭建好了一个MySQL服">
+<meta name="twitter:description" content="MySQL Replication又称AB复制或者主从复制，它主要用于MySQL的实时备份或者读写分离。在配置之前先做一下准备工作：配置两台MySQL服务器，或者在一台服务器上配置两个端口。在下面的实验中，就是在一台服务器上运行了两个MySQL。 MySQL主从原理非常简单，总结如下：  每个从仅可以设置一个主 主在中SQL之后，记录二进制log文件（bin-log） 从连接主，并从主获取binl">
 
 
 
@@ -363,7 +363,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-16T18:55:39+08:00">2018-03-16</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-23T09:13:03+08:00">2018-03-23</time>
             
           </span>
 
@@ -414,6 +414,26 @@
 
       
         <p><strong>MySQL Replication</strong>又称<strong>AB复制</strong>或者<strong>主从复制</strong>，它主要用于MySQL的实时备份或者读写分离。在配置之前先做一下准备工作：配置两台MySQL服务器，或者在一台服务器上配置两个端口。在下面的实验中，就是在一台服务器上运行了两个MySQL。</p>
+<p>MySQL主从原理非常简单，总结如下：</p>
+<ul>
+<li>每个从仅可以设置一个主</li>
+<li>主在中SQL之后，记录二进制log文件（bin-log）</li>
+<li>从连接主，并从主获取binlog，存于本地relay-log，并从上次记住的位置起执行SQL，一旦遇到错误则停止同步</li>
+</ul>
+<p>从这几条Relocation原理来看，可以有这些推论：</p>
+<ul>
+<li>主从间的数据库不是实时同步，就算网络连接正常，也存在瞬间，主从数据不一致</li>
+<li>如果主从的网络断开，从会在网络正常后，批量同步</li>
+<li>如果对从进行修改数据，那么很可能从在执行主的bin-log时出现错误而停止同步，这个是很危险的操作。所以一般情况下，非常小心的修改从上的数据</li>
+<li>一个衍生的配置是双主，互为主从配置，只要双方的修改不冲突，可以工作良好</li>
+<li>如果需要多主的话，可以用环形配置，这样任意一个节点的修改都可以同步到所有节点</li>
+</ul>
+<p>可以应用在读写分离的场景中，用以降低单台MySQL服务器的IO：</p>
+<ul>
+<li>可以实现MySQL服务的HA集群</li>
+<li>可以是一主多从，也可以是互相主从（主主）</li>
+</ul>
+<hr>
 <h1 id="1-在一台服务器上配置两个MySQL服务"><a href="#1-在一台服务器上配置两个MySQL服务" class="headerlink" title="1. 在一台服务器上配置两个MySQL服务"></a>1. 在一台服务器上配置两个MySQL服务</h1><p>配置MySQL服务的详细步骤请参考LAMP源码方式安装的那篇学习笔记。在这里，假设已经搭建好了一个MySQL服务，使用的是3306端口，那么下面再搭建一个3307端口的MySQL，方法如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> /usr/<span class="built_in">local</span></span></div><div class="line"><span class="meta">#</span><span class="bash"> cp -r mysql mysql_2</span></div><div class="line"><span class="meta">#</span><span class="bash"> <span class="built_in">cd</span> mysql_2</span></div><div class="line"><span class="meta">#</span><span class="bash"> ./scripts/mysql_install_db --user=mysql --datadir=/data/mysql2</span></div></pre></td></tr></table></figure></p>
 <p>初始化数据库目录，显示两个OK并且生成/data/mysql2目录才正确；否则请仔细查看错误信息。</p>
 <p>复制配置文件到mysql_2目录下，并修改相关项目，如下所示：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> cp /etc/my.cnf /usr/<span class="built_in">local</span>/mysql_2/</span></div><div class="line"><span class="meta">#</span><span class="bash"> vim /usr/<span class="built_in">local</span>/mysql_2/my.cnf</span></div></pre></td></tr></table></figure></p>
@@ -472,6 +492,59 @@
 <p>再从slave上看：<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mysql&gt; select * from db;</div><div class="line"><span class="keyword">ERROR </span>1146 (42S02): Table 'aming.db' doesn't exist</div></pre></td></tr></table></figure></p>
 <p>这次就很明显了，db表已经不存在了。</p>
 <p>主从配置起来虽然很简单，但这种机制非常脆弱，一旦我们不小心在slave上写了数据，那么主从复制也就被破坏了。另外，如果重新master，务必要先关闭slave，即在slave上执行<code>slave stop</code>命令，然后再去重启master的MySQL服务，否则主从复制很有可能就会中断。当然重启master后，我们还需要执行<code>start slave</code>命令开启主从复制的服务。</p>
+<hr>
+<h1 id="3-设置主主"><a href="#3-设置主主" class="headerlink" title="3. 设置主主"></a>3. 设置主主</h1><p>MySQL主主复制结构区别于主从复制结构。在主主复制结构中，两台服务器的任何一台上面的数据库存发生了改变都会同步到另一台服务器上，这样开两台服务器互为主从，并且都能向外提供服务。这就比使用主从复制具有更好的性能。</p>
+<p>接下来，将使用两个同样的服务器来实现这个效果：</p>
+<ul>
+<li>server1_mysql:192.168.1.108</li>
+<li>server2_mysql:192.168.1.110</li>
+</ul>
+<h2 id="3-1-创建用户并授权"><a href="#3-1-创建用户并授权" class="headerlink" title="3.1. 创建用户并授权"></a>3.1. 创建用户并授权</h2><ul>
+<li><p>server1:</p>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mysql&gt; grant replication slave <span class="keyword">on</span> *.* <span class="keyword">to</span> <span class="string">'server2'</span>@<span class="string">'192.168.1.110'</span></div><div class="line"></div><div class="line">IDENTIFIED <span class="keyword">BY</span> <span class="string">'server2'</span>;</div></pre></td></tr></table></figure>
+</li>
+<li><p>server2:</p>
+<figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mysql&gt; grant replication slave <span class="keyword">on</span> *.* <span class="keyword">to</span> <span class="string">'server1'</span>@<span class="string">'192.168.1.108'</span></div><div class="line"></div><div class="line">IDENTIFIED <span class="keyword">BY</span> <span class="string">'server1'</span>;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="3-2-修改MySQL的主配置文件"><a href="#3-2-修改MySQL的主配置文件" class="headerlink" title="3.2. 修改MySQL的主配置文件"></a>3.2. 修改MySQL的主配置文件</h2><ul>
+<li><p>server1</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="section">[mysql]</span></div><div class="line"><span class="attr">server-id</span>=<span class="number">10</span></div><div class="line"><span class="attr">log-bin</span>=mysql-bin</div><div class="line"><span class="attr">replicate-do-db</span>=mydb</div><div class="line"><span class="attr">auto-increment-increment</span>=<span class="number">2</span>	//#&lt;==每次增长<span class="number">2</span></div><div class="line"><span class="attr">auto-increment-offset</span>=<span class="number">1</span>		//#&lt;==设置自动增长的字段的偏移量，即初始值为<span class="number">2</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>启动server1</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> service mysqld restart</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>server2</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="section">[mysql]</span></div><div class="line"><span class="attr">server-id</span>=<span class="number">20</span></div><div class="line"><span class="attr">log-bin</span>=mysql-bin</div><div class="line"><span class="attr">replicate-do-db</span>=mydb</div><div class="line"><span class="attr">auto-increment-increment</span>=<span class="number">2</span>	//#&lt;==每次增长<span class="number">2</span></div><div class="line"><span class="attr">auto-increment-offset</span>=<span class="number">2</span>		//#&lt;==设置自动增长的字段的偏移量，即初始值为<span class="number">2</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>启动server2</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> service mysqld restart</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>注：</p>
+<ul>
+<li>二只有<code>server-id</code>和<code>auto-increment-offset</code>不同。</li>
+<li><code>auto-increment-increment</code>的值应设为整个结构中服务器的总数，本案例用到两台服务器，所以值设为2.</li>
+</ul>
+<h2 id="3-3-重启两台服务器"><a href="#3-3-重启两台服务器" class="headerlink" title="3.3. 重启两台服务器"></a>3.3. 重启两台服务器</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span><span class="bash"> service mysqld restart</span></div></pre></td></tr></table></figure>
+<h2 id="3-4-测试准备"><a href="#3-4-测试准备" class="headerlink" title="3.4. 测试准备"></a>3.4. 测试准备</h2><p>为了让两个数据库一样，我们备份其中一个数据库，然后在另一个数据库上恢复，这样是两个数据库一开始就是一样的。</p>
+<p>在server1上操作：</p>
+<ul>
+<li>备份：<code>mysqldump --databases luowei &gt; /tmp/luowei.sql</code><br>在server2上操作：</li>
+<li>创建一个与mydb同名的空数据库：<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">mysql&gt;</span><span class="bash"> create database mydb;</span></div><div class="line"><span class="meta">mysql&gt;</span><span class="bash"> \q</span></div><div class="line"></div><div class="line"><span class="meta">#</span><span class="bash"> scp 192.168.1.108:/tmp/mydb.sql ./</span></div><div class="line"><span class="meta">#</span><span class="bash"> mysql -uroot -p mydb &lt; /tmp/luowei.sql</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>然后两个服务器相互通告二进制日志的位置并启动复制功能：</p>
+<ul>
+<li><p>在server1上：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">mysql&gt;</span><span class="bash"> change master to master_host=<span class="string">'192.168.1.110'</span>,master_user=<span class="string">'server2'</span>,master_password=<span class="string">'server2'</span>;</span></div><div class="line"><span class="meta">mysql&gt;</span><span class="bash"> start slave;</span></div></pre></td></tr></table></figure>
+</li>
+<li><p>在server2上：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">mysql&gt;</span><span class="bash"> change master to master_host=<span class="string">"192.168.1.108"</span>,master_user=<span class="string">'server1'</span>,master_password=<span class="string">'server1'</span>;</span></div><div class="line"><span class="meta">mysql&gt;</span><span class="bash"> start slave;</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="3-5-查看，并验证"><a href="#3-5-查看，并验证" class="headerlink" title="3.5. 查看，并验证"></a>3.5. 查看，并验证</h2><p>分别在两个数据库服务器上查看：<br><figure class="highlight maxima"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mysql&gt; <span class="built_in">show</span> slave <span class="built_in">status</span>\G;</div></pre></td></tr></table></figure></p>
+<p>然后查看数据库和表，你会发现内容是一样的，这样就是整个主主MySQL的架构的配置过程。</p>
 
       
     </div>
@@ -507,8 +580,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/03/15/技术/015. Tomcat部署和优化/" rel="next" title="Tomcat部署和优化">
-                <i class="fa fa-chevron-left"></i> Tomcat部署和优化
+              <a href="/2018/03/15/技术/015. Tomcat和Resin部署和优化/" rel="next" title="Tomcat和Resin部署和优化">
+                <i class="fa fa-chevron-left"></i> Tomcat和Resin部署和优化
               </a>
             
           </div>
@@ -599,7 +672,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">90</span>
+                    <span class="site-state-item-count">93</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -685,7 +758,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">24</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">28</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -730,7 +811,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-在一台服务器上配置两个MySQL服务"><span class="nav-text">1. 在一台服务器上配置两个MySQL服务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-配置Replication"><span class="nav-text">2. 配置Replication</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-设置主（master）"><span class="nav-text">2.1. 设置主（master）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-设置从（slave）"><span class="nav-text">2.2. 设置从（slave）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-测试主从"><span class="nav-text">2.3. 测试主从</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-在一台服务器上配置两个MySQL服务"><span class="nav-text">1. 在一台服务器上配置两个MySQL服务</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-配置Replication"><span class="nav-text">2. 配置Replication</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-设置主（master）"><span class="nav-text">2.1. 设置主（master）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-设置从（slave）"><span class="nav-text">2.2. 设置从（slave）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-测试主从"><span class="nav-text">2.3. 测试主从</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-设置主主"><span class="nav-text">3. 设置主主</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-创建用户并授权"><span class="nav-text">3.1. 创建用户并授权</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-修改MySQL的主配置文件"><span class="nav-text">3.2. 修改MySQL的主配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-重启两台服务器"><span class="nav-text">3.3. 重启两台服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-测试准备"><span class="nav-text">3.4. 测试准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-查看，并验证"><span class="nav-text">3.5. 查看，并验证</span></a></li></ol></li></ol></div>
             
 
           </div>

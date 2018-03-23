@@ -312,7 +312,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/31/Linux/007. Linux用户与用户组管理技术/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/31/Linux/010. Linux软件管理技术/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -331,7 +331,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/31/Linux/007. Linux用户与用户组管理技术/" itemprop="url">Linux用户与用户组管理技术</a></h1>
+                <a class="post-title-link" href="/2017/08/31/Linux/010. Linux软件管理技术/" itemprop="url">Linux软件管理技术</a></h1>
         
 
         <div class="post-meta">
@@ -343,7 +343,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-31T08:38:19+08:00">2017-08-31</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-31T14:24:42+08:00">2017-08-31</time>
             
 
             
@@ -364,7 +364,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:31:57+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:32:22+08:00">2018-02-23</time>
             
           </span>
 
@@ -419,12 +419,11 @@
           
 GO
 
-这部分知识在日常工作中用的并不多，但是这些都是属于基础知识，也必须要掌握。
-1. 认识 /etc/passwd 和 /etc/shadow这两个文件是Linux系统中最重要的文件之一。注意，Linux系统关于像这两个与用户和组有关的文件，都会在相应的目录下面自动备份成相应的名字后面加-，如
+0. RPM和DPKG两大阵营在 GNU/Linux( 以下简称 Linux) 操作系统中，RPM 和 DPKG 为最常见的两类软件包管理工具，他们分别应用于基于 RPM 软件包的 Linux 发行版本和 DEB 软件包的 Linux 发行版本。软件包管理工具的作用是提供在操作系统中安装，
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/31/Linux/007. Linux用户与用户组管理技术/#more" rel="contents">
+            <a class="btn" href="/2017/08/31/Linux/010. Linux软件管理技术/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -480,7 +479,7 @@ GO
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/26/Linux/006. Linux文件与目录管理技术/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/31/Linux/009. Linux压缩打包技术/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -499,7 +498,7 @@ GO
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/26/Linux/006. Linux文件与目录管理技术/" itemprop="url">Linux文件与目录管理技术</a></h1>
+                <a class="post-title-link" href="/2017/08/31/Linux/009. Linux压缩打包技术/" itemprop="url">Linux压缩打包技术</a></h1>
         
 
         <div class="post-meta">
@@ -511,7 +510,7 @@ GO
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-26T22:49:24+08:00">2017-08-26</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-31T14:24:03+08:00">2017-08-31</time>
             
 
             
@@ -532,7 +531,7 @@ GO
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:31:32+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:32:12+08:00">2018-02-23</time>
             
           </span>
 
@@ -587,22 +586,45 @@ GO
           
 GO
 
-0. 几个基本概念- 绝对路径和相对路径
-绝对路径：由根目录写起的路径。如：/usr/local/mysql。
-相对路径：不是由根目录。写起的路径。如：../ 表示上一层路径，./ 表示本层路径。
+1. 常见压缩包后缀名及对应工具
 
 
-1. 文件管理命令- ls
-ls （list）用于查看某个目录下有何文件。
+后缀名
+所使用的压缩工具
 
 
 
 
-常用
+.gz
+gzip
+
+
+.bz2
+bzip2
+
+
+.zip
+zip
+
+
+.rar
+rar
+
+
+.tar
+tar打包程序打包的文件
+
+
+.tar.gz
+先由tar打包，再由gzip压缩
+
+
+.tar.bz2
+先由tar打包
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/26/Linux/006. Linux文件与目录管理技术/#more" rel="contents">
+            <a class="btn" href="/2017/08/31/Linux/009. Linux压缩打包技术/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -658,7 +680,7 @@ ls （list）用于查看某个目录下有何文件。
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/26/Linux/005. Linux系统目录结构/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2017/08/31/Linux/008. Linux磁盘管理技术/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -677,7 +699,7 @@ ls （list）用于查看某个目录下有何文件。
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/26/Linux/005. Linux系统目录结构/" itemprop="url">Linux系统目录结构</a></h1>
+                <a class="post-title-link" href="/2017/08/31/Linux/008. Linux磁盘管理技术/" itemprop="url">Linux磁盘管理技术</a></h1>
         
 
         <div class="post-meta">
@@ -689,7 +711,7 @@ ls （list）用于查看某个目录下有何文件。
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-26T17:24:25+08:00">2017-08-26</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-31T14:23:34+08:00">2017-08-31</time>
             
 
             
@@ -710,7 +732,7 @@ ls （list）用于查看某个目录下有何文件。
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:31:24+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:32:04+08:00">2018-02-23</time>
             
           </span>
 
@@ -765,13 +787,12 @@ ls （list）用于查看某个目录下有何文件。
           
 GO
 
-1. FHS标准
-根据FHS（Filesystem Hierarchy Standard ）官方文件说明，其主要目的是希望让用户可以了解到已安装软件通常放在哪个目录下，所以其希望独立的开发商、操作系统制作者以及想要维护系统的用户，都能够遵循FHS标准。
-FHS将目录定义为四种交互作用的形态
+这一章学习：如何分区、如何格式化、如何挂载、如何卸载。
+0. MBR和GPT0.1. MBRMBR全称Master Boot Record，中文叫做“主引导记录”，又叫做“主引导扇区”，是计算机开机后访问硬盘时所必须要读取的首个扇区，它在硬盘上的地址为0柱面0磁道1扇区。MBR 的主要作用
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2017/08/26/Linux/005. Linux系统目录结构/#more" rel="contents">
+            <a class="btn" href="/2017/08/31/Linux/008. Linux磁盘管理技术/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -816,7 +837,7 @@ FHS将目录定义为四种交互作用的形态
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/25/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><span class="page-number current">26</span><a class="page-number" href="/page/27/">27</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/27/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/25/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/25/">25</a><span class="page-number current">26</span><a class="page-number" href="/page/27/">27</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><a class="extend next" rel="next" href="/page/27/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -865,7 +886,7 @@ FHS将目录定义为四种交互作用的形态
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">90</span>
+                    <span class="site-state-item-count">93</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -951,7 +972,15 @@ FHS将目录定义为四种交互作用的形态
                     
                       
                     
-                    <span class="site-state-item-count">24</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">28</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

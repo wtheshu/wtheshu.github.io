@@ -312,7 +312,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/031. Shell脚本实战08-筛选符合长度的单词/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/06/技术/003. LAMP之源码安装搭建/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -331,7 +331,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/03/05/Shell/031. Shell脚本实战08-筛选符合长度的单词/" itemprop="url">Shell脚本实战08-筛选符合长度的单词</a></h1>
+                <a class="post-title-link" href="/2018/03/06/技术/003. LAMP之源码安装搭建/" itemprop="url">LAMP之源码安装搭建</a></h1>
         
 
         <div class="post-meta">
@@ -343,7 +343,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:10:17+08:00">2018-03-05</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-06T10:23:14+08:00">2018-03-06</time>
             
 
             
@@ -364,7 +364,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-21T11:41:30+08:00">2018-03-21</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-18T12:54:36+08:00">2018-03-18</time>
             
           </span>
 
@@ -380,7 +380,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Shell/" itemprop="url" rel="index"><span itemprop="name">Shell</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">技术</span></a></span>
 
                 
                 
@@ -416,15 +416,12 @@
       
         
           
-          1. 需求打印下面这句话中字母数不大于6的单词：1I am theshu teacher welcome to theshu training class
-2. 解答思路解答思路具体如下：
-
-先把所有的单词放到数组里，然后依次进行判断。命令如下：
-1array=(I am theshu teache
+          1. 介绍LAMP是Linux + Apache + MySQL + PHP的简写，其实就是把Apache、MySQL以及PHP安装在Linux系统上，组成一个环境来运行PHP的脚本语言，通常是网站。
+我们可以把Apache+PHP安装在一台机器上，再把MySQL安装在另外一台机器上，也可以把它们三
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/05/Shell/031. Shell脚本实战08-筛选符合长度的单词/#more" rel="contents">
+            <a class="btn" href="/2018/03/06/技术/003. LAMP之源码安装搭建/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -480,7 +477,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/030. Shell脚本实战07-MySQL数据库分库分表备份/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/033. Shell脚本实战10-比较整数大小/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -499,7 +496,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/03/05/Shell/030. Shell脚本实战07-MySQL数据库分库分表备份/" itemprop="url">Shell脚本实战07-MySQL数据库分库分表备份</a></h1>
+                <a class="post-title-link" href="/2018/03/05/Shell/033. Shell脚本实战10-比较整数大小/" itemprop="url">Shell脚本实战10-比较整数大小</a></h1>
         
 
         <div class="post-meta">
@@ -511,7 +508,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:10:00+08:00">2018-03-05</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:11:25+08:00">2018-03-05</time>
             
 
             
@@ -532,7 +529,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-21T11:02:25+08:00">2018-03-21</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-21T13:26:13+08:00">2018-03-21</time>
             
           </span>
 
@@ -584,12 +581,13 @@
       
         
           
-          1. 需求实现MySQL分库分表备份的脚本。
-2. 实现过程2.1. 批量建表并插入数据准备测试数据：通过写脚本批量建表并插入数据。12345678910#!/bin/bashPATH="/usr/local/mysql/bin:$PATH"MYUSER=rootMYPASS=123456SOCKE
+          1. 需求开发Shell脚本，分别实现以脚本传参和read读入的方式比较两个整数的大小。用条件表达式（禁止用if）进行判断并以屏幕输出的方式提醒用户比较的结构。
+注意：一共是开发两个脚本。在用脚本传参和read读入的方式实现时，需要对变量是否为数字及传参个数是否正确给与提示。
+2. 实现脚本2.1.
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/05/Shell/030. Shell脚本实战07-MySQL数据库分库分表备份/#more" rel="contents">
+            <a class="btn" href="/2018/03/05/Shell/033. Shell脚本实战10-比较整数大小/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -645,7 +643,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/029. Shell脚本实战06-MySQL数据库分库备份/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/032. Shell脚本实战09-MySQL主从复制异常监控/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -664,7 +662,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/03/05/Shell/029. Shell脚本实战06-MySQL数据库分库备份/" itemprop="url">Shell脚本实战06-MySQL数据库分库备份</a></h1>
+                <a class="post-title-link" href="/2018/03/05/Shell/032. Shell脚本实战09-MySQL主从复制异常监控/" itemprop="url">Shell脚本实战09-MySQL主从复制异常监控</a></h1>
         
 
         <div class="post-meta">
@@ -676,7 +674,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:09:39+08:00">2018-03-05</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:10:35+08:00">2018-03-05</time>
             
 
             
@@ -697,7 +695,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-21T10:45:38+08:00">2018-03-21</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-21T13:12:16+08:00">2018-03-21</time>
             
           </span>
 
@@ -749,12 +747,12 @@
       
         
           
-          1. 需求实现MySQL分库备份的脚本
-2. 实现过程2.1. 批量建库脚本基本的批量建库脚本如下，这里使用for循环在数据库服务器里批量创建数据库。12345678910#!/bin/bashPATH="/usr/local/mysql/bin:$PATH"     #&lt;==定义mysql命
+          1. 需求开发一个守护进程脚本，每30秒监控一次MySQL主从复制是否异常（包括不同步及延迟），如果有异常，则发送短信报警，并发送邮件给管理员存档。
+2. 实验准备2.1. 测试数据模拟如果没有主从复制的环境，可以把下面的命令执行的结果部分的文本放到文件里读取来模拟主从复制的状态。123456789
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/05/Shell/029. Shell脚本实战06-MySQL数据库分库备份/#more" rel="contents">
+            <a class="btn" href="/2018/03/05/Shell/032. Shell脚本实战09-MySQL主从复制异常监控/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -799,7 +797,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/30/">30</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/7/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><a class="extend next" rel="next" href="/page/9/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -848,7 +846,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">90</span>
+                    <span class="site-state-item-count">93</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -934,7 +932,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">24</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">28</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
