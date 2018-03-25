@@ -312,7 +312,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/01/20/Linux/013. Linux程序管理技术/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/014. Shell学习笔记12-循环控制及状态返回值/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -331,7 +331,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/20/Linux/013. Linux程序管理技术/" itemprop="url">Linux程序管理技术</a></h1>
+                <a class="post-title-link" href="/2018/02/19/Shell/014. Shell学习笔记12-循环控制及状态返回值/" itemprop="url">Shell学习笔记12-循环控制及状态返回值</a></h1>
         
 
         <div class="post-meta">
@@ -343,7 +343,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-20T10:09:29+08:00">2018-01-20</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:41:18+08:00">2018-02-19</time>
             
 
             
@@ -364,7 +364,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-15T12:01:06+08:00">2018-03-15</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-01T11:01:13+08:00">2018-03-01</time>
             
           </span>
 
@@ -380,7 +380,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Shell/" itemprop="url" rel="index"><span itemprop="name">Shell</span></a></span>
 
                 
                 
@@ -420,11 +420,12 @@
 GO
 
 
-1. 什么是进程（process）在Linux系统中，触发任何一个事件时，系统都会将它定义为一个进程，并且给予这个进程一个ID，称为PID，同时依据触发这个进程的用户与相关属性关系，给予这个PID一组有效的权限设置。从此以后，这个PID能够在系统上面进行的操作，就与这个PID的权限有关了
+这一篇文章是关于break（循环控制）、continue（循环控制）、exit（退出脚本）、return（退出函数）的知识。
+1. break、continue、exit、return的区别和对比break、continue在条件语句及循环语句（for、while、if等）中用于控制程序
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/20/Linux/013. Linux程序管理技术/#more" rel="contents">
+            <a class="btn" href="/2018/02/19/Shell/014. Shell学习笔记12-循环控制及状态返回值/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -480,7 +481,7 @@ GO
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/01/19/Linux/012. 正则表达式实用技术/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/013. Shell学习笔记11-for和select循环语句/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -499,7 +500,7 @@ GO
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/19/Linux/012. 正则表达式实用技术/" itemprop="url">正则表达式实用技术</a></h1>
+                <a class="post-title-link" href="/2018/02/19/Shell/013. Shell学习笔记11-for和select循环语句/" itemprop="url">Shell学习笔记11-for和select循环语句</a></h1>
         
 
         <div class="post-meta">
@@ -511,7 +512,7 @@ GO
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-19T12:47:06+08:00">2018-01-19</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:40:49+08:00">2018-02-19</time>
             
 
             
@@ -532,7 +533,7 @@ GO
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:32:37+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-01T10:32:58+08:00">2018-03-01</time>
             
           </span>
 
@@ -548,7 +549,7 @@ GO
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Shell/" itemprop="url" rel="index"><span itemprop="name">Shell</span></a></span>
 
                 
                 
@@ -587,12 +588,13 @@ GO
           
 GO
 
-1. 正则表达式入门1.1. 定义正则表达式是处理字符串的方法，它是以行为单位来进行字符串的处理行为，通过一些特殊符号的辅助，可以轻易达到查找、删除、替换某特定字符的目的。它是一种规则，只要某工具支持正则表达式，便可以使用这种规则。（支持正则的工具有：vi、grep、awk、sed等）
-注
+
+for循环语句和while循环语句类似，但for循环语句主要用于执行次数有限的循环，而不是用于守护进程及无限循环。for循环语句常见的语法有两种，下面将在不同的语法中对for循环语句进行详尽的讲解。
+1. for循环语法结构第一种for循环语句为变量取值型，语法结构如下：1234for 
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/19/Linux/012. 正则表达式实用技术/#more" rel="contents">
+            <a class="btn" href="/2018/02/19/Shell/013. Shell学习笔记11-for和select循环语句/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -648,7 +650,7 @@ GO
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/01/19/Linux/011. Linux计划任务管理技术/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/012. Shell学习笔记10-while循环和until循环/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -667,7 +669,7 @@ GO
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/19/Linux/011. Linux计划任务管理技术/" itemprop="url">Linux计划任务管理技术</a></h1>
+                <a class="post-title-link" href="/2018/02/19/Shell/012. Shell学习笔记10-while循环和until循环/" itemprop="url">Shell学习笔记10-while循环和until循环</a></h1>
         
 
         <div class="post-meta">
@@ -679,7 +681,7 @@ GO
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-19T09:05:17+08:00">2018-01-19</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:40:22+08:00">2018-02-19</time>
             
 
             
@@ -700,7 +702,7 @@ GO
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:32:30+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-28T19:44:33+08:00">2018-02-28</time>
             
           </span>
 
@@ -716,7 +718,7 @@ GO
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Shell/" itemprop="url" rel="index"><span itemprop="name">Shell</span></a></span>
 
                 
                 
@@ -755,18 +757,13 @@ GO
           
 GO
 
-0. 计划任务服务程序Linux系统的计划任务分为三种：
 
-一次性计划任务（用at命令实现，由atd服务提供）
-周期性计划任务（用crontab命令实现，由crond服务提供）
-系统级别的计划任务及其扩展anacron：在一个指定时间间隔错过后自动执行任务
-
-
-1. 一次性计划任务1.1.
+循环语句命令常用于重复执行一条指令或一组指令，直到条件不再满足时停止，Shell脚本语言的循环语句常见的有while、until、for及select循环语句。
+while循环语句主要用来重复执行一组命令或语句，在企业实际应用中，常用于守护进程或持续运行的程序，除此之外，大多数循环都会用
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/19/Linux/011. Linux计划任务管理技术/#more" rel="contents">
+            <a class="btn" href="/2018/02/19/Shell/012. Shell学习笔记10-while循环和until循环/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -811,7 +808,7 @@ GO
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/20/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><a class="extend next" rel="next" href="/page/22/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/20/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><span class="page-number current">21</span><a class="page-number" href="/page/22/">22</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/">37</a><a class="extend next" rel="next" href="/page/22/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -860,7 +857,7 @@ GO
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">93</span>
+                    <span class="site-state-item-count">111</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

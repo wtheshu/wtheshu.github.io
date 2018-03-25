@@ -312,7 +312,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/020. Shell学习笔记18-Expect自动化交互式程序/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/037. Shell脚本实战14-开发脚本实现入侵检测与报警/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -331,7 +331,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/19/Shell/020. Shell学习笔记18-Expect自动化交互式程序/" itemprop="url">Shell学习笔记18-Expect自动化交互式程序</a></h1>
+                <a class="post-title-link" href="/2018/03/05/Shell/037. Shell脚本实战14-开发脚本实现入侵检测与报警/" itemprop="url">Shell脚本实战14-开发脚本实现入侵检测与报警</a></h1>
         
 
         <div class="post-meta">
@@ -343,7 +343,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:43:58+08:00">2018-02-19</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:13:42+08:00">2018-03-05</time>
             
 
             
@@ -364,7 +364,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-03T21:14:50+08:00">2018-03-03</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-25T21:23:44+08:00">2018-03-25</time>
             
           </span>
 
@@ -416,15 +416,14 @@
       
         
           
-          
-GO
-
-
-1. Expect介绍1.1. 什么是ExpectExpect是一个用来实现自动交互功能的软件套件（Expect is a softeare suite for automating interactive tools，这是作者的定义），是基于TCL（全拼为Tool Command La
+          1. 需求监控Web站点目录（比如/var/html/www）下的所有文件是否被恶意篡改（文件内容被更改了），如果有则打印改动的文件名（发邮件），定时任务每3分钟执行一次。
+2. 过程2.1. 问题分析
+首先要说明的是，思考过程的积累比实际代码开发的能力积累更重要。
+什么是恶意篡改，只要是未经过许可
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/02/19/Shell/020. Shell学习笔记18-Expect自动化交互式程序/#more" rel="contents">
+            <a class="btn" href="/2018/03/05/Shell/037. Shell脚本实战14-开发脚本实现入侵检测与报警/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -480,7 +479,7 @@ GO
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/019. Shell学习笔记17-Linux信号及trap命令的企业应用/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/036. Shell脚本实战13-监控Memcached缓存服务/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -499,7 +498,7 @@ GO
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/19/Shell/019. Shell学习笔记17-Linux信号及trap命令的企业应用/" itemprop="url">Shell学习笔记17-Linux信号及trap命令的企业应用</a></h1>
+                <a class="post-title-link" href="/2018/03/05/Shell/036. Shell脚本实战13-监控Memcached缓存服务/" itemprop="url">Shell脚本实战13-监控Memcached缓存服务</a></h1>
         
 
         <div class="post-meta">
@@ -511,7 +510,7 @@ GO
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:43:23+08:00">2018-02-19</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:13:17+08:00">2018-03-05</time>
             
 
             
@@ -532,7 +531,7 @@ GO
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-02T10:47:31+08:00">2018-03-02</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-25T21:24:04+08:00">2018-03-25</time>
             
           </span>
 
@@ -584,16 +583,14 @@ GO
       
         
           
-          
-GO
-
-
-1. 信号知识1.1. 信号介绍运行Shell脚本程序时，如果按下快捷键Ctrl+C或Ctrl+x（x为其它字符），程序就会立刻终止运行。
-在有些情况下，我们并不希望Shell脚本在运行时被信号中断，此时就可以使用屏蔽信号手段，让程序忽略用户输入的信号指令，从而继续运行Shell脚本程序
+          1. 需求监控Memcached缓存服务是否正常，模拟用户（Web客户端）检测。
+使用nc命令加上set/get来模拟检测。
+2. 过程2.1. 问题分析要想写出相应的脚本，必须要对Memcached服务很熟练。
+2.2. 环境准备1234# yum install memcached -y# yu
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/02/19/Shell/019. Shell学习笔记17-Linux信号及trap命令的企业应用/#more" rel="contents">
+            <a class="btn" href="/2018/03/05/Shell/036. Shell脚本实战13-监控Memcached缓存服务/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -649,7 +646,7 @@ GO
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/02/19/Shell/018. Shell学习笔记16-Shell脚本开发环境的配置和优化/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/035. Shell脚本实战12-Web及MySQL服务异常监控/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -668,7 +665,7 @@ GO
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/19/Shell/018. Shell学习笔记16-Shell脚本开发环境的配置和优化/" itemprop="url">Shell学习笔记16-Shell脚本开发环境的配置和优化</a></h1>
+                <a class="post-title-link" href="/2018/03/05/Shell/035. Shell脚本实战12-Web及MySQL服务异常监控/" itemprop="url">Shell脚本实战12-Web及MySQL服务异常监控</a></h1>
         
 
         <div class="post-meta">
@@ -680,7 +677,7 @@ GO
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-19T12:42:46+08:00">2018-02-19</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:12:43+08:00">2018-03-05</time>
             
 
             
@@ -701,28 +698,10 @@ GO
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-28T17:10:22+08:00">2018-02-28</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-25T21:34:45+08:00">2018-03-25</time>
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Shell/" itemprop="url" rel="index"><span itemprop="name">Shell</span></a></span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -753,16 +732,13 @@ GO
       
         
           
-          
-GO
-
-
-1. 使用Vim而不是Vi编辑器建议Shell程序或者Python程序开发都使用Vim。Vim是Vi的增强版，可以高亮显示代码、自动缩进等重要的功能。所以，要使用Vim来进行开发，可以将Vim的别名设置为Vi，这样一来，即使是用Vi的命令打开文件，也会调用Vim来进行工作。
-因此，首先要
+          1. 需求用if条件语句针对Nginx Web服务或MySQL数据库服务是否正常进行检测，如果服务未启动，则启动相应的服务。
+这是企业级运维实战的综合题目，需要编程者对Nginx Web服务和MySQL数据库服务很熟悉才行。这道示例同样适用于其它的Web服务和数据库服务。
+2. 分析问题监控Web服
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/02/19/Shell/018. Shell学习笔记16-Shell脚本开发环境的配置和优化/#more" rel="contents">
+            <a class="btn" href="/2018/03/05/Shell/035. Shell脚本实战12-Web及MySQL服务异常监控/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -807,7 +783,7 @@ GO
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/31/">31</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/">37</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -856,7 +832,7 @@ GO
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">93</span>
+                    <span class="site-state-item-count">111</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>

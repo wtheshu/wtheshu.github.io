@@ -214,10 +214,10 @@
         <category>技术</category>
       </categories>
       <tags>
-        <tag>MySQL</tag>
         <tag>PHP</tag>
         <tag>LNMP</tag>
         <tag>Nginx</tag>
+        <tag>MySQL</tag>
       </tags>
   </entry>
   <entry>
@@ -268,9 +268,204 @@
       <tags>
         <tag>技术</tag>
         <tag>LAMP</tag>
+        <tag>PHP</tag>
         <tag>MySQL</tag>
         <tag>Apache</tag>
-        <tag>PHP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战28-Nginx负载节点状态检测]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F051.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9828-Nginx%E8%B4%9F%E8%BD%BD%E8%8A%82%E7%82%B9%E7%8A%B6%E6%80%81%E6%A3%80%E6%B5%8B%2F</url>
+    <content type="text"><![CDATA[开发通过Web界面展示监控Nginx代理节点的状态。当节点宕机时，以红色展示，当节点正常时以绿色展示。 这个脚本要求对Nginx服务很熟练，由于我的水平不够，所以仅以摘抄的方式收录了这个脚本。 Shell脚本如下：1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768#!/bin/bashRIPS=( 10.0.0.7 10.0.0.8 )file_location=/var/html/test.html[ -e "file_location" ] || mkdir `dirname $file_location` -pfunction web_result()&#123; rs=`curl -I -s $1 | awk 'NR==1&#123;print $2&#125;'` return $rs&#125;function new_row()&#123; cat &gt;&gt; $file_location &lt;&lt;eof &lt;tr&gt; &lt;td bgcolor="$4"&gt;$1&lt;/td&gt; &lt;td bgcolor="$4"&gt;$2&lt;/td&gt; &lt;td bgcolor="$4"&gt;$3&lt;/td&gt; &lt;/tr&gt; eof&#125;function auto_html()&#123; web_result $2 rs=$? if [ $rs -eq 200 ] then new_row $1 $2 up green else new_row $1 $2 down red fi&#125;function main()&#123; while true do cat &gt;&gt; $file_location &lt;&lt;eof &lt;h4&gt;Nginx Server Status Of RS :&lt;/h4&gt; &lt;meta http-equiv="refresh" content="1"&gt; &lt;table border="1"&gt; &lt;tr&gt; &lt;th&gt;NO:&lt;/th&gt; &lt;th&gt;IP:&lt;/th&gt; &lt;th&gt;Status:&lt;/th&gt; &lt;/tr&gt; eof for ((i=0; i&lt;$&#123;#RIPS[*]&#125;; i++)) do auto_html $i $&#123;RIPS[$i]&#125; done cat &gt;&gt; $file_location &lt;&lt;eof &lt;/table&gt; eof sleep 2 &gt; $file_location done&#125;main $*]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战27-编写直接梯型图形字符]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F050.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9827-%E7%BC%96%E5%86%99%E7%9B%B4%E6%8E%A5%E6%A2%AF%E5%9E%8B%E5%9B%BE%E5%BD%A2%E5%AD%97%E7%AC%A6%2F</url>
+    <content type="text"><![CDATA[请用Shell或Python编写一个画直角梯形的程序，接收用户输入的参数n(n&gt;2)和m。 Shell脚本如下： 参考答案11234567891011121314#!/bin/bashif [ $# -ne 2 ]; then echo $"USAGE:$0 num1(&gt;2) num2" exit 1fifor n in `seq $1 $2`do for ((m=1; m&lt;=$n; m++)) do echo -n '*' done echodone 参考答案2123456789101112131415161718#!/bin/bash#!/bin/shif [ $# -ne 2 ]; then echo $"USAGE:$0 num1(&gt;2) num2" exit 1fiLine_start=$1Line_end=$2for ((i=0; i&lt;=$(($2-$1)); i++))do for ((h=1; h&lt;=$(($1+$i)); h++)) do echo -n '*' done echodone 参考答案3：awk方法1# awk 'BEGIN&#123;for(i=ARGV[1];i&lt;=ARGV[2];i++) for(j=1;j&lt;=i;j++)printf("%s",j==i?"*\n":"*")&#125;' 4 6 执行结果执行结果如下：1234# sh 2.sh 4 6***************]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战26-编写等腰三角形图形字符]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F049.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9826-%E7%BC%96%E5%86%99%E7%AD%89%E8%85%B0%E4%B8%89%E8%A7%92%E5%BD%A2%E5%9B%BE%E5%BD%A2%E5%AD%97%E7%AC%A6%2F</url>
+    <content type="text"><![CDATA[请用shell或Python编写一个等腰三角形，接受用户输入的数字。 shell脚本如下：123456789101112131415#!/bin/bashread -p "Please Enter a number: " Linefor ((i=1; i&lt;=Line; i++))do for ((j=$Line-$i; j&gt;0; j--)) do echo -n ' ' done for ((h=1; h&lt;=$((2*$i-1)); h++)) do echo -n '*' done echodone 执行结果如下：1234567Please Enter a number: 6 * *** ***** ******* ********************]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战25-编写矩形图形]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F048.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9825-%E7%BC%96%E5%86%99%E7%9F%A9%E5%BD%A2%E5%9B%BE%E5%BD%A2%2F</url>
+    <content type="text"><![CDATA[请用Shell或Python编写一个矩形，接受用户输入的数字。 Shell脚本如下：123456789101112131415#!/bin/bashread -p "Please Enter a number:" Linefor ((i=1; i&lt;=$Line; i++))do for ((m=1; m&lt;=$(($Line+1)); m++)) do echo -n "*" done for ((h=1; h&lt;=$(($Line-1)); h++)) do echo -n '*' done echodone 执行结果如下：123456789Please Enter a number:8********************************************************************************************************************************]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战24-模拟keepalived软件高可用]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F047.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9824-%E6%A8%A1%E6%8B%9Fkeepalived%E8%BD%AF%E4%BB%B6%E9%AB%98%E5%8F%AF%E7%94%A8%2F</url>
+    <content type="text"><![CDATA[1. 需求请在LVS服务端备用节点上，模拟keepalived vrrp功能，监听主节点，如果主节点不可访问，则启动备节点并配置LVS服务，接管主节点的资源并对用户提供服务（提醒：注意ARP缓存） 2. 分析此题实际上要实现两部分功能： 检测主节点是否宕机，可以使用ping或nmap命令。 如果主节点宕机，则调用管理LVS的服务脚本，执行LVS配置。 3. 实现3.1. 管理LVS服务的脚本假如该脚本名字为/etc/init.d/lvs 其内容如下（参考脚本实战21）：123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293#!/bin/bash. /etc/init.d/functionsVIP=10.0.0.3INTERFACE=eth0SubINTERFACE=$&#123;INTERFACE&#125;:`echo $VIP | cut -d. -f4`PORT=80GW=10.0.0.254RETVAR=0IP=/sbin/ipROUTE=/sbin/routeIPVSADM=/sbin/ipvsadmARPING=/sbin/srpingRIPS=( #&lt;==定义realserver节点IP数组 10.0.0.7 10.0.0.8 )function usage()&#123; echo "Usage : $0 &#123;start|stop|restart&#125;" return 1&#125;function ipvsStart() #&lt;==配置ipvs&#123; $IP addr add $VIP/24 dev $&#123;INTERFACE&#125; label $SubINTERFACE #&lt;==添加VIP $ROUTE add -host $VIP dev $SubINTERFACE #&lt;==添加VIP对应主机路由 $IPVSADM -C $IPVSADM -A -t $VIP:$PORT -s wrr -p 60 #&lt;==生成ipvs实例 for ((i=0; i&lt;`echo $&#123;#RIPS[*]&#125;`; i++)) do $IPVSADM -a -t $VIP:$PORT -r $&#123;RIPS[$i]&#125;:$PORT -g -w 1 #&lt;==添加节点 done RETVAR=$? # update MAC $ARPING -c 1 -I $&#123;INTERFACE&#125; -s $VIP $GW &amp;&gt; /dev/null #&lt;==arp表 if [ $RETVAR -eq 0 ] then action "Ipvsadm started." /bin/true else action "Ipvsadm started." /bin/false fi return $RETVAR&#125;function ipvsStop()&#123; $IPVSADM -C $IPVSADM -Z $IP addr del $VIP/24 dev $&#123;INTERFACE&#125; label $SubINTERFACE &amp;&gt; /dev/null #&lt;==删除VIP RETVAR=$? $ROUTE del -host $VIP dev $SubINTERFACE &amp;&gt; /dev/null #&lt;==删除路由 $ARPING -从1 -I $&#123;INTERFACE&#125; -s $VIP $GW &gt; /dev/null 2&gt;&amp;1 #&lt;==更新arp表 if [ $RETVAR -eq 0 ] then action "Ipvsadm stopped." /bin/true else action "Ipvsadm stopped." /bin/false fi return $RETVAR&#125;main()&#123; #judge argv num if [ $# -ne 1 ] then usage $0 fi case "$1" in start) ipvsStart ;; stop) ipvsStop ;; restart) ipvsStop ipvsStart ;; *) usage $0 ;; esac&#125;# start operatingmain $* 3.2. 监测主节点是否宕机及管理LVS的服务脚本脚本内容如下：1234567891011121314151617181920#!/bin/bashVIP=10.0.0.3PORT=80ipvs_tools=`rpm -qa ipvsadm | wc -l`if [ $ipvs_tools -ne 1 ]then yum install ipvsadm -yfiwhile truedo ping w2 -c2 $&#123;VIP&#125; &gt; /dev/null 2&gt;&amp;1 if [ $? -ne 0 ] then /bin/sh /etc/init.d/lvs start &gt; /dev/null 2&gt;&amp;1 else /bin/sh /etc/init.d/lvs stop &gt; /dev/null 2&gt;&amp;1 fi sleep 5done]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战23-LVS客户端配置脚本]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F046.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9823-LVS%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%85%8D%E7%BD%AE%E8%84%9A%E6%9C%AC%2F</url>
+    <content type="text"><![CDATA[1. 需求请在LVS客户端节点上，开发LVS客户端设置VIP及抑制ARP的管理脚本。 实现：/etc/init.d/lvsclient {start|stop|restart} 2. 参考脚本脚本如下：123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051#!/bin/bashREVTAR=0VIP=( 10.0.0.3 10.0.0.4 ). /etc/init.d/functionscase "$1" in start) for ((i=0; i&lt;`echo $&#123;#VIP[*]&#125;`; i++)) do interface="lo:`echo $&#123;VIP[$i]&#125; | awk -F . '&#123;print $4&#125;'`" /sbin/ip addr add $&#123;VIP[$i]&#125;/24 dev lo label $interface REVTAR=$? done echo "1" &gt; /proc/sys/net/ipv4/conf/lo/arp_ignore echo "2" &gt; /proc/sys/net/ipv4/conf/lo/arp_announce echo "1" &gt; /proc/sys/net/ipv4/conf/all/arp_ignore echo "2" &gt; /proc/sys/net/ipv4/conf/all/arp_annouce if [ $REVTAR -eq 0 ] then action "Start LVS Config of RearServer." /bin/true else action "Start LVS Config og RearServer." /bin/false fi ;; stop) for ((i=0; i&lt;`echo $&#123;#VIP[*]&#125;`; i++)) do interface="lo:`echo $&#123;VIP[$i]&#125; | awk -F . '&#123;print $4&#125;'`" /sbin/ip addr del $&#123;VIP[$i]&#125;/24 dev lo label $interface &gt; /dev/null 2&gt;&amp;1 done echo "0" &gt; /proc/sys/net/ipv4/conf/lo/arp_ignore echo "0" &gt; /proc/sys/net/ipv4/conf/lo/arp_announce echo "0" &gt; /proc/sys/net/ipv4/conf/all/arp_ignore echo "0" &gt; /proc/sys/net/ipv4/conf/all/arp_annouce if [ $REVTAR -eq 0 ] then action "Close LVS Config of RearServer." /bin/true else action "Close LVS Config of RearServer." /bin/false fi ;; *) echo "Usage: $0 &#123;start|stop&#125;" exit 1esacexit $REVTAR]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战22-LVS节点健康检查及管理脚本]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F045.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9822-LVS%E8%8A%82%E7%82%B9%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5%E5%8F%8A%E7%AE%A1%E7%90%86%E8%84%9A%E6%9C%AC%2F</url>
+    <content type="text"><![CDATA[1. 需求请在LVS负载均衡主节点上，模拟keepalived健康检查功能管理LVS节点，当节点挂掉时从服务器池中将其剔除，好了后再将其加到服务器池中来。 2. 参考脚本参考脚本如下：123456789101112131415161718192021222324252627282930313233#!/bin/bashIPVSADM=/sbin/ipvsadmVIP=10.0.0.3PORT=80RIPS=(10.0.0.710.0.0.8)while truedo for ((i=0; i&lt;$&#123;#RIPS[*]&#125;; i++)) do PORT_COUNT=`nmap $&#123;RIPS[$i]&#125; -p $PORT | grep open | wc -l` #&lt;==检测节点，是否正常 if [ $PORT_COUNT -ne 1 ] #&lt;==如果节点不通 then if [ `$IPVSADM -Ln | grep $&#123;RIPS[$i]&#125; | wc -l` -ne 0 ] then $IPVSADM -d -t $VIP:$PORT -r $&#123;RIPS[$i]&#125;:$PORT &gt; /dev/null 2&gt;&amp;1 #&lt;==删除不正常的节点 fi else #&lt;==如果节点正常 if [ `$IPVSADM -Ln | grep $&#123;RIPS[$i]&#125; | wc -l` -eq 0 ] #&lt;==如果节点池中没有RS then $IPVSADM -a -t $VIP:$PORT -r $&#123;RIPS[$i]&#125;:PORT &gt; /dev/null 2&gt;&amp;1 #&lt;==添加对应的节点 fi fi done sleep 5done]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战21-开发脚本管理服务端LVS]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F044.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9821-%E5%BC%80%E5%8F%91%E8%84%9A%E6%9C%AC%E7%AE%A1%E7%90%86%E6%9C%8D%E5%8A%A1%E7%AB%AFLVS%2F</url>
+    <content type="text"><![CDATA[1. 需求请在LVS负载均衡主节点上，开发管理LVS服务的脚本ip_vs。 实现：利用ipvsadm可以启动并配置好LVS服务，脚本如下：/etc/init.d/lvs {start|stop|restart} 2. 问题分析此题需要对LVS软件有一定的了解。另外，如果进行实际测试，需要提前执行yum install ipvsadm -y安装LVS软件。 3. 参考脚本123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293#!/bin/bash. /etc/init.d/functionsVIP=10.0.0.3INTERFACE=eth0SubINTERFACE=$&#123;INTERFACE&#125;:`echo $VIP | cut -d. -f4`PORT=80GW=10.0.0.254RETVAR=0IP=/sbin/ipROUTE=/sbin/routeIPVSADM=/sbin/ipvsadmARPING=/sbin/srpingRIPS=( #&lt;==定义realserver节点IP数组 10.0.0.7 10.0.0.8 )function usage()&#123; echo "Usage : $0 &#123;start|stop|restart&#125;" return 1&#125;function ipvsStart() #&lt;==配置ipvs&#123; $IP addr add $VIP/24 dev $&#123;INTERFACE&#125; label $SubINTERFACE #&lt;==添加VIP $ROUTE add -host $VIP dev $SubINTERFACE #&lt;==添加VIP对应主机路由 $IPVSADM -C $IPVSADM -A -t $VIP:$PORT -s wrr -p 60 #&lt;==生成ipvs实例 for ((i=0; i&lt;`echo $&#123;#RIPS[*]&#125;`; i++)) do $IPVSADM -a -t $VIP:$PORT -r $&#123;RIPS[$i]&#125;:$PORT -g -w 1 #&lt;==添加节点 done RETVAR=$? # update MAC $ARPING -c 1 -I $&#123;INTERFACE&#125; -s $VIP $GW &amp;&gt; /dev/null #&lt;==arp表 if [ $RETVAR -eq 0 ] then action "Ipvsadm started." /bin/true else action "Ipvsadm started." /bin/false fi return $RETVAR&#125;function ipvsStop()&#123; $IPVSADM -C $IPVSADM -Z $IP addr del $VIP/24 dev $&#123;INTERFACE&#125; label $SubINTERFACE &amp;&gt; /dev/null #&lt;==删除VIP RETVAR=$? $ROUTE del -host $VIP dev $SubINTERFACE &amp;&gt; /dev/null #&lt;==删除路由 $ARPING -从1 -I $&#123;INTERFACE&#125; -s $VIP $GW &gt; /dev/null 2&gt;&amp;1 #&lt;==更新arp表 if [ $RETVAR -eq 0 ] then action "Ipvsadm stopped." /bin/true else action "Ipvsadm stopped." /bin/false fi return $RETVAR&#125;main()&#123; #judge argv num if [ $# -ne 1 ] then usage $0 fi case "$1" in start) ipvsStart ;; stop) ipvsStop ;; restart) ipvsStop ipvsStart ;; *) usage $0 ;; esac&#125;# start operatingmain $*]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战20-单词及字母去重排序]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F043.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9820-%E5%8D%95%E8%AF%8D%E5%8F%8A%E5%AD%97%E6%AF%8D%E5%8E%BB%E9%87%8D%E6%8E%92%E5%BA%8F%2F</url>
+    <content type="text"><![CDATA[1. 需求用Shell处理以下的内容： the squid project provides a number of resources to assist users design,implement and support squid installations. Please browse the documentation and support sections for more infomation,by theshu training. 要求： 按单词出现的频率降序排序 按字母出现的频率降序排序 提示：这道题适合用awk进行处理。 2. 数据准备12# cat test.txtthe squid project provides a number of resources to assist users design,implement and support squid installations. Please browse the documentation and support sections for more infomation,by theshu training. 3. 参考脚本3.1. 按单词出现频率降序排序的参考脚本3.1.1. 方法1：awk数组法1# awk -F "[,. ]" '&#123;for(i=1;i&lt;+NF;i++) array[$i]++&#125; END &#123;for(key in array) print array[key],key|"sort -nr"&#125;' test.txt | column -t 3.1.2. 方法2：sort排序法1# tr "[ ,.]" "\n" &lt; test.txt | grep -v "^$" | sort | uniq -c | sort -rn 3.1.3. 方法3：tr配合awk数组法1# tr "[ ,.]" "\n" &lt; test.txt | sed '/^$/d' | awk '&#123;++$[$0]&#125; END &#123;for(key in S) print S[key]" " key | "sort -rn"&#125;' 3.2. 按字母出现频率降序排序的参考脚本3.2.1. 方法1：awk数组法1# tr "&#123; |,|.&#125;" "\n" &lt; test.txt | awk -F "" '&#123;for(i=1;i&lt;=NF;i++)array[$i]++&#125;END&#123;for(key in array)print array[key],key | "sort -nr"&#125;' 3.2.2. 方法2：grep及sort排序法1# grep -o "[^ ]" test.txt | sort | uniq -c | sort -rn -k1]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战19-批量检查多个网站地址是否正常]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F042.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9819-%E6%89%B9%E9%87%8F%E6%A3%80%E6%9F%A5%E5%A4%9A%E4%B8%AA%E7%BD%91%E7%AB%99%E5%9C%B0%E5%9D%80%E6%98%AF%E5%90%A6%E6%AD%A3%E5%B8%B8%2F</url>
+    <content type="text"><![CDATA[1. 需求要求： 使用Shell数组的方法实现，检测策咯尽量模拟用户访问 每10秒进行一次全部检测，无法访问的输出报警 待检测的地址如下：1234http://blog.oldboyedu.comhttp://blog.etiantian.orghttp://oldboy.blog.51cto.comhttp://10.0.0.1 2. 思路思路： 把URL定义成数组，形成函数 编写URL检查脚本函数，传入数组的元素，即URL 组合实现整个案例，编写main主函数（即执行函数），每隔10秒检查一次 3. 脚本下面的参考脚本采用Shell数组的方法，同时检测多个URL是否正常，并给出专业的展示效果 123456789101112131415161718192021222324252627282930313233343536373839404142434445464748#!/bin/bash. /etc/init.d/functionscheck_count=0usl_list=( #&lt;==定义检测的URL数组，包含多个URL地址http://blog.oldboyedu.comhttp://blog.etiantian.orghttp://oldboy.blog.51cto.comhttp://10.0.0.1)function wait() #&lt;==定义3、2、1倒计时函数&#123; echo -n '3秒后，执行检查URL操作.'; for ((i=0; i&lt;3; i++)) do echo -n "."; sleep 1 done echo&#125;function check_url() #&lt;==定义检测URL的函数&#123; wait for ((i=0; i&lt;`echo $&#123;#url_list[*]&#125;`; i++)) do wget -o /dev/null -T 3 --tries=1 --spider $&#123;url_list[$i]&#125; &gt; /dev/null 2&gt;&amp;1 if [ $? -eq 0 ] then action "$&#123;usl_list[$i]&#125;" /bin/true else action "$&#123;usl_list[$i]&#125;" /bin/false fi done ((check_count++))&#125;main()&#123; while true do check_url echo "----------check count:$&#123;check_count&#125;----------" sleep 10 done&#125;main 提示：实际使用时，一些基础的函数脚本（例如，加颜色的函数）是放在函数文件里（例如，放在/etc/init.d/functions里），与执行的脚本内容部分隔离，这样看起来会更清爽，大型的语言程序都是这样开发的。]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战18-破解RANDOM随机数]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F041.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9818-%E7%A0%B4%E8%A7%A3RANDOM%E9%9A%8F%E6%9C%BA%E6%95%B0%2F</url>
+    <content type="text"><![CDATA[1. 需求已知下面的字符串是RANDOM随机数变量经过md5sum处理后，再截取一部分连续字符串的结果，请破解这些字符串在使用md5sum处理前所对应的数字。123452102929900205d1ca3da1677lf6d12dd890684b 2. 实现脚本参考脚本如下：123456789101112131415161718192021222324252627282930313233343536373839404142434445#!/bin/basharray=( #&lt;==把字符串放到数组里2102929900205d1ca3da1677lf6d12dd890684b)Path=/tmp/md5.txtNum=0funGetMd5()&#123; [ -f "$Path" ] || touch $Path rowNum=$(wc -l &lt; $Path) if [ $rowNum -ne 32768 ] then &gt; $Path for ((Num=0; Num&lt;=32767; Num++)) do &#123; Stat=$(echo $Num | md5sum | cut -c 1-8) echo "$Stat $Num" &gt;&gt; $Path &#125;&amp; done else return 0 fi&#125;funFindMd5()&#123; word=$(echo "$&#123;array[@]&#125;" | sed -r 's# |\n#|#g') grep -E "$word" $Path&#125;funcMain()&#123; funGetMd5 funFindMd5&#125;funcMain]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战17-开发学生实践抓阄脚本]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F040.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9817-%E5%BC%80%E5%8F%91%E5%AD%A6%E7%94%9F%E5%AE%9E%E8%B7%B5%E6%8A%93%E9%98%84%E8%84%9A%E6%9C%AC%2F</url>
+    <content type="text"><![CDATA[1. 需求学校要举行一个活动，但是每个班参加人数的名额有限，仅限3人（班长带队）。因此需要开发一个抓阄的程序来挑选学生。 具体要求如下： 执行脚本后，输入想去的同学的英文名字全拼，产生随机数（01~99之间的数字），数字越大就越有机会去参加，对于前面已经抓到的数字，下次不能再出现。 输入第一个名字之后，屏幕输出信息，并将名字和数字记录到文件里，程序不能退出，继续等待别的学生输入。 2. 实现脚本参考脚本如下：123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354#!/bin/bashFileLog=/tmp/zhuanjiu.log #&lt;==定义最终抓阄后的结果日志[ -f "$FileLog" ] || touch $FileLog#&lt;==提示用户输入名字函数，判断用户的输入是否重复function Check_Name()&#123; while true do read -p "Please input your English name: " name if [ -n "$name" -a "$(grep -w "$name" $FileLog | wc -l)" -eq 0 ] then flag=1 break else echo "The name your input is null or alread exist." continue fi done&#125;#&lt;==该函数生成随机数，并判断随机数是否重复function Product_RandomNum()&#123; if [ $flag -eq 1 ] then while true do RandomNum=$(expr $RANDOM % 99 + 1) #&lt;==生成1~99的随机数 if [ $(grep -w "$RandomNum" $FileLog | wc -l) -ne 1 ] then echo "$name, your num is $&#123;RandomNum&#125;." | tee -a $FileLog flag1=0 else flag1=1 fi if [ $flag1 -eq 1 ] then Product_RandomNum else Check_Name fi done fi&#125;function main()&#123; Check_Name Product_RandomNum&#125;main 3. 执行结果123456789101112131415161718192021# &gt; /tmp/zhuajiu.log# sh zhuajiu.shPlease input your English name: name1name1, your num is 33.Please input your English name: name2name2, your num is 83.Please input your English name: name1The name your input is null or alread exist.Please input your English name: name2The name your input is null or alread exist.Please input your English name: name3name3, your num is 30.Please input your English name: name4name4, your num is 84.Please input your English name: ^C# sort -t" " -rn -k4 /tmp/zhuajiu.logname4, your num is 84.name3, your num is 30.name2, your num is 83.name1, your num is 33.]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战16-开发MySQL多实例启动脚本]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F039.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9816-%E5%BC%80%E5%8F%91MySQL%E5%A4%9A%E5%AE%9E%E4%BE%8B%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC%2F</url>
+    <content type="text"><![CDATA[1. 需求已知: MySQL多实例启动命令为：mysqld_safe --defaults-file=/data/3306/my.cnf &amp; 停止命令为：mysqladmin -u root -p123456 -S /data/3306/mysql.sock shutdown 请完成MySQL多实例启动脚本的编写。 要求：用函数、case语句、if语句等实现。 2. 实现问题分析：要想写出这个脚本，必须要对MySQL服务很熟练。 参考脚本如下：123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354#!/bin/bash# initPort=3306MysqlUser="root"MysqlPass="123456"CmdPath="/usr/local/mysql/bin"# startup functionstart()&#123; if [ `netstat -lnt | grep "$Port" | wc -l` -eq 0 ] then printf "Starting MySQL...\n" /bin/bash $&#123;CmdPath&#125;/mysqld_safe --defaults-file=/data/$&#123;Port&#125;/my.cnf 2&gt;&amp;1 /dev/null &amp; else printf "MySQL is running...\n" fi&#125;# stop functionstop()&#123; if [ ! `netstat -lnt | grep "$Port" | wc -l` -eq 0 ] then printf "Stoping MySQL...\n" $&#123;CmdPath&#125;/mysqladmin -u $&#123;MysqlUser&#125; -p$&#123;MysqlPass&#125; -S /data/$&#123;Port&#125;/mysql.sock shutdown else printf "MySQL is stopped...\n" fi&#125;# restart functionrestart()&#123; printf "Restarting MySQL...\n" stop sleep 2 start&#125;case "$1" instart) start ;;stop) stop ;;restart) restart ;;*) printf "Usage: $0 &#123;start|stop|restart&#125;\n"esac]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战15-开发Rsync服务启动脚本]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F038.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9815-%E5%BC%80%E5%8F%91Rsync%E6%9C%8D%E5%8A%A1%E5%90%AF%E5%8A%A8%E8%84%9A%E6%9C%AC%2F</url>
+    <content type="text"><![CDATA[1. 需求写出网络服务独立进程模式下Rsync的系统启动脚本。例如：/etc/init.d/rsyncd {start|stop|restart}。 要求： 要使用系统函数库技巧 要用函数，不能将一堆代码混在一起 可悲chkconfig管理 2. 过程2.1. 实现过程2.1.1. 第一步rsync服务的简单准备，代码如下：1234567# rpm -qa rsync #&lt;==查看软件包是否安装# yum install -y rsync #&lt;==如果没有安装rsync，则安装，否则就跳过这一步操作# touch /etc/rsyncd.conf #&lt;==为了简便起见，这里创建了一个空文件，实际工作中是有配置内容的。# rsync --daemon #&lt;==启动rsync服务命令# netstat -lnt | grep 873 #&lt;==过滤873端口，即rsync端口服务tcp 0 0 0.0.0.0:873 0.0.0.0:* LISTENtcp 0 0 :::873 :::* LISTEN 2.1.2. 第二步实现rsync服务的启动和停止方法，以及端口检测方法。 停止方法：12# pkill rsync# netstat -lntup | grep 873 启动方法：1234# rsync --daemon# netstat -lnt | grep 873tcp 0 0 0.0.0.0:873 0.0.0.0:* LISTENtcp 0 0 :::873 :::* LISTEN 2.1.3. 第三步常规方法有检测端口以及进程是否存在，还可以当服务启动时，创建一个锁文件（/var/lock/subsys/），而当服务停止时，就删除这个锁文件，这样就可以通过判断这个文件的有无，来确定服务是否是启动状态，这是一些系统脚本常用的手法。 2.1.4. 第四步开发rsync服务的启动脚本/etc/init.d/rsyncd，内容如下：1234567891011121314151617181920212223242526272829303132333435363738394041424344#!/bin/bashif [ $# -ne 1 ]then echo $"usage:$0 &#123;start|stop|restart&#125;" exit 1fiif [ "$1" = "start" ]then rsync --daemon sleep 2 #&lt;==休息2秒，这点很重要，停止及启动服务后，建议先休息1-2秒，再判断 if [ `netstat -lntup | grep rsync | wc -l` -ge 1 ] then echo "rsync is started." exit 0 fielif [ "$1" = "stop" ]then killall rsync &amp;&gt; /dev/null sleep 2 if [ `netstat -lntup | grep rsync | wc -l` -eq 0 ] then echo "rsyncd is stopped." exit 0 fielif [ "$1" = "restart" ]then killall rsync sleep 1 killpro=`netstat -lntup | grep rsync | wc -l` rsync --daemon sleep 1 startpro=`netstat -lntup | grep rsync | wc -l` if [ $killpro -eq 0 -a $startpro -eq 1 ] then echo "rsyncd is restarted." exit 0 fielse echo $"usage:$0 &#123;start|stop|restart&#125;" exit 1fi 此脚本可以实现基本的启动和停止功能，但是，离专业和规范还有一定的距离。比如更专业的可以用case语句实现。 2.2. 实现chkconfig管理2.2.1. 实现说明chkconfig命令是系统用来管理脚本开机自启动的命令，但是需要脚本支持chkconfig管理才行，具体的方法是在脚本的开头解释器之后加入如下两行内容：12# chkconfig: 2345 20 80# description: Save and restores system entropy pool 说明： 两行内容的开头都要有#号 第一行是说需要chkconfig管理，2345是Linux运行级别，表示该脚本默认在2345级别为启动状态，20是脚本的开始启动顺序，80是脚本的停止顺序，这两个数字都是不超过99的数字。一般情况下，可以根据服务的启动需求来选择，应用服务一般要靠后启动为准，越早停止越好。 2.2.2. 最终的脚本最终的rsync的启动脚本如下：12345678910111213141516171819202122232425262728293031323334353637383940414243444546#!/bin/bash# chkconfig: 2345 20 80# description: Save and restores system entropy poolif [ $# -ne 1 ]then echo $"usage:$0 &#123;start|stop|restart&#125;" exit 1fiif [ "$1" = "start" ]then rsync --daemon sleep 2 #&lt;==休息2秒，这点很重要，停止及启动服务后，建议先休息1-2秒，再判断 if [ `netstat -lntup | grep rsync | wc -l` -ge 1 ] then echo "rsync is started." exit 0 fielif [ "$1" = "stop" ]then killall rsync &amp;&gt; /dev/null sleep 2 if [ `netstat -lntup | grep rsync | wc -l` -eq 0 ] then echo "rsyncd is stopped." exit 0 fielif [ "$1" = "restart" ]then killall rsync sleep 1 killpro=`netstat -lntup | grep rsync | wc -l` rsync --daemon sleep 1 startpro=`netstat -lntup | grep rsync | wc -l` if [ $killpro -eq 0 -a $startpro -eq 1 ] then echo "rsyncd is restarted." exit 0 fielse echo $"usage:$0 &#123;start|stop|restart&#125;" exit 1fi 2.3. 最后的步骤设置开机自启动的过程如下： 设置前检查rsyncd的开机自启动情况 1# chkconfig --list rsyncd #&lt;==因为没有设置，所以没有输出 添加脚本开机自启动并检查： 123# chkconfig --add rsyncd #&lt;==注意，rsyncd脚本一定要放在/etc/init.d/目录下# chkconfig list rsyncd #&lt;==检查自启动结果，2345级别默认为启动状态rsyncd 0: 关闭 1: 关闭 2: 启用 3: 启用 4: 启用 5: 启用 6: 关闭]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战14-开发脚本实现入侵检测与报警]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F037.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9814-%E5%BC%80%E5%8F%91%E8%84%9A%E6%9C%AC%E5%AE%9E%E7%8E%B0%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E4%B8%8E%E6%8A%A5%E8%AD%A6%2F</url>
+    <content type="text"><![CDATA[1. 需求监控Web站点目录（比如/var/html/www）下的所有文件是否被恶意篡改（文件内容被更改了），如果有则打印改动的文件名（发邮件），定时任务每3分钟执行一次。 2. 过程2.1. 问题分析 首先要说明的是，思考过程的积累比实际代码开发的能力积累更重要。 什么是恶意篡改，只要是未经过许可的改动都是篡改。 文件内容被改动了会有如下特征： 大小可能会变化 修改时间会变化 文件内容会变化，利用md5sum指纹校验 增加或删除文件，比对每次检测前后的文件数量 2.2. 参考解答本案例主要采用md5sum的方法来实现。 2.2.1. 第一步在企业网站发布代码之后，即对所有网站数据建立初始指纹库和文件库，这个步骤很重要，没有基础的指纹库，无法进行入侵检测。 以/var/html/www作为站点目录为例： 建立测试数据 1234# mkdir /var/html/www -p #&lt;==创建站点目录# cp -a /etc/a* /var/html/www/ #&lt;==复制少量测试数据# cp -a /etc/b* /var/html/www/ #&lt;==复制少量测试数据# ls /var/html/www/ #&lt;==检查 建立初始的文件指纹库 12# find /var/html/www -type f | xargs md5sum &gt; /opt/zhiwen.db.ori #&lt;==建立文件内容指纹库# tail /opt/zhiwen.db.ori #&lt;==查看指纹库 建立初始的文件库 12# find /var/html/www -type f &gt; /opt/wenjian.db.ori #&lt;==建立文件数量和名字库# tail /opt/wenjian.db.ori #&lt;查看文件库 2.2.2. 第二步检测文件内容和文件数量变化 检测文件内容变化： 12345# echo theshu &gt;&gt; /var/html/www/audisp/plugins.d/af_unix.conf #&lt;==篡改文件# export LANG=en #&lt;==调整字符集# md5sum -c --quiet /opt/zhiwen.db.ori #&lt;==检查所有文件的内容是否变化/var/html/www/audisp/plugins.d/af_unix.conf: FAILED #&lt;==变化的会被打印出来md5sum: WARNING: 1 of 33 computed checksums did NOT match #&lt;==综合提示 检测文件数量变化 123456789# echo theshu.txt &gt; /var/html/www/test.txt #&lt;==模拟增加新文件# md5sum -c --quiet /opt/zhiwen.db.ori #&lt;==利用指纹库无法检测新增文件/var/html/www/audisp/plugins.d/af_unix.conf: FAILEDmd5sum: WARNING: 1 of 33 computed checksums did NOT match# find /var/html/www -type f &gt; /opt/wenjian.db_curr.ori#&lt;==获取检测前的所有文件数量和文件名# diff /opt/wenjian.db* #&lt;==采用diff命令比较18d17&lt; /var/html/www/test.txt #&lt;==test.txt就是新增的 2.2.3. 第三步开发检测指纹识别脚本。 首先，人工做如下操作：12# find /var/html/www -type f | xargs md5sum &gt; /opt/zhiwen.db.ori# find /var/html/www -type f &gt; /opt/wenjian.db.ori 脚本检测会以上述两个命令获取的结果为原始的正确依据，如下：123456789101112131415161718192021222324252627282930#!/bin/bashRETVAL=0 #&lt;==状态初始化export LANG=en #&lt;==调整字符集CHECK_DIR=/var/html/www #&lt;==定义要检测的站点目录[ -e $CHECK_DIR ] || exit 1 #&lt;==如果目录不存在则退出脚本ZhiWenDbOri="/opt/zhiwen.db.ori" #&lt;==定义原始指纹库路径FileCountDbOri="/opt/wenjian.db.ori" #&lt;==定义原始文件库路径ErrLog="/opt/err.log" #&lt;==定义检测后的内容日志[ -e $ZhiWenDbOri ] || exit 1 #&lt;==如果原始指纹库不存在则退出脚本[ -e $FileCountDbOri ] || exit 1 #&lt;==如果原始文件库不存在则退出脚本#judge file countecho "# md5sum -c --quiet /opt/zhiwen.db.ori" &gt; $ErrLog #&lt;==打印检测命令md5sum -c --quiet /opt/zhiwen.db.ori &amp;&gt;&gt; $ErrLog #&lt;==实际执行检测命令RETVAL=$? #&lt;==收集返回值#com file countfind $CHECK_DIR -type f &gt; /opt/wenjian.db_curr.ori #&lt;==实际执行检测命令，获取最新文件数量等echo "# diff /opt/wenjian.db*" &amp;&gt;&gt; $ErrLog #&lt;==打印检测命令diff /opt/wenjian.db* &amp;&gt;&gt; $ErrLog #&lt;==实际执行检测命令，对比文件数量及文件名变化情况if [ $RETVAL -ne 0 -o `diff /opt/wenjian.db* | wc -l` -ne 0 ]#&lt;==如果返回值不为0，或者对比结果行数不为0，则进入判断。then mail -s "`uname -n` $(date +%F) err" theshu@qq.com &lt;$ErrLog #&lt;==发送邮件else echo "Sites dir is ok" | mail -s "`uname -n` $(date +%F) is ok" theshu@qq.comfi 然后，利用定时任务检查，命令如下：123# crontab -1 | tail -2*/3 * * * * /bin/sh /server/scripts/xxx.sh &gt; /dev/null 2&gt;&amp;1 3. 补充现在来思考一下，在企业中一般什么文件需要做指纹验证呢？ 系统命令、用户文件、配置文件、启动文件等重要文件，都要监控起来，另外，在实际工作中应对所有的用户操作做日志审计，让所有人的操作无处遁形，起到威慑和监督的作用，从而减少被当作“黑锅侠”的风险。]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战13-监控Memcached缓存服务]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F036.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9813-%E7%9B%91%E6%8E%A7Memcached%E7%BC%93%E5%AD%98%E6%9C%8D%E5%8A%A1%2F</url>
+    <content type="text"><![CDATA[1. 需求监控Memcached缓存服务是否正常，模拟用户（Web客户端）检测。 使用nc命令加上set/get来模拟检测。 2. 过程2.1. 问题分析要想写出相应的脚本，必须要对Memcached服务很熟练。 2.2. 环境准备1234# yum install memcached -y# yum install nc -y #&lt;==用于探测端口及异地传输文件的工具# memcached -uroot -m 16 -p 11211 #&lt;启动Memecached服务# netstat -lntup | grep memcache #&lt;==查看是否启动成功 2.3. 参考解答脚本如下：1234567891011121314151617#!/bin/bashif [ `netstat -lntup | grep 11211 | wc -l` -lt 1 ]#&lt;==若端口对应的行数小于1，则说明服务未启动then echo "Memcached Service is error." exit 1fiprintf "del key\r\n" | nc 127.0.0.1 11211 &amp;&gt; /dev/null #&lt;==删除缓存中的key及对应的值printf "set key 0 0 10 \r\ntheshu1234\r\n" | nc 127.0.0.1 11211 &amp;&gt; /dev/null #&lt;==添加新值McValues=`printf "get key\r\n" | nc 127.0.0.1 11211 | grep theshu1234 | wc -l`if [ $McValues -eq 1 ]then echo "Memcached status is ok."else echo "Memcached status is bad."fi 2.4. 执行结果假如上面的脚本名为memcached.sh，则：12345678# sh memcached.shMemcached status is ok.# pkill memcached# sh memcached.shMemcached Service is error.# memcached -uroot -m16m -d# sh memcached.shMemcached status is ok.]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战12-Web及MySQL服务异常监控]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F035.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9812-Web%E5%8F%8AMySQL%E6%9C%8D%E5%8A%A1%E5%BC%82%E5%B8%B8%E7%9B%91%E6%8E%A7%2F</url>
+    <content type="text"><![CDATA[1. 需求用if条件语句针对Nginx Web服务或MySQL数据库服务是否正常进行检测，如果服务未启动，则启动相应的服务。 这是企业级运维实战的综合题目，需要编程者对Nginx Web服务和MySQL数据库服务很熟悉才行。这道示例同样适用于其它的Web服务和数据库服务。 2. 分析问题监控Web服务和MySQL数据库服务是否异常的方法有哪些呢？见下表： 方式种类 具体方法 端口监控 1. 在服务器本地监控服务端口的常见命令有netstat、ss、lsof2. 从远端监控服务器本地端口的命令有telnet、nmap、nc 在客户端模拟用户访问 使用wget或curl命令进行测试（如果检测数据库，则需要转为通过Web服务器去访问数据库），并对测试结果做三种判断：1. 利用返回值（echo $?）进行判断2. 获取特殊字符串进行判断（需要事先开发好程序）3. 根据HTTP相应header的情况进行判断 登陆MySQL数据库判断 通过MySQL客户端连接数据库，根据返回值或返回内容判断。例如：mysql -uroot -p123456 -e &quot;select version();&quot; &amp;&gt;/dev/null; echo $? 监控服务进程或进程数 此方法适合本地服务器，注意，过滤的是进程的名字。命令如下： 1ps -ef | grep nginx | wc -l`&lt;br/&gt;`ps -ef | grep mysql | wc -l 此外，对端口进程等进行判断时，尽量先通过grep过滤端口和进程特殊标记字符串，然后结合wc将过滤得到的结果转成行数再比较，这样相对简单有效。且经过wc -l命令处理之后的结果一定是数字，这样再进行判断就会比较简便。如果单纯地根据具体的列取具体的值判断会很麻烦吗如果确实想采用取值判断的方法，那就尽量用字符串比较的语法。 提示：掌握技术思想比解决问题本身更重要。 3. 监测MySQL数据库异常3.1. MySQL数据库环境准备准备如下：1234# yum install -y mysql-server# /etc/init.d/mysqld start# netstat -lnpup | grep mysql#&lt;==只有MySQL服务正常启动后才可以继续做下面的实验 3.2. 通过命令行测试通过命令行检测数据库服务是否正常，只有先确定命令行是正确的，才能确保将它放到脚本里也是正确的。 首先采用端口监控的方式。在服务器本地监控端口的命令有netstat、ss、lsof，具体实现多种命令的方法如下： netstat -lnp | grep 3306 | awk -F &quot;[ :]+&quot; &#39;{print $5}&#39;正常显示3306。这个就是前面所描述的根据具体的列取值判断的方法，获取到值，然后看啊可能其是否等于3306。但是不推荐采用这种取值方法，因为第一取值麻烦；第二如果使用数字比较，当端口不存在时就会报错。而一旦使用了取值判断方法，即使看起来是数字，也要尽量使用字符串进行比较，否则你将掉进坑里，很久都不会爬出来 netstat -lntup | grep 3306 | wc -l正常显示1。过滤关键字端口，转成数字，此方法很好。 netstat -lntup | grep mysql | wc -l正常显示1。过滤关键字进程吗，转成数字，此方法很好。 ss -lntup | grep mysql | wc -l正常显示1。ss类似于netstat命令，参数选项可通用 ss -lntup | grep 3306 | wc -l正常显示1 lsof -i tcp:3306 | wc -l 利用lsof检查tcp协议的3306端口。 从远端监控服务器监控本地端口的命令有telnet、nmap、nc，这三个命令有可能需要事先安装好才能使用，安装方法为：1# yum install -y telnet nmap nc nmap 127.0.0.1 -p 3306 | grep open | wc -l 查看远端3306端口是否开通，过滤open关键字，结果返回1，说明有open关键字，表示3306端口是通的。 echo -e &quot;\n&quot; | telnet 127.0.0.1 3306 2&gt; /dev/null | grep Connected | wc -l telnet是常用来检测远端服务器端口是通畅的一个好用的命令，在非交互时需要采用特殊写法才行，过滤的关键字为Connected，返回1，说明有Connected，表示3306端口是通的。 nc -w 2 127.0.0.1 3306 &amp;&gt; /dev/null nc的命令很强大，这里用来检测端口。根据执行命令的返回值判断端口是否通畅，如果返回0，则表示通畅，-w为超时时间。 上面各个示例都是使用的127.0.0.1，在实际工作中，应该用自己服务器的IP来替代。 下面对服务进程数进行监控（适合本地服务器）：12# ps -ef | grep mysql | grep -v grep | wc -l3 以下是在客户端模拟用户访问的方式进行监控。 使用wget或curl命令访问URL地址来测试（如果要检测数据库是否异常，则先转为通过访问Web服务器去访问数据库）时，有以下几种判断思路： 第一种，是根据执行命令的返回值判断成功与否，本例的URL使用了网上的地址，在实际工作中应该使用开发人员提供给我们的访问数据库的程序地址。 12345678910111213141516171819# wget --spider --timeout=10 --tries=2 www.baidu.com &amp;&gt; /dev/null#&lt;== 在wget后面加url的检测方法。#&lt;== &amp;&gt;/dev/null表示不输出，只看返回值。#&lt;== --spider的意思是模拟爬取。#&lt;== --timeout=10的意思是10秒超时。#&lt;== --tries=2表示如果不成功，则重试2次。# echo $?0#&lt;== 查看命令执行的返回值，0为成功。# curl -s -o /dev/null http://www.baidu,com#&lt;== 利用curl进行检测#&lt;== -s为沉默模式#&lt;== -o /dev/null 表示输出定向到空# echo $?0#&lt;== 查看命令执行的返回值，0为成功 第二种，是根据执行命令后获取到的字符串进行判断。此方法需要有前端动态程序支持，即开发PHP或Java程序从数据库里面取出指定的字符串，看它和期待的是否相等。下面以PHP服务为例（对于一个PHP程序访问数据库，如果访问成功，则给出固定的输出）。 1234567891011121314# vim /server/scripts/testmysql.php&lt;?php/* * This scripts is test the MySQL *///$link_id=mysql_connect('主机名','用户','密码');$link_id=mysql_connect('localhost','root','metianhai') or mysql_error();//$link_id=mysql_connect('localhost','test','');if($link_id)&#123; echo "mysql successful!";&#125;else&#123; echo mysql_error();&#125;?&gt; 命令行执行： 1234# php /server/scripts/testmysql.php#&lt;== 注意，.php需要执行（yum install -y php）安装mysql successful!#&lt;==可以通过grep过滤上面输出的关键字，进而判断访问数据库是否成功 提示：需要事先安装PHP软件才行，或者将程序放到LNMP服务器的站点目录，然后curl或wget访问http地址。 此方法是监控数据库是否异常的最佳的方法。 3.3. 开发监控MySQL数据库的脚本这里将给出多种开发脚本以供参考。 脚本1123456789#!/bin/bashecho method1-------------------if [ `netstat -lnt | grep 3306 | awk -F "[ :]+" '&#123;print $5&#125;'` -eq 3306 ]then echo "MySQL is Running."else echo "MySQL is Stopped." /etc/init.d/mysqld startfi 说明： 这这个例子中的判断思路并不是很好 最好不要用整数进行比较，因为一旦端口不存在，取值就会为空，进行整数比较会报错 不要根据列取具体的值，而是要过滤关键字，通过wc转换成行数进行判断 脚本2123456789#!/bin/bashecho method2----------------if [ "`netstat -lnt | grep 3306 | awk -F "[ :]+" '&#123;print $5&#125;'`" = "3306" ]then echo "MySQL is Running."else echo "MySQL is Stopped." /etc/init.d/mysqld startfi 说明： 在这里例子中，用字符串的方法及逆行比较就好多了，避免了脚本1中整数比较的错误发生，但是取值麻烦了一些。 脚本3123456789#!/bin/bashecho method3-----------------if [ `netstat -lntup | grep mysqld | wc -l` -gt 0 ]then echo "MySQL is Running."else echo "MySQL is Stoppped." /etc/init.d/mysqld startfi 说明： 过滤进程名，转成数字，很优秀的取值判断方法 脚本4123456789#!/bin/bashecho method4-----------------if [ `lsof -i tcp:3306 | wc -l` -gt 0 ]then echo "MySQL is Running."else echo "MySQL is Stopped." /etc/init.d/mysqld startfi 说明： 过滤端口转成数字，很优秀的取值判断方法 脚本51234567891011#!/bin/bashecho method5-------------------[ `rpm -qa nmap | wc -l` -lt 1 ] &amp;&amp; yum install nmap -y &amp;&gt; /dev/null#&lt;==防止因nmap没有安装而导致的错误if [ `nmap 127.0.0.1 -p 3306 2&gt; /dev/null | grep open | wc -l` -gt 0 ]then echo "MySQL is Running."else echo "MySQL is Stopped." /etc/init.d/mysqld startfi 说明： 远端的端口检查，推荐使用，统里，这里也不要过滤出open，然后再做字符比较，转成数字最佳 脚本61234567891011#!/bin/bashecho method6-------------------[ `rpm -qa nc | wc -l` -lt 1 ] &amp;&amp; yum install -y nc &amp;&gt; /dev/null#&lt;==防止因nc没有安装而导致的错误if [ `nc -w 2 127.0.0.1 3306 &amp;&gt; /dev/null &amp;&amp; echo ok | grep ok | wc -l` -gt 0 ]then echo "MySQL is Running."else echo "MySQL is Stopped." /etc/init.d/mysqld startfi 说明： 这个例子中的判断有点特别，即若nc执行成功，则输出和之后的过滤都没有问题，最后转换成数字，思路决定出路。 脚本7123456789#!/bin/bashecho method7----------------if [ `ps -ef | grep -v grep | grep mysql | wc -l` -gt 0 ] #&lt;==过滤进程方式，排除自身then echo "MySQL is Running."else echo "MySQL is Stopped." /etc/init.d/mysqld startfi 4. 监控Nginx Web服务异常监控Nginx Web服务异常的方法和监控MySQL数据库一样，也是使用端口、进程或者通过wget/curl访问来进行检测。 4.1. Nginx Web服务环境准备环境准备如下：12345678# wget -O /etc/yum.repos.d/epel.repo http://mirrors.aliyun.com/repo/epel-6.repo# yum insatll nginx -y# /etc/init.d/nginx start# echo theshu &gt; /usr/share/nginx/html/index.html#&lt;==建立测试网页，内容为theshu# curl http://127.0.0.1theshu 4.2. 通过命令行检测Nginx服务是否正常通过命令行检测Nginx服务是否正常，同样也只有在命令行下是正确的，才能确保它放到脚本里也是正确的。 首先采用端口监控的方式。在监控Nginx和监控数据库端口时，除了端口不同，其它的命令方法都是一模一样的。在服务器本地监控端口的命令有netstat、ss、lsof，如下： netstat -lnt | grep -w 80 | awk -F &quot;[ :]+&quot; &#39;{print $5}&#39; netstat -lntup | grep -w 80 | wc -l netstat -lntup | grep nginx | wc -l ss -lntup | grep nginx | wc -l ss -lntup | grep -w 80 | wc -l lsof -i tcp:80 | wc -l 在远端监控服务器本地端口的命令有telnet、nmap、nc，如下： nmap 127.0.0.1 -p 80 | grep open | wc -l echo -e &quot;\n&quot; | telnet 127.0.0.1 80 2&gt; /dev/null | grep Connected | wc -l nc -w 2 127.0.0.1 80 &amp;&gt; /dev/null，然后echo $? 对服务进程或进程数进行监控的方式（适合本地服务器）如下： ps -ef | grep nginx | grep -v grep | wc -l ps -C nginx --no-header | wc -l 以下是在客户端模拟用户访问的监控方式。先通过wget或curl命令进行测试。执行wget或curl命令之后，再看返回值（echo $?）为0，则成功。 wget --spider --timeout=10 --tries=2 http://127.0.0.1 &amp;&gt; /dev/null然后echo $? wget -T 10 -q --spider http://127.0.0.1 &amp;&gt; /dev/null然后echo $? curl -s -o /dev/null http://127.0.0.1然后echo $? 以下是获取字符串的方式（判断获取的字符串是否和事先设定的相等）12# curl http://127.0.0.1theshu 以下是根据HTTP响应的header的结果进行判断（200、301、302都表示正常）12# curl -I -s -w "%&#123;http_code&#125;\n" -o /dev/null http://127.0.0.1200 4.3. 开发监控Nginx Web服务的脚本在这里同样给出多个参考脚本。 脚本1123456789#!/bin/bashecho http method1--------------if [ `netstat -lnt | grep 80 | awk -F "[ :]+" '&#123;print $5&#125;'` -eq 80 ]then echo "Nginx is Running."else echo "Nginx is Stopped." /etc/init.d/nginx startfi 脚本2123456789#!/bin/bashecho http method2--------------if [ "`netstat -lnt | grep 80 | awk -F "[ :]+" '&#123;print $5&#125;'`" -eq "80" ]then echo "Nginx is Running."else echo "Nginx is Stopped." /etc/init.d/nginx startfi 脚本3123456789#!/bin/bashecho http method3--------------if [ `netstat -lntup | grep nginx | wc -l` -gt 0 ]then echo "Nginx is Running."else echo "Nginx is Stopped." /etc/init.d/nginx startfi 脚本4123456789#!/bin/bashecho http method4--------------if [ `lsof -i tcp:80 | wc -l` -gt 0 ]then echo "Nginx is Running."else echo "Nginx is Stopped." /etc/init.d/nginx startfi 脚本512345678910#!/bin/bashecho http method5--------------[ `rpm -qa nmap | wc -l` lt 1 ] &amp;&amp; yum install -y nmap &amp;&gt; /dev/nullif [ `nmap 127.0.0.1 -p 80 2&gt; /dev/null | grep open | wc -l` -gt 0 ]then echo "Nginx is Running."else echo "Nginx is Stopped." /etc/init.d/nginx startfi 脚本612345678910#!/bin/bashecho http method6--------------[ `rpm -qa nc | wc -l` -lt 1 ] &amp;&amp; yum install -y nc &amp;&gt; /dev/nullif [ `nc -w 2 127.0.0.1 80 &amp;&gt; /dev/null &amp;&amp; echo ok | grep ok | wc -l` -gt 0 ]then echo "Nginx is Running."else echo "Nginx is Stopped." /etc/init.d/nginx startfi 脚本7123456789#!/bin/bashecho http method7--------------if [ `ps -ef | grep -v grep | grep nginx | wc -l` -ge 1 ]then echo "Nginx is Running."else echo "Nginx is Stopped." /etc/init.d/nginx startfi 脚本8123456789#!/bin/bashecho http method8--------------if [[ `curl -I -s -o /dev/null -w "%&#123;http_code&#125;\n" http://127.0.0.1` =~ [23]0[012] ]]then echo "Nginx is Running."else echo "Nginx is Stopped." /etc/init.d/nginx startfi 脚本9123456789#!/bin/bashecho http method9--------------if [ `curl -I http://127.0.0.1 2&gt; /dev/null | head -1 | egrep "200|302|301" | wc -l` -eq 1 ]then echo "Nginx is Running."else echo "Nginx is Stopped." /etc/init.d/nginx startfi 脚本10123456789#!/bin/bashecho http method10--------------if [ "`curl -s http://127.0.0.1`" = "theshu" ]then echo "Nginx is Running."else echo "Nginx is Stopped." /etc/init.d/nginx startfi]]></content>
+      <tags>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Shell脚本实战11-菜单自动化软件部署]]></title>
+    <url>%2F2018%2F03%2F05%2FShell%2F034.%20Shell%E8%84%9A%E6%9C%AC%E5%AE%9E%E6%88%9811-%E8%8F%9C%E5%8D%95%E8%87%AA%E5%8A%A8%E5%8C%96%E8%BD%AF%E4%BB%B6%E9%83%A8%E7%BD%B2%2F</url>
+    <content type="text"><![CDATA[1. 需求这是一个综合实例：打印选择菜单，按照选择一键安装不同的Web服务。 要求： 当用户输入1时，输出”start installing lamp.”的提示，然后执行lamp.sh，脚本内容输出”lamp is installed”后退出脚本，也就是实际工作中使用的lamp一键安装脚本。 当用户输入2时，输出”start installing lnmp.”的提示，然后执行lnmp.sh，输出”lnmp is installed”后退出脚本，也就是实际工作中使用的lnmp一键安装脚本。 当输入3时，退出当前菜单及脚本。 当输入任何其它字符时，给出提示:”Input error”后退出脚本。 对要执行的脚本进行相关的条件判断，例如：脚本文件是否存在，是否可执行等判断 2. 脚本实现准备工作1234567# mkdir -p /server/scripts #&lt;==建立脚本存放路径，可自定义# cd /server/scripts #&lt;==切换到脚本目录下# echo "echo lamp is installed" &gt; lamp.sh#&lt;==模拟lamp脚本输出# echo "echo lnmp is installed" &gt; lnmp.sh#&lt;==模拟lnmp脚本输出# chmod +x lnmp.sh lamp.sh #&lt;==给予执行权限 正式脚本(lanmp.sh)如下:1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162#!/bin/bashpath=/server/scripts #&lt;==定义脚本路径[ ! -d "$path" ] &amp;&amp; mkdir $path -p#menucat &lt;&lt;END 1. [install LAMP] 2. [install LNMP] 3. [exit] Please input the num you want:ENDread num #&lt;==接收用户选择的数字#判断用户输入的数字是否为整数expr $num + 1 &amp;&gt; /dev/null[ $? -ne 0 ] &amp;&amp; &#123; echo "the num you input must be &#123;1|2|3&#125;" exit 1&#125;#用户选择1执行lamp脚本[ $num -eq 1 ] &amp;&amp; &#123; echo "start installing lamp." sleep 2; [ -x "$path/lamp.sh" ] || &#123; echo "$path/lamp.sh does not exist or can not be exec." exit 1 &#125; source $path/lamp.sh #&lt;==其实使用这种方法比sh或不叫解释器更好 exit $?&#125;#用户选择2执行lnmp脚本[ $num -eq 2 ] &amp;&amp; &#123; echo "start installing lnmp." sleep 2; [ -x "$path/lnmp.sh" ] || &#123; echo "$path/lnmp.sh does not exist or can not be exec." exit 2 &#125; source $path/lnmp.sh #&lt;==其实使用这种方法比sh或不叫解释器更好 exit $?&#125;#用户选择3时退出脚本[ $num -eq 3 ] &amp;&amp; &#123; echo bye. exit 3&#125;#用户输入不等于123的用法：#用法1#[[ ! "$num" =~ [1-3 ]] &amp;&amp; &#123;# echo "I guess, you are not man."#&#125;#用法2[[ ! $num =~ [1-3] ]] &amp;&amp; &#123; echo "the num you input must be &#123;1|2|3&#125;" echo "Input ERROR" exit 4&#125; 3. 脚本演示脚本个数如下：12# lslamp.sh lanmp.sh lnmp.sh 脚本执行结果如下；12345678910111213141516171819202122232425262728293031323334# sh lanmp.sh 1. [install LAMP] 2. [install LNMP] 3. [exit] Please input the num you want:1start installing lamp.lamp is installed# sh lanmp.sh 1. [install LAMP] 2. [install LNMP] 3. [exit] Please input the num you want:2start installing lnmp.lnmp is installed# sh lanmp.sh 1. [install LAMP] 2. [install LNMP] 3. [exit] Please input the num you want:3bye.# sh lanmp.sh 1. [install LAMP] 2. [install LNMP] 3. [exit] Please input the num you want:4the num you input must be &#123;1|2|3&#125;Input ERROR]]></content>
+      <categories>
+        <category>Shell</category>
+      </categories>
+      <tags>
+        <tag>Shell</tag>
       </tags>
   </entry>
   <entry>
@@ -359,8 +554,8 @@
       </categories>
       <tags>
         <tag>Shell</tag>
-        <tag>随机数</tag>
         <tag>批量</tag>
+        <tag>随机数</tag>
       </tags>
   </entry>
   <entry>
