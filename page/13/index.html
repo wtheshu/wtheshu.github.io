@@ -312,7 +312,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/037. Shell脚本实战14-开发脚本实现入侵检测与报警/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/041. Shell脚本实战18-破解RANDOM随机数/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -331,7 +331,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/03/05/Shell/037. Shell脚本实战14-开发脚本实现入侵检测与报警/" itemprop="url">Shell脚本实战14-开发脚本实现入侵检测与报警</a></h1>
+                <a class="post-title-link" href="/2018/03/05/Shell/041. Shell脚本实战18-破解RANDOM随机数/" itemprop="url">Shell脚本实战18-破解RANDOM随机数</a></h1>
         
 
         <div class="post-meta">
@@ -343,7 +343,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:13:42+08:00">2018-03-05</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:15:56+08:00">2018-03-05</time>
             
 
             
@@ -364,7 +364,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-25T21:23:44+08:00">2018-03-25</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-25T21:22:21+08:00">2018-03-25</time>
             
           </span>
 
@@ -416,14 +416,12 @@
       
         
           
-          1. 需求监控Web站点目录（比如/var/html/www）下的所有文件是否被恶意篡改（文件内容被更改了），如果有则打印改动的文件名（发邮件），定时任务每3分钟执行一次。
-2. 过程2.1. 问题分析
-首先要说明的是，思考过程的积累比实际代码开发的能力积累更重要。
-什么是恶意篡改，只要是未经过许可
+          1. 需求已知下面的字符串是RANDOM随机数变量经过md5sum处理后，再截取一部分连续字符串的结果，请破解这些字符串在使用md5sum处理前所对应的数字。123452102929900205d1ca3da1677lf6d12dd890684b
+2. 实现脚本参考脚本如下：123456789101
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/05/Shell/037. Shell脚本实战14-开发脚本实现入侵检测与报警/#more" rel="contents">
+            <a class="btn" href="/2018/03/05/Shell/041. Shell脚本实战18-破解RANDOM随机数/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -479,7 +477,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/036. Shell脚本实战13-监控Memcached缓存服务/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/040. Shell脚本实战17-开发学生实践抓阄脚本/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -498,7 +496,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/03/05/Shell/036. Shell脚本实战13-监控Memcached缓存服务/" itemprop="url">Shell脚本实战13-监控Memcached缓存服务</a></h1>
+                <a class="post-title-link" href="/2018/03/05/Shell/040. Shell脚本实战17-开发学生实践抓阄脚本/" itemprop="url">Shell脚本实战17-开发学生实践抓阄脚本</a></h1>
         
 
         <div class="post-meta">
@@ -510,7 +508,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:13:17+08:00">2018-03-05</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:15:19+08:00">2018-03-05</time>
             
 
             
@@ -531,7 +529,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-25T21:24:04+08:00">2018-03-25</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-25T21:22:45+08:00">2018-03-25</time>
             
           </span>
 
@@ -583,14 +581,15 @@
       
         
           
-          1. 需求监控Memcached缓存服务是否正常，模拟用户（Web客户端）检测。
-使用nc命令加上set/get来模拟检测。
-2. 过程2.1. 问题分析要想写出相应的脚本，必须要对Memcached服务很熟练。
-2.2. 环境准备1234# yum install memcached -y# yu
+          1. 需求学校要举行一个活动，但是每个班参加人数的名额有限，仅限3人（班长带队）。因此需要开发一个抓阄的程序来挑选学生。
+具体要求如下：
+
+执行脚本后，输入想去的同学的英文名字全拼，产生随机数（01~99之间的数字），数字越大就越有机会去参加，对于前面已经抓到的数字，下次不能再出现。
+输入第一个名字
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/05/Shell/036. Shell脚本实战13-监控Memcached缓存服务/#more" rel="contents">
+            <a class="btn" href="/2018/03/05/Shell/040. Shell脚本实战17-开发学生实践抓阄脚本/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -646,7 +645,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/035. Shell脚本实战12-Web及MySQL服务异常监控/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/05/Shell/039. Shell脚本实战16-开发MySQL多实例启动脚本/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -665,7 +664,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/03/05/Shell/035. Shell脚本实战12-Web及MySQL服务异常监控/" itemprop="url">Shell脚本实战12-Web及MySQL服务异常监控</a></h1>
+                <a class="post-title-link" href="/2018/03/05/Shell/039. Shell脚本实战16-开发MySQL多实例启动脚本/" itemprop="url">Shell脚本实战16-开发MySQL多实例启动脚本</a></h1>
         
 
         <div class="post-meta">
@@ -677,7 +676,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:12:43+08:00">2018-03-05</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-05T11:14:48+08:00">2018-03-05</time>
             
 
             
@@ -698,10 +697,28 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-25T21:34:45+08:00">2018-03-25</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-25T21:23:05+08:00">2018-03-25</time>
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Shell/" itemprop="url" rel="index"><span itemprop="name">Shell</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -732,13 +749,16 @@
       
         
           
-          1. 需求用if条件语句针对Nginx Web服务或MySQL数据库服务是否正常进行检测，如果服务未启动，则启动相应的服务。
-这是企业级运维实战的综合题目，需要编程者对Nginx Web服务和MySQL数据库服务很熟悉才行。这道示例同样适用于其它的Web服务和数据库服务。
-2. 分析问题监控Web服
+          1. 需求已知:
+
+MySQL多实例启动命令为：mysqld_safe --defaults-file=/data/3306/my.cnf &amp;
+停止命令为：mysqladmin -u root -p123456 -S /data/3306/mysql.sock shutdown
+
+请完成My
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/03/05/Shell/035. Shell脚本实战12-Web及MySQL服务异常监控/#more" rel="contents">
+            <a class="btn" href="/2018/03/05/Shell/039. Shell脚本实战16-开发MySQL多实例启动脚本/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -783,7 +803,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/">37</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/12/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><span class="page-number current">13</span><a class="page-number" href="/page/14/">14</a><span class="space">&hellip;</span><a class="page-number" href="/page/39/">39</a><a class="extend next" rel="next" href="/page/14/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -832,7 +852,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">111</span>
+                    <span class="site-state-item-count">115</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -926,7 +946,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">28</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">32</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

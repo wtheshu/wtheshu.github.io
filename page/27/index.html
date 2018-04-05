@@ -312,7 +312,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/01/20/Linux/013. Linux程序管理技术/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/01/24/Linux/017. Linux系统日志介绍/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -331,7 +331,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/20/Linux/013. Linux程序管理技术/" itemprop="url">Linux程序管理技术</a></h1>
+                <a class="post-title-link" href="/2018/01/24/Linux/017. Linux系统日志介绍/" itemprop="url">Linux系统日志介绍</a></h1>
         
 
         <div class="post-meta">
@@ -343,7 +343,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-20T10:09:29+08:00">2018-01-20</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-24T13:24:10+08:00">2018-01-24</time>
             
 
             
@@ -364,7 +364,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-03-15T12:01:06+08:00">2018-03-15</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:33:18+08:00">2018-02-23</time>
             
           </span>
 
@@ -417,14 +417,15 @@
         
           
           
-GO
+GO 
 
 
-1. 什么是进程（process）在Linux系统中，触发任何一个事件时，系统都会将它定义为一个进程，并且给予这个进程一个ID，称为PID，同时依据触发这个进程的用户与相关属性关系，给予这个PID一组有效的权限设置。从此以后，这个PID能够在系统上面进行的操作，就与这个PID的权限有关了
+日志记录了系统每天发生的各种各种的事情，比如监测系统状况、排查系统故障等。你可以通过日志来检查错误发生的原因，或者收到攻击时攻击者留下的痕迹。日志的主要功能是审计和监测，还可以实时地监测系统状态，监测和追踪侵入者等。所以，在以后的工作中，遇到问题，查看日志，才能找到线索，来解决问题。
+
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/20/Linux/013. Linux程序管理技术/#more" rel="contents">
+            <a class="btn" href="/2018/01/24/Linux/017. Linux系统日志介绍/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -480,7 +481,7 @@ GO
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/01/19/Linux/012. 正则表达式实用技术/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/01/24/Linux/016. Linux数据备份技术/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -499,7 +500,7 @@ GO
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/19/Linux/012. 正则表达式实用技术/" itemprop="url">正则表达式实用技术</a></h1>
+                <a class="post-title-link" href="/2018/01/24/Linux/016. Linux数据备份技术/" itemprop="url">Linux数据备份技术</a></h1>
         
 
         <div class="post-meta">
@@ -511,7 +512,7 @@ GO
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-19T12:47:06+08:00">2018-01-19</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-24T13:23:52+08:00">2018-01-24</time>
             
 
             
@@ -532,7 +533,7 @@ GO
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:32:37+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:33:08+08:00">2018-02-23</time>
             
           </span>
 
@@ -587,12 +588,16 @@ GO
           
 GO
 
-1. 正则表达式入门1.1. 定义正则表达式是处理字符串的方法，它是以行为单位来进行字符串的处理行为，通过一些特殊符号的辅助，可以轻易达到查找、删除、替换某特定字符的目的。它是一种规则，只要某工具支持正则表达式，便可以使用这种规则。（支持正则的工具有：vi、grep、awk、sed等）
-注
+
+1. scp工具scp用来拷贝用的，可远程和本地相互之间都可以，与rsync差不多，但是它不支持增量备份。
+用法如下：
+
+scp是由openssh-clients包支持的，安装这个包就可以使用scp了，但是远程备份的时候双方都必须安装这个包。
+scp -r a/ 192.168.1.12
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/19/Linux/012. 正则表达式实用技术/#more" rel="contents">
+            <a class="btn" href="/2018/01/24/Linux/016. Linux数据备份技术/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -648,7 +653,7 @@ GO
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/01/19/Linux/011. Linux计划任务管理技术/">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/01/24/Linux/015. Linux系统服务管理技术/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="奇怪先生theshu">
@@ -667,7 +672,7 @@ GO
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/01/19/Linux/011. Linux计划任务管理技术/" itemprop="url">Linux计划任务管理技术</a></h1>
+                <a class="post-title-link" href="/2018/01/24/Linux/015. Linux系统服务管理技术/" itemprop="url">Linux系统服务管理技术</a></h1>
         
 
         <div class="post-meta">
@@ -679,7 +684,7 @@ GO
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-19T09:05:17+08:00">2018-01-19</time>
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-24T13:23:29+08:00">2018-01-24</time>
             
 
             
@@ -700,7 +705,7 @@ GO
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:32:30+08:00">2018-02-23</time>
+              <time title="更新于" itemprop="dateModified" datetime="2018-02-23T20:33:02+08:00">2018-02-23</time>
             
           </span>
 
@@ -755,18 +760,14 @@ GO
           
 GO
 
-0. 计划任务服务程序Linux系统的计划任务分为三种：
 
-一次性计划任务（用at命令实现，由atd服务提供）
-周期性计划任务（用crontab命令实现，由crond服务提供）
-系统级别的计划任务及其扩展anacron：在一个指定时间间隔错过后自动执行任务
+有些服务我们日常用不到则要把它们停掉，一来可以节省资源，二来可以减少安全隐患。下面就介绍一下Linux(尤其是红帽系统Linux系统)中的服务管理工具。
 
-
-1. 一次性计划任务1.1.
+1. ntsysv服务配置工具如果没有这个命令请使用yum install -y ntsysv来安装它。这个工具用来配置哪些服务开启
           ...
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2018/01/19/Linux/011. Linux计划任务管理技术/#more" rel="contents">
+            <a class="btn" href="/2018/01/24/Linux/015. Linux系统服务管理技术/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -811,7 +812,7 @@ GO
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/26/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><span class="page-number current">27</span><a class="page-number" href="/page/28/">28</a><span class="space">&hellip;</span><a class="page-number" href="/page/37/">37</a><a class="extend next" rel="next" href="/page/28/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/26/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/26/">26</a><span class="page-number current">27</span><a class="page-number" href="/page/28/">28</a><span class="space">&hellip;</span><a class="page-number" href="/page/39/">39</a><a class="extend next" rel="next" href="/page/28/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -860,7 +861,7 @@ GO
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">111</span>
+                    <span class="site-state-item-count">115</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -954,7 +955,15 @@ GO
                     
                       
                     
-                    <span class="site-state-item-count">28</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">32</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>

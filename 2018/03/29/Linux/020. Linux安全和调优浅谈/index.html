@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+
+
+
+
+<html class="theme-next mist" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.0.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.0.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.0.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.0.4" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '6.0.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":false,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  
+  <meta name="keywords" content="Linux," />
+
+
+<meta name="description" content="1. 安全Linux的安全，对于运维人员来说是重中之重，掌握基本的安全知识是非常有必要的。这一节学习笔记就是来宏观地记录在Linux下的安全知识。 1.1. Linux发行版本在选择Linux发行版的时候，一定要选择主流的、更新较快的发行版。比如Redhat、CentOS、Ubuntu等，这些发行版用户群体是很庞大的，而且它们的发行厂商也是非常有实力的，有很多高级安全工程师来维护这些发行版的安全。">
+<meta name="keywords" content="Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux安全和调优浅谈">
+<meta property="og:url" content="http://www.theshu.top/2018/03/29/Linux/020. Linux安全和调优浅谈/index.html">
+<meta property="og:site_name" content="奇怪先生的博客">
+<meta property="og:description" content="1. 安全Linux的安全，对于运维人员来说是重中之重，掌握基本的安全知识是非常有必要的。这一节学习笔记就是来宏观地记录在Linux下的安全知识。 1.1. Linux发行版本在选择Linux发行版的时候，一定要选择主流的、更新较快的发行版。比如Redhat、CentOS、Ubuntu等，这些发行版用户群体是很庞大的，而且它们的发行厂商也是非常有实力的，有很多高级安全工程师来维护这些发行版的安全。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-03-29T08:48:43.919Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux安全和调优浅谈">
+<meta name="twitter:description" content="1. 安全Linux的安全，对于运维人员来说是重中之重，掌握基本的安全知识是非常有必要的。这一节学习笔记就是来宏观地记录在Linux下的安全知识。 1.1. Linux发行版本在选择Linux发行版的时候，一定要选择主流的、更新较快的发行版。比如Redhat、CentOS、Ubuntu等，这些发行版用户群体是很庞大的，而且它们的发行厂商也是非常有实力的，有很多高级安全工程师来维护这些发行版的安全。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://www.theshu.top/2018/03/29/Linux/020. Linux安全和调优浅谈/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+  <title>Linux安全和调优浅谈 | 奇怪先生的博客</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">奇怪先生的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">耳目得来终觉浅，觉知此事要躬行。</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+  
+
+
+
+ </div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://www.theshu.top/2018/03/29/Linux/020. Linux安全和调优浅谈/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="奇怪先生theshu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/head_me.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奇怪先生的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux安全和调优浅谈</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-29T14:02:07+08:00">2018-03-29</time>
+            
+
+            
+            
+              
+                
+              
+            
+
+            
+              
+              <span class="post-meta-divider">|</span>
+              
+
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2018-03-29T16:48:43+08:00">2018-03-29</time>
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-安全"><a href="#1-安全" class="headerlink" title="1. 安全"></a>1. 安全</h1><p>Linux的安全，对于运维人员来说是重中之重，掌握基本的安全知识是非常有必要的。这一节学习笔记就是来宏观地记录在Linux下的安全知识。</p>
+<h2 id="1-1-Linux发行版本"><a href="#1-1-Linux发行版本" class="headerlink" title="1.1. Linux发行版本"></a>1.1. Linux发行版本</h2><p>在选择Linux发行版的时候，一定要选择主流的、更新较快的发行版。比如Redhat、CentOS、Ubuntu等，这些发行版用户群体是很庞大的，而且它们的发行厂商也是非常有实力的，有很多高级安全工程师来维护这些发行版的安全。</p>
+<p>我们安装的时候要获得镜像，一定要从官网获取。</p>
+<hr>
+<h2 id="1-2-硬件和物理安全"><a href="#1-2-硬件和物理安全" class="headerlink" title="1.2. 硬件和物理安全"></a>1.2. 硬件和物理安全</h2><p>在这个方面，要注意以下的问题：</p>
+<ul>
+<li>设置BIOS密码：为了防止别人可以拿安装盘重装系统，或者进入救援模式</li>
+<li>设置Grub密码：为了防止进入单用户模式</li>
+<li>设置系统密码：系统密码在我们安装系统的时候是必须要设置的，只不过这个密码也许你设置的很简单，很容易被暴力破解，所以密码要设置复杂一些</li>
+<li>选择有安全保障的IDC机房，机房首选得保证不能随便让陌生人进入，其次机房的配套设施得完善，制冷设备必须一年四季都好使，电压要稳定，要配有UPS电池，可以供给短暂电源，机房不能出现漏水、漏电等事故</li>
+<li>最后，现在云计算已经成为一种必然的趋势，云计算可以为我们节约了很多基础性安全的成本</li>
+</ul>
+<hr>
+<h2 id="1-3-系统和用户方面"><a href="#1-3-系统和用户方面" class="headerlink" title="1.3. 系统和用户方面"></a>1.3. 系统和用户方面</h2><p>在这个方面，要注意以下的问题：</p>
+<ul>
+<li>关闭用不到的服务</li>
+<li>尽量升级到最新的稳定版本程序包</li>
+<li>合理设置防火墙规则</li>
+<li>不需要登陆的用户要禁止登陆</li>
+<li>root远程登陆限制（比如：禁止远程root登陆，用户必须用密钥的方式登陆等等）</li>
+<li>一定要打开系统日志记录一切信息，比如/var/log/messages、/var/log/secure。如果是Web服务，一定要打开访问日志</li>
+<li>配置合适的sudoer</li>
+</ul>
+<hr>
+<h2 id="1-4-文件系统安全"><a href="#1-4-文件系统安全" class="headerlink" title="1.4. 文件系统安全"></a>1.4. 文件系统安全</h2><p>在这个方面，要注意以下的问题：</p>
+<ul>
+<li>使用ext3、ext4或xfs系统，因为它们有日志功能</li>
+<li>严格控制目录和文件的权限umask，避免权限放大，对于不应该有权限的用户，绝不给它多余的权限</li>
+<li>尽量少使用suid/sgid权限</li>
+<li>重要的数据或配置文件要指定备份计划</li>
+</ul>
+<hr>
+<h2 id="1-5-pam"><a href="#1-5-pam" class="headerlink" title="1.5. pam"></a>1.5. pam</h2><p>它的主要配置文件在/etc/pam.conf和/etc/pam.d/。</p>
+<p>pam的类型：</p>
+<ul>
+<li>auth：用户验证相关，要求用户输入一个口令</li>
+<li>account：用户账户管理相关，检查一个用户的账户或者口令是否过期</li>
+<li>session：与连接或者会话管理相关，比如将用户登陆会话信息记录到日志</li>
+<li>password：密码管理</li>
+</ul>
+<p>pam级别</p>
+<ul>
+<li>required：表示改行以及所涉及模块的成功是用户通过鉴别的必要条件。换句话说，只有当对应于应用程序的所有带required标记的模块全部成功后，该程序才能通过鉴别。同时，如果任何带required标记的模块出现了错误，PAM并不立刻将错误消息返回给应用程序，而是在所有模块都调用完毕后才将错误消息返回调用它的程序。反正说白了，就是必须将所有的模块都执行一次，其中任何一个模块验证出错，验证都会继续进行，并在执行完成之后才返回错误信息。这样做的目的就是不让用户知道自己被哪个模块拒绝，通过一种隐蔽的方式来保护系统服务。就像设置防火墙规则的时候将拒绝类的规则都设置为drop一样，以至于用户在访问网络不成功的时候无法准确判断到底是被拒绝还是目标网络不可达。</li>
+<li>requisite：与required相仿，只有带此标记的模块返回成功后，用户才能通过鉴别。不同之处在于其一旦失败就不再执行堆中后面的其它模块，并且鉴别过程到此结束，同时也会立即返回错误信息。与上面的required相比，似乎要显得更正大光明一些。</li>
+<li>sufficient：表示该行以及所涉及模块验证成功是用户通过鉴别的充分条件。也就是说，只要标记为sufficient的模块一旦验证成功，那么PAM便立即向应用程序返回成功结果而不必尝试任何其它模块。</li>
+<li>optional：它表示即便该行所涉及的模块验证失败用户仍能通过认证。</li>
+</ul>
+<hr>
+<h2 id="1-6-应用安全"><a href="#1-6-应用安全" class="headerlink" title="1.6. 应用安全"></a>1.6. 应用安全</h2><p>各种常用服务FTP、Samba、NFS、Rsync、MySQL、http等，都会有相关的配置，包含了用户登陆、权限控制相关的操作。不要小看这些服务，如果权限控制不好，很有可能导致到服务器被黑。</p>
+<p>下面是Apache和Nginx的一些访问控制的示例：</p>
+<ul>
+<li>Apache配置：<ul>
+<li>Apache的Order allow deny</li>
+<li>Apache限制某个目录下的PHP文件没有执行权限</li>
+<li>Apache针对访问URL限制IP</li>
+</ul>
+</li>
+<li>Nginx配置：<ul>
+<li>限制只让某个IP访问</li>
+<li>禁止通过IP访问站点</li>
+<li>禁止某个IP或者IP段访问站点</li>
+<li>使用user_agent控制客户端访问</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="1-7-Web安全"><a href="#1-7-Web安全" class="headerlink" title="1.7. Web安全"></a>1.7. Web安全</h2><p>对于Web安全，要详细关注一些漏洞：文件上传、XSS、SQL注入、CSRF、访问控制等等</p>
+<ul>
+<li>文件上传<ul>
+<li>就像Discuz论坛的图片上传，如果图片上传服务器时的日志可以执行PHP脚本，那么这就意味着，用户可以上传木马脚本，然后可以执行。所以，只要是能上传的目录，我们一定要做一个访问控制，甚至有必要禁止解析PHP。</li>
+</ul>
+</li>
+<li>XSS<ul>
+<li>跨站脚本漏洞（Cross Site Scripting，常简写为CSS）是Web应用程序在将数据输出到网页的时候存在问题，导致攻击者可以将构造的恶意数据显示在页面的漏洞。因为跨站脚本攻击都是向网页内容中写入一段恶意的脚本或者HTML代码，故跨站脚本漏洞也被叫做HTML注入漏洞（HTMLInjection）。</li>
+</ul>
+</li>
+<li>SQL注入<ul>
+<li>所谓的SQL注入，就是通过把SQL命令插入到Web表单递交或输入域名或页面请求的查询字符串，最终达到欺骗服务器执行恶意的SQL命令。</li>
+<li>PHP+MySQL编程，引发SQL注入攻击的主要原因有两点：<ul>
+<li>PHP配置文件php.ini中magic_quotes_pgc选项没有打开，被设置为off</li>
+<li>开发者没有对数据类型进行检查和转义</li>
+</ul>
+</li>
+<li>上面两点中，第二点最为重要，如果没有第二点的保证，magic_quotes_pgc选项不论是on还是off，都可能引发SQL注入攻击。</li>
+</ul>
+</li>
+<li>CSRF<ul>
+<li>CSRF（Cross-site request forgery，跨站请求伪造）伪造用户的请求利用受信任的网站来做一些用户不知道的事情。</li>
+<li>当用户访问网站通过登陆操作会得到身份标识的cookie，在不关闭浏览器并未注销登陆的情况下会带着cookie，这种状态下就有可能会让攻击者去伪造请求。</li>
+<li>因为CSRF不容易被发现，所以用户通常不容易察觉但是其危害性是很明显的。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="1-8-入侵检测"><a href="#1-8-入侵检测" class="headerlink" title="1.8. 入侵检测"></a>1.8. 入侵检测</h2><p>主流的入侵检测工具为snort。可以学习一下。</p>
+<hr>
+<h1 id="2-调优"><a href="#2-调优" class="headerlink" title="2. 调优"></a>2. 调优</h1><h2 id="2-1-硬件方面"><a href="#2-1-硬件方面" class="headerlink" title="2.1. 硬件方面"></a>2.1. 硬件方面</h2><ol>
+<li>CPU，使用主频高的CPU或者增加CPU核数都可以增加服务器的性能</li>
+<li>内存，增加内容可以很有效地增加系统的性能</li>
+<li>存储吗，也就是硬盘，大多时候系统性能的平瓶颈在与IO上，如果磁盘读写速度很快，那么整体性能会提升很多。另外我们 也可以把服务器上的硬盘做成Raid，以提升性能</li>
+<li>网卡，网络速度跟不上也会导致系统性能下降，所以有必要使用千兆网卡，或者双网卡绑定，类似于磁盘的raid0</li>
+</ol>
+<hr>
+<h2 id="2-2-系统方面"><a href="#2-2-系统方面" class="headerlink" title="2.2. 系统方面"></a>2.2. 系统方面</h2><ol>
+<li>内核参数优化（网络相关、内存相关、缓冲缓存相关）</li>
+<li>文件系统方面（分区调优、格式化时根据存储文件特性，指定合适的块大小，noatime，日志隔离，软raid，有效使用/dev/shm，关闭不必要的服务）</li>
+<li>CPU优化（进程绑定，中断绑定）<ul>
+<li>numa架构CPU</li>
+<li>taskset把进程和CPU绑定</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="2-3-应用程序方面"><a href="#2-3-应用程序方面" class="headerlink" title="2.3. 应用程序方面"></a>2.3. 应用程序方面</h2><ol>
+<li>Nginx、Apache、Php-fpm、MySQL、Tomcat、Squid等应用，是可以通过调节各个参数获得性能优化的。</li>
+<li>Web优化，比如可以把用户请求合并（js、css合并），使用CDN加速静态页访问速度，把图片文档压缩减少带宽传输</li>
+<li>优化网站程序代码</li>
+</ol>
+<hr>
+<h2 id="2-4-架构方面"><a href="#2-4-架构方面" class="headerlink" title="2.4. 架构方面"></a>2.4. 架构方面</h2><ol>
+<li>使用简单并且稳定的架构方案</li>
+<li>多使用缓存（Squid、Varnish、Memcache、NoSQL相关：redis、mongodb）</li>
+</ol>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"><i class="fa fa-tag"></i> Linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/23/技术/020. 邮件服务器的解决方案/" rel="next" title="邮件服务器的解决方案">
+                <i class="fa fa-chevron-left"></i> 邮件服务器的解决方案
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/30/技术/021. 高可用集群HA的配置和使用/" rel="prev" title="高可用集群HA的配置和使用">
+                高可用集群HA的配置和使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/head_me.jpg"
+                alt="奇怪先生theshu" />
+            
+              <p class="site-author-name" itemprop="name">奇怪先生theshu</p>
+              <p class="site-description motion-element" itemprop="description">奇怪先生的博客</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">115</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">32</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+            <div class="links-of-author motion-element">
+              
+                <span class="links-of-author-item">
+                  <a href="http://weibo.com/thewanghongshu" target="_blank" title="Weibo"><i class="fa fa-fw fa-globe"></i>Weibo</a>
+                  
+                </span>
+              
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-安全"><span class="nav-text">1. 安全</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-Linux发行版本"><span class="nav-text">1.1. Linux发行版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-硬件和物理安全"><span class="nav-text">1.2. 硬件和物理安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-系统和用户方面"><span class="nav-text">1.3. 系统和用户方面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-文件系统安全"><span class="nav-text">1.4. 文件系统安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-pam"><span class="nav-text">1.5. pam</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-应用安全"><span class="nav-text">1.6. 应用安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-7-Web安全"><span class="nav-text">1.7. Web安全</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-8-入侵检测"><span class="nav-text">1.8. 入侵检测</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-调优"><span class="nav-text">2. 调优</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-硬件方面"><span class="nav-text">2.1. 硬件方面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-系统方面"><span class="nav-text">2.2. 系统方面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-应用程序方面"><span class="nav-text">2.3. 应用程序方面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-架构方面"><span class="nav-text">2.4. 架构方面</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奇怪先生theshu</span>
+
+  
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.0.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.0.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.0.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.0.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.0.4"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  <script type="text/javascript" src="/lib/clipboard/clipboard.js"></script>
+<script type="text/javascript" src="/js/src/custom.js"></script>
+
+
+</body>
+</html>
+
+<!-- 页面点击小红心 -->
+<script type="text/javascript" src="/js/src/love.js"></script>
